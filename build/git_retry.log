@@ -1,0 +1,165 @@
+AGENT_WORKDIR=/home/jenkins/agent
+BITBUCKET_REPO_SLUG=cdf
+BUILD_DISPLAY_NAME=#76 prakash
+BUILD_ID=76
+BUILD_NUMBER=76
+BUILD_TAG=jenkins-sdk-generate_sdk_pr-76
+BUILD_TIMESTAMP=2021-09-09 13:41:41 UTC
+BUILD_URL=https://jenkins.corp.clum.io/job/sdk/job/generate_sdk_pr/76/
+CDF_BRANCH=origin/release/CCM-2832
+CDF_PROTO_ARTIFACT=1
+CI=true
+GIT_ASKPASS=echo
+HOME=/home/jenkins
+HOSTNAME=sdk-generate-sdk-pr-76-8ndmm-4tr18-jkwfv
+HUDSON_COOKIE=18e44876-cc7c-4336-b6af-2d7118340eb9
+HUDSON_HOME=/var/jenkins_home
+HUDSON_SERVER_COOKIE=07b7711d3918e173
+HUDSON_URL=https://jenkins.corp.clum.io/
+JAVA_HOME=/opt/java/openjdk
+JAVA_OPTS=-Xmx100m -XX:MaxMetaspaceSize=48m -XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled -XX:+UseCompressedClassPointers -XshowSettings:vm
+JAVA_VERSION=jdk8u292-b10
+JENKINS_AGENT_NAME=sdk-generate-sdk-pr-76-8ndmm-4tr18-jkwfv
+JENKINS_AGENT_PORT=tcp://172.20.201.32:50000
+JENKINS_AGENT_PORT_50000_TCP=tcp://172.20.201.32:50000
+JENKINS_AGENT_PORT_50000_TCP_ADDR=172.20.201.32
+JENKINS_AGENT_PORT_50000_TCP_PORT=50000
+JENKINS_AGENT_PORT_50000_TCP_PROTO=tcp
+JENKINS_AGENT_SERVICE_HOST=172.20.201.32
+JENKINS_AGENT_SERVICE_PORT=50000
+JENKINS_AGENT_SERVICE_PORT_SLAVELISTENER=50000
+JENKINS_AGENT_WORKDIR=/home/jenkins/agent
+JENKINS_HOME=/var/jenkins_home
+JENKINS_NAME=sdk-generate-sdk-pr-76-8ndmm-4tr18-jkwfv
+JENKINS_PORT=tcp://172.20.237.107:443
+JENKINS_PORT_443_TCP=tcp://172.20.237.107:443
+JENKINS_PORT_443_TCP_ADDR=172.20.237.107
+JENKINS_PORT_443_TCP_PORT=443
+JENKINS_PORT_443_TCP_PROTO=tcp
+JENKINS_SECRET=fab6a451c5ae28b5acd095ec2ed612240ec1a11550e79a6e09a6137bb28064e1
+JENKINS_SERVER_COOKIE=07b7711d3918e173
+JENKINS_SERVICE_HOST=172.20.237.107
+JENKINS_SERVICE_PORT=443
+JENKINS_SERVICE_PORT_HTTP=443
+JENKINS_TUNNEL=jenkins-agent:50000
+JENKINS_URL=https://jenkins.corp.clum.io/
+JIRA_ID=CLUMIO-34715
+JOB_BASE_NAME=generate_sdk_pr
+JOB_DISPLAY_URL=https://jenkins.corp.clum.io/job/sdk/job/generate_sdk_pr/display/redirect
+JOB_NAME=sdk/generate_sdk_pr
+JOB_URL=https://jenkins.corp.clum.io/job/sdk/job/generate_sdk_pr/
+KUBERNETES_PORT=tcp://172.20.0.1:443
+KUBERNETES_PORT_443_TCP=tcp://172.20.0.1:443
+KUBERNETES_PORT_443_TCP_ADDR=172.20.0.1
+KUBERNETES_PORT_443_TCP_PORT=443
+KUBERNETES_PORT_443_TCP_PROTO=tcp
+KUBERNETES_SERVICE_HOST=172.20.0.1
+KUBERNETES_SERVICE_PORT=443
+KUBERNETES_SERVICE_PORT_HTTPS=443
+LANG=en_US.UTF-8
+LANGUAGE=en_US:en
+LC_ALL=en_US.UTF-8
+PATH=/opt/java/openjdk/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+PWD=/home/jenkins/agent/workspace/sdk/generate_sdk_pr/clumio-go-sdk
+PYTEST_ADDOPTS=--color=yes
+PYTHONUNBUFFERED=1
+RUN_ARTIFACTS_DISPLAY_URL=https://jenkins.corp.clum.io/job/sdk/job/generate_sdk_pr/76/display/redirect?page=artifacts
+RUN_CHANGES_DISPLAY_URL=https://jenkins.corp.clum.io/job/sdk/job/generate_sdk_pr/76/display/redirect?page=changes
+RUN_DISPLAY_URL=https://jenkins.corp.clum.io/job/sdk/job/generate_sdk_pr/76/display/redirect
+RUN_TESTS_DISPLAY_URL=https://jenkins.corp.clum.io/job/sdk/job/generate_sdk_pr/76/display/redirect?page=tests
+SDK_GEN_BRANCH=origin/user/prakash/CLUMIO-34657/main
+SDK_LANGUAGE=go
+SHLVL=1
+VAULT_ADDR=https://vault-internal.corp.clum.io
+_=/usr/bin/env
+library.prepare.version=main
+
+top - 13:46:35 up 136 days,  8:12,  0 users,  load average: 1.47, 1.14, 0.57
+Tasks:   5 total,   1 running,   4 sleeping,   0 stopped,   0 zombie
+%Cpu0  :   0.0/6.2     6[||||||                                                                                              ]     %Cpu1  :   0.0/0.0     0[                                                                                                    ]
+%Cpu2  :   0.0/0.0     0[                                                                                                    ]     %Cpu3  :   0.0/0.0     0[                                                                                                    ]
+%Cpu4  :   0.0/0.0     0[                                                                                                    ]     %Cpu5  :   0.0/0.0     0[                                                                                                    ]
+%Cpu6  :   0.0/0.0     0[                                                                                                    ]     %Cpu7  :   0.0/0.0     0[                                                                                                    ]
+%Cpu8  :   0.0/0.0     0[                                                                                                    ]     %Cpu9  :   0.0/0.0     0[                                                                                                    ]
+%Cpu10 :   0.0/0.0     0[                                                                                                    ]     %Cpu11 :   0.0/0.0     0[                                                                                                    ]
+%Cpu12 :   6.7/0.0     7[|||||||                                                                                             ]     %Cpu13 :   0.0/0.0     0[                                                                                                    ]
+%Cpu14 :  50.0/0.0    50[||||||||||||||||||||||||||||||||||||||||||||||||||                                                  ]     %Cpu15 :   6.2/0.0     6[||||||                                                                                              ]
+GiB Mem : 21.1/30.4     [                                                                                                    ]
+GiB Swap:  0.0/0.0      [                                                                                                    ]
+
+    PID USER      PR  NI    VIRT    RES  %CPU  %MEM     TIME+ S COMMAND
+      1 root      20   0    0.9m   0.0m   0.0   0.0   0:00.00 S pause
+      6 jenkins   20   0 4851.8m 135.9m  73.3   0.4   0:11.86 S java
+     29 root      20   0    4.1m   3.4m   0.0   0.0   0:00.01 S bash
+    230 jenkins   20   0    2.3m   1.7m   0.0   0.0   0:00.00 S git
+    237 jenkins   20   0    2.0m   1.2m   0.0   0.0   0:00.00 R top
+
+Memory: 178667520/419430400
+2021-09-09T13:46:35+00:00 1: git init /home/jenkins/agent/workspace/sdk/generate_sdk_pr/clumio-go-sdk
+hint: Using 'master' as the name for the initial branch. This default branch name
+hint: is subject to change. To configure the initial branch name to use in all
+hint: of your new repositories, which will suppress this warning, call:
+hint: 
+hint: 	git config --global init.defaultBranch <name>
+hint: 
+hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+hint: 'development'. The just-created branch can be renamed via this command:
+hint: 
+hint: 	git branch -m <name>
+Initialized empty Git repository in /home/jenkins/agent/workspace/sdk/generate_sdk_pr/clumio-go-sdk/.git/
+2021-09-09T13:46:44+00:00 1: git --version
+git version 2.32.0
+PR: https://github.com/clumio-code/clumio-go-sdk.git TARGET: +refs/heads/*:refs/remotes/origin/*
+2021-09-09T13:46:44+00:00 1: git fetch --tags --force --progress --depth=100 -- https://github.com/clumio-code/clumio-go-sdk.git +refs/heads/*:refs/remotes/origin/*
+remote: Enumerating objects: 5, done.        
+remote: Counting objects:  20% (1/5)        remote: Counting objects:  40% (2/5)        remote: Counting objects:  60% (3/5)        remote: Counting objects:  80% (4/5)        remote: Counting objects: 100% (5/5)        remote: Counting objects: 100% (5/5), done.        
+remote: Compressing objects:  25% (1/4)        remote: Compressing objects:  50% (2/4)        remote: Compressing objects:  75% (3/4)        remote: Compressing objects: 100% (4/4)        remote: Compressing objects: 100% (4/4), done.        
+remote: Total 5 (delta 0), reused 0 (delta 0), pack-reused 0        
+From https://github.com/clumio-code/clumio-go-sdk
+ * [new branch]      main       -> origin/main
+2021-09-09T13:46:45+00:00 1: git config remote.origin.url https://github.com/clumio-code/clumio-go-sdk.git
+2021-09-09T13:46:45+00:00 1: git config --add remote.origin.fetch +refs/heads/*:refs/remotes/origin/*
+2021-09-09T13:46:45+00:00 1: git rev-parse refs/remotes/origin/main^{commit}
+3524a1790fe45c04e7c665dc8641a9bfc25306fd
+2021-09-09T13:46:45+00:00 1: git config core.sparsecheckout
+2021-09-09T13:46:45+00:00 1: git checkout -f 3524a1790fe45c04e7c665dc8641a9bfc25306fd
+Note: switching to '3524a1790fe45c04e7c665dc8641a9bfc25306fd'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+HEAD is now at 3524a17 Initial commit
+
+top - 13:46:45 up 136 days,  8:12,  0 users,  load average: 1.39, 1.14, 0.58
+Tasks:   5 total,   1 running,   4 sleeping,   0 stopped,   0 zombie
+%Cpu0  :   0.0/0.0     0[                                                                                                    ]     %Cpu1  :   0.0/0.0     0[                                                                                                    ]
+%Cpu2  :   0.0/0.0     0[                                                                                                    ]     %Cpu3  :   0.0/0.0     0[                                                                                                    ]
+%Cpu4  :   0.0/0.0     0[                                                                                                    ]     %Cpu5  :   0.0/0.0     0[                                                                                                    ]
+%Cpu6  :   0.0/0.0     0[                                                                                                    ]     %Cpu7  :   0.0/0.0     0[                                                                                                    ]
+%Cpu8  :   0.0/0.0     0[                                                                                                    ]     %Cpu9  :   0.0/0.0     0[                                                                                                    ]
+%Cpu10 :   0.0/0.0     0[                                                                                                    ]     %Cpu11 :   0.0/0.0     0[                                                                                                    ]
+%Cpu12 :   0.0/0.0     0[                                                                                                    ]     %Cpu13 :   0.0/0.0     0[                                                                                                    ]
+%Cpu14 :   0.0/0.0     0[                                                                                                    ]     %Cpu15 :   0.0/0.0     0[                                                                                                    ]
+GiB Mem : 21.1/30.4     [                                                                                                    ]
+GiB Swap:  0.0/0.0      [                                                                                                    ]
+
+    PID USER      PR  NI    VIRT    RES  %CPU  %MEM     TIME+ S COMMAND
+      1 root      20   0    0.9m   0.0m   0.0   0.0   0:00.00 S pause
+      6 jenkins   20   0 4851.8m 136.5m   0.0   0.4   0:12.45 S java
+     29 root      20   0    4.1m   3.4m   0.0   0.0   0:00.01 S bash
+    324 jenkins   20   0    2.3m   1.8m   0.0   0.0   0:00.00 S git
+    335 jenkins   20   0    2.0m   1.2m   0.0   0.0   0:00.00 R top
+
+Memory: 181026816/419430400
