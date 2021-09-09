@@ -1,3 +1,48 @@
+# We do *NOT* want binaries in our git repositories.
+# If they need to be included this has to be done through
+# binary blob stores such as S3 buckets.
+*.apk
+*.deb
+*.rpm
+*.a
+*.o
+*.so
+*.so.2
+*.tar
+*.tar.*
+*.jar
+*.war
+*.dll
+*.exe
+*.msi
+*.zip
+*.tgz
+*.log
+*.log.*
+*.sig
+*.mp3
+*.mp4
+*.avi
+
+
+# IDE related files
+.idea
+.vscode
+.tags
+
+# macOS files:
+.DS_Store
+
+# emacs files
+*~
+
+# Coverage related files
+.coverage.*
+.coverage-*
+*-coverage.html
+*-coverage.txt
+coverage.out
+
 # Binaries for programs and plugins
 *.exe
 *.exe~
@@ -12,4 +57,5 @@
 *.out
 
 # Dependency directories (remove the comment below to include it)
-# vendor/
+/vendor
+/build
