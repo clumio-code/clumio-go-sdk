@@ -3,9 +3,9 @@
 package restoredmssqldatabases
 
 import (
-     "github.com/clumio/clumiogosdk/api_utils"
-     "github.com/clumio/clumiogosdk/config"
-     "github.com/clumio/clumiogosdk/models"
+     "github.com/clumio-code/clumiogosdk/api_utils"
+     "github.com/clumio-code/clumiogosdk/config"
+     "github.com/clumio-code/clumiogosdk/models"
 )
 
 // RestoredMssqlDatabasesV1Client represents a custom type interface
