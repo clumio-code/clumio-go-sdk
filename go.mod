@@ -1,5 +1,5 @@
 // Copyright (c) 2021 Clumio All Rights Reserved
-module github.com/clumio/clumiogosdk
+module github.com/clumio-code/clumiogosdk
 
 go 1.16
 

@@ -12,27 +12,25 @@ The library requires GO 1.16 and higher. Third-party libraries are also required
 
 ### Install
 ```
-go get github.com/clumio/clumiogosdk
+go get github.com/clumio-code/clumiogosdk
 ```
 
 ### Quick Start
 ```
 import (
-	"github.com/clumio/clumiogosdk/config"
-	"github.com/clumio/clumiogosdk/controllers"
-	"github.com/clumio/clumiogosdk/models"
+	"github.com/clumio-code/clumiogosdk/config"
+	"github.com/clumio-code/clumiogosdk/controllers"
+	"github.com/clumio-code/clumiogosdk/models"
 )
 
 func main() {
 	cfg := config.Config{
 		Token: <access_token>,
 		// BaseUrl can be API URL of any namespace
-		BaseUrl: "https://eng-48-cc-1-backend.api.k8s-clumio.com/api",
+		BaseUrl: <base_url>,
 	}
 	handler := controllers.NewPolicyDefinitionsV1(cfg)
 	res, cerr := handler.ListPolicyDefinitions(nil, nil)
 }
 ```
-
-## Documentation
-For full documentation, including a quick start example, see [SDK documentation](https://probable-telegram-b0cf4eee.pages.github.io)
+The REST API documentation describes all the available APIs and can be accessed from the help section in the top right corner of the Clumio UI.
