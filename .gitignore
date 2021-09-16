@@ -1,6 +1,4 @@
 # We do *NOT* want binaries in our git repositories.
-# If they need to be included this has to be done through
-# binary blob stores such as S3 buckets.
 *.apk
 *.deb
 *.rpm
