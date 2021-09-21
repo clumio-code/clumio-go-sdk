@@ -3,9 +3,9 @@
 package backupfilesystems
 
 import (
-     "github.com/clumio-code/clumiogosdk/api_utils"
-     "github.com/clumio-code/clumiogosdk/config"
-     "github.com/clumio-code/clumiogosdk/models"
+     "github.com/clumio-code/clumio-go-sdk/api_utils"
+     "github.com/clumio-code/clumio-go-sdk/config"
+     "github.com/clumio-code/clumio-go-sdk/models"
 )
 
 // BackupFilesystemsV1Client represents a custom type interface
