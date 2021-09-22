@@ -30,7 +30,7 @@ func (v *VmwareVcenterTagsV1) ListVmwareVcenterTags(
     _pathURL := "/datasources/vmware/vcenters/{vcenter_id}/tags"
     //process optional template parameters
     pathParams := map[string]string{
-        "vcenterId": vcenterId,
+        "vcenter_id": vcenterId,
     }
     _queryBuilder := v.config.BaseUrl + _pathURL
 
@@ -100,8 +100,8 @@ func (v *VmwareVcenterTagsV1) ReadVmwareVcenterTag(
     _pathURL := "/datasources/vmware/vcenters/{vcenter_id}/tags/{tag_id}"
     //process optional template parameters
     pathParams := map[string]string{
-        "vcenterId": vcenterId,
-        "tagId": tagId,
+        "vcenter_id": vcenterId,
+        "tag_id": tagId,
     }
     _queryBuilder := v.config.BaseUrl + _pathURL
 

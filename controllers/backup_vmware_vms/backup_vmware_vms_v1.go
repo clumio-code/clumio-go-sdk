@@ -133,7 +133,7 @@ func (b *BackupVmwareVmsV1) ReadBackupVmwareVm(
     _pathURL := "/backups/vmware/vms/{backup_id}"
     //process optional template parameters
     pathParams := map[string]string{
-        "backupId": fmt.Sprintf("%v", backupId),
+        "backup_id": fmt.Sprintf("%v", backupId),
     }
     _queryBuilder := b.config.BaseUrl + _pathURL
 

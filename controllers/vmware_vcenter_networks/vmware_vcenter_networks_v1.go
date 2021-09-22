@@ -29,7 +29,7 @@ func (v *VmwareVcenterNetworksV1) ListVmwareVcenterNetworks(
     _pathURL := "/datasources/vmware/vcenters/{vcenter_id}/networks"
     //process optional template parameters
     pathParams := map[string]string{
-        "vcenterId": vcenterId,
+        "vcenter_id": vcenterId,
     }
     _queryBuilder := v.config.BaseUrl + _pathURL
 
@@ -94,8 +94,8 @@ func (v *VmwareVcenterNetworksV1) ReadVmwareVcenterNetwork(
     _pathURL := "/datasources/vmware/vcenters/{vcenter_id}/networks/{network_id}"
     //process optional template parameters
     pathParams := map[string]string{
-        "vcenterId": vcenterId,
-        "networkId": networkId,
+        "vcenter_id": vcenterId,
+        "network_id": networkId,
     }
     _queryBuilder := v.config.BaseUrl + _pathURL
 

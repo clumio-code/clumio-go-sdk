@@ -85,7 +85,7 @@ func (m *ManagementGroupsV1) ReadManagementGroup(
     _pathURL := "/management-groups/{group_id}"
     //process optional template parameters
     pathParams := map[string]string{
-        "groupId": groupId,
+        "group_id": groupId,
     }
     _queryBuilder := m.config.BaseUrl + _pathURL
 
@@ -129,7 +129,7 @@ func (m *ManagementGroupsV1) UpdateManagementGroup(
     _pathURL := "/management-groups/{group_id}"
     //process optional template parameters
     pathParams := map[string]string{
-        "groupId": groupId,
+        "group_id": groupId,
     }
     _queryBuilder := m.config.BaseUrl + _pathURL
 

@@ -302,7 +302,7 @@ func (m *MssqlHostsV1) ReadMssqlHostConnections(
     _pathURL := "/connections/mssql/hosts/{host_id}"
     //process optional template parameters
     pathParams := map[string]string{
-        "hostId": hostId,
+        "host_id": hostId,
     }
     _queryBuilder := m.config.BaseUrl + _pathURL
 
@@ -410,7 +410,7 @@ func (m *MssqlHostsV1) ReadMssqlHosts(
     _pathURL := "/datasources/mssql/hosts/{host_id}"
     //process optional template parameters
     pathParams := map[string]string{
-        "hostId": hostId,
+        "host_id": hostId,
     }
     _queryBuilder := m.config.BaseUrl + _pathURL
 

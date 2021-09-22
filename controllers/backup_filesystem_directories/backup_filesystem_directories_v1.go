@@ -30,9 +30,9 @@ func (b *BackupFilesystemDirectoriesV1) ReadBackupFilesystemDirectory(
     _pathURL := "/backups/{backup_id}/filesystems/{filesystem_id}/directories/{directory_id}/browse"
     //process optional template parameters
     pathParams := map[string]string{
-        "backupId": backupId,
-        "filesystemId": filesystemId,
-        "directoryId": directoryId,
+        "backup_id": backupId,
+        "filesystem_id": filesystemId,
+        "directory_id": directoryId,
     }
     _queryBuilder := b.config.BaseUrl + _pathURL
 

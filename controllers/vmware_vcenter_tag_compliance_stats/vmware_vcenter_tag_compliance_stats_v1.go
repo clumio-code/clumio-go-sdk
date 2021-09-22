@@ -27,8 +27,8 @@ func (v *VmwareVcenterTagComplianceStatsV1) ReadVmwareVcenterTagComplianceStats(
     _pathURL := "/datasources/vmware/vcenters/{vcenter_id}/tags/{tag_id}/stats/compliance"
     //process optional template parameters
     pathParams := map[string]string{
-        "vcenterId": vcenterId,
-        "tagId": tagId,
+        "vcenter_id": vcenterId,
+        "tag_id": tagId,
     }
     _queryBuilder := v.config.BaseUrl + _pathURL
 

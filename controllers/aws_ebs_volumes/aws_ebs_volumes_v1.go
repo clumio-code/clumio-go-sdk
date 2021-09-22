@@ -92,7 +92,7 @@ func (a *AwsEbsVolumesV1) ReadAwsEbsVolume(
     _pathURL := "/datasources/aws/ebs-volumes/{volume_id}"
     //process optional template parameters
     pathParams := map[string]string{
-        "volumeId": volumeId,
+        "volume_id": volumeId,
     }
     _queryBuilder := a.config.BaseUrl + _pathURL
 

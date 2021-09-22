@@ -92,7 +92,7 @@ func (a *AwsEnvironmentsV1) ReadAwsEnvironment(
     _pathURL := "/datasources/aws/environments/{environment_id}"
     //process optional template parameters
     pathParams := map[string]string{
-        "environmentId": environmentId,
+        "environment_id": environmentId,
     }
     _queryBuilder := a.config.BaseUrl + _pathURL
 

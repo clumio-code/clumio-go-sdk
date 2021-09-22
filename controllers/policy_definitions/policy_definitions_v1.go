@@ -167,7 +167,7 @@ func (p *PolicyDefinitionsV1) ReadPolicyDefinition(
     _pathURL := "/policies/definitions/{policy_id}"
     //process optional template parameters
     pathParams := map[string]string{
-        "policyId": policyId,
+        "policy_id": policyId,
     }
     _queryBuilder := p.config.BaseUrl + _pathURL
 
@@ -224,7 +224,7 @@ func (p *PolicyDefinitionsV1) UpdatePolicyDefinition(
     _pathURL := "/policies/definitions/{policy_id}"
     //process optional template parameters
     pathParams := map[string]string{
-        "policyId": policyId,
+        "policy_id": policyId,
     }
     _queryBuilder := p.config.BaseUrl + _pathURL
 
@@ -288,7 +288,7 @@ func (p *PolicyDefinitionsV1) DeletePolicyDefinition(
     _pathURL := "/policies/definitions/{policy_id}"
     //process optional template parameters
     pathParams := map[string]string{
-        "policyId": policyId,
+        "policy_id": policyId,
     }
     _queryBuilder := p.config.BaseUrl + _pathURL
 
