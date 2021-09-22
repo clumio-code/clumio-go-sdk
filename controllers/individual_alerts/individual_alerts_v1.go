@@ -125,7 +125,7 @@ func (i *IndividualAlertsV1) ReadIndividualAlert(
     _pathURL := "/alerts/individual/{individual_alert_id}"
     //process optional template parameters
     pathParams := map[string]string{
-        "individualAlertId": individualAlertId,
+        "individual_alert_id": individualAlertId,
     }
     _queryBuilder := i.config.BaseUrl + _pathURL
 
@@ -182,7 +182,7 @@ func (i *IndividualAlertsV1) UpdateIndividualAlert(
     _pathURL := "/alerts/individual/{individual_alert_id}"
     //process optional template parameters
     pathParams := map[string]string{
-        "individualAlertId": individualAlertId,
+        "individual_alert_id": individualAlertId,
     }
     _queryBuilder := i.config.BaseUrl + _pathURL
 

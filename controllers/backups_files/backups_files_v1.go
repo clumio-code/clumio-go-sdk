@@ -85,7 +85,7 @@ func (b *BackupsFilesV1) ListFileVersions(
     _pathURL := "/backups/files/search/{search_result_id}/versions"
     //process optional template parameters
     pathParams := map[string]string{
-        "searchResultId": searchResultId,
+        "search_result_id": searchResultId,
     }
     _queryBuilder := b.config.BaseUrl + _pathURL
 

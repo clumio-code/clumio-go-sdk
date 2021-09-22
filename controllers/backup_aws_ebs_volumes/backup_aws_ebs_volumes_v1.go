@@ -133,7 +133,7 @@ func (b *BackupAwsEbsVolumesV1) ReadBackupAwsEbsVolume(
     _pathURL := "/backups/aws/ebs-volumes/{backup_id}"
     //process optional template parameters
     pathParams := map[string]string{
-        "backupId": backupId,
+        "backup_id": backupId,
     }
     _queryBuilder := b.config.BaseUrl + _pathURL
 

@@ -91,7 +91,7 @@ func (m *MssqlDatabasesV1) ReadMssqlDatabases(
     _pathURL := "/datasources/mssql/databases/{database_id}"
     //process optional template parameters
     pathParams := map[string]string{
-        "databaseId": databaseId,
+        "database_id": databaseId,
     }
     _queryBuilder := m.config.BaseUrl + _pathURL
 
@@ -137,7 +137,7 @@ func (m *MssqlDatabasesV1) ListMssqlDatabasePitrIntervals(
     _pathURL := "/datasources/mssql/databases/{database_id}/pitr-intervals"
     //process optional template parameters
     pathParams := map[string]string{
-        "databaseId": databaseId,
+        "database_id": databaseId,
     }
     _queryBuilder := m.config.BaseUrl + _pathURL
 

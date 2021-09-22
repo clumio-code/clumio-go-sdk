@@ -28,7 +28,7 @@ func (b *BackupFilesystemsV1) ListBackupFilesystems(
     _pathURL := "/backups/{backup_id}/filesystems"
     //process optional template parameters
     pathParams := map[string]string{
-        "backupId": backupId,
+        "backup_id": backupId,
     }
     _queryBuilder := b.config.BaseUrl + _pathURL
 
@@ -89,8 +89,8 @@ func (b *BackupFilesystemsV1) ReadFilesystem(
     _pathURL := "/backups/{backup_id}/filesystems/{filesystem_id}"
     //process optional template parameters
     pathParams := map[string]string{
-        "filesystemId": filesystemId,
-        "backupId": backupId,
+        "filesystem_id": filesystemId,
+        "backup_id": backupId,
     }
     _queryBuilder := b.config.BaseUrl + _pathURL
 

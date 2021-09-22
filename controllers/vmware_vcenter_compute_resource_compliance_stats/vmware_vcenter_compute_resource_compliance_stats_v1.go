@@ -27,8 +27,8 @@ func (v *VmwareVcenterComputeResourceComplianceStatsV1) ReadVmwareVcenterCompute
     _pathURL := "/datasources/vmware/vcenters/{vcenter_id}/compute-resources/{compute_resource_id}/stats/compliance"
     //process optional template parameters
     pathParams := map[string]string{
-        "vcenterId": vcenterId,
-        "computeResourceId": computeResourceId,
+        "vcenter_id": vcenterId,
+        "compute_resource_id": computeResourceId,
     }
     _queryBuilder := v.config.BaseUrl + _pathURL
 

@@ -86,7 +86,7 @@ func (m *MssqlInstanceV1) ReadMssqlInstance(
     _pathURL := "/datasources/mssql/instances/{instance_id}"
     //process optional template parameters
     pathParams := map[string]string{
-        "instanceId": instanceId,
+        "instance_id": instanceId,
     }
     _queryBuilder := m.config.BaseUrl + _pathURL
 

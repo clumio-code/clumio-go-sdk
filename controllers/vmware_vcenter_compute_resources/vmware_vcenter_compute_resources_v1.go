@@ -42,7 +42,7 @@ func (v *VmwareVcenterComputeResourcesV1) ListVmwareVcenterComputeResources(
     _pathURL := "/datasources/vmware/vcenters/{vcenter_id}/compute-resources"
     //process optional template parameters
     pathParams := map[string]string{
-        "vcenterId": vcenterId,
+        "vcenter_id": vcenterId,
     }
     _queryBuilder := v.config.BaseUrl + _pathURL
 
@@ -112,8 +112,8 @@ func (v *VmwareVcenterComputeResourcesV1) ReadVmwareVcenterComputeResource(
     _pathURL := "/datasources/vmware/vcenters/{vcenter_id}/compute-resources/{compute_resource_id}"
     //process optional template parameters
     pathParams := map[string]string{
-        "vcenterId": vcenterId,
-        "computeResourceId": computeResourceId,
+        "vcenter_id": vcenterId,
+        "compute_resource_id": computeResourceId,
     }
     _queryBuilder := v.config.BaseUrl + _pathURL
 

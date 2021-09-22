@@ -29,7 +29,7 @@ func (v *VmwareVcenterCategoriesV1) ListVmwareVcenterCategories(
     _pathURL := "/datasources/vmware/vcenters/{vcenter_id}/categories"
     //process optional template parameters
     pathParams := map[string]string{
-        "vcenterId": vcenterId,
+        "vcenter_id": vcenterId,
     }
     _queryBuilder := v.config.BaseUrl + _pathURL
 
@@ -94,8 +94,8 @@ func (v *VmwareVcenterCategoriesV1) ReadVmwareVcenterCategory(
     _pathURL := "/datasources/vmware/vcenters/{vcenter_id}/categories/{category_id}"
     //process optional template parameters
     pathParams := map[string]string{
-        "vcenterId": vcenterId,
-        "categoryId": categoryId,
+        "vcenter_id": vcenterId,
+        "category_id": categoryId,
     }
     _queryBuilder := v.config.BaseUrl + _pathURL
 

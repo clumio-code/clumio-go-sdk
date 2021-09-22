@@ -29,7 +29,7 @@ func (m *ManagementSubgroupsV1) ListManagementSubgroups(
     _pathURL := "/management-groups/{group_id}/subgroups"
     //process optional template parameters
     pathParams := map[string]string{
-        "groupId": groupId,
+        "group_id": groupId,
     }
     _queryBuilder := m.config.BaseUrl + _pathURL
 
@@ -92,8 +92,8 @@ func (m *ManagementSubgroupsV1) ReadManagementSubgroup(
     _pathURL := "/management-groups/{group_id}/subgroups/{subgroup_id}"
     //process optional template parameters
     pathParams := map[string]string{
-        "subgroupId": subgroupId,
-        "groupId": groupId,
+        "subgroup_id": subgroupId,
+        "group_id": groupId,
     }
     _queryBuilder := m.config.BaseUrl + _pathURL
 
@@ -138,8 +138,8 @@ func (m *ManagementSubgroupsV1) UpdateManagementSubgroup(
     _pathURL := "/management-groups/{group_id}/subgroups/{subgroup_id}"
     //process optional template parameters
     pathParams := map[string]string{
-        "subgroupId": subgroupId,
-        "groupId": groupId,
+        "subgroup_id": subgroupId,
+        "group_id": groupId,
     }
     _queryBuilder := m.config.BaseUrl + _pathURL
 

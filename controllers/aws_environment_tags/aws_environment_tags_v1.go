@@ -33,7 +33,7 @@ func (a *AwsEnvironmentTagsV1) ListAwsEnvironmentTags(
     _pathURL := "/datasources/aws/environments/{environment_id}/tags"
     //process optional template parameters
     pathParams := map[string]string{
-        "environmentId": environmentId,
+        "environment_id": environmentId,
     }
     _queryBuilder := a.config.BaseUrl + _pathURL
 
@@ -115,8 +115,8 @@ func (a *AwsEnvironmentTagsV1) ReadAwsEnvironmentTag(
     _pathURL := "/datasources/aws/environments/{environment_id}/tags/{tag_id}"
     //process optional template parameters
     pathParams := map[string]string{
-        "environmentId": environmentId,
-        "tagId": tagId,
+        "environment_id": environmentId,
+        "tag_id": tagId,
     }
     _queryBuilder := a.config.BaseUrl + _pathURL
 
@@ -172,8 +172,8 @@ func (a *AwsEnvironmentTagsV1) ReadAwsEnvironmentTagEbsVolumesComplianceStats(
     _pathURL := "/datasources/aws/environments/{environment_id}/tags/{tag_id}/stats/compliance/ebs-volumes"
     //process optional template parameters
     pathParams := map[string]string{
-        "environmentId": environmentId,
-        "tagId": tagId,
+        "environment_id": environmentId,
+        "tag_id": tagId,
     }
     _queryBuilder := a.config.BaseUrl + _pathURL
 

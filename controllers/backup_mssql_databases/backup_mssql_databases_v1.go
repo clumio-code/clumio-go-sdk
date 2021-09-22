@@ -151,7 +151,7 @@ func (b *BackupMssqlDatabasesV1) ReadBackupMssqlDatabase(
     _pathURL := "/backups/mssql/databases/{backup_id}"
     //process optional template parameters
     pathParams := map[string]string{
-        "backupId": backupId,
+        "backup_id": backupId,
     }
     _queryBuilder := b.config.BaseUrl + _pathURL
 

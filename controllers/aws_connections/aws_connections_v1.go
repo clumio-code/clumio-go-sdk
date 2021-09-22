@@ -133,7 +133,7 @@ func (a *AwsConnectionsV1) ReadAwsConnection(
     _pathURL := "/connections/aws/{connection_id}"
     //process optional template parameters
     pathParams := map[string]string{
-        "connectionId": connectionId,
+        "connection_id": connectionId,
     }
     _queryBuilder := a.config.BaseUrl + _pathURL
 
@@ -176,7 +176,7 @@ func (a *AwsConnectionsV1) DeleteAwsConnection(
     _pathURL := "/connections/aws/{connection_id}"
     //process optional template parameters
     pathParams := map[string]string{
-        "connectionId": connectionId,
+        "connection_id": connectionId,
     }
     _queryBuilder := a.config.BaseUrl + _pathURL
 
@@ -220,7 +220,7 @@ func (a *AwsConnectionsV1) UpdateAwsConnection(
     _pathURL := "/connections/aws/{connection_id}"
     //process optional template parameters
     pathParams := map[string]string{
-        "connectionId": connectionId,
+        "connection_id": connectionId,
     }
     _queryBuilder := a.config.BaseUrl + _pathURL
 

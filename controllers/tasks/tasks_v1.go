@@ -171,7 +171,7 @@ func (t *TasksV1) ReadTask(
     _pathURL := "/tasks/{task_id}"
     //process optional template parameters
     pathParams := map[string]string{
-        "taskId": taskId,
+        "task_id": taskId,
     }
     _queryBuilder := t.config.BaseUrl + _pathURL
 
@@ -215,7 +215,7 @@ func (t *TasksV1) UpdateTask(
     _pathURL := "/tasks/{task_id}"
     //process optional template parameters
     pathParams := map[string]string{
-        "taskId": taskId,
+        "task_id": taskId,
     }
     _queryBuilder := t.config.BaseUrl + _pathURL
 

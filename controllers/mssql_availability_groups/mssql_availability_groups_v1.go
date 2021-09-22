@@ -86,7 +86,7 @@ func (m *MssqlAvailabilityGroupsV1) ReadMssqlAvailabilityGroup(
     _pathURL := "/datasources/mssql/availability-groups/{availability_group_id}"
     //process optional template parameters
     pathParams := map[string]string{
-        "availabilityGroupId": availabilityGroupId,
+        "availability_group_id": availabilityGroupId,
     }
     _queryBuilder := m.config.BaseUrl + _pathURL
 

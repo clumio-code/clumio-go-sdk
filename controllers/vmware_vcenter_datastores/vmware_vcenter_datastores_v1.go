@@ -39,7 +39,7 @@ func (v *VmwareVcenterDatastoresV1) ListVmwareVcenterDatastores(
     _pathURL := "/datasources/vmware/vcenters/{vcenter_id}/datastores"
     //process optional template parameters
     pathParams := map[string]string{
-        "vcenterId": vcenterId,
+        "vcenter_id": vcenterId,
     }
     _queryBuilder := v.config.BaseUrl + _pathURL
 
@@ -104,8 +104,8 @@ func (v *VmwareVcenterDatastoresV1) ReadVmwareVcenterDatastore(
     _pathURL := "/datasources/vmware/vcenters/{vcenter_id}/datastores/{datastore_id}"
     //process optional template parameters
     pathParams := map[string]string{
-        "vcenterId": vcenterId,
-        "datastoreId": datastoreId,
+        "vcenter_id": vcenterId,
+        "datastore_id": datastoreId,
     }
     _queryBuilder := v.config.BaseUrl + _pathURL
 

@@ -27,8 +27,8 @@ func (v *VmwareVcenterFolderComplianceStatsV1) ReadVmwareVcenterFolderCompliance
     _pathURL := "/datasources/vmware/vcenters/{vcenter_id}/folders/{folder_id}/stats/compliance"
     //process optional template parameters
     pathParams := map[string]string{
-        "vcenterId": vcenterId,
-        "folderId": folderId,
+        "vcenter_id": vcenterId,
+        "folder_id": folderId,
     }
     _queryBuilder := v.config.BaseUrl + _pathURL
 

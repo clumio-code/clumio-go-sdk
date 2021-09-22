@@ -179,7 +179,7 @@ func (u *UsersV1) ReadUser(
     _pathURL := "/users/{user_id}"
     //process optional template parameters
     pathParams := map[string]string{
-        "userId": fmt.Sprintf("%v", userId),
+        "user_id": fmt.Sprintf("%v", userId),
     }
     _queryBuilder := u.config.BaseUrl + _pathURL
 
@@ -222,7 +222,7 @@ func (u *UsersV1) DeleteUser(
     _pathURL := "/users/{user_id}"
     //process optional template parameters
     pathParams := map[string]string{
-        "userId": fmt.Sprintf("%v", userId),
+        "user_id": fmt.Sprintf("%v", userId),
     }
     _queryBuilder := u.config.BaseUrl + _pathURL
 
@@ -266,7 +266,7 @@ func (u *UsersV1) UpdateUser(
     _pathURL := "/users/{user_id}"
     //process optional template parameters
     pathParams := map[string]string{
-        "userId": fmt.Sprintf("%v", userId),
+        "user_id": fmt.Sprintf("%v", userId),
     }
     _queryBuilder := u.config.BaseUrl + _pathURL
 
@@ -319,7 +319,7 @@ func (u *UsersV1) ChangePassword(
     _pathURL := "/users/{user_id}/password"
     //process optional template parameters
     pathParams := map[string]string{
-        "userId": fmt.Sprintf("%v", userId),
+        "user_id": fmt.Sprintf("%v", userId),
     }
     _queryBuilder := u.config.BaseUrl + _pathURL
 
