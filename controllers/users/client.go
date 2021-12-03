@@ -37,7 +37,8 @@ type UsersV1Client interface {
         userId int64)(
         interface{},  *apiutils.APIError)
     
-    //  Manages an existing user. Managing a user includes enabling or disabling the user, or changing the user's full name.
+    //  Manages an existing user. Managing a user includes enabling or disabling the user,
+    //  changing the user's full name or updating the user's role.
     UpdateUser(
         userId int64, 
         body *models.UpdateUserV1Request)(
