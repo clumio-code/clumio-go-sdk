@@ -256,7 +256,8 @@ func (u *UsersV1) DeleteUser(
 }
 
 
-//  UpdateUser Manages an existing user. Managing a user includes enabling or disabling the user, or changing the user's full name.
+//  UpdateUser Manages an existing user. Managing a user includes enabling or disabling the user,
+//  changing the user's full name or updating the user's role.
 func (u *UsersV1) UpdateUser(
     userId int64, 
     body *models.UpdateUserV1Request)(

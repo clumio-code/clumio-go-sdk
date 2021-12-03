@@ -73,6 +73,13 @@ type CreateAwsConnectionV1Request struct {
     ServicesEnabled          []*string `json:"services_enabled"`
 }
 
+// CreateConnectionTemplateV1Request represents a custom type struct.
+// The body of the request.
+type CreateConnectionTemplateV1Request struct {
+    // TODO: Add struct field description
+    Config *AWSConnectionConfigModel `json:"config"`
+}
+
 // UpdateAwsConnectionV1Request represents a custom type struct
 type UpdateAwsConnectionV1Request struct {
     // An optional, user-provided description for this connection.
@@ -531,6 +538,21 @@ type UpdateTaskV1Request struct {
 
 // CreateUserV1Request represents a custom type struct
 type CreateUserV1Request struct {
+    // The Clumio-assigned ID of the role to assign to the user.
+    // The available roles can be retrieved via the [GET /roles](#operation/list-roles) API.
+    // When not set, the role is determined as follows
+    // 
+    // +-------------+---------------------------+----------------+
+    // |   Inviter   |       Assigned OUs        | Resulting Role |
+    // +=============+===========================+================+
+    // | Super Admin | Gloabl OU is assigned     | Super Admin    |
+    // +-------------+---------------------------+----------------+
+    // | Super Admin | Gloabl OU is not assigned | OU Admin       |
+    // +-------------+---------------------------+----------------+
+    // | OU Admin    | Any                       | OU Admin       |
+    // +-------------+---------------------------+----------------+
+    // 
+    AssignedRole          *string   `json:"assigned_role"`
     // The email address of the user to be added to Clumio.
     Email                 *string   `json:"email"`
     // The full name of the user to be added to Clumio. For example, enter the user's first name and last name.
@@ -549,6 +571,9 @@ type UpdateUserProfileV1Request struct {
 
 // UpdateUserV1Request represents a custom type struct
 type UpdateUserV1Request struct {
+    // Updates the role assigned to the user.
+    // The available roles can be retrieved via the [GET /roles](#operation/list-roles) API.
+    AssignedRole                        *string                      `json:"assigned_role"`
     // The full name of the user that is to replace the existing full name.
     // For example, enter the user's first name and last name.
     FullName                            *string                      `json:"full_name"`

@@ -56,6 +56,12 @@ type AWSConnection struct {
     Token                    *string             `json:"token"`
 }
 
+// AWSConnectionConfigModel represents a custom type struct
+type AWSConnectionConfigModel struct {
+    // TODO: Add struct field description
+    Protect *ProtectTemplateConfig `json:"protect"`
+}
+
 // AWSConnectionLinks represents a custom type struct.
 // URLs to pages related to the resource.
 type AWSConnectionLinks struct {
@@ -1109,71 +1115,83 @@ type DiscoverTemplateInfo struct {
     AvailableTemplateVersion *string   `json:"available_template_version"`
 }
 
+// DiscoverTemplateInfoV2 represents a custom type struct
+type DiscoverTemplateInfoV2 struct {
+    // The AWS asset types supported with the available version of the template.
+    AssetTypesEnabled        []*string `json:"asset_types_enabled"`
+    // The latest available version for the template.
+    AvailableTemplateVersion *string   `json:"available_template_version"`
+}
+
 // EBS represents a custom type struct
 type EBS struct {
     // Embedded responses related to the resource.
-    Embedded              *EbsVolumeEmbedded `json:"_embedded"`
+    Embedded                 *EbsVolumeEmbedded      `json:"_embedded"`
     // URLs to pages related to the resource.
-    Links                 *EbsVolumeLinks    `json:"_links"`
+    Links                    *EbsVolumeLinks         `json:"_links"`
     // The AWS-assigned ID of the account associated with the EBS volume.
-    AccountNativeId       *string            `json:"account_native_id"`
+    AccountNativeId          *string                 `json:"account_native_id"`
     // The AWS availability zone in which the EBS volume resides. For example,
     // `us-west-2a`.
-    AwsAz                 *string            `json:"aws_az"`
+    AwsAz                    *string                 `json:"aws_az"`
     // The AWS region associated with the EBS volume.
-    AwsRegion             *string            `json:"aws_region"`
+    AwsRegion                *string                 `json:"aws_region"`
     // The compliance status of the protected EBS volume. Possible values include
     // "compliant" and "noncompliant". If the volume is not protected, then this field has
     // a value of `null`.
-    ComplianceStatus      *string            `json:"compliance_status"`
+    ComplianceStatus         *string                 `json:"compliance_status"`
     // The timestamp of when the volume was deleted. Represented in RFC-3339 format. If
     // this volume has not been deleted, then this field has a value of `null`.
-    DeletionTimestamp     *string            `json:"deletion_timestamp"`
+    DeletionTimestamp        *string                 `json:"deletion_timestamp"`
+    // The Clumio-assigned ID of the policy directly assigned to the entity.
+    DirectAssignmentPolicyId *string                 `json:"direct_assignment_policy_id"`
     // The Clumio-assigned ID of the AWS environment associated with the EBS volume.
-    EnvironmentId         *string            `json:"environment_id"`
+    EnvironmentId            *string                 `json:"environment_id"`
+    // Determines whether the table has a direct assignment.
+    HasDirectAssignment      *bool                   `json:"has_direct_assignment"`
     // The Clumio-assigned ID of the EBS volume.
-    Id                    *string            `json:"id"`
+    Id                       *string                 `json:"id"`
     // Determines whether the EBS volume has been deleted. If `true`, the volume has been
     // deleted.
-    IsDeleted             *bool              `json:"is_deleted"`
+    IsDeleted                *bool                   `json:"is_deleted"`
     // Determines whether the EBS volume is encrypted. If `true`, the volume is encrypted.
-    IsEncrypted           *bool              `json:"is_encrypted"`
+    IsEncrypted              *bool                   `json:"is_encrypted"`
     // Determines whether the EBS volume is supported for backups.
-    IsSupported           *bool              `json:"is_supported"`
+    IsSupported              *bool                   `json:"is_supported"`
     // The AWS-assigned ID of the KMS key encrypting the EBS volume. If the volume is
     // unencrypted, then this field has a value of `null`.
-    KmsKeyNativeId        *string            `json:"kms_key_native_id"`
+    KmsKeyNativeId           *string                 `json:"kms_key_native_id"`
     // The timestamp of the most recent backup of the EBS volume. Represented in RFC-3339
     // format. If the volume has never been backed up, then this field has a value of
     // `null`.
-    LastBackupTimestamp   *string            `json:"last_backup_timestamp"`
+    LastBackupTimestamp      *string                 `json:"last_backup_timestamp"`
     // The timestamp of the most recent snapshot of the EBS volume taken as part of
     // Snapshot Manager. Represented in RFC-3339 format. If the volume has never been
     // snapshotted, then this field has a value of `null`.
-    LastSnapshotTimestamp *string            `json:"last_snapshot_timestamp"`
+    LastSnapshotTimestamp    *string                 `json:"last_snapshot_timestamp"`
     // The AWS-assigned name of the EBS volume.
-    Name                  *string            `json:"name"`
+    Name                     *string                 `json:"name"`
     // The Clumio-assigned ID of the organizational unit associated with the EBS volume.
-    OrganizationalUnitId  *string            `json:"organizational_unit_id"`
+    OrganizationalUnitId     *string                 `json:"organizational_unit_id"`
     // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
-    ProtectionInfo        *ProtectionInfo    `json:"protection_info"`
+    ProtectionInfo           *ProtectionInfoWithRule `json:"protection_info"`
     // The protection status of the EBS volume. Possible values include "protected",
     // "unprotected", and "unsupported". If the EBS volume does not support backups, then
     // this field has a value of `unsupported`. If the volume has been deleted, then this
     // field has a value of `null`.
-    ProtectionStatus      *string            `json:"protection_status"`
+    ProtectionStatus         *string                 `json:"protection_status"`
     // The size of the EBS volume. Measured in bytes (B).
-    Size                  *int64             `json:"size"`
+    Size                     *int64                  `json:"size"`
     // A tag created through AWS console which can be applied to EBS volumes.
-    Tags                  []*AwsTagModel     `json:"tags"`
+    Tags                     []*AwsTagModel          `json:"tags"`
     // The type of EBS volume. Possible values include "gp2", "io1", "st1", "sc1", and
     // "standard".
-    ClumioType            *string            `json:"type"`
+    ClumioType               *string                 `json:"type"`
     // The reason why protection is not available. If the volume is supported, then this
     // field has a value of `null`.
-    UnsupportedReason     *string            `json:"unsupported_reason"`
+    UnsupportedReason        *string                 `json:"unsupported_reason"`
     // The AWS-assigned ID of the EBS volume.
-    VolumeNativeId        *string            `json:"volume_native_id"`
+    VolumeNativeId           *string                 `json:"volume_native_id"`
 }
 
 // EBSBackupLinksV1 represents a custom type struct.
@@ -2025,6 +2043,8 @@ type MssqlDatabase struct {
     InstanceId                              *string                `json:"instance_id"`
     // The name of the Microsoft SQL instance containing the given database.
     InstanceName                            *string                `json:"instance_name"`
+    // is_supported is true if Clumio supports backup of the database.
+    IsSupported                             *bool                  `json:"is_supported"`
     // The timestamp of the last time this database was full backed up.
     // Represented in RFC-3339 format. If this database has never been backed up,
     // this field has a value of `null`.
@@ -2055,6 +2075,9 @@ type MssqlDatabase struct {
     SubgroupId                              *string                `json:"subgroup_id"`
     // The type of the database. Possible values include 'availability_group_database' and 'standalone_database'.
     ClumioType                              *string                `json:"type"`
+    // unsupported_reason is the reason why Clumio doesn't support backup of such database,
+    // possible values include 'filestream_enabled_database'.
+    UnsupportedReason                       *string                `json:"unsupported_reason"`
 }
 
 // MssqlDatabaseBackup represents a custom type struct
@@ -2525,6 +2548,41 @@ type OrganizationalUnitWithETag struct {
     Users                     []*string                `json:"users"`
 }
 
+// PermissionModel represents a custom type struct
+type PermissionModel struct {
+    // Description of the permission.
+    Description *string `json:"description"`
+    // The Clumio-assigned ID of the permission.
+    Id          *string `json:"id"`
+    // Name of the permission.
+    // The following table lists the supported permissions for a role:
+    // 
+    // +----------------------------------------------------+-------------------------+
+    // |                  Permission Name                   | Full/Partial Applicable |
+    // +====================================================+=========================+
+    // | Policy Management                                  | Yes                     |
+    // +----------------------------------------------------+-------------------------+
+    // | Data Source Management                             | Yes                     |
+    // +----------------------------------------------------+-------------------------+
+    // | Perform Backup (Scheduled or On-demand)            | Yes                     |
+    // +----------------------------------------------------+-------------------------+
+    // | Regular Restore                                    | No                      |
+    // +----------------------------------------------------+-------------------------+
+    // | Redirected Granular Restore (things like GRR &     | Yes                     |
+    // | content download)                                  |                         |
+    // +----------------------------------------------------+-------------------------+
+    // | Dashboards & Reports                               | Yes                     |
+    // +----------------------------------------------------+-------------------------+
+    // | Some Admin Functions (User mgmt, SSO/MFA, IP       | No                      |
+    // | Allow, Password expiry, OU, KMS)                   |                         |
+    // +----------------------------------------------------+-------------------------+
+    // | Other Admin Functions (API Tokens, Tasks, Alerts   | Yes                     |
+    // | and Audit Logs)                                    |                         |
+    // +----------------------------------------------------+-------------------------+
+    // 
+    Name        *string `json:"name"`
+}
+
 // Policy represents a custom type struct
 type Policy struct {
     // If the `embed` query parameter is set, displays the responses of the related resource,
@@ -2653,6 +2711,13 @@ type ProtectEntitiesHateoasLink struct {
     ClumioType *string `json:"type"`
 }
 
+// ProtectTemplateConfig represents a custom type struct
+type ProtectTemplateConfig struct {
+    // The asset types for which the template is to be generated. Possible
+    // asset types are ["EBS", "RDS", "DynamoDB", "EC2MSSQL"].
+    AssetTypesEnabled []*string `json:"asset_types_enabled"`
+}
+
 // ProtectTemplateInfo represents a custom type struct.
 // The latest available CloudFormation template for Clumio Cloud Protect.
 type ProtectTemplateInfo struct {
@@ -2660,6 +2725,18 @@ type ProtectTemplateInfo struct {
     AssetTypesEnabled        []*string        `json:"asset_types_enabled"`
     // The latest available URL for the template.
     AvailableTemplateUrl     *string          `json:"available_template_url"`
+    // The latest available version for the template.
+    AvailableTemplateVersion *string          `json:"available_template_version"`
+    // TODO: Add struct field description
+    Ebs                      *EbsTemplateInfo `json:"ebs"`
+    // TODO: Add struct field description
+    Rds                      *RdsTemplateInfo `json:"rds"`
+}
+
+// ProtectTemplateInfoV2 represents a custom type struct
+type ProtectTemplateInfoV2 struct {
+    // The AWS asset types supported with the available version of the template.
+    AssetTypesEnabled        []*string        `json:"asset_types_enabled"`
     // The latest available version for the template.
     AvailableTemplateVersion *string          `json:"available_template_version"`
     // TODO: Add struct field description
@@ -2719,6 +2796,41 @@ type ProtectionInfoDeprecated struct {
     Inheritedfrom *InheritedFrom `json:"inheritedFrom"`
     // PolicyID for the policy.
     Policyid      *string        `json:"policyId"`
+}
+
+// ProtectionInfoWithRule represents a custom type struct.
+// The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
+type ProtectionInfoWithRule struct {
+    // The ID of the entity from which protection was inherited.
+    // If protection was not inherited, then this field has a value of `null`.
+    InheritingEntityId   *string `json:"inheriting_entity_id"`
+    // The type of entity from which protection was inherited.
+    // If protection was not inherited, then this field has a value of `null`.
+    // Entities from which protection can be inherited include the following:
+    // 
+    // +--------------------------------+---------------------------------+
+    // |     Inheriting Entity Type     |             Details             |
+    // +================================+=================================+
+    // | aws_tag                        | AWS tag.                        |
+    // +--------------------------------+---------------------------------+
+    // | vmware_vm_folder               | VMware VM folder.               |
+    // +--------------------------------+---------------------------------+
+    // | vmware_datacenter              | VMware data center.             |
+    // +--------------------------------+---------------------------------+
+    // | vmware_datacenter_folder       | VMware data center folder.      |
+    // +--------------------------------+---------------------------------+
+    // | vmware_tag                     | VMware tag.                     |
+    // +--------------------------------+---------------------------------+
+    // | vmware_category                | VMware tag category.            |
+    // +--------------------------------+---------------------------------+
+    // | vmware_compute_resource        | VMware compute resource.        |
+    // +--------------------------------+---------------------------------+
+    // | vmware_compute_resource_folder | VMware compute resource folder. |
+    // +--------------------------------+---------------------------------+
+    // 
+    InheritingEntityType *string `json:"inheriting_entity_type"`
+    // A system-generated ID assigned to the policy protecting this resource.
+    PolicyId             *string `json:"policy_id"`
 }
 
 // RPOBackupSLAParam represents a custom type struct.
@@ -2982,6 +3094,54 @@ type RetentionBackupSLAParam struct {
     Unit  *string `json:"unit"`
     // The measurement value of the SLA parameter.
     Value *int64  `json:"value"`
+}
+
+// RoleLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type RoleLinks struct {
+    // The HATEOAS link to this resource.
+    Self *HateoasSelfLink `json:"_self"`
+}
+
+// RoleListEmbedded represents a custom type struct.
+// Embedded responses related to the resource.
+type RoleListEmbedded struct {
+    // RoleWithETag to support etag string to be calculated
+    Items []*RoleWithETag `json:"items"`
+}
+
+// RoleListLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type RoleListLinks struct {
+    // The HATEOAS link to the first page of results.
+    First *HateoasFirstLink `json:"_first"`
+    // The HATEOAS link to the last page of results.
+    Last  *HateoasLastLink  `json:"_last"`
+    // The HATEOAS link to the next page of results.
+    Next  *HateoasNextLink  `json:"_next"`
+    // The HATEOAS link to the previous page of results.
+    Prev  *HateoasPrevLink  `json:"_prev"`
+    // The HATEOAS link to this resource.
+    Self  *HateoasSelfLink  `json:"_self"`
+}
+
+// RoleWithETag represents a custom type struct.
+// RoleWithETag to support etag string to be calculated
+type RoleWithETag struct {
+    // ETag value
+    Etag        *string            `json:"_etag"`
+    // URLs to pages related to the resource.
+    Links       *RoleLinks         `json:"_links"`
+    // A description of the role.
+    Description *string            `json:"description"`
+    // The Clumio-assigned ID of the role.
+    Id          *string            `json:"id"`
+    // Unique name assigned to the role.
+    Name        *string            `json:"name"`
+    // TODO: Add struct field description
+    Permissions []*PermissionModel `json:"permissions"`
+    // Number of users to whom the role has been assigned.
+    UserCount   *int64             `json:"user_count"`
 }
 
 // SingleErrorResponse represents a custom type struct
@@ -3361,6 +3521,14 @@ type TaskPrimaryEntity struct {
     Value      *string `json:"value"`
 }
 
+// TemplateConfiguration represents a custom type struct
+type TemplateConfiguration struct {
+    // TODO: Add struct field description
+    Discover *DiscoverTemplateInfoV2 `json:"discover"`
+    // TODO: Add struct field description
+    Protect  *ProtectTemplateInfoV2  `json:"protect"`
+}
+
 // UnprotectEntitiesHateoasLink represents a custom type struct.
 // A HATEOAS link to unprotect the entities.
 type UnprotectEntitiesHateoasLink struct {
@@ -3408,6 +3576,8 @@ type UserHateoas struct {
     // The list of organizational unit IDs assigned to the user.
     // This attribute will be available when reading a single user and not when listing users.
     AssignedOrganizationalUnitIds []*string     `json:"assigned_organizational_unit_ids"`
+    // Assigned Role for the user.
+    AssignedRole                  *string       `json:"assigned_role"`
     // The email address of the Clumio user.
     Email                         *string       `json:"email"`
     // The first and last name of the Clumio user. The name appears in the User Management screen and is used to identify the user.

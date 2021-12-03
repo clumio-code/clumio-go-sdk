@@ -56,6 +56,16 @@ type CreateAWSConnectionResponse struct {
     Token                    *string             `json:"token"`
 }
 
+// CreateAWSTemplateV2Response represents a custom type struct for Success
+type CreateAWSTemplateV2Response struct {
+    // The latest available URL for the template.
+    CloudformationUrl *string                `json:"cloudformation_url"`
+    // TODO: Add struct field description
+    Config            *TemplateConfiguration `json:"config"`
+    // The latest available URL for the terraform template.
+    TerraformUrl      *string                `json:"terraform_url"`
+}
+
 // CreateHcmHostResponse represents a custom type struct for Success
 type CreateHcmHostResponse struct {
     // TODO: Add struct field description
@@ -177,6 +187,8 @@ type CreateUserResponse struct {
     // The list of organizational unit IDs assigned to the user.
     // This attribute will be available when reading a single user and not when listing users.
     AssignedOrganizationalUnitIds []*string     `json:"assigned_organizational_unit_ids"`
+    // Assigned Role for the user.
+    AssignedRole                  *string       `json:"assigned_role"`
     // The email address of the Clumio user.
     Email                         *string       `json:"email"`
     // The first and last name of the Clumio user. The name appears in the User Management screen and is used to identify the user.
@@ -230,6 +242,8 @@ type EditProfileResponse struct {
     // The list of organizational unit IDs assigned to the user.
     // This attribute will be available when reading a single user and not when listing users.
     AssignedOrganizationalUnitIds []*string     `json:"assigned_organizational_unit_ids"`
+    // Assigned Role for the user.
+    AssignedRole                  *string       `json:"assigned_role"`
     // The email address of the Clumio user.
     Email                         *string       `json:"email"`
     // The first and last name of the Clumio user. The name appears in the User Management screen and is used to identify the user.
@@ -784,6 +798,27 @@ type ListResourcePoolsResponse struct {
     TotalPagesCount *int64                    `json:"total_pages_count"`
 }
 
+// ListRolesResponse represents a custom type struct for Success
+type ListRolesResponse struct {
+    // Embedded responses related to the resource.
+    Embedded        *RoleListEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links           *RoleListLinks    `json:"_links"`
+    // The number of items listed on the current page.
+    CurrentCount    *int64            `json:"current_count"`
+    // The filter used in the request. The filter includes both manually-specified and system-generated filters.
+    FilterApplied   *string           `json:"filter_applied"`
+    // The maximum number of items displayed per page in the response.
+    Limit           *int64            `json:"limit"`
+    // The page number used to get this response.
+    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
+    Start           *string           `json:"start"`
+    // The total number of items, summed across all pages.
+    TotalCount      *int64            `json:"total_count"`
+    // The total number of pages of results.
+    TotalPagesCount *int64            `json:"total_pages_count"`
+}
+
 // ListSubgroupsResponse represents a custom type struct for Success
 type ListSubgroupsResponse struct {
     // Embedded responses related to the resource.
@@ -1150,6 +1185,12 @@ type ReadAWSTemplatesResponse struct {
     Protect  *ProtectTemplateInfo  `json:"protect"`
 }
 
+// ReadAWSTemplatesV2Response represents a custom type struct for Success
+type ReadAWSTemplatesV2Response struct {
+    // TODO: Add struct field description
+    Config *TemplateConfiguration `json:"config"`
+}
+
 // ReadAlertResponse represents a custom type struct for Success
 type ReadAlertResponse struct {
     // Embedded responses related to the resource.
@@ -1381,68 +1422,72 @@ type ReadEbsTagComplianceStatsResponse struct {
 // ReadEbsVolumeResponse represents a custom type struct for Success
 type ReadEbsVolumeResponse struct {
     // Embedded responses related to the resource.
-    Embedded              *EbsVolumeEmbedded `json:"_embedded"`
+    Embedded                 *EbsVolumeEmbedded      `json:"_embedded"`
     // URLs to pages related to the resource.
-    Links                 *EbsVolumeLinks    `json:"_links"`
+    Links                    *EbsVolumeLinks         `json:"_links"`
     // The AWS-assigned ID of the account associated with the EBS volume.
-    AccountNativeId       *string            `json:"account_native_id"`
+    AccountNativeId          *string                 `json:"account_native_id"`
     // The AWS availability zone in which the EBS volume resides. For example,
     // `us-west-2a`.
-    AwsAz                 *string            `json:"aws_az"`
+    AwsAz                    *string                 `json:"aws_az"`
     // The AWS region associated with the EBS volume.
-    AwsRegion             *string            `json:"aws_region"`
+    AwsRegion                *string                 `json:"aws_region"`
     // The compliance status of the protected EBS volume. Possible values include
     // "compliant" and "noncompliant". If the volume is not protected, then this field has
     // a value of `null`.
-    ComplianceStatus      *string            `json:"compliance_status"`
+    ComplianceStatus         *string                 `json:"compliance_status"`
     // The timestamp of when the volume was deleted. Represented in RFC-3339 format. If
     // this volume has not been deleted, then this field has a value of `null`.
-    DeletionTimestamp     *string            `json:"deletion_timestamp"`
+    DeletionTimestamp        *string                 `json:"deletion_timestamp"`
+    // The Clumio-assigned ID of the policy directly assigned to the entity.
+    DirectAssignmentPolicyId *string                 `json:"direct_assignment_policy_id"`
     // The Clumio-assigned ID of the AWS environment associated with the EBS volume.
-    EnvironmentId         *string            `json:"environment_id"`
+    EnvironmentId            *string                 `json:"environment_id"`
+    // Determines whether the table has a direct assignment.
+    HasDirectAssignment      *bool                   `json:"has_direct_assignment"`
     // The Clumio-assigned ID of the EBS volume.
-    Id                    *string            `json:"id"`
+    Id                       *string                 `json:"id"`
     // Determines whether the EBS volume has been deleted. If `true`, the volume has been
     // deleted.
-    IsDeleted             *bool              `json:"is_deleted"`
+    IsDeleted                *bool                   `json:"is_deleted"`
     // Determines whether the EBS volume is encrypted. If `true`, the volume is encrypted.
-    IsEncrypted           *bool              `json:"is_encrypted"`
+    IsEncrypted              *bool                   `json:"is_encrypted"`
     // Determines whether the EBS volume is supported for backups.
-    IsSupported           *bool              `json:"is_supported"`
+    IsSupported              *bool                   `json:"is_supported"`
     // The AWS-assigned ID of the KMS key encrypting the EBS volume. If the volume is
     // unencrypted, then this field has a value of `null`.
-    KmsKeyNativeId        *string            `json:"kms_key_native_id"`
+    KmsKeyNativeId           *string                 `json:"kms_key_native_id"`
     // The timestamp of the most recent backup of the EBS volume. Represented in RFC-3339
     // format. If the volume has never been backed up, then this field has a value of
     // `null`.
-    LastBackupTimestamp   *string            `json:"last_backup_timestamp"`
+    LastBackupTimestamp      *string                 `json:"last_backup_timestamp"`
     // The timestamp of the most recent snapshot of the EBS volume taken as part of
     // Snapshot Manager. Represented in RFC-3339 format. If the volume has never been
     // snapshotted, then this field has a value of `null`.
-    LastSnapshotTimestamp *string            `json:"last_snapshot_timestamp"`
+    LastSnapshotTimestamp    *string                 `json:"last_snapshot_timestamp"`
     // The AWS-assigned name of the EBS volume.
-    Name                  *string            `json:"name"`
+    Name                     *string                 `json:"name"`
     // The Clumio-assigned ID of the organizational unit associated with the EBS volume.
-    OrganizationalUnitId  *string            `json:"organizational_unit_id"`
+    OrganizationalUnitId     *string                 `json:"organizational_unit_id"`
     // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
-    ProtectionInfo        *ProtectionInfo    `json:"protection_info"`
+    ProtectionInfo           *ProtectionInfoWithRule `json:"protection_info"`
     // The protection status of the EBS volume. Possible values include "protected",
     // "unprotected", and "unsupported". If the EBS volume does not support backups, then
     // this field has a value of `unsupported`. If the volume has been deleted, then this
     // field has a value of `null`.
-    ProtectionStatus      *string            `json:"protection_status"`
+    ProtectionStatus         *string                 `json:"protection_status"`
     // The size of the EBS volume. Measured in bytes (B).
-    Size                  *int64             `json:"size"`
+    Size                     *int64                  `json:"size"`
     // A tag created through AWS console which can be applied to EBS volumes.
-    Tags                  []*AwsTagModel     `json:"tags"`
+    Tags                     []*AwsTagModel          `json:"tags"`
     // The type of EBS volume. Possible values include "gp2", "io1", "st1", "sc1", and
     // "standard".
-    ClumioType            *string            `json:"type"`
+    ClumioType               *string                 `json:"type"`
     // The reason why protection is not available. If the volume is supported, then this
     // field has a value of `null`.
-    UnsupportedReason     *string            `json:"unsupported_reason"`
+    UnsupportedReason        *string                 `json:"unsupported_reason"`
     // The AWS-assigned ID of the EBS volume.
-    VolumeNativeId        *string            `json:"volume_native_id"`
+    VolumeNativeId           *string                 `json:"volume_native_id"`
 }
 
 // ReadFileSystemResponse represents a custom type struct for Success
@@ -1696,6 +1741,8 @@ type ReadMssqlDatabaseResponse struct {
     InstanceId                              *string                `json:"instance_id"`
     // The name of the Microsoft SQL instance containing the given database.
     InstanceName                            *string                `json:"instance_name"`
+    // is_supported is true if Clumio supports backup of the database.
+    IsSupported                             *bool                  `json:"is_supported"`
     // The timestamp of the last time this database was full backed up.
     // Represented in RFC-3339 format. If this database has never been backed up,
     // this field has a value of `null`.
@@ -1726,6 +1773,9 @@ type ReadMssqlDatabaseResponse struct {
     SubgroupId                              *string                `json:"subgroup_id"`
     // The type of the database. Possible values include 'availability_group_database' and 'standalone_database'.
     ClumioType                              *string                `json:"type"`
+    // unsupported_reason is the reason why Clumio doesn't support backup of such database,
+    // possible values include 'filestream_enabled_database'.
+    UnsupportedReason                       *string                `json:"unsupported_reason"`
 }
 
 // ReadMssqlHostResponse represents a custom type struct for Success
@@ -1876,6 +1926,24 @@ type ReadResourcePoolResponse struct {
     Parent          *VMwareResourcePoolParentModel          `json:"parent"`
 }
 
+// ReadRoleResponse represents a custom type struct for Success
+type ReadRoleResponse struct {
+    // ETag value
+    Etag        *string            `json:"_etag"`
+    // URLs to pages related to the resource.
+    Links       *RoleLinks         `json:"_links"`
+    // A description of the role.
+    Description *string            `json:"description"`
+    // The Clumio-assigned ID of the role.
+    Id          *string            `json:"id"`
+    // Unique name assigned to the role.
+    Name        *string            `json:"name"`
+    // TODO: Add struct field description
+    Permissions []*PermissionModel `json:"permissions"`
+    // Number of users to whom the role has been assigned.
+    UserCount   *int64             `json:"user_count"`
+}
+
 // ReadSubgroupResponse represents a custom type struct for Success
 type ReadSubgroupResponse struct {
     // URLs to pages related to the resource.
@@ -2015,6 +2083,8 @@ type ReadUserResponse struct {
     // The list of organizational unit IDs assigned to the user.
     // This attribute will be available when reading a single user and not when listing users.
     AssignedOrganizationalUnitIds []*string     `json:"assigned_organizational_unit_ids"`
+    // Assigned Role for the user.
+    AssignedRole                  *string       `json:"assigned_role"`
     // The email address of the Clumio user.
     Email                         *string       `json:"email"`
     // The first and last name of the Clumio user. The name appears in the User Management screen and is used to identify the user.
@@ -2641,6 +2711,8 @@ type UpdateUserResponse struct {
     // The list of organizational unit IDs assigned to the user.
     // This attribute will be available when reading a single user and not when listing users.
     AssignedOrganizationalUnitIds []*string     `json:"assigned_organizational_unit_ids"`
+    // Assigned Role for the user.
+    AssignedRole                  *string       `json:"assigned_role"`
     // The email address of the Clumio user.
     Email                         *string       `json:"email"`
     // The first and last name of the Clumio user. The name appears in the User Management screen and is used to identify the user.
