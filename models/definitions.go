@@ -13,6 +13,10 @@ type AWSConnection struct {
     AccountNativeId          *string             `json:"account_native_id"`
     // The AWS region associated with the connection. For example, `us-east-1`.
     AwsRegion                *string             `json:"aws_region"`
+    // Clumio AWS AccountId
+    ClumioAwsAccountId       *string             `json:"clumio_aws_account_id"`
+    // Clumio AWS Region
+    ClumioAwsRegion          *string             `json:"clumio_aws_region"`
     // The status of the connection. Possible values include "connecting",
     // "connected", and "unlinked".
     ConnectionStatus         *string             `json:"connection_status"`
@@ -26,6 +30,10 @@ type AWSConnection struct {
     Discover                 *DiscoverConfig     `json:"discover"`
     // The Clumio-assigned ID of the connection.
     Id                       *string             `json:"id"`
+    // Lambda Bucket Prefix required for configuring Clumio Protect Warm-tier AWS Lambda.
+    LambdaBucketPrefix       *string             `json:"lambda_bucket_prefix"`
+    // K8S Namespace
+    Namespace                *string             `json:"namespace"`
     // The Clumio-assigned ID of the organizational unit associated with the
     // AWS environment. If this parameter is not provided, then the value
     // defaults to the first organizational unit assigned to the requesting
@@ -49,6 +57,8 @@ type AWSConnection struct {
     StackArn                 *string             `json:"stack_arn"`
     // The name given to the installed CloudFormation stack on AWS.
     StackName                *string             `json:"stack_name"`
+    // Subnets Lambda Object Key required for configuring Clumio Protect Warm-tier AWS Lambda.
+    SubnetsLambdaObjectKey   *string             `json:"subnets_lambda_object_key"`
     // The 36-character Clumio AWS integration ID token used to identify the
     // installation of the CloudFormation template on the account. This value
     // will be pasted into the ClumioToken field when creating the
