@@ -6,54 +6,64 @@ package models
 // AWSConnection represents a custom type struct
 type AWSConnection struct {
     // URLs to pages related to the resource.
-    Links                    *AWSConnectionLinks `json:"_links"`
+    Links                         *AWSConnectionLinks `json:"_links"`
     // The alias given to the account on AWS.
-    AccountName              *string             `json:"account_name"`
+    AccountName                   *string             `json:"account_name"`
     // The AWS-assigned ID of the account associated with the connection.
-    AccountNativeId          *string             `json:"account_native_id"`
+    AccountNativeId               *string             `json:"account_native_id"`
+    // AwsBackupProxyLambdaObjectKey required for configuring Clumio Protect Warm-tier AWS Lambda.
+    AwsBackupProxyLambdaObjectKey *string             `json:"aws_backup_proxy_lambda_object_key"`
     // The AWS region associated with the connection. For example, `us-east-1`.
-    AwsRegion                *string             `json:"aws_region"`
+    AwsRegion                     *string             `json:"aws_region"`
+    // Clumio AWS AccountId
+    ClumioAwsAccountId            *string             `json:"clumio_aws_account_id"`
+    // Clumio AWS Region
+    ClumioAwsRegion               *string             `json:"clumio_aws_region"`
     // The status of the connection. Possible values include "connecting",
     // "connected", and "unlinked".
-    ConnectionStatus         *string             `json:"connection_status"`
+    ConnectionStatus              *string             `json:"connection_status"`
     // The timestamp of when the connection was created.
-    CreatedTimestamp         *string             `json:"created_timestamp"`
+    CreatedTimestamp              *string             `json:"created_timestamp"`
     // An optional, user-provided description for this connection.
-    Description              *string             `json:"description"`
+    Description                   *string             `json:"description"`
     // The configuration of the Clumio Discover product for this connection.
     // If this connection is not configured for Clumio Discover, then this field has a
     // value of `null`.
-    Discover                 *DiscoverConfig     `json:"discover"`
+    Discover                      *DiscoverConfig     `json:"discover"`
     // The Clumio-assigned ID of the connection.
-    Id                       *string             `json:"id"`
+    Id                            *string             `json:"id"`
+    // Lambda Bucket Prefix required for configuring Clumio Protect Warm-tier AWS Lambda.
+    LambdaBucketPrefix            *string             `json:"lambda_bucket_prefix"`
+    // K8S Namespace
+    Namespace                     *string             `json:"namespace"`
     // The Clumio-assigned ID of the organizational unit associated with the
     // AWS environment. If this parameter is not provided, then the value
     // defaults to the first organizational unit assigned to the requesting
     // user. For more information about organizational units, refer to the
     // Organizational-Units documentation.
-    OrganizationalUnitId     *string             `json:"organizational_unit_id"`
+    OrganizationalUnitId          *string             `json:"organizational_unit_id"`
     // The configuration of the Clumio Cloud Protect product for this connection.
     // If this connection is not configured for Clumio Cloud Protect, then this field has a
     // value of `null`.
-    Protect                  *ProtectConfig      `json:"protect"`
+    Protect                       *ProtectConfig      `json:"protect"`
     // The asset types enabled for protect. This is only populated if "protect"
     // is enabled. Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL"].
     // EBS and RDS are mandatory datasources.
-    ProtectAssetTypesEnabled []*string           `json:"protect_asset_types_enabled"`
+    ProtectAssetTypesEnabled      []*string           `json:"protect_asset_types_enabled"`
     // The services to be enabled for this configuration. Valid values are
     // ["discover"], ["discover", "protect"]. This is only set when the
     // registration is created, the enabled services are obtained directly from
     // the installed template after that.
-    ServicesEnabled          []*string           `json:"services_enabled"`
+    ServicesEnabled               []*string           `json:"services_enabled"`
     // The Amazon Resource Name of the installed CloudFormation stack in this AWS account
-    StackArn                 *string             `json:"stack_arn"`
+    StackArn                      *string             `json:"stack_arn"`
     // The name given to the installed CloudFormation stack on AWS.
-    StackName                *string             `json:"stack_name"`
+    StackName                     *string             `json:"stack_name"`
     // The 36-character Clumio AWS integration ID token used to identify the
     // installation of the CloudFormation template on the account. This value
     // will be pasted into the ClumioToken field when creating the
     // CloudFormation stack.
-    Token                    *string             `json:"token"`
+    Token                         *string             `json:"token"`
 }
 
 // AWSConnectionConfigModel represents a custom type struct
