@@ -73,6 +73,26 @@ type CreateAwsConnectionV1Request struct {
     ServicesEnabled          []*string `json:"services_enabled"`
 }
 
+// PostProcessAwsConnectionV1Request represents a custom type struct.
+// The body of the request.
+type PostProcessAwsConnectionV1Request struct {
+    // The AWS-assigned ID of the account associated with the connection.
+    AccountNativeId *string `json:"account_native_id"`
+    // The AWS region associated with the connection. For example, `us-east-1`.
+    AwsRegion       *string `json:"aws_region"`
+    // Configuration represents the AWS connection configuration in json string format
+    Configuration   *string `json:"configuration"`
+    // RequestType indicates whether this is a Create, Update or Delete request
+    RequestType     *string `json:"request_type"`
+    // RoleArn is the ARN of the ClumioIAMRole created in the customer account
+    RoleArn         *string `json:"role_arn"`
+    // Role External Id is the unique string passed while creating the AWS resources .
+    RoleExternalId  *string `json:"role_external_id"`
+    // The 36-character Clumio AWS integration ID token used to identify the
+    // installation of the CloudFormation/Terraform template on the account.
+    Token           *string `json:"token"`
+}
+
 // CreateConnectionTemplateV1Request represents a custom type struct.
 // The body of the request.
 type CreateConnectionTemplateV1Request struct {
