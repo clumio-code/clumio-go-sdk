@@ -1384,6 +1384,16 @@ type EntityGroupEmbedded struct {
     ReadTask interface{} `json:"read-task"`
 }
 
+// EntityModel represents a custom type struct.
+// entityModel denotes the entityModel
+type EntityModel struct {
+    // The parent object of the primary entity associated with the organizational unit. For example, "vmware_vcenter" is the parent entity of primary entity "vmware_vm_folder".
+    // The parent object is necessary for VMware entities and can be omitted for other data sources.
+    ParentEntity  *OrganizationalUnitParentEntity  `json:"parent_entity"`
+    // The primary object associated with the organizational unit. Examples of primary entities include "aws_environment" and "vmware_vm".
+    PrimaryEntity *OrganizationalUnitPrimaryEntity `json:"primary_entity"`
+}
+
 // FileDescriptor represents a custom type struct.
 // Specifies a file/directory by providing path and file system.
 type FileDescriptor struct {
@@ -3550,9 +3560,9 @@ type UnprotectEntitiesHateoasLink struct {
 // Updates to the entities in the organizational unit.
 type UpdateEntities struct {
     // entityModel denotes the entityModel
-    Add    []*entityModel `json:"add"`
+    Add    []*EntityModel `json:"add"`
     // entityModel denotes the entityModel
-    Remove []*entityModel `json:"remove"`
+    Remove []*EntityModel `json:"remove"`
 }
 
 // UpdateUserAssignments represents a custom type struct.
@@ -4458,14 +4468,4 @@ type VmListLinks struct {
     Prev  *HateoasPrevLink  `json:"_prev"`
     // The HATEOAS link to this resource.
     Self  *HateoasSelfLink  `json:"_self"`
-}
-
-// entityModel represents a custom type struct.
-// entityModel denotes the entityModel
-type entityModel struct {
-    // The parent object of the primary entity associated with the organizational unit. For example, "vmware_vcenter" is the parent entity of primary entity "vmware_vm_folder".
-    // The parent object is necessary for VMware entities and can be omitted for other data sources.
-    ParentEntity  *OrganizationalUnitParentEntity  `json:"parent_entity"`
-    // The primary object associated with the organizational unit. Examples of primary entities include "aws_environment" and "vmware_vm".
-    PrimaryEntity *OrganizationalUnitPrimaryEntity `json:"primary_entity"`
 }
