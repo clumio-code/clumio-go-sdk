@@ -165,7 +165,7 @@ type CreateOrganizationalUnitV1Request struct {
     // A description of the organizational unit.
     Description *string        `json:"description"`
     // entityModel denotes the entityModel
-    Entities    []*entityModel `json:"entities"`
+    Entities    []*EntityModel `json:"entities"`
     // Unique name assigned to the organizational unit.
     Name        *string        `json:"name"`
     // The Clumio-assigned ID of the parent organizational unit under which the new organizational unit is to be created.
