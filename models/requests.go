@@ -186,6 +186,12 @@ type PatchOrganizationalUnitV1Request struct {
     Users       *UpdateUserAssignments `json:"users"`
 }
 
+// SetPolicyAssignmentsV1Request represents a custom type struct
+type SetPolicyAssignmentsV1Request struct {
+    // The portion of the policy assignment used for updates/creations
+    Items []*assignmentInputModel `json:"items"`
+}
+
 // CreatePolicyDefinitionV1Request represents a custom type struct
 type CreatePolicyDefinitionV1Request struct {
     // The status of the policy.
@@ -210,6 +216,188 @@ type UpdatePolicyDefinitionV1Request struct {
     Operations           []*PolicyOperation `json:"operations"`
     // The Clumio-assigned ID of the organizational unit associated with the policy.
     OrganizationalUnitId *string            `json:"organizational_unit_id"`
+}
+
+// CreatePolicyRuleV1Request represents a custom type struct
+type CreatePolicyRuleV1Request struct {
+    // An action to be applied subject to the rule criteria.
+    Action        *RuleAction   `json:"action"`
+    // The following table describes the possible conditions for a rule.
+    // 
+    // +-----------------------+---------------------------+--------------------------+
+    // |         Field         |      Rule Condition       |       Description        |
+    // +=======================+===========================+==========================+
+    // | aws_account_native_id | $eq, $in                  | Denotes the AWS account  |
+    // |                       |                           | to conditionalize on     |
+    // |                       |                           |                          |
+    // |                       |                           | {"aws_account_native_id" |
+    // |                       |                           | :{"$eq":"111111111111"}} |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"aws_account_native_id" |
+    // |                       |                           | :{"$in":["111111111111", |
+    // |                       |                           | "222222222222"]}}        |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // +-----------------------+---------------------------+--------------------------+
+    // | aws_region            | $eq, $in                  | Denotes the AWS region   |
+    // |                       |                           | to conditionalize on     |
+    // |                       |                           |                          |
+    // |                       |                           | {"aws_region":{"$eq":"us |
+    // |                       |                           | -west-2"}}               |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"aws_region":{"$in":["u |
+    // |                       |                           | s-west-2", "us-          |
+    // |                       |                           | east-1"]}}               |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // +-----------------------+---------------------------+--------------------------+
+    // | aws_tag               | $eq, $in, $all, $contains | Denotes the AWS tag(s)   |
+    // |                       |                           | to conditionalize on     |
+    // |                       |                           |                          |
+    // |                       |                           | {"aws_tag":{"$eq":{"key" |
+    // |                       |                           | :"Environment",          |
+    // |                       |                           | "value":"Prod"}}}        |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"aws_tag":{"$in":[{"key |
+    // |                       |                           | ":"Environment",         |
+    // |                       |                           | "value":"Prod"},         |
+    // |                       |                           | {"key":"Hello",          |
+    // |                       |                           | "value":"World"}]}}      |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"aws_tag":{"$all":[{"ke |
+    // |                       |                           | y":"Environment",        |
+    // |                       |                           | "value":"Prod"},         |
+    // |                       |                           | {"key":"Hello",          |
+    // |                       |                           | "value":"World"}]}}      |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"aws_tag":{"$contains": |
+    // |                       |                           | {"key":"Environment",    |
+    // |                       |                           | "value":"Prod"}}}        |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // +-----------------------+---------------------------+--------------------------+
+    // 
+    Condition     *string       `json:"condition"`
+    // The following table describes the possible execution types of a rule.
+    // 
+    // +--------+---------------------------------------------------------------------+
+    // |  Type  |                             Description                             |
+    // +========+=====================================================================+
+    // | actual | Create and apply the rule                                           |
+    // +--------+---------------------------------------------------------------------+
+    // | dryrun | Preview the effect of the rule without applying or persisting the   |
+    // |        | rule                                                                |
+    // +--------+---------------------------------------------------------------------+
+    // 
+    ExecutionType *string       `json:"execution_type"`
+    // Name of the rule.
+    Name          *string       `json:"name"`
+    // A priority relative to other rules.
+    Priority      *RulePriority `json:"priority"`
+}
+
+// UpdatePolicyRuleV1Request represents a custom type struct
+type UpdatePolicyRuleV1Request struct {
+    // An action to be applied subject to the rule criteria.
+    Action        *RuleAction   `json:"action"`
+    // The following table describes the possible conditions for a rule.
+    // 
+    // +-----------------------+---------------------------+--------------------------+
+    // |         Field         |      Rule Condition       |       Description        |
+    // +=======================+===========================+==========================+
+    // | aws_account_native_id | $eq, $in                  | Denotes the AWS account  |
+    // |                       |                           | to conditionalize on     |
+    // |                       |                           |                          |
+    // |                       |                           | {"aws_account_native_id" |
+    // |                       |                           | :{"$eq":"111111111111"}} |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"aws_account_native_id" |
+    // |                       |                           | :{"$in":["111111111111", |
+    // |                       |                           | "222222222222"]}}        |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // +-----------------------+---------------------------+--------------------------+
+    // | aws_region            | $eq, $in                  | Denotes the AWS region   |
+    // |                       |                           | to conditionalize on     |
+    // |                       |                           |                          |
+    // |                       |                           | {"aws_region":{"$eq":"us |
+    // |                       |                           | -west-2"}}               |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"aws_region":{"$in":["u |
+    // |                       |                           | s-west-2", "us-          |
+    // |                       |                           | east-1"]}}               |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // +-----------------------+---------------------------+--------------------------+
+    // | aws_tag               | $eq, $in, $all, $contains | Denotes the AWS tag(s)   |
+    // |                       |                           | to conditionalize on     |
+    // |                       |                           |                          |
+    // |                       |                           | {"aws_tag":{"$eq":{"key" |
+    // |                       |                           | :"Environment",          |
+    // |                       |                           | "value":"Prod"}}}        |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"aws_tag":{"$in":[{"key |
+    // |                       |                           | ":"Environment",         |
+    // |                       |                           | "value":"Prod"},         |
+    // |                       |                           | {"key":"Hello",          |
+    // |                       |                           | "value":"World"}]}}      |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"aws_tag":{"$all":[{"ke |
+    // |                       |                           | y":"Environment",        |
+    // |                       |                           | "value":"Prod"},         |
+    // |                       |                           | {"key":"Hello",          |
+    // |                       |                           | "value":"World"}]}}      |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"aws_tag":{"$contains": |
+    // |                       |                           | {"key":"Environment",    |
+    // |                       |                           | "value":"Prod"}}}        |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // +-----------------------+---------------------------+--------------------------+
+    // 
+    Condition     *string       `json:"condition"`
+    // The following table describes the possible execution types of a rule.
+    // 
+    // +--------+---------------------------------------------------------------------+
+    // |  Type  |                             Description                             |
+    // +========+=====================================================================+
+    // | actual | Create and apply the rule                                           |
+    // +--------+---------------------------------------------------------------------+
+    // | dryrun | Preview the effect of the rule without applying or persisting the   |
+    // |        | rule                                                                |
+    // +--------+---------------------------------------------------------------------+
+    // 
+    ExecutionType *string       `json:"execution_type"`
+    // Name of the rule.
+    Name          *string       `json:"name"`
+    // A priority relative to other rules.
+    Priority      *RulePriority `json:"priority"`
+}
+
+// DeletePolicyRuleV1Request represents a custom type struct
+type DeletePolicyRuleV1Request struct {
+    // The following table describes the possible execution types of a rule.
+    // 
+    // +--------+---------------------------------------------------------------------+
+    // |  Type  |                             Description                             |
+    // +========+=====================================================================+
+    // | actual | Create and apply the rule                                           |
+    // +--------+---------------------------------------------------------------------+
+    // | dryrun | Preview the effect of the rule without applying or persisting the   |
+    // |        | rule                                                                |
+    // +--------+---------------------------------------------------------------------+
+    // 
+    ExecutionType *string `json:"execution_type"`
 }
 
 // ListReportDownloadsV1Request represents a custom type struct

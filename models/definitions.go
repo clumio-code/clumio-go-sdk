@@ -351,6 +351,40 @@ type AncestorRefModel struct {
     ClumioType *string `json:"type"`
 }
 
+// AssignPolicyAction represents a custom type struct.
+// Apply a policy to assets.
+type AssignPolicyAction struct {
+    // The policy to be applied to the assets.
+    PolicyId *string `json:"policy_id"`
+}
+
+// AssignmentEntity represents a custom type struct
+type AssignmentEntity struct {
+    // A system-generated ID assigned of an entity being assigned or unassigned to a policy.
+    Id         *string `json:"id"`
+    // 
+    // The type of an entity being associated or disassociated with a policy.
+    // Valid primary entity types include the following:
+    // 
+    // +---------------------+---------------------+
+    // | Primary Entity Type |       Details       |
+    // +=====================+=====================+
+    // | aws_ebs_volume      | AWS EBS volume.     |
+    // +---------------------+---------------------+
+    // | aws_ec2_instance    | AWS EC2 instance.   |
+    // +---------------------+---------------------+
+    // | aws_rds_cluster     | AWS RDS cluster.    |
+    // +---------------------+---------------------+
+    // | aws_rds_instance    | AWS RDS instance.   |
+    // +---------------------+---------------------+
+    // | aws_dynamodb_table  | AWS DynamoDB table. |
+    // +---------------------+---------------------+
+    // | protection_group    | Protection group.   |
+    // +---------------------+---------------------+
+    // 
+    ClumioType *string `json:"type"`
+}
+
 // AuditTrails represents a custom type struct
 type AuditTrails struct {
     // The action performed by the user.
@@ -3160,6 +3194,118 @@ type RoleWithETag struct {
     UserCount   *int64             `json:"user_count"`
 }
 
+// Rule represents a custom type struct.
+// A rule applies an action subject to a condition criteria.
+type Rule struct {
+    // Embedded responses related to the resource.
+    Embedded  *RuleEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links     *RuleLinks    `json:"_links"`
+    // An action to be applied subject to the rule criteria.
+    Action    *RuleAction   `json:"action"`
+    // The following table describes the possible conditions for a rule.
+    // 
+    // +-----------------------+---------------------------+--------------------------+
+    // |         Field         |      Rule Condition       |       Description        |
+    // +=======================+===========================+==========================+
+    // | aws_account_native_id | $eq, $in                  | Denotes the AWS account  |
+    // |                       |                           | to conditionalize on     |
+    // |                       |                           |                          |
+    // |                       |                           | {"aws_account_native_id" |
+    // |                       |                           | :{"$eq":"111111111111"}} |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"aws_account_native_id" |
+    // |                       |                           | :{"$in":["111111111111", |
+    // |                       |                           | "222222222222"]}}        |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // +-----------------------+---------------------------+--------------------------+
+    // | aws_region            | $eq, $in                  | Denotes the AWS region   |
+    // |                       |                           | to conditionalize on     |
+    // |                       |                           |                          |
+    // |                       |                           | {"aws_region":{"$eq":"us |
+    // |                       |                           | -west-2"}}               |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"aws_region":{"$in":["u |
+    // |                       |                           | s-west-2", "us-          |
+    // |                       |                           | east-1"]}}               |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // +-----------------------+---------------------------+--------------------------+
+    // | aws_tag               | $eq, $in, $all, $contains | Denotes the AWS tag(s)   |
+    // |                       |                           | to conditionalize on     |
+    // |                       |                           |                          |
+    // |                       |                           | {"aws_tag":{"$eq":{"key" |
+    // |                       |                           | :"Environment",          |
+    // |                       |                           | "value":"Prod"}}}        |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"aws_tag":{"$in":[{"key |
+    // |                       |                           | ":"Environment",         |
+    // |                       |                           | "value":"Prod"},         |
+    // |                       |                           | {"key":"Hello",          |
+    // |                       |                           | "value":"World"}]}}      |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"aws_tag":{"$all":[{"ke |
+    // |                       |                           | y":"Environment",        |
+    // |                       |                           | "value":"Prod"},         |
+    // |                       |                           | {"key":"Hello",          |
+    // |                       |                           | "value":"World"}]}}      |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"aws_tag":{"$contains": |
+    // |                       |                           | {"key":"Environment",    |
+    // |                       |                           | "value":"Prod"}}}        |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // +-----------------------+---------------------------+--------------------------+
+    // 
+    Condition *string       `json:"condition"`
+    // The Clumio-assigned ID of the policy rule.
+    Id        *string       `json:"id"`
+    // Name of the rule.
+    Name      *string       `json:"name"`
+    // A priority relative to other rules.
+    Priority  *RulePriority `json:"priority"`
+}
+
+// RuleAction represents a custom type struct.
+// An action to be applied subject to the rule criteria.
+type RuleAction struct {
+    // Apply a policy to assets.
+    AssignPolicy *AssignPolicyAction `json:"assign_policy"`
+}
+
+// RuleEmbedded represents a custom type struct.
+// Embedded responses related to the resource.
+type RuleEmbedded struct {
+    // Embeds the associated policy of a protected resource in the response if requested using the `embed` query parameter. Unprotected resources will not have an associated policy.
+    ReadPolicyDefinition interface{} `json:"read-policy-definition"`
+}
+
+// RuleLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type RuleLinks struct {
+    // The HATEOAS link to this resource.
+    Self                 *HateoasSelfLink                 `json:"_self"`
+    // A resource-specific HATEOAS link.
+    DeletePolicyRule     *HateoasLink                     `json:"delete-policy-rule"`
+    // A HATEOAS link to the policy protecting this resource. Will be omitted for unprotected entities.
+    ReadPolicyDefinition *ReadPolicyDefinitionHateoasLink `json:"read-policy-definition"`
+    // A resource-specific HATEOAS link.
+    UpdatePolicyRule     *HateoasLink                     `json:"update-policy-rule"`
+}
+
+// RulePriority represents a custom type struct.
+// A priority relative to other rules.
+type RulePriority struct {
+    // The rule ID before which this rule should be inserted.
+    BeforeRuleId *string `json:"before_rule_id"`
+}
+
 // SingleErrorResponse represents a custom type struct
 type SingleErrorResponse struct {
     // TODO: Add struct field description
@@ -4468,4 +4614,18 @@ type VmListLinks struct {
     Prev  *HateoasPrevLink  `json:"_prev"`
     // The HATEOAS link to this resource.
     Self  *HateoasSelfLink  `json:"_self"`
+}
+
+// assignmentInputModel represents a custom type struct.
+// The portion of the policy assignment used for updates/creations
+type assignmentInputModel struct {
+    // The action to be executed by this request.
+    // Possible values include "assign" and "unassign".
+    Action   *string           `json:"action"`
+    // TODO: Add struct field description
+    Entity   *AssignmentEntity `json:"entity"`
+    // The Clumio-assigned ID of the policy to be applied to the requested entities.
+    // If `action: assign`, then this parameter is required.
+    // Otherwise, it must not be provided.
+    PolicyId *string           `json:"policy_id"`
 }
