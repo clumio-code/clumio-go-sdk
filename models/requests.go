@@ -189,7 +189,7 @@ type PatchOrganizationalUnitV1Request struct {
 // SetPolicyAssignmentsV1Request represents a custom type struct
 type SetPolicyAssignmentsV1Request struct {
     // The portion of the policy assignment used for updates/creations
-    Items []*assignmentInputModel `json:"items"`
+    Items []*AssignmentInputModel `json:"items"`
 }
 
 // CreatePolicyDefinitionV1Request represents a custom type struct
@@ -551,8 +551,8 @@ type CreateReportDownloadV1Request struct {
     // |                   |                  |                   | filter={"primary_ |
     // |                   |                  |                   | entity.id":{"$in" |
     // |                   |                  |                   | :["9c2934fc-ff4d- |
-    // |                   |                  |                   | 11e9-8e11-76706df |
-    // |                   |                  |                   | 7fe01"]}}         |
+    // |                   |                  |                   | 11e9-8e11-        |
+    // |                   |                  |                   | 76706df7fe01"]}}  |
     // |                   |                  |                   |                   |
     // |                   |                  |                   |                   |
     // +-------------------+------------------+-------------------+-------------------+
@@ -590,9 +590,9 @@ type CreateReportDownloadV1Request struct {
     // |                   |                  |                   | primary entity    |
     // |                   |                  |                   | type              |
     // |                   |                  |                   | "aws_ebs_volume"  |
-    // |                   |                  |                   | is "vol-0a5f2e52d |
-    // |                   |                  |                   | 6decd664"         |
-    // |                   |                  |                   | representing      |
+    // |                   |                  |                   | is "vol-          |
+    // |                   |                  |                   | 0a5f2e52d6decd664 |
+    // |                   |                  |                   | " representing    |
     // |                   |                  |                   | the name of the   |
     // |                   |                  |                   | EBS volume. The   |
     // |                   |                  |                   | filter supports   |
@@ -657,9 +657,9 @@ type CreateReportDownloadV1Request struct {
     // |                   |                  |                   |                   |
     // |                   |                  |                   | filter={"parent_e |
     // |                   |                  |                   | ntity.id":{"$in": |
-    // |                   |                  |                   | ["9c2934fc-ff4d-1 |
-    // |                   |                  |                   | 1e9-8e11-76706df7 |
-    // |                   |                  |                   | fe01"]}}          |
+    // |                   |                  |                   | ["9c2934fc-ff4d-  |
+    // |                   |                  |                   | 11e9-8e11-        |
+    // |                   |                  |                   | 76706df7fe01"]}}  |
     // |                   |                  |                   |                   |
     // |                   |                  |                   |                   |
     // +-------------------+------------------+-------------------+-------------------+
