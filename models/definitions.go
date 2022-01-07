@@ -385,6 +385,20 @@ type AssignmentEntity struct {
     ClumioType *string `json:"type"`
 }
 
+// AssignmentInputModel represents a custom type struct.
+// The portion of the policy assignment used for updates/creations
+type AssignmentInputModel struct {
+    // The action to be executed by this request.
+    // Possible values include "assign" and "unassign".
+    Action   *string           `json:"action"`
+    // TODO: Add struct field description
+    Entity   *AssignmentEntity `json:"entity"`
+    // The Clumio-assigned ID of the policy to be applied to the requested entities.
+    // If `action: assign`, then this parameter is required.
+    // Otherwise, it must not be provided.
+    PolicyId *string           `json:"policy_id"`
+}
+
 // AuditTrails represents a custom type struct
 type AuditTrails struct {
     // The action performed by the user.
@@ -4614,18 +4628,4 @@ type VmListLinks struct {
     Prev  *HateoasPrevLink  `json:"_prev"`
     // The HATEOAS link to this resource.
     Self  *HateoasSelfLink  `json:"_self"`
-}
-
-// assignmentInputModel represents a custom type struct.
-// The portion of the policy assignment used for updates/creations
-type assignmentInputModel struct {
-    // The action to be executed by this request.
-    // Possible values include "assign" and "unassign".
-    Action   *string           `json:"action"`
-    // TODO: Add struct field description
-    Entity   *AssignmentEntity `json:"entity"`
-    // The Clumio-assigned ID of the policy to be applied to the requested entities.
-    // If `action: assign`, then this parameter is required.
-    // Otherwise, it must not be provided.
-    PolicyId *string           `json:"policy_id"`
 }
