@@ -221,7 +221,7 @@ type UpdatePolicyDefinitionV1Request struct {
 // CreatePolicyRuleV1Request represents a custom type struct
 type CreatePolicyRuleV1Request struct {
     // An action to be applied subject to the rule criteria.
-    Action        *RuleAction   `json:"action"`
+    Action    *RuleAction   `json:"action"`
     // The following table describes the possible conditions for a rule.
     // 
     // +-----------------------+---------------------------+--------------------------+
@@ -281,30 +281,35 @@ type CreatePolicyRuleV1Request struct {
     // |                       |                           |                          |
     // |                       |                           |                          |
     // +-----------------------+---------------------------+--------------------------+
+    // | entity_type           | $eq, $in                  | Denotes the AWS entity   |
+    // |                       |                           | type to conditionalize   |
+    // |                       |                           | on                       |
+    // |                       |                           |                          |
+    // |                       |                           | {"entity_type":{"$eq":"a |
+    // |                       |                           | ws_rds_instance"}}       |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"entity_type":{"$in":[" |
+    // |                       |                           | aws_rds_instance",       |
+    // |                       |                           | "aws_ebs_volume", "aws_e |
+    // |                       |                           | c2_instance","aws_dynamo |
+    // |                       |                           | db_table",               |
+    // |                       |                           | "aws_rds_cluster"]}}     |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // +-----------------------+---------------------------+--------------------------+
     // 
-    Condition     *string       `json:"condition"`
-    // The following table describes the possible execution types of a rule.
-    // 
-    // +--------+---------------------------------------------------------------------+
-    // |  Type  |                             Description                             |
-    // +========+=====================================================================+
-    // | actual | Create and apply the rule                                           |
-    // +--------+---------------------------------------------------------------------+
-    // | dryrun | Preview the effect of the rule without applying or persisting the   |
-    // |        | rule                                                                |
-    // +--------+---------------------------------------------------------------------+
-    // 
-    ExecutionType *string       `json:"execution_type"`
+    Condition *string       `json:"condition"`
     // Name of the rule.
-    Name          *string       `json:"name"`
+    Name      *string       `json:"name"`
     // A priority relative to other rules.
-    Priority      *RulePriority `json:"priority"`
+    Priority  *RulePriority `json:"priority"`
 }
 
 // UpdatePolicyRuleV1Request represents a custom type struct
 type UpdatePolicyRuleV1Request struct {
     // An action to be applied subject to the rule criteria.
-    Action        *RuleAction   `json:"action"`
+    Action    *RuleAction   `json:"action"`
     // The following table describes the possible conditions for a rule.
     // 
     // +-----------------------+---------------------------+--------------------------+
@@ -364,40 +369,29 @@ type UpdatePolicyRuleV1Request struct {
     // |                       |                           |                          |
     // |                       |                           |                          |
     // +-----------------------+---------------------------+--------------------------+
+    // | entity_type           | $eq, $in                  | Denotes the AWS entity   |
+    // |                       |                           | type to conditionalize   |
+    // |                       |                           | on                       |
+    // |                       |                           |                          |
+    // |                       |                           | {"entity_type":{"$eq":"a |
+    // |                       |                           | ws_rds_instance"}}       |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"entity_type":{"$in":[" |
+    // |                       |                           | aws_rds_instance",       |
+    // |                       |                           | "aws_ebs_volume", "aws_e |
+    // |                       |                           | c2_instance","aws_dynamo |
+    // |                       |                           | db_table",               |
+    // |                       |                           | "aws_rds_cluster"]}}     |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // +-----------------------+---------------------------+--------------------------+
     // 
-    Condition     *string       `json:"condition"`
-    // The following table describes the possible execution types of a rule.
-    // 
-    // +--------+---------------------------------------------------------------------+
-    // |  Type  |                             Description                             |
-    // +========+=====================================================================+
-    // | actual | Create and apply the rule                                           |
-    // +--------+---------------------------------------------------------------------+
-    // | dryrun | Preview the effect of the rule without applying or persisting the   |
-    // |        | rule                                                                |
-    // +--------+---------------------------------------------------------------------+
-    // 
-    ExecutionType *string       `json:"execution_type"`
+    Condition *string       `json:"condition"`
     // Name of the rule.
-    Name          *string       `json:"name"`
+    Name      *string       `json:"name"`
     // A priority relative to other rules.
-    Priority      *RulePriority `json:"priority"`
-}
-
-// DeletePolicyRuleV1Request represents a custom type struct
-type DeletePolicyRuleV1Request struct {
-    // The following table describes the possible execution types of a rule.
-    // 
-    // +--------+---------------------------------------------------------------------+
-    // |  Type  |                             Description                             |
-    // +========+=====================================================================+
-    // | actual | Create and apply the rule                                           |
-    // +--------+---------------------------------------------------------------------+
-    // | dryrun | Preview the effect of the rule without applying or persisting the   |
-    // |        | rule                                                                |
-    // +--------+---------------------------------------------------------------------+
-    // 
-    ExecutionType *string `json:"execution_type"`
+    Priority  *RulePriority `json:"priority"`
 }
 
 // ListReportDownloadsV1Request represents a custom type struct

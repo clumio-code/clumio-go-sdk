@@ -29,12 +29,38 @@ type PolicyDefinitionsV1 struct {
 //  +----------------------------------+-------------------------------------------+
 //  | aws_ebs_volume_backup            | AWS EBS volume backup.                    |
 //  +----------------------------------+-------------------------------------------+
+//  | aws_ebs_volume_snapshot          | AWS EBS volume snapshot stored in         |
+//  |                                  | customer's AWS account.                   |
+//  +----------------------------------+-------------------------------------------+
+//  | aws_ec2_instance_backup          | AWS EC2 instance backup.                  |
+//  +----------------------------------+-------------------------------------------+
+//  | aws_ec2_instance_snapshot        | AWS EC2 instance snapshot stored in       |
+//  |                                  | customer's AWS account.                   |
+//  +----------------------------------+-------------------------------------------+
+//  | ec2_mssql_database_backup        | AWS EC2 MSSQL database backup.            |
+//  +----------------------------------+-------------------------------------------+
+//  | ec2_mssql_log_backup             | AWS EC2 MSSQL log backup.                 |
+//  +----------------------------------+-------------------------------------------+
 //  | aws_rds_resource_aws_snapshot    | AWS RDS snapshot stored in the customer's |
 //  |                                  | AWS account.                              |
 //  +----------------------------------+-------------------------------------------+
 //  | aws_rds_resource_rolling_backup  | AWS RDS backup stored in Clumio.          |
 //  +----------------------------------+-------------------------------------------+
 //  | aws_rds_resource_granular_backup | AWS RDS granular backup stored in Clumio. |
+//  +----------------------------------+-------------------------------------------+
+//  | aws_dynamodb_table_snapshot      | AWS DynamoDB table snapshot stored in     |
+//  |                                  | customer's AWS account.                   |
+//  +----------------------------------+-------------------------------------------+
+//  | aws_dynamodb_table_pitr          | AWS DynamoDB table point-in-time          |
+//  |                                  | recovery.                                 |
+//  +----------------------------------+-------------------------------------------+
+//  | protection_group_backup          | AWS S3 Protection Group backup.           |
+//  +----------------------------------+-------------------------------------------+
+//  | microsoft365_mailbox_backup      | Microsoft365 mailbox backup.              |
+//  +----------------------------------+-------------------------------------------+
+//  | microsoft365_onedrive_backup     | Microsoft365 onedrive backup.             |
+//  +----------------------------------+-------------------------------------------+
+//  | microsoft365_share_point_backup  | Microsoft365 site backup.                 |
 //  +----------------------------------+-------------------------------------------+
 //  | mssql_database_backup            | VMC MSSQL database backup stored in       |
 //  |                                  | Clumio.                                   |
