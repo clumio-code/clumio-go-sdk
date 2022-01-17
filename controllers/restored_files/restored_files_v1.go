@@ -26,7 +26,7 @@ func (r *RestoredFilesV1) ListRestoredFiles(
     *models.RestoredFilesResponse, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := r.config.BaseUrl + "/restores/files"
+    queryBuilder := r.config.BaseUrl + "/restores/files"
 
     
     header := "application/restored-files=v1+json"
@@ -55,7 +55,7 @@ func (r *RestoredFilesV1) ListRestoredFiles(
         SetHeader("Accept", header).
         SetAuthToken(r.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -81,7 +81,7 @@ func (r *RestoredFilesV1) RestoreFiles(
     *models.RestoreFileResponse, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := r.config.BaseUrl + "/restores/files"
+    queryBuilder := r.config.BaseUrl + "/restores/files"
 
     bytes, err := json.Marshal(body)
     if err != nil {
@@ -101,7 +101,7 @@ func (r *RestoredFilesV1) RestoreFiles(
         SetAuthToken(r.config.Token).
         SetBody(payload).
         SetResult(&result).
-        Post(_queryBuilder)
+        Post(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{

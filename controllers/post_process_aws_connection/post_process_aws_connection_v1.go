@@ -24,7 +24,7 @@ func (p *PostProcessAwsConnectionV1) PostProcessAwsConnection(
     interface{}, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := p.config.BaseUrl + "/connections/aws/post-process"
+    queryBuilder := p.config.BaseUrl + "/connections/aws/post-process"
 
     bytes, err := json.Marshal(body)
     if err != nil {
@@ -44,7 +44,7 @@ func (p *PostProcessAwsConnectionV1) PostProcessAwsConnection(
         SetAuthToken(p.config.Token).
         SetBody(payload).
         SetResult(&result).
-        Post(_queryBuilder)
+        Post(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{

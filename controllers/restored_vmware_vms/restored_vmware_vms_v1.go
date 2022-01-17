@@ -24,7 +24,7 @@ func (r *RestoredVmwareVmsV1) RestoreVmwareVm(
     *models.RestoreVMwareVMResponse, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := r.config.BaseUrl + "/restores/vmware/vms"
+    queryBuilder := r.config.BaseUrl + "/restores/vmware/vms"
 
     bytes, err := json.Marshal(body)
     if err != nil {
@@ -44,7 +44,7 @@ func (r *RestoredVmwareVmsV1) RestoreVmwareVm(
         SetAuthToken(r.config.Token).
         SetBody(payload).
         SetResult(&result).
-        Post(_queryBuilder)
+        Post(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{

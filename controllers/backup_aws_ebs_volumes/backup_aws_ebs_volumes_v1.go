@@ -26,7 +26,7 @@ func (b *BackupAwsEbsVolumesV1) ListBackupAwsEbsVolumes(
     *models.ListEBSBackupsResponseV1, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := b.config.BaseUrl + "/backups/aws/ebs-volumes"
+    queryBuilder := b.config.BaseUrl + "/backups/aws/ebs-volumes"
 
     
     header := "application/backup-aws-ebs-volumes=v1+json"
@@ -58,7 +58,7 @@ func (b *BackupAwsEbsVolumesV1) ListBackupAwsEbsVolumes(
         SetHeader("Accept", header).
         SetAuthToken(b.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -84,7 +84,7 @@ func (b *BackupAwsEbsVolumesV1) CreateBackupAwsEbsVolume(
     interface{}, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := b.config.BaseUrl + "/backups/aws/ebs-volumes"
+    queryBuilder := b.config.BaseUrl + "/backups/aws/ebs-volumes"
 
     bytes, err := json.Marshal(body)
     if err != nil {
@@ -104,7 +104,7 @@ func (b *BackupAwsEbsVolumesV1) CreateBackupAwsEbsVolume(
         SetAuthToken(b.config.Token).
         SetBody(payload).
         SetResult(&result).
-        Post(_queryBuilder)
+        Post(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -130,12 +130,12 @@ func (b *BackupAwsEbsVolumesV1) ReadBackupAwsEbsVolume(
     *models.ReadEBSBackupResponseV1, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/backups/aws/ebs-volumes/{backup_id}"
+    pathURL := "/backups/aws/ebs-volumes/{backup_id}"
     //process optional template parameters
     pathParams := map[string]string{
         "backup_id": backupId,
     }
-    _queryBuilder := b.config.BaseUrl + _pathURL
+    queryBuilder := b.config.BaseUrl + pathURL
 
     
     header := "application/backup-aws-ebs-volumes=v1+json"
@@ -147,7 +147,7 @@ func (b *BackupAwsEbsVolumesV1) ReadBackupAwsEbsVolume(
         SetHeader("Accept", header).
         SetAuthToken(b.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{

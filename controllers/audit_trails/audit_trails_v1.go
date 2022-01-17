@@ -25,7 +25,7 @@ func (a *AuditTrailsV1) ListAuditTrails(
     *models.ListAuditTrailsResponse, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := a.config.BaseUrl + "/audit-trails"
+    queryBuilder := a.config.BaseUrl + "/audit-trails"
 
     
     header := "application/audit-trails=v1+json"
@@ -57,7 +57,7 @@ func (a *AuditTrailsV1) ListAuditTrails(
         SetHeader("Accept", header).
         SetAuthToken(a.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{

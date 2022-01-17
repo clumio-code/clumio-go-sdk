@@ -25,12 +25,12 @@ func (b *BackupFilesystemsV1) ListBackupFilesystems(
     *models.ListFileSystemsResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/backups/{backup_id}/filesystems"
+    pathURL := "/backups/{backup_id}/filesystems"
     //process optional template parameters
     pathParams := map[string]string{
         "backup_id": backupId,
     }
-    _queryBuilder := b.config.BaseUrl + _pathURL
+    queryBuilder := b.config.BaseUrl + pathURL
 
     
     header := "application/backup-filesystems=v1+json"
@@ -59,7 +59,7 @@ func (b *BackupFilesystemsV1) ListBackupFilesystems(
         SetHeader("Accept", header).
         SetAuthToken(b.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -86,13 +86,13 @@ func (b *BackupFilesystemsV1) ReadFilesystem(
     *models.ReadFileSystemResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/backups/{backup_id}/filesystems/{filesystem_id}"
+    pathURL := "/backups/{backup_id}/filesystems/{filesystem_id}"
     //process optional template parameters
     pathParams := map[string]string{
         "filesystem_id": filesystemId,
         "backup_id": backupId,
     }
-    _queryBuilder := b.config.BaseUrl + _pathURL
+    queryBuilder := b.config.BaseUrl + pathURL
 
     
     header := "application/backup-filesystems=v1+json"
@@ -104,7 +104,7 @@ func (b *BackupFilesystemsV1) ReadFilesystem(
         SetHeader("Accept", header).
         SetAuthToken(b.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{

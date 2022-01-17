@@ -25,7 +25,7 @@ func (b *BackupsFilesV1) ListFiles(
     *models.FileSearchResponse, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := b.config.BaseUrl + "/backups/files/search"
+    queryBuilder := b.config.BaseUrl + "/backups/files/search"
 
     
     header := "application/backups-files=v1+json"
@@ -54,7 +54,7 @@ func (b *BackupsFilesV1) ListFiles(
         SetHeader("Accept", header).
         SetAuthToken(b.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -82,12 +82,12 @@ func (b *BackupsFilesV1) ListFileVersions(
     *models.FileListResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/backups/files/search/{search_result_id}/versions"
+    pathURL := "/backups/files/search/{search_result_id}/versions"
     //process optional template parameters
     pathParams := map[string]string{
         "search_result_id": searchResultId,
     }
-    _queryBuilder := b.config.BaseUrl + _pathURL
+    queryBuilder := b.config.BaseUrl + pathURL
 
     
     header := "application/backups-files=v1+json"
@@ -116,7 +116,7 @@ func (b *BackupsFilesV1) ListFileVersions(
         SetHeader("Accept", header).
         SetAuthToken(b.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{

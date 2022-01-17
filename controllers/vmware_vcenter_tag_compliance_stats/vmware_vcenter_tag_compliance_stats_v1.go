@@ -24,13 +24,13 @@ func (v *VmwareVcenterTagComplianceStatsV1) ReadVmwareVcenterTagComplianceStats(
     *models.ReadVMwareTagStatsResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/datasources/vmware/vcenters/{vcenter_id}/tags/{tag_id}/stats/compliance"
+    pathURL := "/datasources/vmware/vcenters/{vcenter_id}/tags/{tag_id}/stats/compliance"
     //process optional template parameters
     pathParams := map[string]string{
         "vcenter_id": vcenterId,
         "tag_id": tagId,
     }
-    _queryBuilder := v.config.BaseUrl + _pathURL
+    queryBuilder := v.config.BaseUrl + pathURL
 
     
     header := "application/vmware-vcenter-tag-compliance-stats=v1+json"
@@ -42,7 +42,7 @@ func (v *VmwareVcenterTagComplianceStatsV1) ReadVmwareVcenterTagComplianceStats(
         SetHeader("Accept", header).
         SetAuthToken(v.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{

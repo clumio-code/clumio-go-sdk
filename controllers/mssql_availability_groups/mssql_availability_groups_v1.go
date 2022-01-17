@@ -25,7 +25,7 @@ func (m *MssqlAvailabilityGroupsV1) ListMssqlAvailabilityGroups(
     *models.ListMssqlAGsResponse, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := m.config.BaseUrl + "/datasources/mssql/availability-groups"
+    queryBuilder := m.config.BaseUrl + "/datasources/mssql/availability-groups"
 
     
     header := "application/mssql-availability-groups=v1+json"
@@ -57,7 +57,7 @@ func (m *MssqlAvailabilityGroupsV1) ListMssqlAvailabilityGroups(
         SetHeader("Accept", header).
         SetAuthToken(m.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -83,12 +83,12 @@ func (m *MssqlAvailabilityGroupsV1) ReadMssqlAvailabilityGroup(
     *models.ReadMssqlAGResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/datasources/mssql/availability-groups/{availability_group_id}"
+    pathURL := "/datasources/mssql/availability-groups/{availability_group_id}"
     //process optional template parameters
     pathParams := map[string]string{
         "availability_group_id": availabilityGroupId,
     }
-    _queryBuilder := m.config.BaseUrl + _pathURL
+    queryBuilder := m.config.BaseUrl + pathURL
 
     
     header := "application/mssql-availability-groups=v1+json"
@@ -100,7 +100,7 @@ func (m *MssqlAvailabilityGroupsV1) ReadMssqlAvailabilityGroup(
         SetHeader("Accept", header).
         SetAuthToken(m.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{

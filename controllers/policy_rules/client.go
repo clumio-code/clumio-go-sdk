@@ -10,6 +10,15 @@ import (
 
 // PolicyRulesV1Client represents a custom type interface
 type PolicyRulesV1Client interface {
+    //  Returns a list of policy rules.
+    ListPolicyRules(
+        limit *int64, 
+        start *string, 
+        organizationalUnitId *string, 
+        sort *string, 
+        filter *string)(
+        *models.ListRulesResponse,  *apiutils.APIError)
+    
     //  Creates a new policy rule. Policy rules determine how a policy should be assigned to assets.
     CreatePolicyRule(
         body *models.CreatePolicyRuleV1Request)(

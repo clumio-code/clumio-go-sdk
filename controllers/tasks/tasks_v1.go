@@ -110,7 +110,7 @@ func (t *TasksV1) ListTasks(
     *models.ListTasksResponse, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := t.config.BaseUrl + "/tasks"
+    queryBuilder := t.config.BaseUrl + "/tasks"
 
     
     header := "application/tasks=v1+json"
@@ -142,7 +142,7 @@ func (t *TasksV1) ListTasks(
         SetHeader("Accept", header).
         SetAuthToken(t.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -168,12 +168,12 @@ func (t *TasksV1) ReadTask(
     *models.ReadTaskResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/tasks/{task_id}"
+    pathURL := "/tasks/{task_id}"
     //process optional template parameters
     pathParams := map[string]string{
         "task_id": taskId,
     }
-    _queryBuilder := t.config.BaseUrl + _pathURL
+    queryBuilder := t.config.BaseUrl + pathURL
 
     
     header := "application/tasks=v1+json"
@@ -185,7 +185,7 @@ func (t *TasksV1) ReadTask(
         SetHeader("Accept", header).
         SetAuthToken(t.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -212,12 +212,12 @@ func (t *TasksV1) UpdateTask(
     *models.UpdateTaskResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/tasks/{task_id}"
+    pathURL := "/tasks/{task_id}"
     //process optional template parameters
     pathParams := map[string]string{
         "task_id": taskId,
     }
-    _queryBuilder := t.config.BaseUrl + _pathURL
+    queryBuilder := t.config.BaseUrl + pathURL
 
     bytes, err := json.Marshal(body)
     if err != nil {
@@ -238,7 +238,7 @@ func (t *TasksV1) UpdateTask(
         SetAuthToken(t.config.Token).
         SetBody(payload).
         SetResult(&result).
-        Patch(_queryBuilder)
+        Patch(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{

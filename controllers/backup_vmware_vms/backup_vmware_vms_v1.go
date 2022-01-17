@@ -26,7 +26,7 @@ func (b *BackupVmwareVmsV1) ListBackupVmwareVms(
     *models.ListVMBackupsResponse, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := b.config.BaseUrl + "/backups/vmware/vms"
+    queryBuilder := b.config.BaseUrl + "/backups/vmware/vms"
 
     
     header := "application/backup-vmware-vms=v1+json"
@@ -58,7 +58,7 @@ func (b *BackupVmwareVmsV1) ListBackupVmwareVms(
         SetHeader("Accept", header).
         SetAuthToken(b.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -84,7 +84,7 @@ func (b *BackupVmwareVmsV1) CreateBackupVmwareVm(
     interface{}, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := b.config.BaseUrl + "/backups/vmware/vms"
+    queryBuilder := b.config.BaseUrl + "/backups/vmware/vms"
 
     bytes, err := json.Marshal(body)
     if err != nil {
@@ -104,7 +104,7 @@ func (b *BackupVmwareVmsV1) CreateBackupVmwareVm(
         SetAuthToken(b.config.Token).
         SetBody(payload).
         SetResult(&result).
-        Post(_queryBuilder)
+        Post(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -130,12 +130,12 @@ func (b *BackupVmwareVmsV1) ReadBackupVmwareVm(
     *models.ReadVMBackupResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/backups/vmware/vms/{backup_id}"
+    pathURL := "/backups/vmware/vms/{backup_id}"
     //process optional template parameters
     pathParams := map[string]string{
         "backup_id": fmt.Sprintf("%v", backupId),
     }
-    _queryBuilder := b.config.BaseUrl + _pathURL
+    queryBuilder := b.config.BaseUrl + pathURL
 
     
     header := "application/backup-vmware-vms=v1+json"
@@ -147,7 +147,7 @@ func (b *BackupVmwareVmsV1) ReadBackupVmwareVm(
         SetHeader("Accept", header).
         SetAuthToken(b.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{

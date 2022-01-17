@@ -55,7 +55,7 @@ func (i *IndividualAlertsV1) ListIndividualAlerts(
     *models.ListAlertsResponse, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := i.config.BaseUrl + "/alerts/individual"
+    queryBuilder := i.config.BaseUrl + "/alerts/individual"
 
     
     header := "application/individual-alerts=v1+json"
@@ -95,7 +95,7 @@ func (i *IndividualAlertsV1) ListIndividualAlerts(
         SetHeader("Accept", header).
         SetAuthToken(i.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -122,12 +122,12 @@ func (i *IndividualAlertsV1) ReadIndividualAlert(
     *models.ReadAlertResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/alerts/individual/{individual_alert_id}"
+    pathURL := "/alerts/individual/{individual_alert_id}"
     //process optional template parameters
     pathParams := map[string]string{
         "individual_alert_id": individualAlertId,
     }
-    _queryBuilder := i.config.BaseUrl + _pathURL
+    queryBuilder := i.config.BaseUrl + pathURL
 
     
     header := "application/individual-alerts=v1+json"
@@ -151,7 +151,7 @@ func (i *IndividualAlertsV1) ReadIndividualAlert(
         SetHeader("Accept", header).
         SetAuthToken(i.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -179,12 +179,12 @@ func (i *IndividualAlertsV1) UpdateIndividualAlert(
     *models.UpdateAlertResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/alerts/individual/{individual_alert_id}"
+    pathURL := "/alerts/individual/{individual_alert_id}"
     //process optional template parameters
     pathParams := map[string]string{
         "individual_alert_id": individualAlertId,
     }
-    _queryBuilder := i.config.BaseUrl + _pathURL
+    queryBuilder := i.config.BaseUrl + pathURL
 
     bytes, err := json.Marshal(body)
     if err != nil {
@@ -217,7 +217,7 @@ func (i *IndividualAlertsV1) UpdateIndividualAlert(
         SetAuthToken(i.config.Token).
         SetBody(payload).
         SetResult(&result).
-        Patch(_queryBuilder)
+        Patch(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{

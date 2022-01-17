@@ -26,12 +26,12 @@ func (v *VmwareVcenterCategoriesV1) ListVmwareVcenterCategories(
     *models.ListTagCategories2Response, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/datasources/vmware/vcenters/{vcenter_id}/categories"
+    pathURL := "/datasources/vmware/vcenters/{vcenter_id}/categories"
     //process optional template parameters
     pathParams := map[string]string{
         "vcenter_id": vcenterId,
     }
-    _queryBuilder := v.config.BaseUrl + _pathURL
+    queryBuilder := v.config.BaseUrl + pathURL
 
     
     header := "application/vmware-vcenter-categories=v1+json"
@@ -64,7 +64,7 @@ func (v *VmwareVcenterCategoriesV1) ListVmwareVcenterCategories(
         SetHeader("Accept", header).
         SetAuthToken(v.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -91,13 +91,13 @@ func (v *VmwareVcenterCategoriesV1) ReadVmwareVcenterCategory(
     *models.ReadTagCategory2Response, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/datasources/vmware/vcenters/{vcenter_id}/categories/{category_id}"
+    pathURL := "/datasources/vmware/vcenters/{vcenter_id}/categories/{category_id}"
     //process optional template parameters
     pathParams := map[string]string{
         "vcenter_id": vcenterId,
         "category_id": categoryId,
     }
-    _queryBuilder := v.config.BaseUrl + _pathURL
+    queryBuilder := v.config.BaseUrl + pathURL
 
     
     header := "application/vmware-vcenter-categories=v1+json"
@@ -109,7 +109,7 @@ func (v *VmwareVcenterCategoriesV1) ReadVmwareVcenterCategory(
         SetHeader("Accept", header).
         SetAuthToken(v.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{

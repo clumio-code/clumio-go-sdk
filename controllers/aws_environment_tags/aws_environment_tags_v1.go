@@ -30,12 +30,12 @@ func (a *AwsEnvironmentTagsV1) ListAwsEnvironmentTags(
     *models.ListAwsTagsResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/datasources/aws/environments/{environment_id}/tags"
+    pathURL := "/datasources/aws/environments/{environment_id}/tags"
     //process optional template parameters
     pathParams := map[string]string{
         "environment_id": environmentId,
     }
-    _queryBuilder := a.config.BaseUrl + _pathURL
+    queryBuilder := a.config.BaseUrl + pathURL
 
     
     header := "application/aws-environment-tags=v1+json"
@@ -84,7 +84,7 @@ func (a *AwsEnvironmentTagsV1) ListAwsEnvironmentTags(
         SetHeader("Accept", header).
         SetAuthToken(a.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -112,13 +112,13 @@ func (a *AwsEnvironmentTagsV1) ReadAwsEnvironmentTag(
     *models.ReadAwsTagResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/datasources/aws/environments/{environment_id}/tags/{tag_id}"
+    pathURL := "/datasources/aws/environments/{environment_id}/tags/{tag_id}"
     //process optional template parameters
     pathParams := map[string]string{
         "environment_id": environmentId,
         "tag_id": tagId,
     }
-    _queryBuilder := a.config.BaseUrl + _pathURL
+    queryBuilder := a.config.BaseUrl + pathURL
 
     
     header := "application/aws-environment-tags=v1+json"
@@ -142,7 +142,7 @@ func (a *AwsEnvironmentTagsV1) ReadAwsEnvironmentTag(
         SetHeader("Accept", header).
         SetAuthToken(a.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -169,13 +169,13 @@ func (a *AwsEnvironmentTagsV1) ReadAwsEnvironmentTagEbsVolumesComplianceStats(
     *models.ReadEbsTagComplianceStatsResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/datasources/aws/environments/{environment_id}/tags/{tag_id}/stats/compliance/ebs-volumes"
+    pathURL := "/datasources/aws/environments/{environment_id}/tags/{tag_id}/stats/compliance/ebs-volumes"
     //process optional template parameters
     pathParams := map[string]string{
         "environment_id": environmentId,
         "tag_id": tagId,
     }
-    _queryBuilder := a.config.BaseUrl + _pathURL
+    queryBuilder := a.config.BaseUrl + pathURL
 
     
     header := "application/aws-environment-tags=v1+json"
@@ -187,7 +187,7 @@ func (a *AwsEnvironmentTagsV1) ReadAwsEnvironmentTagEbsVolumesComplianceStats(
         SetHeader("Accept", header).
         SetAuthToken(a.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{

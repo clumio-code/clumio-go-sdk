@@ -23,7 +23,7 @@ func (g *GeneralSettingsV2) ReadGeneralSettings()(
     *models.ReadGeneralSettingsResponseV2, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := g.config.BaseUrl + "/settings/general"
+    queryBuilder := g.config.BaseUrl + "/settings/general"
 
     
     header := "application/general-settings=v2+json"
@@ -34,7 +34,7 @@ func (g *GeneralSettingsV2) ReadGeneralSettings()(
         SetHeader("Accept", header).
         SetAuthToken(g.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -60,7 +60,7 @@ func (g *GeneralSettingsV2) UpdateGeneralSettings(
     *models.PatchGeneralSettingsResponseV2, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := g.config.BaseUrl + "/settings/general"
+    queryBuilder := g.config.BaseUrl + "/settings/general"
 
     bytes, err := json.Marshal(body)
     if err != nil {
@@ -80,7 +80,7 @@ func (g *GeneralSettingsV2) UpdateGeneralSettings(
         SetAuthToken(g.config.Token).
         SetBody(payload).
         SetResult(&result).
-        Patch(_queryBuilder)
+        Patch(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{

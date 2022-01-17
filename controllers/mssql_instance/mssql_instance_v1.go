@@ -25,7 +25,7 @@ func (m *MssqlInstanceV1) ListMssqlInstance(
     *models.ListMssqlInstancesResponse, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := m.config.BaseUrl + "/datasources/mssql/instances"
+    queryBuilder := m.config.BaseUrl + "/datasources/mssql/instances"
 
     
     header := "application/mssql-instance=v1+json"
@@ -57,7 +57,7 @@ func (m *MssqlInstanceV1) ListMssqlInstance(
         SetHeader("Accept", header).
         SetAuthToken(m.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -83,12 +83,12 @@ func (m *MssqlInstanceV1) ReadMssqlInstance(
     *models.ReadMssqlInstanceResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/datasources/mssql/instances/{instance_id}"
+    pathURL := "/datasources/mssql/instances/{instance_id}"
     //process optional template parameters
     pathParams := map[string]string{
         "instance_id": instanceId,
     }
-    _queryBuilder := m.config.BaseUrl + _pathURL
+    queryBuilder := m.config.BaseUrl + pathURL
 
     
     header := "application/mssql-instance=v1+json"
@@ -100,7 +100,7 @@ func (m *MssqlInstanceV1) ReadMssqlInstance(
         SetHeader("Accept", header).
         SetAuthToken(m.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{

@@ -39,12 +39,12 @@ func (v *VmwareVcenterComputeResourcesV1) ListVmwareVcenterComputeResources(
     *models.ListComputeResourcesResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/datasources/vmware/vcenters/{vcenter_id}/compute-resources"
+    pathURL := "/datasources/vmware/vcenters/{vcenter_id}/compute-resources"
     //process optional template parameters
     pathParams := map[string]string{
         "vcenter_id": vcenterId,
     }
-    _queryBuilder := v.config.BaseUrl + _pathURL
+    queryBuilder := v.config.BaseUrl + pathURL
 
     
     header := "application/vmware-vcenter-compute-resources=v1+json"
@@ -81,7 +81,7 @@ func (v *VmwareVcenterComputeResourcesV1) ListVmwareVcenterComputeResources(
         SetHeader("Accept", header).
         SetAuthToken(v.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -109,13 +109,13 @@ func (v *VmwareVcenterComputeResourcesV1) ReadVmwareVcenterComputeResource(
     *models.ReadComputeResourceResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/datasources/vmware/vcenters/{vcenter_id}/compute-resources/{compute_resource_id}"
+    pathURL := "/datasources/vmware/vcenters/{vcenter_id}/compute-resources/{compute_resource_id}"
     //process optional template parameters
     pathParams := map[string]string{
         "vcenter_id": vcenterId,
         "compute_resource_id": computeResourceId,
     }
-    _queryBuilder := v.config.BaseUrl + _pathURL
+    queryBuilder := v.config.BaseUrl + pathURL
 
     
     header := "application/vmware-vcenter-compute-resources=v1+json"
@@ -139,7 +139,7 @@ func (v *VmwareVcenterComputeResourcesV1) ReadVmwareVcenterComputeResource(
         SetHeader("Accept", header).
         SetAuthToken(v.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{

@@ -24,13 +24,13 @@ func (v *VmwareVcenterDatacenterComplianceStatsV1) ReadVmwareVcenterDatacenterCo
     *models.ReadVMwareDatacenterStatsResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/datasources/vmware/vcenters/{vcenter_id}/datacenters/{datacenter_id}/stats/compliance"
+    pathURL := "/datasources/vmware/vcenters/{vcenter_id}/datacenters/{datacenter_id}/stats/compliance"
     //process optional template parameters
     pathParams := map[string]string{
         "vcenter_id": vcenterId,
         "datacenter_id": datacenterId,
     }
-    _queryBuilder := v.config.BaseUrl + _pathURL
+    queryBuilder := v.config.BaseUrl + pathURL
 
     
     header := "application/vmware-vcenter-datacenter-compliance-stats=v1+json"
@@ -42,7 +42,7 @@ func (v *VmwareVcenterDatacenterComplianceStatsV1) ReadVmwareVcenterDatacenterCo
         SetHeader("Accept", header).
         SetAuthToken(v.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{

@@ -24,7 +24,7 @@ func (a *AwsCloudformationTemplatesV1) ReadAwsConnectionTemplates()(
     *models.ReadAWSTemplatesResponse, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := a.config.BaseUrl + "/connections/aws/cloudformation-templates"
+    queryBuilder := a.config.BaseUrl + "/connections/aws/cloudformation-templates"
 
     
     header := "application/aws-cloudformation-templates=v1+json"
@@ -35,7 +35,7 @@ func (a *AwsCloudformationTemplatesV1) ReadAwsConnectionTemplates()(
         SetHeader("Accept", header).
         SetAuthToken(a.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
