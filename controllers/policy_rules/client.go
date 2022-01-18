@@ -37,8 +37,7 @@ type PolicyRulesV1Client interface {
     
     //  Deletes the specified policy rule.
     DeletePolicyRule(
-        ruleId string, 
-        body *models.DeletePolicyRuleV1Request)(
+        ruleId string)(
         *models.DeleteRuleResponse,  *apiutils.APIError)
     
 }
