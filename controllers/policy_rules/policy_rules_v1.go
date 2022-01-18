@@ -18,13 +18,83 @@ type PolicyRulesV1 struct {
     config config.Config
 }
 
+//  ListPolicyRules Returns a list of policy rules.
+func (p *PolicyRulesV1) ListPolicyRules(
+    limit *int64, 
+    start *string, 
+    organizationalUnitId *string, 
+    sort *string, 
+    filter *string)(
+    *models.ListRulesResponse, *apiutils.APIError){
+
+    var err error = nil
+    queryBuilder := p.config.BaseUrl + "/policies/rules"
+
+    
+    header := "application/policy-rules=v1+json"
+    var result *models.ListRulesResponse
+    client := resty.New()
+    defaultInt64 := int64(0)
+    defaultString := "" 
+    
+
+    if limit == nil{
+        limit = &defaultInt64
+    }
+    if start == nil{
+        start = &defaultString
+    }
+    if organizationalUnitId == nil{
+        organizationalUnitId = &defaultString
+    }
+    if sort == nil{
+        sort = &defaultString
+    }
+    if filter == nil{
+        filter = &defaultString
+    }
+    
+
+    queryParams := map[string]string{
+        "limit": fmt.Sprintf("%v", *limit),
+        "start": *start,
+        "organizationalUnitId": *organizationalUnitId,
+        "sort": *sort,
+        "filter": *filter,
+    }
+
+    res, err := client.R().
+        SetQueryParams(queryParams).
+        SetHeader("Accept", header).
+        SetAuthToken(p.config.Token).
+        SetResult(&result).
+        Get(queryBuilder)
+
+    if err != nil {
+        return nil, &apiutils.APIError{
+            ResponseCode: 500,
+            Reason:       "Internal Server Error",
+            Response:     []byte(fmt.Sprintf("%v", err)),
+        }
+    }
+    if !res.IsSuccess(){
+        return nil, &apiutils.APIError{
+            ResponseCode: res.RawResponse.StatusCode,
+            Reason:       "Non-success status code returned.",
+            Response:     res.Body(),
+        }
+    }
+    return result, nil
+}
+
+
 //  CreatePolicyRule Creates a new policy rule. Policy rules determine how a policy should be assigned to assets.
 func (p *PolicyRulesV1) CreatePolicyRule(
     body *models.CreatePolicyRuleV1Request)(
     *models.CreateRuleResponse, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := p.config.BaseUrl + "/policies/rules"
+    queryBuilder := p.config.BaseUrl + "/policies/rules"
 
     bytes, err := json.Marshal(body)
     if err != nil {
@@ -44,7 +114,7 @@ func (p *PolicyRulesV1) CreatePolicyRule(
         SetAuthToken(p.config.Token).
         SetBody(payload).
         SetResult(&result).
-        Post(_queryBuilder)
+        Post(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -70,12 +140,12 @@ func (p *PolicyRulesV1) ReadPolicyRule(
     *models.ReadRuleResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/policies/rules/{rule_id}"
+    pathURL := "/policies/rules/{rule_id}"
     //process optional template parameters
     pathParams := map[string]string{
         "rule_id": ruleId,
     }
-    _queryBuilder := p.config.BaseUrl + _pathURL
+    queryBuilder := p.config.BaseUrl + pathURL
 
     
     header := "application/policy-rules=v1+json"
@@ -87,7 +157,7 @@ func (p *PolicyRulesV1) ReadPolicyRule(
         SetHeader("Accept", header).
         SetAuthToken(p.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -114,12 +184,12 @@ func (p *PolicyRulesV1) UpdatePolicyRule(
     *models.UpdateRuleResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/policies/rules/{rule_id}"
+    pathURL := "/policies/rules/{rule_id}"
     //process optional template parameters
     pathParams := map[string]string{
         "rule_id": ruleId,
     }
-    _queryBuilder := p.config.BaseUrl + _pathURL
+    queryBuilder := p.config.BaseUrl + pathURL
 
     bytes, err := json.Marshal(body)
     if err != nil {
@@ -140,7 +210,7 @@ func (p *PolicyRulesV1) UpdatePolicyRule(
         SetAuthToken(p.config.Token).
         SetBody(payload).
         SetResult(&result).
-        Put(_queryBuilder)
+        Put(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -167,12 +237,12 @@ func (p *PolicyRulesV1) DeletePolicyRule(
     *models.DeleteRuleResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/policies/rules/{rule_id}"
+    pathURL := "/policies/rules/{rule_id}"
     //process optional template parameters
     pathParams := map[string]string{
         "rule_id": ruleId,
     }
-    _queryBuilder := p.config.BaseUrl + _pathURL
+    queryBuilder := p.config.BaseUrl + pathURL
 
     bytes, err := json.Marshal(body)
     if err != nil {
@@ -193,7 +263,7 @@ func (p *PolicyRulesV1) DeletePolicyRule(
         SetAuthToken(p.config.Token).
         SetBody(payload).
         SetResult(&result).
-        Delete(_queryBuilder)
+        Delete(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{

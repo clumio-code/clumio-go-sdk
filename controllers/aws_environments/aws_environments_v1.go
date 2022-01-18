@@ -26,7 +26,7 @@ func (a *AwsEnvironmentsV1) ListAwsEnvironments(
     *models.ListAWSEnvironmentsResponse, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := a.config.BaseUrl + "/datasources/aws/environments"
+    queryBuilder := a.config.BaseUrl + "/datasources/aws/environments"
 
     
     header := "application/aws-environments=v1+json"
@@ -62,7 +62,7 @@ func (a *AwsEnvironmentsV1) ListAwsEnvironments(
         SetHeader("Accept", header).
         SetAuthToken(a.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -89,12 +89,12 @@ func (a *AwsEnvironmentsV1) ReadAwsEnvironment(
     *models.ReadAWSEnvironmentResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/datasources/aws/environments/{environment_id}"
+    pathURL := "/datasources/aws/environments/{environment_id}"
     //process optional template parameters
     pathParams := map[string]string{
         "environment_id": environmentId,
     }
-    _queryBuilder := a.config.BaseUrl + _pathURL
+    queryBuilder := a.config.BaseUrl + pathURL
 
     
     header := "application/aws-environments=v1+json"
@@ -118,7 +118,7 @@ func (a *AwsEnvironmentsV1) ReadAwsEnvironment(
         SetHeader("Accept", header).
         SetAuthToken(a.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{

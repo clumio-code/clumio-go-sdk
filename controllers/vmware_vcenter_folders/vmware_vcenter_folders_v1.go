@@ -42,12 +42,12 @@ func (v *VmwareVcenterFoldersV1) ListVmwareVcenterFolders(
     *models.ListFoldersResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/datasources/vmware/vcenters/{vcenter_id}/folders"
+    pathURL := "/datasources/vmware/vcenters/{vcenter_id}/folders"
     //process optional template parameters
     pathParams := map[string]string{
         "vcenter_id": vcenterId,
     }
-    _queryBuilder := v.config.BaseUrl + _pathURL
+    queryBuilder := v.config.BaseUrl + pathURL
 
     
     header := "application/vmware-vcenter-folders=v1+json"
@@ -84,7 +84,7 @@ func (v *VmwareVcenterFoldersV1) ListVmwareVcenterFolders(
         SetHeader("Accept", header).
         SetAuthToken(v.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -112,13 +112,13 @@ func (v *VmwareVcenterFoldersV1) ReadVmwareVcenterFolder(
     *models.ReadFolderResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/datasources/vmware/vcenters/{vcenter_id}/folders/{folder_id}"
+    pathURL := "/datasources/vmware/vcenters/{vcenter_id}/folders/{folder_id}"
     //process optional template parameters
     pathParams := map[string]string{
         "vcenter_id": vcenterId,
         "folder_id": folderId,
     }
-    _queryBuilder := v.config.BaseUrl + _pathURL
+    queryBuilder := v.config.BaseUrl + pathURL
 
     
     header := "application/vmware-vcenter-folders=v1+json"
@@ -142,7 +142,7 @@ func (v *VmwareVcenterFoldersV1) ReadVmwareVcenterFolder(
         SetHeader("Accept", header).
         SetAuthToken(v.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{

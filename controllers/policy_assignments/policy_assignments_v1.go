@@ -26,7 +26,7 @@ func (p *PolicyAssignmentsV1) SetPolicyAssignments(
     *models.SetAssignmentsResponse, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := p.config.BaseUrl + "/policies/assignments"
+    queryBuilder := p.config.BaseUrl + "/policies/assignments"
 
     bytes, err := json.Marshal(body)
     if err != nil {
@@ -46,7 +46,7 @@ func (p *PolicyAssignmentsV1) SetPolicyAssignments(
         SetAuthToken(p.config.Token).
         SetBody(payload).
         SetResult(&result).
-        Post(_queryBuilder)
+        Post(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{

@@ -26,7 +26,7 @@ func (a *AwsConnectionsV1) ListAwsConnections(
     *models.ListAWSConnectionsResponse, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := a.config.BaseUrl + "/connections/aws"
+    queryBuilder := a.config.BaseUrl + "/connections/aws"
 
     
     header := "application/aws-connections=v1+json"
@@ -58,7 +58,7 @@ func (a *AwsConnectionsV1) ListAwsConnections(
         SetHeader("Accept", header).
         SetAuthToken(a.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -84,7 +84,7 @@ func (a *AwsConnectionsV1) CreateAwsConnection(
     *models.CreateAWSConnectionResponse, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := a.config.BaseUrl + "/connections/aws"
+    queryBuilder := a.config.BaseUrl + "/connections/aws"
 
     bytes, err := json.Marshal(body)
     if err != nil {
@@ -104,7 +104,7 @@ func (a *AwsConnectionsV1) CreateAwsConnection(
         SetAuthToken(a.config.Token).
         SetBody(payload).
         SetResult(&result).
-        Post(_queryBuilder)
+        Post(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -130,12 +130,12 @@ func (a *AwsConnectionsV1) ReadAwsConnection(
     *models.ReadAWSConnectionResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/connections/aws/{connection_id}"
+    pathURL := "/connections/aws/{connection_id}"
     //process optional template parameters
     pathParams := map[string]string{
         "connection_id": connectionId,
     }
-    _queryBuilder := a.config.BaseUrl + _pathURL
+    queryBuilder := a.config.BaseUrl + pathURL
 
     
     header := "application/aws-connections=v1+json"
@@ -147,7 +147,7 @@ func (a *AwsConnectionsV1) ReadAwsConnection(
         SetHeader("Accept", header).
         SetAuthToken(a.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -173,12 +173,12 @@ func (a *AwsConnectionsV1) DeleteAwsConnection(
     interface{}, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/connections/aws/{connection_id}"
+    pathURL := "/connections/aws/{connection_id}"
     //process optional template parameters
     pathParams := map[string]string{
         "connection_id": connectionId,
     }
-    _queryBuilder := a.config.BaseUrl + _pathURL
+    queryBuilder := a.config.BaseUrl + pathURL
 
     
     header := "application/aws-connections=v1+json"
@@ -190,7 +190,7 @@ func (a *AwsConnectionsV1) DeleteAwsConnection(
         SetHeader("Accept", header).
         SetAuthToken(a.config.Token).
         SetResult(&result).
-        Delete(_queryBuilder)
+        Delete(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -217,12 +217,12 @@ func (a *AwsConnectionsV1) UpdateAwsConnection(
     *models.UpdateAWSConnectionResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/connections/aws/{connection_id}"
+    pathURL := "/connections/aws/{connection_id}"
     //process optional template parameters
     pathParams := map[string]string{
         "connection_id": connectionId,
     }
-    _queryBuilder := a.config.BaseUrl + _pathURL
+    queryBuilder := a.config.BaseUrl + pathURL
 
     bytes, err := json.Marshal(body)
     if err != nil {
@@ -243,7 +243,7 @@ func (a *AwsConnectionsV1) UpdateAwsConnection(
         SetAuthToken(a.config.Token).
         SetBody(payload).
         SetResult(&result).
-        Patch(_queryBuilder)
+        Patch(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{

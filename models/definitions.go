@@ -2736,8 +2736,8 @@ type PolicyListLinks struct {
 type PolicyOperation struct {
     // Determines whether the protection policy should take action now or during the specified backup window.
     // If set to `immediate`, Clumio starts the backup process right away. If set to `window`, Clumio starts the backup process when the backup window (`backup_window`) opens.
-    // If set to `window` and `operation="aws_rds_resource_aws_snapshot"`,
-    // the backup window will be determined by the database's maintenance window (as specified by AWS) and not Clumio's backup window.
+    // If set to `window` and `operation in ("aws_rds_resource_aws_snapshot", "mssql_log_backup", "ec2_mssql_log_backup")`,
+    // the backup window will not be determined by Clumio's backup window.
     ActionSetting *string       `json:"action_setting"`
     // The start and end times for the customized backup window.
     BackupWindow  *BackupWindow `json:"backup_window"`
@@ -3276,6 +3276,23 @@ type Rule struct {
     // |                       |                           |                          |
     // |                       |                           |                          |
     // +-----------------------+---------------------------+--------------------------+
+    // | entity_type           | $eq, $in                  | Denotes the AWS entity   |
+    // |                       |                           | type to conditionalize   |
+    // |                       |                           | on                       |
+    // |                       |                           |                          |
+    // |                       |                           | {"entity_type":{"$eq":"a |
+    // |                       |                           | ws_rds_instance"}}       |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"entity_type":{"$in":[" |
+    // |                       |                           | aws_rds_instance",       |
+    // |                       |                           | "aws_ebs_volume", "aws_e |
+    // |                       |                           | c2_instance","aws_dynamo |
+    // |                       |                           | db_table",               |
+    // |                       |                           | "aws_rds_cluster"]}}     |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // +-----------------------+---------------------------+--------------------------+
     // 
     Condition *string       `json:"condition"`
     // The Clumio-assigned ID of the policy rule.
@@ -3311,6 +3328,26 @@ type RuleLinks struct {
     ReadPolicyDefinition *ReadPolicyDefinitionHateoasLink `json:"read-policy-definition"`
     // A resource-specific HATEOAS link.
     UpdatePolicyRule     *HateoasLink                     `json:"update-policy-rule"`
+}
+
+// RuleListEmbedded represents a custom type struct.
+// An array of embedded resources related to this resource.
+type RuleListEmbedded struct {
+    // A rule applies an action subject to a condition criteria.
+    Items []*Rule `json:"items"`
+}
+
+// RuleListLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type RuleListLinks struct {
+    // The HATEOAS link to the first page of results.
+    First            *HateoasFirstLink `json:"_first"`
+    // The HATEOAS link to the next page of results.
+    Next             *HateoasNextLink  `json:"_next"`
+    // The HATEOAS link to this resource.
+    Self             *HateoasSelfLink  `json:"_self"`
+    // A resource-specific HATEOAS link.
+    CreatePolicyRule *HateoasLink      `json:"create-policy-rule"`
 }
 
 // RulePriority represents a custom type struct.

@@ -25,7 +25,7 @@ func (m *ManagementGroupsV1) ListManagementGroups(
     *models.ListManagementGroupsResponse, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := m.config.BaseUrl + "/management-groups"
+    queryBuilder := m.config.BaseUrl + "/management-groups"
 
     
     header := "application/management-groups=v1+json"
@@ -53,7 +53,7 @@ func (m *ManagementGroupsV1) ListManagementGroups(
         SetHeader("Accept", header).
         SetAuthToken(m.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -82,12 +82,12 @@ func (m *ManagementGroupsV1) ReadManagementGroup(
     *models.ReadManagementGroupResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/management-groups/{group_id}"
+    pathURL := "/management-groups/{group_id}"
     //process optional template parameters
     pathParams := map[string]string{
         "group_id": groupId,
     }
-    _queryBuilder := m.config.BaseUrl + _pathURL
+    queryBuilder := m.config.BaseUrl + pathURL
 
     
     header := "application/management-groups=v1+json"
@@ -99,7 +99,7 @@ func (m *ManagementGroupsV1) ReadManagementGroup(
         SetHeader("Accept", header).
         SetAuthToken(m.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -126,12 +126,12 @@ func (m *ManagementGroupsV1) UpdateManagementGroup(
     *models.UpdateManagementGroupResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/management-groups/{group_id}"
+    pathURL := "/management-groups/{group_id}"
     //process optional template parameters
     pathParams := map[string]string{
         "group_id": groupId,
     }
-    _queryBuilder := m.config.BaseUrl + _pathURL
+    queryBuilder := m.config.BaseUrl + pathURL
 
     bytes, err := json.Marshal(body)
     if err != nil {
@@ -152,7 +152,7 @@ func (m *ManagementGroupsV1) UpdateManagementGroup(
         SetAuthToken(m.config.Token).
         SetBody(payload).
         SetResult(&result).
-        Put(_queryBuilder)
+        Put(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{

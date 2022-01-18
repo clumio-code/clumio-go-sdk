@@ -24,13 +24,13 @@ func (v *VmwareVcenterComputeResourceComplianceStatsV1) ReadVmwareVcenterCompute
     *models.ReadVMwareComputeResourceStatsResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/datasources/vmware/vcenters/{vcenter_id}/compute-resources/{compute_resource_id}/stats/compliance"
+    pathURL := "/datasources/vmware/vcenters/{vcenter_id}/compute-resources/{compute_resource_id}/stats/compliance"
     //process optional template parameters
     pathParams := map[string]string{
         "vcenter_id": vcenterId,
         "compute_resource_id": computeResourceId,
     }
-    _queryBuilder := v.config.BaseUrl + _pathURL
+    queryBuilder := v.config.BaseUrl + pathURL
 
     
     header := "application/vmware-vcenter-compute-resource-compliance-stats=v1+json"
@@ -42,7 +42,7 @@ func (v *VmwareVcenterComputeResourceComplianceStatsV1) ReadVmwareVcenterCompute
         SetHeader("Accept", header).
         SetAuthToken(v.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{

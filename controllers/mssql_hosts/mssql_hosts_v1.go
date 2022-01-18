@@ -27,7 +27,7 @@ func (m *MssqlHostsV1) ListMssqlHostConnections(
     *models.ListHcmHostsResponse, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := m.config.BaseUrl + "/connections/mssql/hosts"
+    queryBuilder := m.config.BaseUrl + "/connections/mssql/hosts"
 
     
     header := "application/mssql-hosts=v1+json"
@@ -63,7 +63,7 @@ func (m *MssqlHostsV1) ListMssqlHostConnections(
         SetHeader("Accept", header).
         SetAuthToken(m.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -89,7 +89,7 @@ func (m *MssqlHostsV1) CreateMssqlHostConnections(
     *models.CreateHcmHostResponse, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := m.config.BaseUrl + "/connections/mssql/hosts"
+    queryBuilder := m.config.BaseUrl + "/connections/mssql/hosts"
 
     bytes, err := json.Marshal(body)
     if err != nil {
@@ -109,7 +109,7 @@ func (m *MssqlHostsV1) CreateMssqlHostConnections(
         SetAuthToken(m.config.Token).
         SetBody(payload).
         SetResult(&result).
-        Post(_queryBuilder)
+        Post(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -136,7 +136,7 @@ func (m *MssqlHostsV1) DeleteMssqlHostConnections(
     *models.DeleteHcmHostResponse, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := m.config.BaseUrl + "/connections/mssql/hosts"
+    queryBuilder := m.config.BaseUrl + "/connections/mssql/hosts"
 
     bytes, err := json.Marshal(body)
     if err != nil {
@@ -168,7 +168,7 @@ func (m *MssqlHostsV1) DeleteMssqlHostConnections(
         SetAuthToken(m.config.Token).
         SetBody(payload).
         SetResult(&result).
-        Delete(_queryBuilder)
+        Delete(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -195,7 +195,7 @@ func (m *MssqlHostsV1) MoveMssqlHostConnections(
     *models.MoveHcmHostsResponse, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := m.config.BaseUrl + "/connections/mssql/hosts"
+    queryBuilder := m.config.BaseUrl + "/connections/mssql/hosts"
 
     bytes, err := json.Marshal(body)
     if err != nil {
@@ -227,7 +227,7 @@ func (m *MssqlHostsV1) MoveMssqlHostConnections(
         SetAuthToken(m.config.Token).
         SetBody(payload).
         SetResult(&result).
-        Patch(_queryBuilder)
+        Patch(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -253,7 +253,7 @@ func (m *MssqlHostsV1) CreateMssqlHostConnectionCredentials(
     *models.CreateHostECCredentialsResponse, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := m.config.BaseUrl + "/connections/mssql/hosts/eccredentials"
+    queryBuilder := m.config.BaseUrl + "/connections/mssql/hosts/eccredentials"
 
     bytes, err := json.Marshal(body)
     if err != nil {
@@ -273,7 +273,7 @@ func (m *MssqlHostsV1) CreateMssqlHostConnectionCredentials(
         SetAuthToken(m.config.Token).
         SetBody(payload).
         SetResult(&result).
-        Post(_queryBuilder)
+        Post(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -299,12 +299,12 @@ func (m *MssqlHostsV1) ReadMssqlHostConnections(
     *models.ReadHcmHostResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/connections/mssql/hosts/{host_id}"
+    pathURL := "/connections/mssql/hosts/{host_id}"
     //process optional template parameters
     pathParams := map[string]string{
         "host_id": hostId,
     }
-    _queryBuilder := m.config.BaseUrl + _pathURL
+    queryBuilder := m.config.BaseUrl + pathURL
 
     
     header := "application/mssql-hosts=v1+json"
@@ -316,7 +316,7 @@ func (m *MssqlHostsV1) ReadMssqlHostConnections(
         SetHeader("Accept", header).
         SetAuthToken(m.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -345,7 +345,7 @@ func (m *MssqlHostsV1) ListMssqlHosts(
     *models.ListMssqlHostsResponse, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := m.config.BaseUrl + "/datasources/mssql/hosts"
+    queryBuilder := m.config.BaseUrl + "/datasources/mssql/hosts"
 
     
     header := "application/mssql-hosts=v1+json"
@@ -381,7 +381,7 @@ func (m *MssqlHostsV1) ListMssqlHosts(
         SetHeader("Accept", header).
         SetAuthToken(m.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -407,12 +407,12 @@ func (m *MssqlHostsV1) ReadMssqlHosts(
     *models.ReadMssqlHostResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/datasources/mssql/hosts/{host_id}"
+    pathURL := "/datasources/mssql/hosts/{host_id}"
     //process optional template parameters
     pathParams := map[string]string{
         "host_id": hostId,
     }
-    _queryBuilder := m.config.BaseUrl + _pathURL
+    queryBuilder := m.config.BaseUrl + pathURL
 
     
     header := "application/mssql-hosts=v1+json"
@@ -424,7 +424,7 @@ func (m *MssqlHostsV1) ReadMssqlHosts(
         SetHeader("Accept", header).
         SetAuthToken(m.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{

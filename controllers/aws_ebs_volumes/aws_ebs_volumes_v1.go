@@ -26,7 +26,7 @@ func (a *AwsEbsVolumesV1) ListAwsEbsVolumes(
     *models.ListEbsVolumesResponse, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := a.config.BaseUrl + "/datasources/aws/ebs-volumes"
+    queryBuilder := a.config.BaseUrl + "/datasources/aws/ebs-volumes"
 
     
     header := "application/aws-ebs-volumes=v1+json"
@@ -62,7 +62,7 @@ func (a *AwsEbsVolumesV1) ListAwsEbsVolumes(
         SetHeader("Accept", header).
         SetAuthToken(a.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -89,12 +89,12 @@ func (a *AwsEbsVolumesV1) ReadAwsEbsVolume(
     *models.ReadEbsVolumeResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/datasources/aws/ebs-volumes/{volume_id}"
+    pathURL := "/datasources/aws/ebs-volumes/{volume_id}"
     //process optional template parameters
     pathParams := map[string]string{
         "volume_id": volumeId,
     }
-    _queryBuilder := a.config.BaseUrl + _pathURL
+    queryBuilder := a.config.BaseUrl + pathURL
 
     
     header := "application/aws-ebs-volumes=v1+json"
@@ -118,7 +118,7 @@ func (a *AwsEbsVolumesV1) ReadAwsEbsVolume(
         SetHeader("Accept", header).
         SetAuthToken(a.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{

@@ -24,7 +24,7 @@ func (r *RolesV1) ListRoles()(
     *models.ListRolesResponse, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := r.config.BaseUrl + "/roles"
+    queryBuilder := r.config.BaseUrl + "/roles"
 
     
     header := "application/roles=v1+json"
@@ -35,7 +35,7 @@ func (r *RolesV1) ListRoles()(
         SetHeader("Accept", header).
         SetAuthToken(r.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -61,12 +61,12 @@ func (r *RolesV1) ReadRole(
     *models.ReadRoleResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/roles/{role_id}"
+    pathURL := "/roles/{role_id}"
     //process optional template parameters
     pathParams := map[string]string{
         "role_id": roleId,
     }
-    _queryBuilder := r.config.BaseUrl + _pathURL
+    queryBuilder := r.config.BaseUrl + pathURL
 
     
     header := "application/roles=v1+json"
@@ -78,7 +78,7 @@ func (r *RolesV1) ReadRole(
         SetHeader("Accept", header).
         SetAuthToken(r.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{

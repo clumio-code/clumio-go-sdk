@@ -26,7 +26,7 @@ func (u *UsersV1) ListUsers(
     *models.ListUsersResponse, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := u.config.BaseUrl + "/users"
+    queryBuilder := u.config.BaseUrl + "/users"
 
     
     header := "application/users=v1+json"
@@ -58,7 +58,7 @@ func (u *UsersV1) ListUsers(
         SetHeader("Accept", header).
         SetAuthToken(u.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -84,7 +84,7 @@ func (u *UsersV1) CreateUser(
     *models.CreateUserResponse, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := u.config.BaseUrl + "/users"
+    queryBuilder := u.config.BaseUrl + "/users"
 
     bytes, err := json.Marshal(body)
     if err != nil {
@@ -104,7 +104,7 @@ func (u *UsersV1) CreateUser(
         SetAuthToken(u.config.Token).
         SetBody(payload).
         SetResult(&result).
-        Post(_queryBuilder)
+        Post(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -130,7 +130,7 @@ func (u *UsersV1) UpdateUserProfile(
     *models.EditProfileResponse, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := u.config.BaseUrl + "/users/my-profile"
+    queryBuilder := u.config.BaseUrl + "/users/my-profile"
 
     bytes, err := json.Marshal(body)
     if err != nil {
@@ -150,7 +150,7 @@ func (u *UsersV1) UpdateUserProfile(
         SetAuthToken(u.config.Token).
         SetBody(payload).
         SetResult(&result).
-        Patch(_queryBuilder)
+        Patch(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -176,12 +176,12 @@ func (u *UsersV1) ReadUser(
     *models.ReadUserResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/users/{user_id}"
+    pathURL := "/users/{user_id}"
     //process optional template parameters
     pathParams := map[string]string{
         "user_id": fmt.Sprintf("%v", userId),
     }
-    _queryBuilder := u.config.BaseUrl + _pathURL
+    queryBuilder := u.config.BaseUrl + pathURL
 
     
     header := "application/users=v1+json"
@@ -193,7 +193,7 @@ func (u *UsersV1) ReadUser(
         SetHeader("Accept", header).
         SetAuthToken(u.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -219,12 +219,12 @@ func (u *UsersV1) DeleteUser(
     interface{}, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/users/{user_id}"
+    pathURL := "/users/{user_id}"
     //process optional template parameters
     pathParams := map[string]string{
         "user_id": fmt.Sprintf("%v", userId),
     }
-    _queryBuilder := u.config.BaseUrl + _pathURL
+    queryBuilder := u.config.BaseUrl + pathURL
 
     
     header := "application/users=v1+json"
@@ -236,7 +236,7 @@ func (u *UsersV1) DeleteUser(
         SetHeader("Accept", header).
         SetAuthToken(u.config.Token).
         SetResult(&result).
-        Delete(_queryBuilder)
+        Delete(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -264,12 +264,12 @@ func (u *UsersV1) UpdateUser(
     *models.UpdateUserResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/users/{user_id}"
+    pathURL := "/users/{user_id}"
     //process optional template parameters
     pathParams := map[string]string{
         "user_id": fmt.Sprintf("%v", userId),
     }
-    _queryBuilder := u.config.BaseUrl + _pathURL
+    queryBuilder := u.config.BaseUrl + pathURL
 
     bytes, err := json.Marshal(body)
     if err != nil {
@@ -290,7 +290,7 @@ func (u *UsersV1) UpdateUser(
         SetAuthToken(u.config.Token).
         SetBody(payload).
         SetResult(&result).
-        Patch(_queryBuilder)
+        Patch(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -317,12 +317,12 @@ func (u *UsersV1) ChangePassword(
     interface{}, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/users/{user_id}/password"
+    pathURL := "/users/{user_id}/password"
     //process optional template parameters
     pathParams := map[string]string{
         "user_id": fmt.Sprintf("%v", userId),
     }
-    _queryBuilder := u.config.BaseUrl + _pathURL
+    queryBuilder := u.config.BaseUrl + pathURL
 
     bytes, err := json.Marshal(body)
     if err != nil {
@@ -343,7 +343,7 @@ func (u *UsersV1) ChangePassword(
         SetAuthToken(u.config.Token).
         SetBody(payload).
         SetResult(&result).
-        Put(_queryBuilder)
+        Put(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{

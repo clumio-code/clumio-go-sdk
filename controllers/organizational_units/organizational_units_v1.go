@@ -26,7 +26,7 @@ func (o *OrganizationalUnitsV1) ListOrganizationalUnits(
     *models.ListOrganizationalUnitsResponse, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := o.config.BaseUrl + "/organizational-units"
+    queryBuilder := o.config.BaseUrl + "/organizational-units"
 
     
     header := "application/organizational-units=v1+json"
@@ -58,7 +58,7 @@ func (o *OrganizationalUnitsV1) ListOrganizationalUnits(
         SetHeader("Accept", header).
         SetAuthToken(o.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -85,7 +85,7 @@ func (o *OrganizationalUnitsV1) CreateOrganizationalUnit(
     *models.CreateOrganizationalUnitResponse, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := o.config.BaseUrl + "/organizational-units"
+    queryBuilder := o.config.BaseUrl + "/organizational-units"
 
     bytes, err := json.Marshal(body)
     if err != nil {
@@ -117,7 +117,7 @@ func (o *OrganizationalUnitsV1) CreateOrganizationalUnit(
         SetAuthToken(o.config.Token).
         SetBody(payload).
         SetResult(&result).
-        Post(_queryBuilder)
+        Post(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -143,12 +143,12 @@ func (o *OrganizationalUnitsV1) ReadOrganizationalUnit(
     *models.ReadOrganizationalUnitResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/organizational-units/{id}"
+    pathURL := "/organizational-units/{id}"
     //process optional template parameters
     pathParams := map[string]string{
         "id": id,
     }
-    _queryBuilder := o.config.BaseUrl + _pathURL
+    queryBuilder := o.config.BaseUrl + pathURL
 
     
     header := "application/organizational-units=v1+json"
@@ -160,7 +160,7 @@ func (o *OrganizationalUnitsV1) ReadOrganizationalUnit(
         SetHeader("Accept", header).
         SetAuthToken(o.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -187,12 +187,12 @@ func (o *OrganizationalUnitsV1) DeleteOrganizationalUnit(
     *models.DeleteOrganizationalUnitResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/organizational-units/{id}"
+    pathURL := "/organizational-units/{id}"
     //process optional template parameters
     pathParams := map[string]string{
         "id": id,
     }
-    _queryBuilder := o.config.BaseUrl + _pathURL
+    queryBuilder := o.config.BaseUrl + pathURL
 
     
     header := "application/organizational-units=v1+json"
@@ -216,7 +216,7 @@ func (o *OrganizationalUnitsV1) DeleteOrganizationalUnit(
         SetHeader("Accept", header).
         SetAuthToken(o.config.Token).
         SetResult(&result).
-        Delete(_queryBuilder)
+        Delete(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -245,12 +245,12 @@ func (o *OrganizationalUnitsV1) PatchOrganizationalUnit(
     *models.PatchOrganizationalUnitResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/organizational-units/{id}"
+    pathURL := "/organizational-units/{id}"
     //process optional template parameters
     pathParams := map[string]string{
         "id": id,
     }
-    _queryBuilder := o.config.BaseUrl + _pathURL
+    queryBuilder := o.config.BaseUrl + pathURL
 
     bytes, err := json.Marshal(body)
     if err != nil {
@@ -283,7 +283,7 @@ func (o *OrganizationalUnitsV1) PatchOrganizationalUnit(
         SetAuthToken(o.config.Token).
         SetBody(payload).
         SetResult(&result).
-        Patch(_queryBuilder)
+        Patch(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{

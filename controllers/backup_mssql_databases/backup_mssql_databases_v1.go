@@ -27,7 +27,7 @@ func (b *BackupMssqlDatabasesV1) ListBackupMssqlDatabases(
     *models.ListMssqlDatabaseBackupsResponse, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := b.config.BaseUrl + "/backups/mssql/databases"
+    queryBuilder := b.config.BaseUrl + "/backups/mssql/databases"
 
     
     header := "application/backup-mssql-databases=v1+json"
@@ -63,7 +63,7 @@ func (b *BackupMssqlDatabasesV1) ListBackupMssqlDatabases(
         SetHeader("Accept", header).
         SetAuthToken(b.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -90,7 +90,7 @@ func (b *BackupMssqlDatabasesV1) CreateBackupMssqlDatabase(
     *models.OnDemandMssqlBackupResponse, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := b.config.BaseUrl + "/backups/mssql/databases"
+    queryBuilder := b.config.BaseUrl + "/backups/mssql/databases"
 
     bytes, err := json.Marshal(body)
     if err != nil {
@@ -122,7 +122,7 @@ func (b *BackupMssqlDatabasesV1) CreateBackupMssqlDatabase(
         SetAuthToken(b.config.Token).
         SetBody(payload).
         SetResult(&result).
-        Post(_queryBuilder)
+        Post(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -148,12 +148,12 @@ func (b *BackupMssqlDatabasesV1) ReadBackupMssqlDatabase(
     *models.ReadMssqlDatabaseBackupResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/backups/mssql/databases/{backup_id}"
+    pathURL := "/backups/mssql/databases/{backup_id}"
     //process optional template parameters
     pathParams := map[string]string{
         "backup_id": backupId,
     }
-    _queryBuilder := b.config.BaseUrl + _pathURL
+    queryBuilder := b.config.BaseUrl + pathURL
 
     
     header := "application/backup-mssql-databases=v1+json"
@@ -165,7 +165,7 @@ func (b *BackupMssqlDatabasesV1) ReadBackupMssqlDatabase(
         SetHeader("Accept", header).
         SetAuthToken(b.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{

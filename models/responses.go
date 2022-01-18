@@ -849,6 +849,20 @@ type ListRolesResponse struct {
     TotalPagesCount *int64            `json:"total_pages_count"`
 }
 
+// ListRulesResponse represents a custom type struct for Success
+type ListRulesResponse struct {
+    // An array of embedded resources related to this resource.
+    Embedded     *RuleListEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links        *RuleListLinks    `json:"_links"`
+    // The number of items listed on the current page.
+    CurrentCount *int64            `json:"current_count"`
+    // The maximum number of items displayed per page in the response.
+    Limit        *int64            `json:"limit"`
+    // The page token used to get this response.
+    Start        *string           `json:"start"`
+}
+
 // ListSubgroupsResponse represents a custom type struct for Success
 type ListSubgroupsResponse struct {
     // Embedded responses related to the resource.
@@ -2044,6 +2058,23 @@ type ReadRuleResponse struct {
     // |                       |                           | {"aws_tag":{"$contains": |
     // |                       |                           | {"key":"Environment",    |
     // |                       |                           | "value":"Prod"}}}        |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // +-----------------------+---------------------------+--------------------------+
+    // | entity_type           | $eq, $in                  | Denotes the AWS entity   |
+    // |                       |                           | type to conditionalize   |
+    // |                       |                           | on                       |
+    // |                       |                           |                          |
+    // |                       |                           | {"entity_type":{"$eq":"a |
+    // |                       |                           | ws_rds_instance"}}       |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"entity_type":{"$in":[" |
+    // |                       |                           | aws_rds_instance",       |
+    // |                       |                           | "aws_ebs_volume", "aws_e |
+    // |                       |                           | c2_instance","aws_dynamo |
+    // |                       |                           | db_table",               |
+    // |                       |                           | "aws_rds_cluster"]}}     |
     // |                       |                           |                          |
     // |                       |                           |                          |
     // +-----------------------+---------------------------+--------------------------+

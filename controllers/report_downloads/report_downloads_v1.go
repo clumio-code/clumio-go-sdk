@@ -24,7 +24,7 @@ func (r *ReportDownloadsV1) ListReportDownloads(
     *models.ListReportDownloadsResponse, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := r.config.BaseUrl + "/reports/downloads"
+    queryBuilder := r.config.BaseUrl + "/reports/downloads"
 
     bytes, err := json.Marshal(body)
     if err != nil {
@@ -44,7 +44,7 @@ func (r *ReportDownloadsV1) ListReportDownloads(
         SetAuthToken(r.config.Token).
         SetBody(payload).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -70,7 +70,7 @@ func (r *ReportDownloadsV1) CreateReportDownload(
     *models.CreateReportDownloadResponse, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := r.config.BaseUrl + "/reports/downloads"
+    queryBuilder := r.config.BaseUrl + "/reports/downloads"
 
     bytes, err := json.Marshal(body)
     if err != nil {
@@ -90,7 +90,7 @@ func (r *ReportDownloadsV1) CreateReportDownload(
         SetAuthToken(r.config.Token).
         SetBody(payload).
         SetResult(&result).
-        Post(_queryBuilder)
+        Post(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{

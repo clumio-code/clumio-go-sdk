@@ -24,7 +24,7 @@ func (r *RestoredAwsEbsVolumesV1) RestoreAwsEbsVolume(
     interface{}, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := r.config.BaseUrl + "/restores/aws/ebs-volumes"
+    queryBuilder := r.config.BaseUrl + "/restores/aws/ebs-volumes"
 
     bytes, err := json.Marshal(body)
     if err != nil {
@@ -44,7 +44,7 @@ func (r *RestoredAwsEbsVolumesV1) RestoreAwsEbsVolume(
         SetAuthToken(r.config.Token).
         SetBody(payload).
         SetResult(&result).
-        Post(_queryBuilder)
+        Post(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{

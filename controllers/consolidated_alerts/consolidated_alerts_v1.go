@@ -26,7 +26,7 @@ func (c *ConsolidatedAlertsV1) ListConsolidatedAlerts(
     *models.ListConsolidatedAlertsResponse, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := c.config.BaseUrl + "/alerts/consolidated"
+    queryBuilder := c.config.BaseUrl + "/alerts/consolidated"
 
     
     header := "application/consolidated-alerts=v1+json"
@@ -58,7 +58,7 @@ func (c *ConsolidatedAlertsV1) ListConsolidatedAlerts(
         SetHeader("Accept", header).
         SetAuthToken(c.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -84,12 +84,12 @@ func (c *ConsolidatedAlertsV1) ReadConsolidatedAlert(
     *models.ReadConsolidatedAlertResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/alerts/consolidated/{id}"
+    pathURL := "/alerts/consolidated/{id}"
     //process optional template parameters
     pathParams := map[string]string{
         "id": id,
     }
-    _queryBuilder := c.config.BaseUrl + _pathURL
+    queryBuilder := c.config.BaseUrl + pathURL
 
     
     header := "application/consolidated-alerts=v1+json"
@@ -101,7 +101,7 @@ func (c *ConsolidatedAlertsV1) ReadConsolidatedAlert(
         SetHeader("Accept", header).
         SetAuthToken(c.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -128,12 +128,12 @@ func (c *ConsolidatedAlertsV1) UpdateConsolidatedAlert(
     *models.UpdateConsolidatedAlertResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/alerts/consolidated/{id}"
+    pathURL := "/alerts/consolidated/{id}"
     //process optional template parameters
     pathParams := map[string]string{
         "id": id,
     }
-    _queryBuilder := c.config.BaseUrl + _pathURL
+    queryBuilder := c.config.BaseUrl + pathURL
 
     bytes, err := json.Marshal(body)
     if err != nil {
@@ -154,7 +154,7 @@ func (c *ConsolidatedAlertsV1) UpdateConsolidatedAlert(
         SetAuthToken(c.config.Token).
         SetBody(payload).
         SetResult(&result).
-        Patch(_queryBuilder)
+        Patch(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{

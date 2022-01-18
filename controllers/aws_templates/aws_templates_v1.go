@@ -24,7 +24,7 @@ func (a *AwsTemplatesV1) ReadConnectionTemplates()(
     *models.ReadAWSTemplatesV2Response, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := a.config.BaseUrl + "/connections/aws/templates"
+    queryBuilder := a.config.BaseUrl + "/connections/aws/templates"
 
     
     header := "application/aws-templates=v1+json"
@@ -35,7 +35,7 @@ func (a *AwsTemplatesV1) ReadConnectionTemplates()(
         SetHeader("Accept", header).
         SetAuthToken(a.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -62,7 +62,7 @@ func (a *AwsTemplatesV1) CreateConnectionTemplate(
     *models.CreateAWSTemplateV2Response, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := a.config.BaseUrl + "/connections/aws/templates"
+    queryBuilder := a.config.BaseUrl + "/connections/aws/templates"
 
     bytes, err := json.Marshal(body)
     if err != nil {
@@ -82,7 +82,7 @@ func (a *AwsTemplatesV1) CreateConnectionTemplate(
         SetAuthToken(a.config.Token).
         SetBody(payload).
         SetResult(&result).
-        Post(_queryBuilder)
+        Post(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{

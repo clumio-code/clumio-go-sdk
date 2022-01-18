@@ -27,14 +27,14 @@ func (b *BackupFilesystemDirectoriesV1) ReadBackupFilesystemDirectory(
     *models.ReadDirectoryResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/backups/{backup_id}/filesystems/{filesystem_id}/directories/{directory_id}/browse"
+    pathURL := "/backups/{backup_id}/filesystems/{filesystem_id}/directories/{directory_id}/browse"
     //process optional template parameters
     pathParams := map[string]string{
         "backup_id": backupId,
         "filesystem_id": filesystemId,
         "directory_id": directoryId,
     }
-    _queryBuilder := b.config.BaseUrl + _pathURL
+    queryBuilder := b.config.BaseUrl + pathURL
 
     
     header := "application/backup-filesystem-directories=v1+json"
@@ -63,7 +63,7 @@ func (b *BackupFilesystemDirectoriesV1) ReadBackupFilesystemDirectory(
         SetHeader("Accept", header).
         SetAuthToken(b.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{

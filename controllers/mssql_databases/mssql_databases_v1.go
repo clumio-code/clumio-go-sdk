@@ -26,7 +26,7 @@ func (m *MssqlDatabasesV1) ListMssqlDatabases(
     *models.ListMssqlDatabasesResponse, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := m.config.BaseUrl + "/datasources/mssql/databases"
+    queryBuilder := m.config.BaseUrl + "/datasources/mssql/databases"
 
     
     header := "application/mssql-databases=v1+json"
@@ -62,7 +62,7 @@ func (m *MssqlDatabasesV1) ListMssqlDatabases(
         SetHeader("Accept", header).
         SetAuthToken(m.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -88,12 +88,12 @@ func (m *MssqlDatabasesV1) ReadMssqlDatabases(
     *models.ReadMssqlDatabaseResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/datasources/mssql/databases/{database_id}"
+    pathURL := "/datasources/mssql/databases/{database_id}"
     //process optional template parameters
     pathParams := map[string]string{
         "database_id": databaseId,
     }
-    _queryBuilder := m.config.BaseUrl + _pathURL
+    queryBuilder := m.config.BaseUrl + pathURL
 
     
     header := "application/mssql-databases=v1+json"
@@ -105,7 +105,7 @@ func (m *MssqlDatabasesV1) ReadMssqlDatabases(
         SetHeader("Accept", header).
         SetAuthToken(m.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -134,12 +134,12 @@ func (m *MssqlDatabasesV1) ListMssqlDatabasePitrIntervals(
     *models.ListMssqlDatabasePitrIntervalsResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/datasources/mssql/databases/{database_id}/pitr-intervals"
+    pathURL := "/datasources/mssql/databases/{database_id}/pitr-intervals"
     //process optional template parameters
     pathParams := map[string]string{
         "database_id": databaseId,
     }
-    _queryBuilder := m.config.BaseUrl + _pathURL
+    queryBuilder := m.config.BaseUrl + pathURL
 
     
     header := "application/mssql-databases=v1+json"
@@ -172,7 +172,7 @@ func (m *MssqlDatabasesV1) ListMssqlDatabasePitrIntervals(
         SetHeader("Accept", header).
         SetAuthToken(m.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{

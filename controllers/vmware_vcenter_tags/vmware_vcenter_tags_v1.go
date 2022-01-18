@@ -27,12 +27,12 @@ func (v *VmwareVcenterTagsV1) ListVmwareVcenterTags(
     *models.ListTagsResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/datasources/vmware/vcenters/{vcenter_id}/tags"
+    pathURL := "/datasources/vmware/vcenters/{vcenter_id}/tags"
     //process optional template parameters
     pathParams := map[string]string{
         "vcenter_id": vcenterId,
     }
-    _queryBuilder := v.config.BaseUrl + _pathURL
+    queryBuilder := v.config.BaseUrl + pathURL
 
     
     header := "application/vmware-vcenter-tags=v1+json"
@@ -69,7 +69,7 @@ func (v *VmwareVcenterTagsV1) ListVmwareVcenterTags(
         SetHeader("Accept", header).
         SetAuthToken(v.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -97,13 +97,13 @@ func (v *VmwareVcenterTagsV1) ReadVmwareVcenterTag(
     *models.ReadTagResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/datasources/vmware/vcenters/{vcenter_id}/tags/{tag_id}"
+    pathURL := "/datasources/vmware/vcenters/{vcenter_id}/tags/{tag_id}"
     //process optional template parameters
     pathParams := map[string]string{
         "vcenter_id": vcenterId,
         "tag_id": tagId,
     }
-    _queryBuilder := v.config.BaseUrl + _pathURL
+    queryBuilder := v.config.BaseUrl + pathURL
 
     
     header := "application/vmware-vcenter-tags=v1+json"
@@ -127,7 +127,7 @@ func (v *VmwareVcenterTagsV1) ReadVmwareVcenterTag(
         SetHeader("Accept", header).
         SetAuthToken(v.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{

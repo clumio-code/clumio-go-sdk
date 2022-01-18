@@ -25,7 +25,7 @@ func (r *RestoredMssqlDatabasesV1) RestoreMssqlDatabase(
     *models.CreateMssqlDatabaseRestoreResponse, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := r.config.BaseUrl + "/restores/mssql/databases"
+    queryBuilder := r.config.BaseUrl + "/restores/mssql/databases"
 
     bytes, err := json.Marshal(body)
     if err != nil {
@@ -57,7 +57,7 @@ func (r *RestoredMssqlDatabasesV1) RestoreMssqlDatabase(
         SetAuthToken(r.config.Token).
         SetBody(payload).
         SetResult(&result).
-        Post(_queryBuilder)
+        Post(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{

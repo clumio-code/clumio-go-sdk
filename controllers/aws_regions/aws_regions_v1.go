@@ -25,7 +25,7 @@ func (a *AwsRegionsV1) ListConnectionAwsRegions(
     *models.ListAWSRegionsResponse, *apiutils.APIError){
 
     var err error = nil
-    _queryBuilder := a.config.BaseUrl + "/connections/aws/regions"
+    queryBuilder := a.config.BaseUrl + "/connections/aws/regions"
 
     
     header := "application/aws-regions=v1+json"
@@ -57,7 +57,7 @@ func (a *AwsRegionsV1) ListConnectionAwsRegions(
         SetHeader("Accept", header).
         SetAuthToken(a.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{

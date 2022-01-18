@@ -26,12 +26,12 @@ func (m *ManagementSubgroupsV1) ListManagementSubgroups(
     *models.ListSubgroupsResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/management-groups/{group_id}/subgroups"
+    pathURL := "/management-groups/{group_id}/subgroups"
     //process optional template parameters
     pathParams := map[string]string{
         "group_id": groupId,
     }
-    _queryBuilder := m.config.BaseUrl + _pathURL
+    queryBuilder := m.config.BaseUrl + pathURL
 
     
     header := "application/management-subgroups=v1+json"
@@ -60,7 +60,7 @@ func (m *ManagementSubgroupsV1) ListManagementSubgroups(
         SetHeader("Accept", header).
         SetAuthToken(m.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -89,13 +89,13 @@ func (m *ManagementSubgroupsV1) ReadManagementSubgroup(
     *models.ReadSubgroupResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/management-groups/{group_id}/subgroups/{subgroup_id}"
+    pathURL := "/management-groups/{group_id}/subgroups/{subgroup_id}"
     //process optional template parameters
     pathParams := map[string]string{
         "subgroup_id": subgroupId,
         "group_id": groupId,
     }
-    _queryBuilder := m.config.BaseUrl + _pathURL
+    queryBuilder := m.config.BaseUrl + pathURL
 
     
     header := "application/management-subgroups=v1+json"
@@ -107,7 +107,7 @@ func (m *ManagementSubgroupsV1) ReadManagementSubgroup(
         SetHeader("Accept", header).
         SetAuthToken(m.config.Token).
         SetResult(&result).
-        Get(_queryBuilder)
+        Get(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
@@ -135,13 +135,13 @@ func (m *ManagementSubgroupsV1) UpdateManagementSubgroup(
     *models.UpdateSubgroupResponse, *apiutils.APIError){
 
     var err error = nil
-    _pathURL := "/management-groups/{group_id}/subgroups/{subgroup_id}"
+    pathURL := "/management-groups/{group_id}/subgroups/{subgroup_id}"
     //process optional template parameters
     pathParams := map[string]string{
         "subgroup_id": subgroupId,
         "group_id": groupId,
     }
-    _queryBuilder := m.config.BaseUrl + _pathURL
+    queryBuilder := m.config.BaseUrl + pathURL
 
     bytes, err := json.Marshal(body)
     if err != nil {
@@ -162,7 +162,7 @@ func (m *ManagementSubgroupsV1) UpdateManagementSubgroup(
         SetAuthToken(m.config.Token).
         SetBody(payload).
         SetResult(&result).
-        Put(_queryBuilder)
+        Put(queryBuilder)
 
     if err != nil {
         return nil, &apiutils.APIError{
