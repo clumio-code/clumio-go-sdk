@@ -232,8 +232,7 @@ func (p *PolicyRulesV1) UpdatePolicyRule(
 
 //  DeletePolicyRule Deletes the specified policy rule.
 func (p *PolicyRulesV1) DeletePolicyRule(
-    ruleId string, 
-    body *models.DeletePolicyRuleV1Request)(
+    ruleId string)(
     *models.DeleteRuleResponse, *apiutils.APIError){
 
     var err error = nil
@@ -244,15 +243,7 @@ func (p *PolicyRulesV1) DeletePolicyRule(
     }
     queryBuilder := p.config.BaseUrl + pathURL
 
-    bytes, err := json.Marshal(body)
-    if err != nil {
-        return nil, &apiutils.APIError{
-            ResponseCode: 500,
-            Reason:       fmt.Sprintf("Failed to Marshal Request Body %v", body),
-            Response:     []byte(fmt.Sprintf("%v", err)),
-        }
-    }
-    payload := string(bytes)
+    
     header := "application/policy-rules=v1+json"
     var result *models.DeleteRuleResponse
     client := resty.New()
@@ -261,7 +252,6 @@ func (p *PolicyRulesV1) DeletePolicyRule(
         SetPathParams(pathParams).
         SetHeader("Accept", header).
         SetAuthToken(p.config.Token).
-        SetBody(payload).
         SetResult(&result).
         Delete(queryBuilder)
 
