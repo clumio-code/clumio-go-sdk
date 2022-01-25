@@ -773,6 +773,72 @@ type BackupWindow struct {
     StartTime *string `json:"start_time"`
 }
 
+// Bucket represents a custom type struct
+type Bucket struct {
+    // Embedded responses related to the resource.
+    Embedded                 interface{}    `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links                    *BucketLinks   `json:"_links"`
+    // The AWS-assigned ID of the account associated with the S3 bucket.
+    AccountNativeId          *string        `json:"account_native_id"`
+    // The AWS region associated with the S3 bucket.
+    AwsRegion                *string        `json:"aws_region"`
+    // The timestamp of when the bucket was created. Represented in RFC-3339 format.
+    CreationTimestamp        *string        `json:"creation_timestamp"`
+    // Encryption configuration of the bucket
+    EncryptionConfiguration  *string        `json:"encryption_configuration"`
+    // The Clumio-assigned ID of the AWS environment associated with the S3 bucket.
+    EnvironmentId            *string        `json:"environment_id"`
+    // The Clumio-assigned ID of the bucket.
+    Id                       *string        `json:"id"`
+    // The AWS-assigned name of the bucket.
+    Name                     *string        `json:"name"`
+    // Number of objects in bucket.
+    ObjectCount              *int64         `json:"object_count"`
+    // The Clumio-assigned ID of the organizational unit associated with the S3 bucket.
+    OrganizationalUnitId     *string        `json:"organizational_unit_id"`
+    // Protection group count reflects how many protection groups are linked to this
+    // bucket
+    ProtectionGroupCount     *int64         `json:"protection_group_count"`
+    // Replication configuration of the bucket
+    ReplicationConfiguration *string        `json:"replication_configuration"`
+    // Size of bucket in bytes.
+    SizeBytes                *int64         `json:"size_bytes"`
+    // A tag created through AWS console which can be applied to EBS volumes.
+    Tags                     []*AwsTagModel `json:"tags"`
+    // Version configuration of the bucket
+    VersionConfiguration     *string        `json:"version_configuration"`
+}
+
+// BucketLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type BucketLinks struct {
+    // The HATEOAS link to this resource.
+    Self *HateoasSelfLink `json:"_self"`
+}
+
+// BucketListEmbedded represents a custom type struct.
+// Embedded responses related to the resource.
+type BucketListEmbedded struct {
+    // TODO: Add struct field description
+    Items []*Bucket `json:"items"`
+}
+
+// BucketListLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type BucketListLinks struct {
+    // The HATEOAS link to the first page of results.
+    First *HateoasFirstLink `json:"_first"`
+    // The HATEOAS link to the last page of results.
+    Last  *HateoasLastLink  `json:"_last"`
+    // The HATEOAS link to the next page of results.
+    Next  *HateoasNextLink  `json:"_next"`
+    // The HATEOAS link to the previous page of results.
+    Prev  *HateoasPrevLink  `json:"_prev"`
+    // The HATEOAS link to this resource.
+    Self  *HateoasSelfLink  `json:"_self"`
+}
+
 // CloudConnectorCountByStatus represents a custom type struct.
 // The number of cloud connectors in this subgroup, aggregated by their status.
 type CloudConnectorCountByStatus struct {
@@ -2526,6 +2592,20 @@ type OUGroupingCriteria struct {
     Vmware       *VMwareDsGroupingCriteria `json:"vmware"`
 }
 
+// ObjectFilter represents a custom type struct.
+// ObjectFilter
+// defines which objects will be backed up.
+type ObjectFilter struct {
+    // Whether to back up only the latest object version.
+    LatestVersionOnly *bool           `json:"latest_version_only"`
+    // PrefixFilter
+    PrefixFilters     []*PrefixFilter `json:"prefix_filters"`
+    // Storage class to include in the backup. If not specified, then all objects across all storage
+    // classes will be backed up. Valid values are: `S3 Standard`, `S3 Standard-IA`,
+    // `S3 Intelligent-Tiering`, `S3 One Zone-IA`, `S3 Glacier` and `S3 Glacier Deep Archive`.
+    StorageClasses    []*string       `json:"storage_classes"`
+}
+
 // OrganizationalUnitLinks represents a custom type struct.
 // URLs to pages related to the resource.
 type OrganizationalUnitLinks struct {
@@ -2749,6 +2829,15 @@ type PolicyOperation struct {
     ClumioType    *string       `json:"type"`
 }
 
+// PrefixFilter represents a custom type struct.
+// PrefixFilter
+type PrefixFilter struct {
+    // List of subprefixes to exclude from the prefix.
+    ExcludedSubPrefixes []*string `json:"excluded_sub_prefixes"`
+    // Prefix to include.
+    Prefix              *string   `json:"prefix"`
+}
+
 // ProtectConfig represents a custom type struct.
 // The configuration of the Clumio Cloud Protect product for this connection.
 // If this connection is not configured for Clumio Cloud Protect, then this field has a
@@ -2817,6 +2906,217 @@ type ProtectedStatsDeprecated struct {
     Protected   *ComplianceStatsDeprecated `json:"protected"`
     // Unprotected count.
     Unprotected *uint32                    `json:"unprotected"`
+}
+
+// ProtectionComplianceStatsWithSeeding represents a custom type struct.
+// The compliance statistics of workloads associated with this entity.
+type ProtectionComplianceStatsWithSeeding struct {
+    // The total number of compliant entities.
+    CompliantCount     *int64 `json:"compliant_count"`
+    // The total number of entities associated with deactivated policies.
+    DeactivatedCount   *int64 `json:"deactivated_count"`
+    // Determines whether one or more entities is currently seeding or waiting for seeding.
+    // If set to `true`, at least one entity is currently seeding or waiting for seeding.
+    HasSeedingEntities *bool  `json:"has_seeding_entities"`
+    // The total number of non-compliant entities.
+    NonCompliantCount  *int64 `json:"non_compliant_count"`
+    // The number of entities with protection applied.
+    ProtectedCount     *int64 `json:"protected_count"`
+    // The number of entities without protection applied.
+    UnprotectedCount   *int64 `json:"unprotected_count"`
+}
+
+// ProtectionGroup represents a custom type struct
+type ProtectionGroup struct {
+    // Embedded responses related to the resource.
+    Embedded                  *ProtectionGroupEmbedded              `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links                     *ProtectionGroupLinks                 `json:"_links"`
+    // Number of buckets
+    BucketCount               *int64                                `json:"bucket_count"`
+    // The compliance statistics of workloads associated with this entity.
+    ComplianceStats           *ProtectionComplianceStatsWithSeeding `json:"compliance_stats"`
+    // The compliance status of the protected protection group. Possible values include
+    // "compliant" and "noncompliant". If the table is not protected, then this field has
+    // a value of `null`.
+    ComplianceStatus          *string                               `json:"compliance_status"`
+    // Creation time of the protection group in RFC-3339 format.
+    CreatedTimestamp          *string                               `json:"created_timestamp"`
+    // The user-assigned description of the protection group.
+    Description               *string                               `json:"description"`
+    // The Clumio-assigned ID of the protection group.
+    Id                        *string                               `json:"id"`
+    // Time of the last backup in RFC-3339 format.
+    LastBackupTimestamp       *string                               `json:"last_backup_timestamp"`
+    // Time of the last discover sync in RFC-3339 format.
+    LastDiscoverSyncTimestamp *string                               `json:"last_discover_sync_timestamp"`
+    // Modified time of the protection group in RFC-3339 format.
+    ModifiedTimestamp         *string                               `json:"modified_timestamp"`
+    // The user-assigned name of the protection group.
+    Name                      *string                               `json:"name"`
+    // ObjectFilter
+    // defines which objects will be backed up.
+    ObjectFilter              *ObjectFilter                         `json:"object_filter"`
+    // The Clumio-assigned ID of the organizational unit associated with the EBS volume.
+    OrganizationalUnitId      *string                               `json:"organizational_unit_id"`
+    // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
+    ProtectionInfo            *ProtectionInfoWithRule               `json:"protection_info"`
+    // The protection status of the protection group. Possible values include "protected",
+    // "unprotected", and "unsupported". If the protection group does not support backups, then
+    // this field has a value of `unsupported`.
+    ProtectionStatus          *string                               `json:"protection_status"`
+    // Cumulative count of all unexpired objects in each backup (any new or updated since
+    // the last backup) that have been backed up as part of this protection group
+    TotalBackedUpObjectCount  *int64                                `json:"total_backed_up_object_count"`
+    // Cumulative size of all unexpired objects in each backup (any new or updated since
+    // the last backup) that have been backed up as part of this protection group
+    TotalBackedUpSizeBytes    *int64                                `json:"total_backed_up_size_bytes"`
+    // Version of the protection group. The version number is incremented every time
+    // a change is made to the protection group.
+    Version                   *int64                                `json:"version"`
+}
+
+// ProtectionGroupBucket represents a custom type struct
+type ProtectionGroupBucket struct {
+    // TODO: Add struct field description
+    Embedded                  *ProtectionGroupBucketEmbedded `json:"_embedded"`
+    // TODO: Add struct field description
+    Links                     *ProtectionGroupBucketLinks    `json:"_links"`
+    // The AWS-assigned ID of the account associated with the DynamoDB table.
+    AccountNativeId           *string                        `json:"account_native_id"`
+    // The AWS region associated with the DynamoDB table.
+    AwsRegion                 *string                        `json:"aws_region"`
+    // The Clumio-assigned ID of the bucket
+    BucketId                  *string                        `json:"bucket_id"`
+    // The name of the bucket
+    BucketName                *string                        `json:"bucket_name"`
+    // The compliance status of the protected protection group. Possible values include
+    // "compliant" and "noncompliant". If the table is not protected, then this field has
+    // a value of `null`.
+    ComplianceStatus          *string                        `json:"compliance_status"`
+    // Creation time of the protection group in RFC-3339 format.
+    CreatedTimestamp          *string                        `json:"created_timestamp"`
+    // The Clumio-assigned ID of the AWS environment associated with the protection group.
+    EnvironmentId             *string                        `json:"environment_id"`
+    // The Clumio-assigned ID of the protection group
+    GroupId                   *string                        `json:"group_id"`
+    // The name of the protection group
+    GroupName                 *string                        `json:"group_name"`
+    // The Clumio-assigned ID that represents the bucket within the protection group.
+    Id                        *string                        `json:"id"`
+    // Determines whether the protection group bucket has been deleted
+    IsDeleted                 *bool                          `json:"is_deleted"`
+    // Time of the last backup in RFC-3339 format.
+    LastBackupTimestamp       *string                        `json:"last_backup_timestamp"`
+    // Time of the last discover sync in RFC-3339 format.
+    LastDiscoverSyncTimestamp *string                        `json:"last_discover_sync_timestamp"`
+    // The Clumio-assigned ID of the organizational unit associated with the protection group.
+    OrganizationalUnitId      *string                        `json:"organizational_unit_id"`
+    // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
+    ProtectionInfo            *ProtectionInfoWithRule        `json:"protection_info"`
+    // The protection status of the protection group. Possible values include "protected",
+    // "unprotected", and "unsupported". If the protection group does not support backups, then
+    // this field has a value of `unsupported`.
+    ProtectionStatus          *string                        `json:"protection_status"`
+    // Cumulative count of all unexpired objects in each backup (any new or updated since
+    // the last backup) that have been backed up as part of this protection group
+    TotalBackedUpObjectCount  *int64                         `json:"total_backed_up_object_count"`
+    // Cumulative size of all unexpired objects in each backup (any new or updated since
+    // the last backup) that have been backed up as part of this protection group
+    TotalBackedUpSizeBytes    *int64                         `json:"total_backed_up_size_bytes"`
+}
+
+// ProtectionGroupBucketEmbedded represents a custom type struct
+type ProtectionGroupBucketEmbedded struct {
+    // Embeds the associated policy of a protected resource in the response if requested using the `embed` query parameter. Unprotected resources will not have an associated policy.
+    ReadPolicyDefinition interface{} `json:"read-policy-definition"`
+}
+
+// ProtectionGroupBucketLinks represents a custom type struct
+type ProtectionGroupBucketLinks struct {
+    // The HATEOAS link to this resource.
+    Self                        *HateoasSelfLink                 `json:"_self"`
+    // A resource-specific HATEOAS link.
+    DeleteBucketProtectionGroup *HateoasLink                     `json:"delete-bucket-protection-group"`
+    // A HATEOAS link to the policy protecting this resource. Will be omitted for unprotected entities.
+    ReadPolicyDefinition        *ReadPolicyDefinitionHateoasLink `json:"read-policy-definition"`
+}
+
+// ProtectionGroupBucketListEmbedded represents a custom type struct.
+// Embedded responses related to the resource.
+type ProtectionGroupBucketListEmbedded struct {
+    // TODO: Add struct field description
+    Items []*ProtectionGroupBucket `json:"items"`
+}
+
+// ProtectionGroupBucketListLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type ProtectionGroupBucketListLinks struct {
+    // The HATEOAS link to the first page of results.
+    First *HateoasFirstLink `json:"_first"`
+    // The HATEOAS link to the last page of results.
+    Last  *HateoasLastLink  `json:"_last"`
+    // The HATEOAS link to the next page of results.
+    Next  *HateoasNextLink  `json:"_next"`
+    // The HATEOAS link to the previous page of results.
+    Prev  *HateoasPrevLink  `json:"_prev"`
+    // The HATEOAS link to this resource.
+    Self  *HateoasSelfLink  `json:"_self"`
+}
+
+// ProtectionGroupEmbedded represents a custom type struct.
+// Embedded responses related to the resource.
+type ProtectionGroupEmbedded struct {
+    // Embeds the associated policy of a protected resource in the response if requested using the `embed` query parameter. Unprotected resources will not have an associated policy.
+    ReadPolicyDefinition interface{} `json:"read-policy-definition"`
+}
+
+// ProtectionGroupLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type ProtectionGroupLinks struct {
+    // The HATEOAS link to this resource.
+    Self                        *HateoasSelfLink                 `json:"_self"`
+    // A resource-specific HATEOAS link.
+    AddBucketProtectionGroup    *HateoasLink                     `json:"add-bucket-protection-group"`
+    // A resource-specific HATEOAS link.
+    DeleteBucketProtectionGroup *HateoasLink                     `json:"delete-bucket-protection-group"`
+    // A HATEOAS link to protect the entities.
+    ProtectEntities             *ProtectEntitiesHateoasLink      `json:"protect-entities"`
+    // A HATEOAS link to the policy protecting this resource. Will be omitted for unprotected entities.
+    ReadPolicyDefinition        *ReadPolicyDefinitionHateoasLink `json:"read-policy-definition"`
+    // A HATEOAS link to unprotect the entities.
+    UnprotectEntities           *UnprotectEntitiesHateoasLink    `json:"unprotect-entities"`
+    // A resource-specific HATEOAS link.
+    UpdateProtectionGroup       *HateoasLink                     `json:"update-protection-group"`
+}
+
+// ProtectionGroupListEmbedded represents a custom type struct.
+// Embedded responses related to the resource.
+type ProtectionGroupListEmbedded struct {
+    // TODO: Add struct field description
+    Items []*ProtectionGroup `json:"items"`
+}
+
+// ProtectionGroupListLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type ProtectionGroupListLinks struct {
+    // The HATEOAS link to the first page of results.
+    First *HateoasFirstLink `json:"_first"`
+    // The HATEOAS link to the last page of results.
+    Last  *HateoasLastLink  `json:"_last"`
+    // The HATEOAS link to the next page of results.
+    Next  *HateoasNextLink  `json:"_next"`
+    // The HATEOAS link to the previous page of results.
+    Prev  *HateoasPrevLink  `json:"_prev"`
+    // The HATEOAS link to this resource.
+    Self  *HateoasSelfLink  `json:"_self"`
+}
+
+// ProtectionGroupVersionLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type ProtectionGroupVersionLinks struct {
+    // The HATEOAS link to this resource.
+    Self *HateoasSelfLink `json:"_self"`
 }
 
 // ProtectionInfo represents a custom type struct.

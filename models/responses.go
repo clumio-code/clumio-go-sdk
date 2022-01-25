@@ -3,6 +3,42 @@
 // Package models has the structs representing responses
 package models
 
+// AddBucketToProtectionGroupResponse represents a custom type struct for Success
+type AddBucketToProtectionGroupResponse struct {
+    // The AWS-assigned ID of the account associated with the DynamoDB table.
+    AccountNativeId           *string `json:"account_native_id"`
+    // The AWS region associated with the DynamoDB table.
+    AwsRegion                 *string `json:"aws_region"`
+    // The Clumio-assigned ID of the bucket
+    BucketId                  *string `json:"bucket_id"`
+    // The name of the bucket
+    BucketName                *string `json:"bucket_name"`
+    // Creation time of the protection group in RFC-3339 format.
+    CreatedTimestamp          *string `json:"created_timestamp"`
+    // The Clumio-assigned ID of the AWS environment associated with the protection group.
+    EnvironmentId             *string `json:"environment_id"`
+    // The Clumio-assigned ID of the protection group
+    GroupId                   *string `json:"group_id"`
+    // The name of the protection group
+    GroupName                 *string `json:"group_name"`
+    // The Clumio-assigned ID that represents the bucket within the protection group.
+    Id                        *string `json:"id"`
+    // Determines whether the protection group bucket has been deleted
+    IsDeleted                 *bool   `json:"is_deleted"`
+    // Time of the last backup in RFC-3339 format.
+    LastBackupTimestamp       *string `json:"last_backup_timestamp"`
+    // Time of the last discover sync in RFC-3339 format.
+    LastDiscoverSyncTimestamp *string `json:"last_discover_sync_timestamp"`
+    // The Clumio-assigned ID of the organizational unit associated with the protection group.
+    OrganizationalUnitId      *string `json:"organizational_unit_id"`
+    // Cumulative count of all unexpired objects in each backup (any new or updated since
+    // the last backup) that have been backed up as part of this protection group
+    TotalBackedUpObjectCount  *int64  `json:"total_backed_up_object_count"`
+    // Cumulative size of all unexpired objects in each backup (any new or updated since
+    // the last backup) that have been backed up as part of this protection group
+    TotalBackedUpSizeBytes    *int64  `json:"total_backed_up_size_bytes"`
+}
+
 // CreateAWSConnectionResponse represents a custom type struct for Success
 type CreateAWSConnectionResponse struct {
     // URLs to pages related to the resource.
@@ -176,6 +212,44 @@ type CreatePolicyResponse struct {
     OrganizationalUnitId          *string            `json:"organizational_unit_id"`
 }
 
+// CreateProtectionGroupResponse represents a custom type struct for Success
+type CreateProtectionGroupResponse struct {
+    // Embedded responses related to the resource.
+    Embedded                  interface{}                  `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links                     *ProtectionGroupVersionLinks `json:"_links"`
+    // Number of buckets
+    BucketCount               *int64                       `json:"bucket_count"`
+    // Creation time of the protection group in RFC-3339 format.
+    CreatedTimestamp          *string                      `json:"created_timestamp"`
+    // The user-assigned description of the protection group.
+    Description               *string                      `json:"description"`
+    // The Clumio-assigned ID of the protection group.
+    Id                        *string                      `json:"id"`
+    // Time of the last backup in RFC-3339 format.
+    LastBackupTimestamp       *string                      `json:"last_backup_timestamp"`
+    // Time of the last discover sync in RFC-3339 format.
+    LastDiscoverSyncTimestamp *string                      `json:"last_discover_sync_timestamp"`
+    // Modified time of the protection group in RFC-3339 format.
+    ModifiedTimestamp         *string                      `json:"modified_timestamp"`
+    // The user-assigned name of the protection group.
+    Name                      *string                      `json:"name"`
+    // ObjectFilter
+    // defines which objects will be backed up.
+    ObjectFilter              *ObjectFilter                `json:"object_filter"`
+    // The Clumio-assigned ID of the organizational unit associated with the EBS volume.
+    OrganizationalUnitId      *string                      `json:"organizational_unit_id"`
+    // Cumulative count of all unexpired objects in each backup (any new or updated since
+    // the last backup) that have been backed up as part of this protection group
+    TotalBackedUpObjectCount  *int64                       `json:"total_backed_up_object_count"`
+    // Cumulative size of all unexpired objects in each backup (any new or updated since
+    // the last backup) that have been backed up as part of this protection group
+    TotalBackedUpSizeBytes    *int64                       `json:"total_backed_up_size_bytes"`
+    // Version of the protection group. The version number is incremented every time
+    // a change is made to the protection group.
+    Version                   *int64                       `json:"version"`
+}
+
 // CreateReportDownloadResponse represents a custom type struct for Success
 type CreateReportDownloadResponse struct {
     // The Clumio-assigned ID of the task created by the request.
@@ -231,6 +305,42 @@ type CreateUserResponse struct {
     LastActivityTimestamp         *string       `json:"last_activity_timestamp"`
     // The number of organizational units accessible to the user.
     OrganizationalUnitCount       *int64        `json:"organizational_unit_count"`
+}
+
+// DeleteBucketFromProtectionGroupResponse represents a custom type struct for Success
+type DeleteBucketFromProtectionGroupResponse struct {
+    // The AWS-assigned ID of the account associated with the DynamoDB table.
+    AccountNativeId           *string `json:"account_native_id"`
+    // The AWS region associated with the DynamoDB table.
+    AwsRegion                 *string `json:"aws_region"`
+    // The Clumio-assigned ID of the bucket
+    BucketId                  *string `json:"bucket_id"`
+    // The name of the bucket
+    BucketName                *string `json:"bucket_name"`
+    // Creation time of the protection group in RFC-3339 format.
+    CreatedTimestamp          *string `json:"created_timestamp"`
+    // The Clumio-assigned ID of the AWS environment associated with the protection group.
+    EnvironmentId             *string `json:"environment_id"`
+    // The Clumio-assigned ID of the protection group
+    GroupId                   *string `json:"group_id"`
+    // The name of the protection group
+    GroupName                 *string `json:"group_name"`
+    // The Clumio-assigned ID that represents the bucket within the protection group.
+    Id                        *string `json:"id"`
+    // Determines whether the protection group bucket has been deleted
+    IsDeleted                 *bool   `json:"is_deleted"`
+    // Time of the last backup in RFC-3339 format.
+    LastBackupTimestamp       *string `json:"last_backup_timestamp"`
+    // Time of the last discover sync in RFC-3339 format.
+    LastDiscoverSyncTimestamp *string `json:"last_discover_sync_timestamp"`
+    // The Clumio-assigned ID of the organizational unit associated with the protection group.
+    OrganizationalUnitId      *string `json:"organizational_unit_id"`
+    // Cumulative count of all unexpired objects in each backup (any new or updated since
+    // the last backup) that have been backed up as part of this protection group
+    TotalBackedUpObjectCount  *int64  `json:"total_backed_up_object_count"`
+    // Cumulative size of all unexpired objects in each backup (any new or updated since
+    // the last backup) that have been backed up as part of this protection group
+    TotalBackedUpSizeBytes    *int64  `json:"total_backed_up_size_bytes"`
 }
 
 // DeleteHcmHostResponse represents a custom type struct for Success
@@ -432,6 +542,25 @@ type ListAwsTagsResponse struct {
     CurrentCount    *int64              `json:"current_count"`
     // The filter used in the request. The filter includes both manually-specified and system-generated filters.
     FilterApplied   *string             `json:"filter_applied"`
+    // The maximum number of items displayed per page in the response.
+    Limit           *int64              `json:"limit"`
+    // The page number used to get this response.
+    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
+    Start           *string             `json:"start"`
+    // The total number of items, summed across all pages.
+    TotalCount      *int64              `json:"total_count"`
+    // The total number of pages of results.
+    TotalPagesCount *int64              `json:"total_pages_count"`
+}
+
+// ListBucketsResponse represents a custom type struct for Success
+type ListBucketsResponse struct {
+    // Embedded responses related to the resource.
+    Embedded        *BucketListEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links           *BucketListLinks    `json:"_links"`
+    // The number of items listed on the current page.
+    CurrentCount    *int64              `json:"current_count"`
     // The maximum number of items displayed per page in the response.
     Limit           *int64              `json:"limit"`
     // The page number used to get this response.
@@ -784,6 +913,44 @@ type ListPoliciesResponse struct {
     Limit         *int64              `json:"limit"`
     // The page token used to get this response.
     Start         *string             `json:"start"`
+}
+
+// ListProtectionGroupS3AssetsResponse represents a custom type struct for Success
+type ListProtectionGroupS3AssetsResponse struct {
+    // Embedded responses related to the resource.
+    Embedded        *ProtectionGroupBucketListEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links           *ProtectionGroupBucketListLinks    `json:"_links"`
+    // The number of items listed on the current page.
+    CurrentCount    *int64                             `json:"current_count"`
+    // The maximum number of items displayed per page in the response.
+    Limit           *int64                             `json:"limit"`
+    // The page number used to get this response.
+    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
+    Start           *string                            `json:"start"`
+    // The total number of items, summed across all pages.
+    TotalCount      *int64                             `json:"total_count"`
+    // The total number of pages of results.
+    TotalPagesCount *int64                             `json:"total_pages_count"`
+}
+
+// ListProtectionGroupsResponse represents a custom type struct for Success
+type ListProtectionGroupsResponse struct {
+    // Embedded responses related to the resource.
+    Embedded        *ProtectionGroupListEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links           *ProtectionGroupListLinks    `json:"_links"`
+    // The number of items listed on the current page.
+    CurrentCount    *int64                       `json:"current_count"`
+    // The maximum number of items displayed per page in the response.
+    Limit           *int64                       `json:"limit"`
+    // The page number used to get this response.
+    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
+    Start           *string                      `json:"start"`
+    // The total number of items, summed across all pages.
+    TotalCount      *int64                       `json:"total_count"`
+    // The total number of pages of results.
+    TotalPagesCount *int64                       `json:"total_pages_count"`
 }
 
 // ListReportDownloadsResponse represents a custom type struct for Success
@@ -1303,6 +1470,43 @@ type ReadAwsTagResponse struct {
     ProtectionStatus     *string         `json:"protection_status"`
     // The AWS-assigned tag value.
     Value                *string         `json:"value"`
+}
+
+// ReadBucketResponse represents a custom type struct for Success
+type ReadBucketResponse struct {
+    // Embedded responses related to the resource.
+    Embedded                 interface{}    `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links                    *BucketLinks   `json:"_links"`
+    // The AWS-assigned ID of the account associated with the S3 bucket.
+    AccountNativeId          *string        `json:"account_native_id"`
+    // The AWS region associated with the S3 bucket.
+    AwsRegion                *string        `json:"aws_region"`
+    // The timestamp of when the bucket was created. Represented in RFC-3339 format.
+    CreationTimestamp        *string        `json:"creation_timestamp"`
+    // Encryption configuration of the bucket
+    EncryptionConfiguration  *string        `json:"encryption_configuration"`
+    // The Clumio-assigned ID of the AWS environment associated with the S3 bucket.
+    EnvironmentId            *string        `json:"environment_id"`
+    // The Clumio-assigned ID of the bucket.
+    Id                       *string        `json:"id"`
+    // The AWS-assigned name of the bucket.
+    Name                     *string        `json:"name"`
+    // Number of objects in bucket.
+    ObjectCount              *int64         `json:"object_count"`
+    // The Clumio-assigned ID of the organizational unit associated with the S3 bucket.
+    OrganizationalUnitId     *string        `json:"organizational_unit_id"`
+    // Protection group count reflects how many protection groups are linked to this
+    // bucket
+    ProtectionGroupCount     *int64         `json:"protection_group_count"`
+    // Replication configuration of the bucket
+    ReplicationConfiguration *string        `json:"replication_configuration"`
+    // Size of bucket in bytes.
+    SizeBytes                *int64         `json:"size_bytes"`
+    // A tag created through AWS console which can be applied to EBS volumes.
+    Tags                     []*AwsTagModel `json:"tags"`
+    // Version configuration of the bucket
+    VersionConfiguration     *string        `json:"version_configuration"`
 }
 
 // ReadComputeResourceResponse represents a custom type struct for Success
@@ -1952,6 +2156,108 @@ type ReadPolicyResponse struct {
     Operations                    []*PolicyOperation `json:"operations"`
     // The Clumio-assigned ID of the organizational unit associated with the policy.
     OrganizationalUnitId          *string            `json:"organizational_unit_id"`
+}
+
+// ReadProtectionGroupResponse represents a custom type struct for Success
+type ReadProtectionGroupResponse struct {
+    // Embedded responses related to the resource.
+    Embedded                  *ProtectionGroupEmbedded              `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links                     *ProtectionGroupLinks                 `json:"_links"`
+    // Number of buckets
+    BucketCount               *int64                                `json:"bucket_count"`
+    // The compliance statistics of workloads associated with this entity.
+    ComplianceStats           *ProtectionComplianceStatsWithSeeding `json:"compliance_stats"`
+    // The compliance status of the protected protection group. Possible values include
+    // "compliant" and "noncompliant". If the table is not protected, then this field has
+    // a value of `null`.
+    ComplianceStatus          *string                               `json:"compliance_status"`
+    // Creation time of the protection group in RFC-3339 format.
+    CreatedTimestamp          *string                               `json:"created_timestamp"`
+    // The user-assigned description of the protection group.
+    Description               *string                               `json:"description"`
+    // The Clumio-assigned ID of the protection group.
+    Id                        *string                               `json:"id"`
+    // Time of the last backup in RFC-3339 format.
+    LastBackupTimestamp       *string                               `json:"last_backup_timestamp"`
+    // Time of the last discover sync in RFC-3339 format.
+    LastDiscoverSyncTimestamp *string                               `json:"last_discover_sync_timestamp"`
+    // Modified time of the protection group in RFC-3339 format.
+    ModifiedTimestamp         *string                               `json:"modified_timestamp"`
+    // The user-assigned name of the protection group.
+    Name                      *string                               `json:"name"`
+    // ObjectFilter
+    // defines which objects will be backed up.
+    ObjectFilter              *ObjectFilter                         `json:"object_filter"`
+    // The Clumio-assigned ID of the organizational unit associated with the EBS volume.
+    OrganizationalUnitId      *string                               `json:"organizational_unit_id"`
+    // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
+    ProtectionInfo            *ProtectionInfoWithRule               `json:"protection_info"`
+    // The protection status of the protection group. Possible values include "protected",
+    // "unprotected", and "unsupported". If the protection group does not support backups, then
+    // this field has a value of `unsupported`.
+    ProtectionStatus          *string                               `json:"protection_status"`
+    // The list of AWS regions that this protection group is linked to
+    Regions                   []*string                             `json:"regions"`
+    // Cumulative count of all unexpired objects in each backup (any new or updated since
+    // the last backup) that have been backed up as part of this protection group
+    TotalBackedUpObjectCount  *int64                                `json:"total_backed_up_object_count"`
+    // Cumulative size of all unexpired objects in each backup (any new or updated since
+    // the last backup) that have been backed up as part of this protection group
+    TotalBackedUpSizeBytes    *int64                                `json:"total_backed_up_size_bytes"`
+    // Version of the protection group. The version number is incremented every time
+    // a change is made to the protection group.
+    Version                   *int64                                `json:"version"`
+}
+
+// ReadProtectionGroupS3AssetResponse represents a custom type struct for Success
+type ReadProtectionGroupS3AssetResponse struct {
+    // TODO: Add struct field description
+    Embedded                  *ProtectionGroupBucketEmbedded `json:"_embedded"`
+    // TODO: Add struct field description
+    Links                     *ProtectionGroupBucketLinks    `json:"_links"`
+    // The AWS-assigned ID of the account associated with the DynamoDB table.
+    AccountNativeId           *string                        `json:"account_native_id"`
+    // The AWS region associated with the DynamoDB table.
+    AwsRegion                 *string                        `json:"aws_region"`
+    // The Clumio-assigned ID of the bucket
+    BucketId                  *string                        `json:"bucket_id"`
+    // The name of the bucket
+    BucketName                *string                        `json:"bucket_name"`
+    // The compliance status of the protected protection group. Possible values include
+    // "compliant" and "noncompliant". If the table is not protected, then this field has
+    // a value of `null`.
+    ComplianceStatus          *string                        `json:"compliance_status"`
+    // Creation time of the protection group in RFC-3339 format.
+    CreatedTimestamp          *string                        `json:"created_timestamp"`
+    // The Clumio-assigned ID of the AWS environment associated with the protection group.
+    EnvironmentId             *string                        `json:"environment_id"`
+    // The Clumio-assigned ID of the protection group
+    GroupId                   *string                        `json:"group_id"`
+    // The name of the protection group
+    GroupName                 *string                        `json:"group_name"`
+    // The Clumio-assigned ID that represents the bucket within the protection group.
+    Id                        *string                        `json:"id"`
+    // Determines whether the protection group bucket has been deleted
+    IsDeleted                 *bool                          `json:"is_deleted"`
+    // Time of the last backup in RFC-3339 format.
+    LastBackupTimestamp       *string                        `json:"last_backup_timestamp"`
+    // Time of the last discover sync in RFC-3339 format.
+    LastDiscoverSyncTimestamp *string                        `json:"last_discover_sync_timestamp"`
+    // The Clumio-assigned ID of the organizational unit associated with the protection group.
+    OrganizationalUnitId      *string                        `json:"organizational_unit_id"`
+    // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
+    ProtectionInfo            *ProtectionInfoWithRule        `json:"protection_info"`
+    // The protection status of the protection group. Possible values include "protected",
+    // "unprotected", and "unsupported". If the protection group does not support backups, then
+    // this field has a value of `unsupported`.
+    ProtectionStatus          *string                        `json:"protection_status"`
+    // Cumulative count of all unexpired objects in each backup (any new or updated since
+    // the last backup) that have been backed up as part of this protection group
+    TotalBackedUpObjectCount  *int64                         `json:"total_backed_up_object_count"`
+    // Cumulative size of all unexpired objects in each backup (any new or updated since
+    // the last backup) that have been backed up as part of this protection group
+    TotalBackedUpSizeBytes    *int64                         `json:"total_backed_up_size_bytes"`
 }
 
 // ReadResourcePoolResponse represents a custom type struct for Success
@@ -2766,6 +3072,44 @@ type UpdatePolicyResponse struct {
     Operations                    []*PolicyOperation `json:"operations"`
     // The Clumio-assigned ID of the organizational unit associated with the policy.
     OrganizationalUnitId          *string            `json:"organizational_unit_id"`
+}
+
+// UpdateProtectionGroupResponse represents a custom type struct for Success
+type UpdateProtectionGroupResponse struct {
+    // Embedded responses related to the resource.
+    Embedded                  interface{}                  `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links                     *ProtectionGroupVersionLinks `json:"_links"`
+    // Number of buckets
+    BucketCount               *int64                       `json:"bucket_count"`
+    // Creation time of the protection group in RFC-3339 format.
+    CreatedTimestamp          *string                      `json:"created_timestamp"`
+    // The user-assigned description of the protection group.
+    Description               *string                      `json:"description"`
+    // The Clumio-assigned ID of the protection group.
+    Id                        *string                      `json:"id"`
+    // Time of the last backup in RFC-3339 format.
+    LastBackupTimestamp       *string                      `json:"last_backup_timestamp"`
+    // Time of the last discover sync in RFC-3339 format.
+    LastDiscoverSyncTimestamp *string                      `json:"last_discover_sync_timestamp"`
+    // Modified time of the protection group in RFC-3339 format.
+    ModifiedTimestamp         *string                      `json:"modified_timestamp"`
+    // The user-assigned name of the protection group.
+    Name                      *string                      `json:"name"`
+    // ObjectFilter
+    // defines which objects will be backed up.
+    ObjectFilter              *ObjectFilter                `json:"object_filter"`
+    // The Clumio-assigned ID of the organizational unit associated with the EBS volume.
+    OrganizationalUnitId      *string                      `json:"organizational_unit_id"`
+    // Cumulative count of all unexpired objects in each backup (any new or updated since
+    // the last backup) that have been backed up as part of this protection group
+    TotalBackedUpObjectCount  *int64                       `json:"total_backed_up_object_count"`
+    // Cumulative size of all unexpired objects in each backup (any new or updated since
+    // the last backup) that have been backed up as part of this protection group
+    TotalBackedUpSizeBytes    *int64                       `json:"total_backed_up_size_bytes"`
+    // Version of the protection group. The version number is incremented every time
+    // a change is made to the protection group.
+    Version                   *int64                       `json:"version"`
 }
 
 // UpdateRuleResponse represents a custom type struct for Success
