@@ -56,6 +56,7 @@ func (o *OrganizationalUnitsV1) ListOrganizationalUnits(
     res, err := client.R().
         SetQueryParams(queryParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", o.config.OrganizationalUnitContext).
         SetAuthToken(o.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -114,6 +115,7 @@ func (o *OrganizationalUnitsV1) CreateOrganizationalUnit(
     res, err := client.R().
         SetQueryParams(queryParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", o.config.OrganizationalUnitContext).
         SetAuthToken(o.config.Token).
         SetBody(payload).
         SetResult(&result).
@@ -158,6 +160,7 @@ func (o *OrganizationalUnitsV1) ReadOrganizationalUnit(
     res, err := client.R().
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", o.config.OrganizationalUnitContext).
         SetAuthToken(o.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -214,6 +217,7 @@ func (o *OrganizationalUnitsV1) DeleteOrganizationalUnit(
         SetQueryParams(queryParams).
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", o.config.OrganizationalUnitContext).
         SetAuthToken(o.config.Token).
         SetResult(&result).
         Delete(queryBuilder)
@@ -280,6 +284,7 @@ func (o *OrganizationalUnitsV1) PatchOrganizationalUnit(
         SetQueryParams(queryParams).
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", o.config.OrganizationalUnitContext).
         SetAuthToken(o.config.Token).
         SetBody(payload).
         SetResult(&result).

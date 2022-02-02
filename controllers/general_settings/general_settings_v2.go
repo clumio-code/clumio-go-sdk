@@ -32,6 +32,7 @@ func (g *GeneralSettingsV2) ReadGeneralSettings()(
 
     res, err := client.R().
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", g.config.OrganizationalUnitContext).
         SetAuthToken(g.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -77,6 +78,7 @@ func (g *GeneralSettingsV2) UpdateGeneralSettings(
 
     res, err := client.R().
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", g.config.OrganizationalUnitContext).
         SetAuthToken(g.config.Token).
         SetBody(payload).
         SetResult(&result).

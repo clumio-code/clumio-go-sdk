@@ -60,6 +60,7 @@ func (a *AwsEbsVolumesV1) ListAwsEbsVolumes(
     res, err := client.R().
         SetQueryParams(queryParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", a.config.OrganizationalUnitContext).
         SetAuthToken(a.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -116,6 +117,7 @@ func (a *AwsEbsVolumesV1) ReadAwsEbsVolume(
         SetQueryParams(queryParams).
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", a.config.OrganizationalUnitContext).
         SetAuthToken(a.config.Token).
         SetResult(&result).
         Get(queryBuilder)

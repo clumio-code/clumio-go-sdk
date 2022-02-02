@@ -41,6 +41,7 @@ func (r *RestoredVmwareVmsV1) RestoreVmwareVm(
 
     res, err := client.R().
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", r.config.OrganizationalUnitContext).
         SetAuthToken(r.config.Token).
         SetBody(payload).
         SetResult(&result).

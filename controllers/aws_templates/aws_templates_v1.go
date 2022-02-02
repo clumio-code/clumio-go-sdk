@@ -33,6 +33,7 @@ func (a *AwsTemplatesV1) ReadConnectionTemplates()(
 
     res, err := client.R().
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", a.config.OrganizationalUnitContext).
         SetAuthToken(a.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -79,6 +80,7 @@ func (a *AwsTemplatesV1) CreateConnectionTemplate(
 
     res, err := client.R().
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", a.config.OrganizationalUnitContext).
         SetAuthToken(a.config.Token).
         SetBody(payload).
         SetResult(&result).

@@ -41,6 +41,7 @@ func (r *RestoredAwsEbsVolumesV1) RestoreAwsEbsVolume(
 
     res, err := client.R().
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", r.config.OrganizationalUnitContext).
         SetAuthToken(r.config.Token).
         SetBody(payload).
         SetResult(&result).

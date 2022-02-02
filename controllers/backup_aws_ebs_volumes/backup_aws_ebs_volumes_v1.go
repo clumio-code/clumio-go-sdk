@@ -56,6 +56,7 @@ func (b *BackupAwsEbsVolumesV1) ListBackupAwsEbsVolumes(
     res, err := client.R().
         SetQueryParams(queryParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", b.config.OrganizationalUnitContext).
         SetAuthToken(b.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -101,6 +102,7 @@ func (b *BackupAwsEbsVolumesV1) CreateBackupAwsEbsVolume(
 
     res, err := client.R().
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", b.config.OrganizationalUnitContext).
         SetAuthToken(b.config.Token).
         SetBody(payload).
         SetResult(&result).
@@ -145,6 +147,7 @@ func (b *BackupAwsEbsVolumesV1) ReadBackupAwsEbsVolume(
     res, err := client.R().
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", b.config.OrganizationalUnitContext).
         SetAuthToken(b.config.Token).
         SetResult(&result).
         Get(queryBuilder)

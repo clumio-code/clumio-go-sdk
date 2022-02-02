@@ -55,6 +55,7 @@ func (a *AwsRegionsV1) ListConnectionAwsRegions(
     res, err := client.R().
         SetQueryParams(queryParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", a.config.OrganizationalUnitContext).
         SetAuthToken(a.config.Token).
         SetResult(&result).
         Get(queryBuilder)

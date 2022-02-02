@@ -55,6 +55,7 @@ func (m *MssqlInstanceV1) ListMssqlInstance(
     res, err := client.R().
         SetQueryParams(queryParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", m.config.OrganizationalUnitContext).
         SetAuthToken(m.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -98,6 +99,7 @@ func (m *MssqlInstanceV1) ReadMssqlInstance(
     res, err := client.R().
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", m.config.OrganizationalUnitContext).
         SetAuthToken(m.config.Token).
         SetResult(&result).
         Get(queryBuilder)

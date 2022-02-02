@@ -57,6 +57,7 @@ func (b *BackupFilesystemsV1) ListBackupFilesystems(
         SetQueryParams(queryParams).
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", b.config.OrganizationalUnitContext).
         SetAuthToken(b.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -102,6 +103,7 @@ func (b *BackupFilesystemsV1) ReadFilesystem(
     res, err := client.R().
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", b.config.OrganizationalUnitContext).
         SetAuthToken(b.config.Token).
         SetResult(&result).
         Get(queryBuilder)

@@ -51,6 +51,7 @@ func (m *ManagementGroupsV1) ListManagementGroups(
     res, err := client.R().
         SetQueryParams(queryParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", m.config.OrganizationalUnitContext).
         SetAuthToken(m.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -97,6 +98,7 @@ func (m *ManagementGroupsV1) ReadManagementGroup(
     res, err := client.R().
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", m.config.OrganizationalUnitContext).
         SetAuthToken(m.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -149,6 +151,7 @@ func (m *ManagementGroupsV1) UpdateManagementGroup(
     res, err := client.R().
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", m.config.OrganizationalUnitContext).
         SetAuthToken(m.config.Token).
         SetBody(payload).
         SetResult(&result).

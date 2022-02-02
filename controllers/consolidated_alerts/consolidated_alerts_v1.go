@@ -56,6 +56,7 @@ func (c *ConsolidatedAlertsV1) ListConsolidatedAlerts(
     res, err := client.R().
         SetQueryParams(queryParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", c.config.OrganizationalUnitContext).
         SetAuthToken(c.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -99,6 +100,7 @@ func (c *ConsolidatedAlertsV1) ReadConsolidatedAlert(
     res, err := client.R().
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", c.config.OrganizationalUnitContext).
         SetAuthToken(c.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -151,6 +153,7 @@ func (c *ConsolidatedAlertsV1) UpdateConsolidatedAlert(
     res, err := client.R().
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", c.config.OrganizationalUnitContext).
         SetAuthToken(c.config.Token).
         SetBody(payload).
         SetResult(&result).

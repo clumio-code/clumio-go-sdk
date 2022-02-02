@@ -61,6 +61,7 @@ func (b *BackupFilesystemDirectoriesV1) ReadBackupFilesystemDirectory(
         SetQueryParams(queryParams).
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", b.config.OrganizationalUnitContext).
         SetAuthToken(b.config.Token).
         SetResult(&result).
         Get(queryBuilder)

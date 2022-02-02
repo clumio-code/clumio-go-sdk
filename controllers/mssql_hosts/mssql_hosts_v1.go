@@ -61,6 +61,7 @@ func (m *MssqlHostsV1) ListMssqlHostConnections(
     res, err := client.R().
         SetQueryParams(queryParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", m.config.OrganizationalUnitContext).
         SetAuthToken(m.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -106,6 +107,7 @@ func (m *MssqlHostsV1) CreateMssqlHostConnections(
 
     res, err := client.R().
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", m.config.OrganizationalUnitContext).
         SetAuthToken(m.config.Token).
         SetBody(payload).
         SetResult(&result).
@@ -165,6 +167,7 @@ func (m *MssqlHostsV1) DeleteMssqlHostConnections(
     res, err := client.R().
         SetQueryParams(queryParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", m.config.OrganizationalUnitContext).
         SetAuthToken(m.config.Token).
         SetBody(payload).
         SetResult(&result).
@@ -224,6 +227,7 @@ func (m *MssqlHostsV1) MoveMssqlHostConnections(
     res, err := client.R().
         SetQueryParams(queryParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", m.config.OrganizationalUnitContext).
         SetAuthToken(m.config.Token).
         SetBody(payload).
         SetResult(&result).
@@ -270,6 +274,7 @@ func (m *MssqlHostsV1) CreateMssqlHostConnectionCredentials(
 
     res, err := client.R().
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", m.config.OrganizationalUnitContext).
         SetAuthToken(m.config.Token).
         SetBody(payload).
         SetResult(&result).
@@ -314,6 +319,7 @@ func (m *MssqlHostsV1) ReadMssqlHostConnections(
     res, err := client.R().
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", m.config.OrganizationalUnitContext).
         SetAuthToken(m.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -379,6 +385,7 @@ func (m *MssqlHostsV1) ListMssqlHosts(
     res, err := client.R().
         SetQueryParams(queryParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", m.config.OrganizationalUnitContext).
         SetAuthToken(m.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -422,6 +429,7 @@ func (m *MssqlHostsV1) ReadMssqlHosts(
     res, err := client.R().
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", m.config.OrganizationalUnitContext).
         SetAuthToken(m.config.Token).
         SetResult(&result).
         Get(queryBuilder)

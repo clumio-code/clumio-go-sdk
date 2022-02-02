@@ -60,6 +60,7 @@ func (m *MssqlDatabasesV1) ListMssqlDatabases(
     res, err := client.R().
         SetQueryParams(queryParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", m.config.OrganizationalUnitContext).
         SetAuthToken(m.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -103,6 +104,7 @@ func (m *MssqlDatabasesV1) ReadMssqlDatabases(
     res, err := client.R().
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", m.config.OrganizationalUnitContext).
         SetAuthToken(m.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -170,6 +172,7 @@ func (m *MssqlDatabasesV1) ListMssqlDatabasePitrIntervals(
         SetQueryParams(queryParams).
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", m.config.OrganizationalUnitContext).
         SetAuthToken(m.config.Token).
         SetResult(&result).
         Get(queryBuilder)

@@ -79,6 +79,7 @@ func (v *VmwareVcenterComputeResourcesV1) ListVmwareVcenterComputeResources(
         SetQueryParams(queryParams).
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", v.config.OrganizationalUnitContext).
         SetAuthToken(v.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -137,6 +138,7 @@ func (v *VmwareVcenterComputeResourcesV1) ReadVmwareVcenterComputeResource(
         SetQueryParams(queryParams).
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", v.config.OrganizationalUnitContext).
         SetAuthToken(v.config.Token).
         SetResult(&result).
         Get(queryBuilder)

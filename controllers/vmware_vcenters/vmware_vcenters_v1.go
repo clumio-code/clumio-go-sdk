@@ -55,6 +55,7 @@ func (v *VmwareVcentersV1) ListVmwareVcenters(
     res, err := client.R().
         SetQueryParams(queryParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", v.config.OrganizationalUnitContext).
         SetAuthToken(v.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -111,6 +112,7 @@ func (v *VmwareVcentersV1) ReadVmwareVcenter(
         SetQueryParams(queryParams).
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", v.config.OrganizationalUnitContext).
         SetAuthToken(v.config.Token).
         SetResult(&result).
         Get(queryBuilder)

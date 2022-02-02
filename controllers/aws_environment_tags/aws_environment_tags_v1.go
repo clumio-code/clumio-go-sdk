@@ -82,6 +82,7 @@ func (a *AwsEnvironmentTagsV1) ListAwsEnvironmentTags(
         SetQueryParams(queryParams).
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", a.config.OrganizationalUnitContext).
         SetAuthToken(a.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -140,6 +141,7 @@ func (a *AwsEnvironmentTagsV1) ReadAwsEnvironmentTag(
         SetQueryParams(queryParams).
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", a.config.OrganizationalUnitContext).
         SetAuthToken(a.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -185,6 +187,7 @@ func (a *AwsEnvironmentTagsV1) ReadAwsEnvironmentTagEbsVolumesComplianceStats(
     res, err := client.R().
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", a.config.OrganizationalUnitContext).
         SetAuthToken(a.config.Token).
         SetResult(&result).
         Get(queryBuilder)

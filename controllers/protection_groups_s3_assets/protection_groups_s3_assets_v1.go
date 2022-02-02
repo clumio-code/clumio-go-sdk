@@ -55,6 +55,7 @@ func (p *ProtectionGroupsS3AssetsV1) ListProtectionGroupS3Assets(
     res, err := client.R().
         SetQueryParams(queryParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", p.config.OrganizationalUnitContext).
         SetAuthToken(p.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -98,6 +99,7 @@ func (p *ProtectionGroupsS3AssetsV1) ReadProtectionGroupS3Asset(
     res, err := client.R().
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", p.config.OrganizationalUnitContext).
         SetAuthToken(p.config.Token).
         SetResult(&result).
         Get(queryBuilder)

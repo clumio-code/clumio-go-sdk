@@ -82,6 +82,7 @@ func (v *VmwareVcenterFoldersV1) ListVmwareVcenterFolders(
         SetQueryParams(queryParams).
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", v.config.OrganizationalUnitContext).
         SetAuthToken(v.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -140,6 +141,7 @@ func (v *VmwareVcenterFoldersV1) ReadVmwareVcenterFolder(
         SetQueryParams(queryParams).
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", v.config.OrganizationalUnitContext).
         SetAuthToken(v.config.Token).
         SetResult(&result).
         Get(queryBuilder)

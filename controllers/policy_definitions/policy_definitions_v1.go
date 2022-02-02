@@ -115,6 +115,7 @@ func (p *PolicyDefinitionsV1) ListPolicyDefinitions(
     res, err := client.R().
         SetQueryParams(queryParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", p.config.OrganizationalUnitContext).
         SetAuthToken(p.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -160,6 +161,7 @@ func (p *PolicyDefinitionsV1) CreatePolicyDefinition(
 
     res, err := client.R().
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", p.config.OrganizationalUnitContext).
         SetAuthToken(p.config.Token).
         SetBody(payload).
         SetResult(&result).
@@ -217,6 +219,7 @@ func (p *PolicyDefinitionsV1) ReadPolicyDefinition(
         SetQueryParams(queryParams).
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", p.config.OrganizationalUnitContext).
         SetAuthToken(p.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -282,6 +285,7 @@ func (p *PolicyDefinitionsV1) UpdatePolicyDefinition(
         SetQueryParams(queryParams).
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", p.config.OrganizationalUnitContext).
         SetAuthToken(p.config.Token).
         SetBody(payload).
         SetResult(&result).
@@ -326,6 +330,7 @@ func (p *PolicyDefinitionsV1) DeletePolicyDefinition(
     res, err := client.R().
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", p.config.OrganizationalUnitContext).
         SetAuthToken(p.config.Token).
         SetResult(&result).
         Delete(queryBuilder)

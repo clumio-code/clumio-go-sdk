@@ -93,6 +93,7 @@ func (i *IndividualAlertsV1) ListIndividualAlerts(
     res, err := client.R().
         SetQueryParams(queryParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", i.config.OrganizationalUnitContext).
         SetAuthToken(i.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -149,6 +150,7 @@ func (i *IndividualAlertsV1) ReadIndividualAlert(
         SetQueryParams(queryParams).
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", i.config.OrganizationalUnitContext).
         SetAuthToken(i.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -214,6 +216,7 @@ func (i *IndividualAlertsV1) UpdateIndividualAlert(
         SetQueryParams(queryParams).
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", i.config.OrganizationalUnitContext).
         SetAuthToken(i.config.Token).
         SetBody(payload).
         SetResult(&result).

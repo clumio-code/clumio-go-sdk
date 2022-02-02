@@ -62,6 +62,7 @@ func (v *VmwareVcenterCategoriesV1) ListVmwareVcenterCategories(
         SetQueryParams(queryParams).
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", v.config.OrganizationalUnitContext).
         SetAuthToken(v.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -107,6 +108,7 @@ func (v *VmwareVcenterCategoriesV1) ReadVmwareVcenterCategory(
     res, err := client.R().
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", v.config.OrganizationalUnitContext).
         SetAuthToken(v.config.Token).
         SetResult(&result).
         Get(queryBuilder)

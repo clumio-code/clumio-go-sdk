@@ -58,6 +58,7 @@ func (m *ManagementSubgroupsV1) ListManagementSubgroups(
         SetQueryParams(queryParams).
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", m.config.OrganizationalUnitContext).
         SetAuthToken(m.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -105,6 +106,7 @@ func (m *ManagementSubgroupsV1) ReadManagementSubgroup(
     res, err := client.R().
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", m.config.OrganizationalUnitContext).
         SetAuthToken(m.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -159,6 +161,7 @@ func (m *ManagementSubgroupsV1) UpdateManagementSubgroup(
     res, err := client.R().
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", m.config.OrganizationalUnitContext).
         SetAuthToken(m.config.Token).
         SetBody(payload).
         SetResult(&result).

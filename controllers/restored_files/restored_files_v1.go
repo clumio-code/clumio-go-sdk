@@ -53,6 +53,7 @@ func (r *RestoredFilesV1) ListRestoredFiles(
     res, err := client.R().
         SetQueryParams(queryParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", r.config.OrganizationalUnitContext).
         SetAuthToken(r.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -98,6 +99,7 @@ func (r *RestoredFilesV1) RestoreFiles(
 
     res, err := client.R().
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", r.config.OrganizationalUnitContext).
         SetAuthToken(r.config.Token).
         SetBody(payload).
         SetResult(&result).

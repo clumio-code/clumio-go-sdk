@@ -56,6 +56,7 @@ func (u *UsersV1) ListUsers(
     res, err := client.R().
         SetQueryParams(queryParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", u.config.OrganizationalUnitContext).
         SetAuthToken(u.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -101,6 +102,7 @@ func (u *UsersV1) CreateUser(
 
     res, err := client.R().
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", u.config.OrganizationalUnitContext).
         SetAuthToken(u.config.Token).
         SetBody(payload).
         SetResult(&result).
@@ -147,6 +149,7 @@ func (u *UsersV1) UpdateUserProfile(
 
     res, err := client.R().
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", u.config.OrganizationalUnitContext).
         SetAuthToken(u.config.Token).
         SetBody(payload).
         SetResult(&result).
@@ -191,6 +194,7 @@ func (u *UsersV1) ReadUser(
     res, err := client.R().
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", u.config.OrganizationalUnitContext).
         SetAuthToken(u.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -234,6 +238,7 @@ func (u *UsersV1) DeleteUser(
     res, err := client.R().
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", u.config.OrganizationalUnitContext).
         SetAuthToken(u.config.Token).
         SetResult(&result).
         Delete(queryBuilder)
@@ -287,6 +292,7 @@ func (u *UsersV1) UpdateUser(
     res, err := client.R().
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", u.config.OrganizationalUnitContext).
         SetAuthToken(u.config.Token).
         SetBody(payload).
         SetResult(&result).
@@ -340,6 +346,7 @@ func (u *UsersV1) ChangePassword(
     res, err := client.R().
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", u.config.OrganizationalUnitContext).
         SetAuthToken(u.config.Token).
         SetBody(payload).
         SetResult(&result).

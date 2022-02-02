@@ -40,6 +40,7 @@ func (v *VmwareVcenterComputeResourceComplianceStatsV1) ReadVmwareVcenterCompute
     res, err := client.R().
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", v.config.OrganizationalUnitContext).
         SetAuthToken(v.config.Token).
         SetResult(&result).
         Get(queryBuilder)

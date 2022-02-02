@@ -140,6 +140,7 @@ func (t *TasksV1) ListTasks(
     res, err := client.R().
         SetQueryParams(queryParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", t.config.OrganizationalUnitContext).
         SetAuthToken(t.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -183,6 +184,7 @@ func (t *TasksV1) ReadTask(
     res, err := client.R().
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", t.config.OrganizationalUnitContext).
         SetAuthToken(t.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -235,6 +237,7 @@ func (t *TasksV1) UpdateTask(
     res, err := client.R().
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", t.config.OrganizationalUnitContext).
         SetAuthToken(t.config.Token).
         SetBody(payload).
         SetResult(&result).

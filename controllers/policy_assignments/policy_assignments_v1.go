@@ -43,6 +43,7 @@ func (p *PolicyAssignmentsV1) SetPolicyAssignments(
 
     res, err := client.R().
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", p.config.OrganizationalUnitContext).
         SetAuthToken(p.config.Token).
         SetBody(payload).
         SetResult(&result).

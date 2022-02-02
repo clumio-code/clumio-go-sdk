@@ -33,6 +33,7 @@ func (r *RolesV1) ListRoles()(
 
     res, err := client.R().
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", r.config.OrganizationalUnitContext).
         SetAuthToken(r.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -76,6 +77,7 @@ func (r *RolesV1) ReadRole(
     res, err := client.R().
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", r.config.OrganizationalUnitContext).
         SetAuthToken(r.config.Token).
         SetResult(&result).
         Get(queryBuilder)

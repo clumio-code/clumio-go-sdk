@@ -56,6 +56,7 @@ func (p *ProtectionGroupsV1) ListProtectionGroups(
     res, err := client.R().
         SetQueryParams(queryParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", p.config.OrganizationalUnitContext).
         SetAuthToken(p.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -99,6 +100,7 @@ func (p *ProtectionGroupsV1) ReadProtectionGroup(
     res, err := client.R().
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", p.config.OrganizationalUnitContext).
         SetAuthToken(p.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -148,6 +150,7 @@ func (p *ProtectionGroupsV1) CreateProtectionGroup(
 
     res, err := client.R().
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", p.config.OrganizationalUnitContext).
         SetAuthToken(p.config.Token).
         SetBody(payload).
         SetResult(&result).
@@ -204,6 +207,7 @@ func (p *ProtectionGroupsV1) UpdateProtectionGroup(
     res, err := client.R().
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", p.config.OrganizationalUnitContext).
         SetAuthToken(p.config.Token).
         SetBody(payload).
         SetResult(&result).
@@ -251,6 +255,7 @@ func (p *ProtectionGroupsV1) DeleteProtectionGroup(
     res, err := client.R().
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", p.config.OrganizationalUnitContext).
         SetAuthToken(p.config.Token).
         SetResult(&result).
         Delete(queryBuilder)
@@ -307,6 +312,7 @@ func (p *ProtectionGroupsV1) AddBucketProtectionGroup(
     res, err := client.R().
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", p.config.OrganizationalUnitContext).
         SetAuthToken(p.config.Token).
         SetBody(payload).
         SetResult(&result).
@@ -357,6 +363,7 @@ func (p *ProtectionGroupsV1) DeleteBucketProtectionGroup(
     res, err := client.R().
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", p.config.OrganizationalUnitContext).
         SetAuthToken(p.config.Token).
         SetResult(&result).
         Delete(queryBuilder)

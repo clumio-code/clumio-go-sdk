@@ -56,6 +56,7 @@ func (a *AwsConnectionsV1) ListAwsConnections(
     res, err := client.R().
         SetQueryParams(queryParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", a.config.OrganizationalUnitContext).
         SetAuthToken(a.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -101,6 +102,7 @@ func (a *AwsConnectionsV1) CreateAwsConnection(
 
     res, err := client.R().
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", a.config.OrganizationalUnitContext).
         SetAuthToken(a.config.Token).
         SetBody(payload).
         SetResult(&result).
@@ -145,6 +147,7 @@ func (a *AwsConnectionsV1) ReadAwsConnection(
     res, err := client.R().
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", a.config.OrganizationalUnitContext).
         SetAuthToken(a.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -188,6 +191,7 @@ func (a *AwsConnectionsV1) DeleteAwsConnection(
     res, err := client.R().
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", a.config.OrganizationalUnitContext).
         SetAuthToken(a.config.Token).
         SetResult(&result).
         Delete(queryBuilder)
@@ -240,6 +244,7 @@ func (a *AwsConnectionsV1) UpdateAwsConnection(
     res, err := client.R().
         SetPathParams(pathParams).
         SetHeader("Accept", header).
+        SetHeader("x-clumio-organizationalunit-context", a.config.OrganizationalUnitContext).
         SetAuthToken(a.config.Token).
         SetBody(payload).
         SetResult(&result).
