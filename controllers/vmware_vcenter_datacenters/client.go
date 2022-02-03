@@ -10,7 +10,7 @@ import (
 
 // VmwareVcenterDatacentersV1Client represents a custom type interface
 type VmwareVcenterDatacentersV1Client interface {
-    //  Returns a list of VMware data centers in the specified vCenter server.
+    // ListVmwareVcenterDatacenters Returns a list of VMware data centers in the specified vCenter server.
     ListVmwareVcenterDatacenters(
         vcenterId string, 
         limit *int64, 
@@ -19,7 +19,7 @@ type VmwareVcenterDatacentersV1Client interface {
         Embed *string)(
         *models.ListDatacentersResponse,  *apiutils.APIError)
     
-    //  Returns a representation of the specified VMware data center within the specified vCenter server.
+    // ReadVmwareVcenterDatacenter Returns a representation of the specified VMware data center within the specified vCenter server.
     ReadVmwareVcenterDatacenter(
         vcenterId string, 
         datacenterId string, 

@@ -220,6 +220,21 @@ type CreateProtectionGroupResponse struct {
     Links                     *ProtectionGroupVersionLinks `json:"_links"`
     // Number of buckets
     BucketCount               *int64                       `json:"bucket_count"`
+    // The following table describes the possible conditions for a bucket to be
+    // automatically added to a protection group.
+    // 
+    // +---------+----------------+---------------------------------------------------+
+    // |  Field  | Rule Condition |                    Description                    |
+    // +=========+================+===================================================+
+    // | aws_tag | $eq            | Denotes the AWS tag(s) to conditionalize on       |
+    // |         |                |                                                   |
+    // |         |                | {"aws_tag":{"$eq":{"key":"Environment",           |
+    // |         |                | "value":"Prod"}}}                                 |
+    // |         |                |                                                   |
+    // |         |                |                                                   |
+    // +---------+----------------+---------------------------------------------------+
+    // 
+    BucketRule                *string                      `json:"bucket_rule"`
     // Creation time of the protection group in RFC-3339 format.
     CreatedTimestamp          *string                      `json:"created_timestamp"`
     // The user-assigned description of the protection group.
@@ -1475,38 +1490,40 @@ type ReadAwsTagResponse struct {
 // ReadBucketResponse represents a custom type struct for Success
 type ReadBucketResponse struct {
     // Embedded responses related to the resource.
-    Embedded                 interface{}    `json:"_embedded"`
+    Embedded                 interface{}          `json:"_embedded"`
     // URLs to pages related to the resource.
-    Links                    *BucketLinks   `json:"_links"`
+    Links                    *BucketLinks         `json:"_links"`
     // The AWS-assigned ID of the account associated with the S3 bucket.
-    AccountNativeId          *string        `json:"account_native_id"`
+    AccountNativeId          *string              `json:"account_native_id"`
     // The AWS region associated with the S3 bucket.
-    AwsRegion                *string        `json:"aws_region"`
+    AwsRegion                *string              `json:"aws_region"`
+    // The Cloudwatch metrics of the bucket.
+    CloudwatchMetrics        *S3CloudwatchMetrics `json:"cloudwatch_metrics"`
     // The timestamp of when the bucket was created. Represented in RFC-3339 format.
-    CreationTimestamp        *string        `json:"creation_timestamp"`
+    CreationTimestamp        *string              `json:"creation_timestamp"`
     // Encryption configuration of the bucket
-    EncryptionConfiguration  *string        `json:"encryption_configuration"`
+    EncryptionConfiguration  *string              `json:"encryption_configuration"`
     // The Clumio-assigned ID of the AWS environment associated with the S3 bucket.
-    EnvironmentId            *string        `json:"environment_id"`
+    EnvironmentId            *string              `json:"environment_id"`
     // The Clumio-assigned ID of the bucket.
-    Id                       *string        `json:"id"`
+    Id                       *string              `json:"id"`
     // The AWS-assigned name of the bucket.
-    Name                     *string        `json:"name"`
+    Name                     *string              `json:"name"`
     // Number of objects in bucket.
-    ObjectCount              *int64         `json:"object_count"`
+    ObjectCount              *int64               `json:"object_count"`
     // The Clumio-assigned ID of the organizational unit associated with the S3 bucket.
-    OrganizationalUnitId     *string        `json:"organizational_unit_id"`
+    OrganizationalUnitId     *string              `json:"organizational_unit_id"`
     // Protection group count reflects how many protection groups are linked to this
     // bucket
-    ProtectionGroupCount     *int64         `json:"protection_group_count"`
+    ProtectionGroupCount     *int64               `json:"protection_group_count"`
     // Replication configuration of the bucket
-    ReplicationConfiguration *string        `json:"replication_configuration"`
+    ReplicationConfiguration *string              `json:"replication_configuration"`
     // Size of bucket in bytes.
-    SizeBytes                *int64         `json:"size_bytes"`
+    SizeBytes                *int64               `json:"size_bytes"`
     // A tag created through AWS console which can be applied to EBS volumes.
-    Tags                     []*AwsTagModel `json:"tags"`
+    Tags                     []*AwsTagModel       `json:"tags"`
     // Version configuration of the bucket
-    VersionConfiguration     *string        `json:"version_configuration"`
+    VersionConfiguration     *string              `json:"version_configuration"`
 }
 
 // ReadComputeResourceResponse represents a custom type struct for Success
@@ -2166,6 +2183,21 @@ type ReadProtectionGroupResponse struct {
     Links                     *ProtectionGroupLinks                 `json:"_links"`
     // Number of buckets
     BucketCount               *int64                                `json:"bucket_count"`
+    // The following table describes the possible conditions for a bucket to be
+    // automatically added to a protection group.
+    // 
+    // +---------+----------------+---------------------------------------------------+
+    // |  Field  | Rule Condition |                    Description                    |
+    // +=========+================+===================================================+
+    // | aws_tag | $eq            | Denotes the AWS tag(s) to conditionalize on       |
+    // |         |                |                                                   |
+    // |         |                | {"aws_tag":{"$eq":{"key":"Environment",           |
+    // |         |                | "value":"Prod"}}}                                 |
+    // |         |                |                                                   |
+    // |         |                |                                                   |
+    // +---------+----------------+---------------------------------------------------+
+    // 
+    BucketRule                *string                               `json:"bucket_rule"`
     // The compliance statistics of workloads associated with this entity.
     ComplianceStats           *ProtectionComplianceStatsWithSeeding `json:"compliance_stats"`
     // The compliance status of the protected protection group. Possible values include
@@ -3082,6 +3114,21 @@ type UpdateProtectionGroupResponse struct {
     Links                     *ProtectionGroupVersionLinks `json:"_links"`
     // Number of buckets
     BucketCount               *int64                       `json:"bucket_count"`
+    // The following table describes the possible conditions for a bucket to be
+    // automatically added to a protection group.
+    // 
+    // +---------+----------------+---------------------------------------------------+
+    // |  Field  | Rule Condition |                    Description                    |
+    // +=========+================+===================================================+
+    // | aws_tag | $eq            | Denotes the AWS tag(s) to conditionalize on       |
+    // |         |                |                                                   |
+    // |         |                | {"aws_tag":{"$eq":{"key":"Environment",           |
+    // |         |                | "value":"Prod"}}}                                 |
+    // |         |                |                                                   |
+    // |         |                |                                                   |
+    // +---------+----------------+---------------------------------------------------+
+    // 
+    BucketRule                *string                      `json:"bucket_rule"`
     // Creation time of the protection group in RFC-3339 format.
     CreatedTimestamp          *string                      `json:"created_timestamp"`
     // The user-assigned description of the protection group.

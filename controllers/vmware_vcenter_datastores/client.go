@@ -10,7 +10,7 @@ import (
 
 // VmwareVcenterDatastoresV1Client represents a custom type interface
 type VmwareVcenterDatastoresV1Client interface {
-    //  Returns a list of datastores in the specified vCenter server.
+    // ListVmwareVcenterDatastores Returns a list of datastores in the specified vCenter server.
     //  
     //  
     //  Supported Datastore Types
@@ -28,7 +28,7 @@ type VmwareVcenterDatastoresV1Client interface {
         filter *string)(
         *models.ListVMwareDatastoresResponse,  *apiutils.APIError)
     
-    //  Returns a representation of the specified datastore.
+    // ReadVmwareVcenterDatastore Returns a representation of the specified datastore.
     ReadVmwareVcenterDatastore(
         vcenterId string, 
         datastoreId string)(

@@ -10,7 +10,7 @@ import (
 
 // AuditTrailsV1Client represents a custom type interface
 type AuditTrailsV1Client interface {
-    //  Returns a list of audit trails.
+    // ListAuditTrails Returns a list of audit trails.
     ListAuditTrails(
         limit *int64, 
         start *string, 

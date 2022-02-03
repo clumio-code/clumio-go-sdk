@@ -10,14 +10,14 @@ import (
 
 // ManagementSubgroupsV1Client represents a custom type interface
 type ManagementSubgroupsV1Client interface {
-    //  Returns a list of subgroups.
+    // ListManagementSubgroups Returns a list of subgroups.
     ListManagementSubgroups(
         groupId string, 
         limit *int64, 
         start *string)(
         *models.ListSubgroupsResponse,  *apiutils.APIError)
     
-    //  Subgroups are used to manage cloud connectors and SQL hosts residing in the same vCenter server.
+    // ReadManagementSubgroup Subgroups are used to manage cloud connectors and SQL hosts residing in the same vCenter server.
     //  
     //  Returns a representation of the specified subgroups.
     ReadManagementSubgroup(
@@ -25,7 +25,7 @@ type ManagementSubgroupsV1Client interface {
         groupId string)(
         *models.ReadSubgroupResponse,  *apiutils.APIError)
     
-    //  Update the specified subgroup.
+    // UpdateManagementSubgroup Update the specified subgroup.
     UpdateManagementSubgroup(
         subgroupId string, 
         groupId string, 

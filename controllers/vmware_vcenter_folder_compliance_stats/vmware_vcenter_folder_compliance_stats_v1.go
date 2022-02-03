@@ -7,9 +7,9 @@ import (
     "fmt"
 
     "github.com/clumio-code/clumio-go-sdk/api_utils"
+    "github.com/clumio-code/clumio-go-sdk/common"
     "github.com/clumio-code/clumio-go-sdk/config"
     "github.com/clumio-code/clumio-go-sdk/models"
-    "github.com/go-resty/resty/v2"
 )
 
 // VmwareVcenterFolderComplianceStatsV1 represents a custom type struct
@@ -17,13 +17,12 @@ type VmwareVcenterFolderComplianceStatsV1 struct {
     config config.Config
 }
 
-//  ReadVmwareVcenterFolderComplianceStats Returns the compliance statistics of VMs under folders and subfolders of the specified VMware folder.
+// ReadVmwareVcenterFolderComplianceStats Returns the compliance statistics of VMs under folders and subfolders of the specified VMware folder.
 func (v *VmwareVcenterFolderComplianceStatsV1) ReadVmwareVcenterFolderComplianceStats(
     vcenterId string, 
     folderId string)(
     *models.ReadVMwareFolderStatsResponse, *apiutils.APIError){
 
-    var err error = nil
     pathURL := "/datasources/vmware/vcenters/{vcenter_id}/folders/{folder_id}/stats/compliance"
     //process optional template parameters
     pathParams := map[string]string{
@@ -35,28 +34,15 @@ func (v *VmwareVcenterFolderComplianceStatsV1) ReadVmwareVcenterFolderCompliance
     
     header := "application/vmware-vcenter-folder-compliance-stats=v1+json"
     var result *models.ReadVMwareFolderStatsResponse
-    client := resty.New()
 
-    res, err := client.R().
-        SetPathParams(pathParams).
-        SetHeader("Accept", header).
-        SetAuthToken(v.config.Token).
-        SetResult(&result).
-        Get(queryBuilder)
+    apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
+        Config: v.config,
+        RequestUrl: queryBuilder,
+        PathParams: pathParams,
+        AcceptHeader: header,
+        Result: &result,
+        RequestType: common.Get,
+    })
 
-    if err != nil {
-        return nil, &apiutils.APIError{
-            ResponseCode: 500,
-            Reason:       "Internal Server Error",
-            Response:     []byte(fmt.Sprintf("%v", err)),
-        }
-    }
-    if !res.IsSuccess(){
-        return nil, &apiutils.APIError{
-            ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
-            Response:     res.Body(),
-        }
-    }
-    return result, nil
+    return result, apiErr
 }

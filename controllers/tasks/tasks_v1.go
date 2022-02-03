@@ -8,9 +8,9 @@ import (
     "fmt"
 
     "github.com/clumio-code/clumio-go-sdk/api_utils"
+    "github.com/clumio-code/clumio-go-sdk/common"
     "github.com/clumio-code/clumio-go-sdk/config"
     "github.com/clumio-code/clumio-go-sdk/models"
-    "github.com/go-resty/resty/v2"
 )
 
 // TasksV1 represents a custom type struct
@@ -18,7 +18,7 @@ type TasksV1 struct {
     config config.Config
 }
 
-//  ListTasks Returns a list of tasks. Tasks include scheduled backup and on-demand restore related tasks.
+// ListTasks Returns a list of tasks. Tasks include scheduled backup and on-demand restore related tasks.
 //  
 //  The following table describes the supported task types.
 //  
@@ -109,13 +109,11 @@ func (t *TasksV1) ListTasks(
     filter *string)(
     *models.ListTasksResponse, *apiutils.APIError){
 
-    var err error = nil
     queryBuilder := t.config.BaseUrl + "/tasks"
 
     
     header := "application/tasks=v1+json"
     var result *models.ListTasksResponse
-    client := resty.New()
     defaultInt64 := int64(0)
     defaultString := "" 
     
@@ -130,44 +128,30 @@ func (t *TasksV1) ListTasks(
         filter = &defaultString
     }
     
-
     queryParams := map[string]string{
         "limit": fmt.Sprintf("%v", *limit),
         "start": *start,
         "filter": *filter,
     }
 
-    res, err := client.R().
-        SetQueryParams(queryParams).
-        SetHeader("Accept", header).
-        SetAuthToken(t.config.Token).
-        SetResult(&result).
-        Get(queryBuilder)
+    apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
+        Config: t.config,
+        RequestUrl: queryBuilder,
+        QueryParams: queryParams,
+        AcceptHeader: header,
+        Result: &result,
+        RequestType: common.Get,
+    })
 
-    if err != nil {
-        return nil, &apiutils.APIError{
-            ResponseCode: 500,
-            Reason:       "Internal Server Error",
-            Response:     []byte(fmt.Sprintf("%v", err)),
-        }
-    }
-    if !res.IsSuccess(){
-        return nil, &apiutils.APIError{
-            ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
-            Response:     res.Body(),
-        }
-    }
-    return result, nil
+    return result, apiErr
 }
 
 
-//  ReadTask Returns a representation of the specified task.
+// ReadTask Returns a representation of the specified task.
 func (t *TasksV1) ReadTask(
     taskId string)(
     *models.ReadTaskResponse, *apiutils.APIError){
 
-    var err error = nil
     pathURL := "/tasks/{task_id}"
     //process optional template parameters
     pathParams := map[string]string{
@@ -178,40 +162,26 @@ func (t *TasksV1) ReadTask(
     
     header := "application/tasks=v1+json"
     var result *models.ReadTaskResponse
-    client := resty.New()
 
-    res, err := client.R().
-        SetPathParams(pathParams).
-        SetHeader("Accept", header).
-        SetAuthToken(t.config.Token).
-        SetResult(&result).
-        Get(queryBuilder)
+    apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
+        Config: t.config,
+        RequestUrl: queryBuilder,
+        PathParams: pathParams,
+        AcceptHeader: header,
+        Result: &result,
+        RequestType: common.Get,
+    })
 
-    if err != nil {
-        return nil, &apiutils.APIError{
-            ResponseCode: 500,
-            Reason:       "Internal Server Error",
-            Response:     []byte(fmt.Sprintf("%v", err)),
-        }
-    }
-    if !res.IsSuccess(){
-        return nil, &apiutils.APIError{
-            ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
-            Response:     res.Body(),
-        }
-    }
-    return result, nil
+    return result, apiErr
 }
 
 
-//  UpdateTask Manages the specified task. Managing a task includes aborting a task that is in queue or in progress.
+// UpdateTask Manages the specified task. Managing a task includes aborting a task that is in queue or in progress.
 func (t *TasksV1) UpdateTask(
     taskId string, 
     body *models.UpdateTaskV1Request)(
     *models.UpdateTaskResponse, *apiutils.APIError){
 
-    var err error = nil
     pathURL := "/tasks/{task_id}"
     //process optional template parameters
     pathParams := map[string]string{
@@ -230,29 +200,16 @@ func (t *TasksV1) UpdateTask(
     payload := string(bytes)
     header := "application/tasks=v1+json"
     var result *models.UpdateTaskResponse
-    client := resty.New()
 
-    res, err := client.R().
-        SetPathParams(pathParams).
-        SetHeader("Accept", header).
-        SetAuthToken(t.config.Token).
-        SetBody(payload).
-        SetResult(&result).
-        Patch(queryBuilder)
+    apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
+        Config: t.config,
+        RequestUrl: queryBuilder,
+        PathParams: pathParams,
+        AcceptHeader: header,
+        Body: payload,
+        Result: &result,
+        RequestType: common.Patch,
+    })
 
-    if err != nil {
-        return nil, &apiutils.APIError{
-            ResponseCode: 500,
-            Reason:       "Internal Server Error",
-            Response:     []byte(fmt.Sprintf("%v", err)),
-        }
-    }
-    if !res.IsSuccess(){
-        return nil, &apiutils.APIError{
-            ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
-            Response:     res.Body(),
-        }
-    }
-    return result, nil
+    return result, apiErr
 }

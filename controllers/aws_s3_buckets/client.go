@@ -10,14 +10,14 @@ import (
 
 // AwsS3BucketsV1Client represents a custom type interface
 type AwsS3BucketsV1Client interface {
-    //  Returns a list of S3 buckets.
+    // ListAwsS3Buckets Returns a list of S3 buckets.
     ListAwsS3Buckets(
         limit *int64, 
         start *string, 
         filter *string)(
         *models.ListBucketsResponse,  *apiutils.APIError)
     
-    //  Returns a representation of the specified S3 bucket.
+    // ReadAwsS3Bucket Returns a representation of the specified S3 bucket.
     ReadAwsS3Bucket(
         bucketId string)(
         *models.ReadBucketResponse,  *apiutils.APIError)

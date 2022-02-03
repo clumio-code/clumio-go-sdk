@@ -10,7 +10,7 @@ import (
 
 // VmwareVcenterHostsV1Client represents a custom type interface
 type VmwareVcenterHostsV1Client interface {
-    //  Returns a list of hosts in the specified vCenter server.
+    // ListVmwareVcenterHosts Returns a list of hosts in the specified vCenter server.
     ListVmwareVcenterHosts(
         vcenterId string, 
         limit *int64, 
@@ -18,7 +18,7 @@ type VmwareVcenterHostsV1Client interface {
         filter *string)(
         *models.ListHostsResponse,  *apiutils.APIError)
     
-    //  Returns a representation of the specified host.
+    // ReadVmwareVcenterHost Returns a representation of the specified host.
     ReadVmwareVcenterHost(
         vcenterId string, 
         hostId string)(

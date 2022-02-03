@@ -10,7 +10,7 @@ import (
 
 // AwsEnvironmentTagsV1Client represents a custom type interface
 type AwsEnvironmentTagsV1Client interface {
-    //  Returns a list of AWS tags in the specified environment.
+    // ListAwsEnvironmentTags Returns a list of AWS tags in the specified environment.
     ListAwsEnvironmentTags(
         environmentId string, 
         currentCount *int64, 
@@ -22,14 +22,14 @@ type AwsEnvironmentTagsV1Client interface {
         embed *string)(
         *models.ListAwsTagsResponse,  *apiutils.APIError)
     
-    //  Returns a representation of the specified AWS tag in the specified environment.
+    // ReadAwsEnvironmentTag Returns a representation of the specified AWS tag in the specified environment.
     ReadAwsEnvironmentTag(
         environmentId string, 
         tagId string, 
         embed *string)(
         *models.ReadAwsTagResponse,  *apiutils.APIError)
     
-    //  Returns the specified AWS tag's EBS compliance statistics.
+    // ReadAwsEnvironmentTagEbsVolumesComplianceStats Returns the specified AWS tag's EBS compliance statistics.
     ReadAwsEnvironmentTagEbsVolumesComplianceStats(
         environmentId string, 
         tagId string)(

@@ -10,19 +10,19 @@ import (
 
 // ProtectionGroupsV1Client represents a custom type interface
 type ProtectionGroupsV1Client interface {
-    //  Returns a list of protection groups.
+    // ListProtectionGroups Returns a list of protection groups.
     ListProtectionGroups(
         limit *int64, 
         start *string, 
         filter *string)(
         *models.ListProtectionGroupsResponse,  *apiutils.APIError)
     
-    //  Returns a representation of the specified protection group.
+    // ReadProtectionGroup Returns a representation of the specified protection group.
     ReadProtectionGroup(
         groupId string)(
         *models.ReadProtectionGroupResponse,  *apiutils.APIError)
     
-    //  Creates a new protection group by specifying object filters. Appearance in
+    // CreateProtectionGroup Creates a new protection group by specifying object filters. Appearance in
     //  datasources/protection-groups read/listing is asynchronous and may take a few
     //  seconds to minutes at most. As a result, the protection group won't be protectable
     //  via /policies/assignments until it appears in the /datasources/protection-groups
@@ -31,7 +31,7 @@ type ProtectionGroupsV1Client interface {
         body models.CreateProtectionGroupV1Request)(
         *models.CreateProtectionGroupResponse,  *apiutils.APIError)
     
-    //  Updates a protection group by modifying object filters. Appearance in
+    // UpdateProtectionGroup Updates a protection group by modifying object filters. Appearance in
     //  datasources/protection-groups read/listing is asynchronous and may take a few
     //  seconds to minutes at most. Must be in the same OU context as the creator of this
     //  protection group.
@@ -40,7 +40,7 @@ type ProtectionGroupsV1Client interface {
         body *models.UpdateProtectionGroupV1Request)(
         *models.UpdateProtectionGroupResponse,  *apiutils.APIError)
     
-    //  Marks a protection group as deleted by taking the protection group ID. Appearance
+    // DeleteProtectionGroup Marks a protection group as deleted by taking the protection group ID. Appearance
     //  in /datasources/protection-groups read/listing is asynchronous and may take a few
     //  seconds to minutes at most. Must be in the same OU context as the creator of this
     //  protection group.
@@ -48,7 +48,7 @@ type ProtectionGroupsV1Client interface {
         groupId string)(
         interface{},  *apiutils.APIError)
     
-    //  Adds a bucket to protection group and creates a child protection group S3 asset.
+    // AddBucketProtectionGroup Adds a bucket to protection group and creates a child protection group S3 asset.
     //  Appearance in /datasources/protection-groups/s3-assets read/listing is asynchronous
     //  and may take a few seconds to minutes at most. Must be in the same OU context as
     //  the creator of this protection group. Bucket ID in body can be found in
@@ -58,7 +58,7 @@ type ProtectionGroupsV1Client interface {
         body models.AddBucketProtectionGroupV1Request)(
         *models.AddBucketToProtectionGroupResponse,  *apiutils.APIError)
     
-    //  Deletes a bucket from a protection group and the child protection group S3 asset.
+    // DeleteBucketProtectionGroup Deletes a bucket from a protection group and the child protection group S3 asset.
     //  Appearance in /datasources/protection-groups/s3-assets read/listing is asynchronous
     //  and may take a few seconds to minutes at most. Must be in the same OU context as
     //  the creator of this protection group. Bucket ID in path can be found in

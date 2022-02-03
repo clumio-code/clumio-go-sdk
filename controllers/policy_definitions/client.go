@@ -10,7 +10,7 @@ import (
 
 // PolicyDefinitionsV1Client represents a custom type interface
 type PolicyDefinitionsV1Client interface {
-    //  Returns a list of policies and their configurations.
+    // ListPolicyDefinitions Returns a list of policies and their configurations.
     //  
     //  The following table describes the supported policy operations.
     //  
@@ -81,25 +81,25 @@ type PolicyDefinitionsV1Client interface {
         embed *string)(
         *models.ListPoliciesResponse,  *apiutils.APIError)
     
-    //  Creates a new policy. Creating a new policy involves configuring the backup seed settings, backup service level agreement (SLA), and backup window.
+    // CreatePolicyDefinition Creates a new policy. Creating a new policy involves configuring the backup seed settings, backup service level agreement (SLA), and backup window.
     CreatePolicyDefinition(
         body *models.CreatePolicyDefinitionV1Request)(
         *models.CreatePolicyResponse,  *apiutils.APIError)
     
-    //  Returns a representation of the specified policy.
+    // ReadPolicyDefinition Returns a representation of the specified policy.
     ReadPolicyDefinition(
         policyId string, 
         embed *string)(
         *models.ReadPolicyResponse,  *apiutils.APIError)
     
-    //  Updates an existing policy by modifying its backup seed setting, backup service level agreement (SLA), and backup window. If a policy is updated while a backup is in progress, the policy changes will take effect after the backup completes.
+    // UpdatePolicyDefinition Updates an existing policy by modifying its backup seed setting, backup service level agreement (SLA), and backup window. If a policy is updated while a backup is in progress, the policy changes will take effect after the backup completes.
     UpdatePolicyDefinition(
         policyId string, 
         embed *string, 
         body *models.UpdatePolicyDefinitionV1Request)(
         *models.UpdatePolicyResponse,  *apiutils.APIError)
     
-    //  Deletes the specified policy.
+    // DeletePolicyDefinition Deletes the specified policy.
     DeletePolicyDefinition(
         policyId string)(
         interface{},  *apiutils.APIError)

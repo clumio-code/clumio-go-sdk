@@ -10,7 +10,7 @@ import (
 
 // AwsEbsVolumesV1Client represents a custom type interface
 type AwsEbsVolumesV1Client interface {
-    //  Returns a list of EBS volumes.
+    // ListAwsEbsVolumes Returns a list of EBS volumes.
     ListAwsEbsVolumes(
         limit *int64, 
         start *string, 
@@ -18,7 +18,7 @@ type AwsEbsVolumesV1Client interface {
         embed *string)(
         *models.ListEbsVolumesResponse,  *apiutils.APIError)
     
-    //  Returns a representation of the specified EBS volume.
+    // ReadAwsEbsVolume Returns a representation of the specified EBS volume.
     ReadAwsEbsVolume(
         volumeId string, 
         embed *string)(

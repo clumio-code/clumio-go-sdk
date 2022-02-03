@@ -10,14 +10,14 @@ import (
 
 // VmwareVcentersV1Client represents a custom type interface
 type VmwareVcentersV1Client interface {
-    //  Returns a list of vCenter servers.
+    // ListVmwareVcenters Returns a list of vCenter servers.
     ListVmwareVcenters(
         limit *int64, 
         start *string, 
         embed *string)(
         *models.ListVcentersResponse,  *apiutils.APIError)
     
-    //  Returns a representation of the specified vCenter server.
+    // ReadVmwareVcenter Returns a representation of the specified vCenter server.
     ReadVmwareVcenter(
         vcenterId string, 
         embed *string)(

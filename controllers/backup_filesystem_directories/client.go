@@ -10,7 +10,7 @@ import (
 
 // BackupFilesystemDirectoriesV1Client represents a custom type interface
 type BackupFilesystemDirectoriesV1Client interface {
-    //  Browse files in the directory with the specified ID.
+    // ReadBackupFilesystemDirectory Browse files in the directory with the specified ID.
     ReadBackupFilesystemDirectory(
         backupId string, 
         filesystemId string, 

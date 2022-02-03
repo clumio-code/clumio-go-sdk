@@ -10,12 +10,12 @@ import (
 
 // ReportDownloadsV1Client represents a custom type interface
 type ReportDownloadsV1Client interface {
-    //  List unexpired report downloads.
+    // ListReportDownloads List unexpired report downloads.
     ListReportDownloads(
         body models.ListReportDownloadsV1Request)(
         *models.ListReportDownloadsResponse,  *apiutils.APIError)
     
-    //  Create a new Report download.
+    // CreateReportDownload Create a new Report download.
     CreateReportDownload(
         body models.CreateReportDownloadV1Request)(
         *models.CreateReportDownloadResponse,  *apiutils.APIError)

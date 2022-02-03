@@ -10,29 +10,29 @@ import (
 
 // AwsConnectionsV1Client represents a custom type interface
 type AwsConnectionsV1Client interface {
-    //  Returns a list of AWS Connections
+    // ListAwsConnections Returns a list of AWS Connections
     ListAwsConnections(
         limit *int64, 
         start *string, 
         filter *string)(
         *models.ListAWSConnectionsResponse,  *apiutils.APIError)
     
-    //  Initiate a new AWS connection.
+    // CreateAwsConnection Initiate a new AWS connection.
     CreateAwsConnection(
         body *models.CreateAwsConnectionV1Request)(
         *models.CreateAWSConnectionResponse,  *apiutils.APIError)
     
-    //  Returns a representation of the specified AWS connection.
+    // ReadAwsConnection Returns a representation of the specified AWS connection.
     ReadAwsConnection(
         connectionId string)(
         *models.ReadAWSConnectionResponse,  *apiutils.APIError)
     
-    //  Delete the specified AWS connection.
+    // DeleteAwsConnection Delete the specified AWS connection.
     DeleteAwsConnection(
         connectionId string)(
         interface{},  *apiutils.APIError)
     
-    //  Returns a new template url for the specified configuration.
+    // UpdateAwsConnection Returns a new template url for the specified configuration.
     UpdateAwsConnection(
         connectionId string, 
         body models.UpdateAwsConnectionV1Request)(

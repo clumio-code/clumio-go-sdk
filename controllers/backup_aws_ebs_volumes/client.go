@@ -10,19 +10,19 @@ import (
 
 // BackupAwsEbsVolumesV1Client represents a custom type interface
 type BackupAwsEbsVolumesV1Client interface {
-    //  Returns a list of EBS volumes that have been backed up by Clumio. EBS volume backups can be restored through the [POST /restores/aws/ebs-volumes](#operation/restore-aws-ebs-volume) endpoint.
+    // ListBackupAwsEbsVolumes Returns a list of EBS volumes that have been backed up by Clumio. EBS volume backups can be restored through the [POST /restores/aws/ebs-volumes](#operation/restore-aws-ebs-volume) endpoint.
     ListBackupAwsEbsVolumes(
         limit *int64, 
         start *string, 
         filter *string)(
         *models.ListEBSBackupsResponseV1,  *apiutils.APIError)
     
-    //  Performs an on-demand backup for the specified EBS volume. The EBS volume must be protected with a policy that includes a service level agreement (SLA) configured for on-demand backups.
+    // CreateBackupAwsEbsVolume Performs an on-demand backup for the specified EBS volume. The EBS volume must be protected with a policy that includes a service level agreement (SLA) configured for on-demand backups.
     CreateBackupAwsEbsVolume(
         body models.CreateBackupAwsEbsVolumeV1Request)(
         interface{},  *apiutils.APIError)
     
-    //  Returns a representation of the specified EBS volume backup.
+    // ReadBackupAwsEbsVolume Returns a representation of the specified EBS volume backup.
     ReadBackupAwsEbsVolume(
         backupId string)(
         *models.ReadEBSBackupResponseV1,  *apiutils.APIError)

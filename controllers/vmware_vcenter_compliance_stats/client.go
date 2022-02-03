@@ -10,7 +10,7 @@ import (
 
 // VmwareVcenterComplianceStatsV1Client represents a custom type interface
 type VmwareVcenterComplianceStatsV1Client interface {
-    //  Returns a representation of the compliance statistics of VMs in the specified vCenter server.
+    // ReadVmwareVcenterComplianceStats Returns a representation of the compliance statistics of VMs in the specified vCenter server.
     ReadVmwareVcenterComplianceStats(
         vcenterId string)(
         *models.ReadVMwareVCenterProtectionStatsResponse,  *apiutils.APIError)

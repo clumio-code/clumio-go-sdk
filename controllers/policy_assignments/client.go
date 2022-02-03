@@ -10,7 +10,7 @@ import (
 
 // PolicyAssignmentsV1Client represents a custom type interface
 type PolicyAssignmentsV1Client interface {
-    //  Assign (or unassign) policies on up to 100 entities. This endpoint returns a task
+    // SetPolicyAssignments Assign (or unassign) policies on up to 100 entities. This endpoint returns a task
     //  ID and queues a task in the background to execute the request. Use the task ID to
     //  monitor task completion.
     SetPolicyAssignments(

@@ -10,13 +10,13 @@ import (
 
 // RolesV1Client represents a custom type interface
 type RolesV1Client interface {
-    //  Returns a list of roles that can be assigned to users, either while inviting users using the
+    // ListRoles Returns a list of roles that can be assigned to users, either while inviting users using the
     //  [POST /users](#operation/create-user) API, or by updating the user using the
     //  [PATCH /users/{user_id}](#operation/update-user) API.
     ListRoles()(
         *models.ListRolesResponse,  *apiutils.APIError)
     
-    //  Returns a representation of the specified role.
+    // ReadRole Returns a representation of the specified role.
     ReadRole(
         roleId string)(
         *models.ReadRoleResponse,  *apiutils.APIError)

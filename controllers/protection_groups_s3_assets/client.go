@@ -10,14 +10,14 @@ import (
 
 // ProtectionGroupsS3AssetsV1Client represents a custom type interface
 type ProtectionGroupsS3AssetsV1Client interface {
-    //  Returns a list of protection group S3 assets.
+    // ListProtectionGroupS3Assets Returns a list of protection group S3 assets.
     ListProtectionGroupS3Assets(
         limit *int64, 
         start *string, 
         filter *string)(
         *models.ListProtectionGroupS3AssetsResponse,  *apiutils.APIError)
     
-    //  Returns a representation of the specified protection group S3 asset.
+    // ReadProtectionGroupS3Asset Returns a representation of the specified protection group S3 asset.
     ReadProtectionGroupS3Asset(
         protectionGroupS3AssetId string)(
         *models.ReadProtectionGroupS3AssetResponse,  *apiutils.APIError)

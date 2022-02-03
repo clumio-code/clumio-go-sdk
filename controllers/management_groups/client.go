@@ -10,13 +10,13 @@ import (
 
 // ManagementGroupsV1Client represents a custom type interface
 type ManagementGroupsV1Client interface {
-    //  Returns a list of management groups.
+    // ListManagementGroups Returns a list of management groups.
     ListManagementGroups(
         limit *int64, 
         start *string)(
         *models.ListManagementGroupsResponse,  *apiutils.APIError)
     
-    //  Returns a representation of the specified management group. Management groups are used to
+    // ReadManagementGroup Returns a representation of the specified management group. Management groups are used to
     //  manage the SQL hosts and cloud connectors deployed in vCenter servers.
     //  
     //  Returns a representation of the specified management-groups.
@@ -24,7 +24,7 @@ type ManagementGroupsV1Client interface {
         groupId string)(
         *models.ReadManagementGroupResponse,  *apiutils.APIError)
     
-    //  Update the specified management group.
+    // UpdateManagementGroup Update the specified management group.
     UpdateManagementGroup(
         groupId string, 
         body *models.UpdateManagementGroupV1Request)(

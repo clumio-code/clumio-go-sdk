@@ -8,9 +8,9 @@ import (
     "fmt"
 
     "github.com/clumio-code/clumio-go-sdk/api_utils"
+    "github.com/clumio-code/clumio-go-sdk/common"
     "github.com/clumio-code/clumio-go-sdk/config"
     "github.com/clumio-code/clumio-go-sdk/models"
-    "github.com/go-resty/resty/v2"
 )
 
 // ProtectionGroupsV1 represents a custom type struct
@@ -18,20 +18,18 @@ type ProtectionGroupsV1 struct {
     config config.Config
 }
 
-//  ListProtectionGroups Returns a list of protection groups.
+// ListProtectionGroups Returns a list of protection groups.
 func (p *ProtectionGroupsV1) ListProtectionGroups(
     limit *int64, 
     start *string, 
     filter *string)(
     *models.ListProtectionGroupsResponse, *apiutils.APIError){
 
-    var err error = nil
     queryBuilder := p.config.BaseUrl + "/datasources/protection-groups"
 
     
     header := "application/protection-groups=v1+json"
     var result *models.ListProtectionGroupsResponse
-    client := resty.New()
     defaultInt64 := int64(0)
     defaultString := "" 
     
@@ -46,44 +44,30 @@ func (p *ProtectionGroupsV1) ListProtectionGroups(
         filter = &defaultString
     }
     
-
     queryParams := map[string]string{
         "limit": fmt.Sprintf("%v", *limit),
         "start": *start,
         "filter": *filter,
     }
 
-    res, err := client.R().
-        SetQueryParams(queryParams).
-        SetHeader("Accept", header).
-        SetAuthToken(p.config.Token).
-        SetResult(&result).
-        Get(queryBuilder)
+    apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
+        Config: p.config,
+        RequestUrl: queryBuilder,
+        QueryParams: queryParams,
+        AcceptHeader: header,
+        Result: &result,
+        RequestType: common.Get,
+    })
 
-    if err != nil {
-        return nil, &apiutils.APIError{
-            ResponseCode: 500,
-            Reason:       "Internal Server Error",
-            Response:     []byte(fmt.Sprintf("%v", err)),
-        }
-    }
-    if !res.IsSuccess(){
-        return nil, &apiutils.APIError{
-            ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
-            Response:     res.Body(),
-        }
-    }
-    return result, nil
+    return result, apiErr
 }
 
 
-//  ReadProtectionGroup Returns a representation of the specified protection group.
+// ReadProtectionGroup Returns a representation of the specified protection group.
 func (p *ProtectionGroupsV1) ReadProtectionGroup(
     groupId string)(
     *models.ReadProtectionGroupResponse, *apiutils.APIError){
 
-    var err error = nil
     pathURL := "/datasources/protection-groups/{group_id}"
     //process optional template parameters
     pathParams := map[string]string{
@@ -94,34 +78,21 @@ func (p *ProtectionGroupsV1) ReadProtectionGroup(
     
     header := "application/protection-groups=v1+json"
     var result *models.ReadProtectionGroupResponse
-    client := resty.New()
 
-    res, err := client.R().
-        SetPathParams(pathParams).
-        SetHeader("Accept", header).
-        SetAuthToken(p.config.Token).
-        SetResult(&result).
-        Get(queryBuilder)
+    apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
+        Config: p.config,
+        RequestUrl: queryBuilder,
+        PathParams: pathParams,
+        AcceptHeader: header,
+        Result: &result,
+        RequestType: common.Get,
+    })
 
-    if err != nil {
-        return nil, &apiutils.APIError{
-            ResponseCode: 500,
-            Reason:       "Internal Server Error",
-            Response:     []byte(fmt.Sprintf("%v", err)),
-        }
-    }
-    if !res.IsSuccess(){
-        return nil, &apiutils.APIError{
-            ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
-            Response:     res.Body(),
-        }
-    }
-    return result, nil
+    return result, apiErr
 }
 
 
-//  CreateProtectionGroup Creates a new protection group by specifying object filters. Appearance in
+// CreateProtectionGroup Creates a new protection group by specifying object filters. Appearance in
 //  datasources/protection-groups read/listing is asynchronous and may take a few
 //  seconds to minutes at most. As a result, the protection group won't be protectable
 //  via /policies/assignments until it appears in the /datasources/protection-groups
@@ -130,7 +101,6 @@ func (p *ProtectionGroupsV1) CreateProtectionGroup(
     body models.CreateProtectionGroupV1Request)(
     *models.CreateProtectionGroupResponse, *apiutils.APIError){
 
-    var err error = nil
     queryBuilder := p.config.BaseUrl + "/protection-groups"
 
     bytes, err := json.Marshal(body)
@@ -144,34 +114,21 @@ func (p *ProtectionGroupsV1) CreateProtectionGroup(
     payload := string(bytes)
     header := "application/protection-groups=v1+json"
     var result *models.CreateProtectionGroupResponse
-    client := resty.New()
 
-    res, err := client.R().
-        SetHeader("Accept", header).
-        SetAuthToken(p.config.Token).
-        SetBody(payload).
-        SetResult(&result).
-        Post(queryBuilder)
+    apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
+        Config: p.config,
+        RequestUrl: queryBuilder,
+        AcceptHeader: header,
+        Body: payload,
+        Result: &result,
+        RequestType: common.Post,
+    })
 
-    if err != nil {
-        return nil, &apiutils.APIError{
-            ResponseCode: 500,
-            Reason:       "Internal Server Error",
-            Response:     []byte(fmt.Sprintf("%v", err)),
-        }
-    }
-    if !res.IsSuccess(){
-        return nil, &apiutils.APIError{
-            ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
-            Response:     res.Body(),
-        }
-    }
-    return result, nil
+    return result, apiErr
 }
 
 
-//  UpdateProtectionGroup Updates a protection group by modifying object filters. Appearance in
+// UpdateProtectionGroup Updates a protection group by modifying object filters. Appearance in
 //  datasources/protection-groups read/listing is asynchronous and may take a few
 //  seconds to minutes at most. Must be in the same OU context as the creator of this
 //  protection group.
@@ -180,7 +137,6 @@ func (p *ProtectionGroupsV1) UpdateProtectionGroup(
     body *models.UpdateProtectionGroupV1Request)(
     *models.UpdateProtectionGroupResponse, *apiutils.APIError){
 
-    var err error = nil
     pathURL := "/protection-groups/{group_id}"
     //process optional template parameters
     pathParams := map[string]string{
@@ -199,35 +155,22 @@ func (p *ProtectionGroupsV1) UpdateProtectionGroup(
     payload := string(bytes)
     header := "application/protection-groups=v1+json"
     var result *models.UpdateProtectionGroupResponse
-    client := resty.New()
 
-    res, err := client.R().
-        SetPathParams(pathParams).
-        SetHeader("Accept", header).
-        SetAuthToken(p.config.Token).
-        SetBody(payload).
-        SetResult(&result).
-        Put(queryBuilder)
+    apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
+        Config: p.config,
+        RequestUrl: queryBuilder,
+        PathParams: pathParams,
+        AcceptHeader: header,
+        Body: payload,
+        Result: &result,
+        RequestType: common.Put,
+    })
 
-    if err != nil {
-        return nil, &apiutils.APIError{
-            ResponseCode: 500,
-            Reason:       "Internal Server Error",
-            Response:     []byte(fmt.Sprintf("%v", err)),
-        }
-    }
-    if !res.IsSuccess(){
-        return nil, &apiutils.APIError{
-            ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
-            Response:     res.Body(),
-        }
-    }
-    return result, nil
+    return result, apiErr
 }
 
 
-//  DeleteProtectionGroup Marks a protection group as deleted by taking the protection group ID. Appearance
+// DeleteProtectionGroup Marks a protection group as deleted by taking the protection group ID. Appearance
 //  in /datasources/protection-groups read/listing is asynchronous and may take a few
 //  seconds to minutes at most. Must be in the same OU context as the creator of this
 //  protection group.
@@ -235,7 +178,6 @@ func (p *ProtectionGroupsV1) DeleteProtectionGroup(
     groupId string)(
     interface{}, *apiutils.APIError){
 
-    var err error = nil
     pathURL := "/protection-groups/{group_id}"
     //process optional template parameters
     pathParams := map[string]string{
@@ -246,34 +188,21 @@ func (p *ProtectionGroupsV1) DeleteProtectionGroup(
     
     header := "application/protection-groups=v1+json"
     var result interface{}
-    client := resty.New()
 
-    res, err := client.R().
-        SetPathParams(pathParams).
-        SetHeader("Accept", header).
-        SetAuthToken(p.config.Token).
-        SetResult(&result).
-        Delete(queryBuilder)
+    apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
+        Config: p.config,
+        RequestUrl: queryBuilder,
+        PathParams: pathParams,
+        AcceptHeader: header,
+        Result: &result,
+        RequestType: common.Delete,
+    })
 
-    if err != nil {
-        return nil, &apiutils.APIError{
-            ResponseCode: 500,
-            Reason:       "Internal Server Error",
-            Response:     []byte(fmt.Sprintf("%v", err)),
-        }
-    }
-    if !res.IsSuccess(){
-        return nil, &apiutils.APIError{
-            ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
-            Response:     res.Body(),
-        }
-    }
-    return result, nil
+    return result, apiErr
 }
 
 
-//  AddBucketProtectionGroup Adds a bucket to protection group and creates a child protection group S3 asset.
+// AddBucketProtectionGroup Adds a bucket to protection group and creates a child protection group S3 asset.
 //  Appearance in /datasources/protection-groups/s3-assets read/listing is asynchronous
 //  and may take a few seconds to minutes at most. Must be in the same OU context as
 //  the creator of this protection group. Bucket ID in body can be found in
@@ -283,7 +212,6 @@ func (p *ProtectionGroupsV1) AddBucketProtectionGroup(
     body models.AddBucketProtectionGroupV1Request)(
     *models.AddBucketToProtectionGroupResponse, *apiutils.APIError){
 
-    var err error = nil
     pathURL := "/protection-groups/{group_id}/buckets"
     //process optional template parameters
     pathParams := map[string]string{
@@ -302,35 +230,22 @@ func (p *ProtectionGroupsV1) AddBucketProtectionGroup(
     payload := string(bytes)
     header := "application/protection-groups=v1+json"
     var result *models.AddBucketToProtectionGroupResponse
-    client := resty.New()
 
-    res, err := client.R().
-        SetPathParams(pathParams).
-        SetHeader("Accept", header).
-        SetAuthToken(p.config.Token).
-        SetBody(payload).
-        SetResult(&result).
-        Post(queryBuilder)
+    apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
+        Config: p.config,
+        RequestUrl: queryBuilder,
+        PathParams: pathParams,
+        AcceptHeader: header,
+        Body: payload,
+        Result: &result,
+        RequestType: common.Post,
+    })
 
-    if err != nil {
-        return nil, &apiutils.APIError{
-            ResponseCode: 500,
-            Reason:       "Internal Server Error",
-            Response:     []byte(fmt.Sprintf("%v", err)),
-        }
-    }
-    if !res.IsSuccess(){
-        return nil, &apiutils.APIError{
-            ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
-            Response:     res.Body(),
-        }
-    }
-    return result, nil
+    return result, apiErr
 }
 
 
-//  DeleteBucketProtectionGroup Deletes a bucket from a protection group and the child protection group S3 asset.
+// DeleteBucketProtectionGroup Deletes a bucket from a protection group and the child protection group S3 asset.
 //  Appearance in /datasources/protection-groups/s3-assets read/listing is asynchronous
 //  and may take a few seconds to minutes at most. Must be in the same OU context as
 //  the creator of this protection group. Bucket ID in path can be found in
@@ -340,7 +255,6 @@ func (p *ProtectionGroupsV1) DeleteBucketProtectionGroup(
     bucketId string)(
     *models.DeleteBucketFromProtectionGroupResponse, *apiutils.APIError){
 
-    var err error = nil
     pathURL := "/protection-groups/{group_id}/buckets/{bucket_id}"
     //process optional template parameters
     pathParams := map[string]string{
@@ -352,28 +266,15 @@ func (p *ProtectionGroupsV1) DeleteBucketProtectionGroup(
     
     header := "application/protection-groups=v1+json"
     var result *models.DeleteBucketFromProtectionGroupResponse
-    client := resty.New()
 
-    res, err := client.R().
-        SetPathParams(pathParams).
-        SetHeader("Accept", header).
-        SetAuthToken(p.config.Token).
-        SetResult(&result).
-        Delete(queryBuilder)
+    apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
+        Config: p.config,
+        RequestUrl: queryBuilder,
+        PathParams: pathParams,
+        AcceptHeader: header,
+        Result: &result,
+        RequestType: common.Delete,
+    })
 
-    if err != nil {
-        return nil, &apiutils.APIError{
-            ResponseCode: 500,
-            Reason:       "Internal Server Error",
-            Response:     []byte(fmt.Sprintf("%v", err)),
-        }
-    }
-    if !res.IsSuccess(){
-        return nil, &apiutils.APIError{
-            ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
-            Response:     res.Body(),
-        }
-    }
-    return result, nil
+    return result, apiErr
 }

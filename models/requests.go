@@ -398,6 +398,21 @@ type UpdatePolicyRuleV1Request struct {
 
 // CreateProtectionGroupV1Request represents a custom type struct
 type CreateProtectionGroupV1Request struct {
+    // The following table describes the possible conditions for a bucket to be
+    // automatically added to a protection group.
+    // 
+    // +---------+----------------+---------------------------------------------------+
+    // |  Field  | Rule Condition |                    Description                    |
+    // +=========+================+===================================================+
+    // | aws_tag | $eq            | Denotes the AWS tag(s) to conditionalize on       |
+    // |         |                |                                                   |
+    // |         |                | {"aws_tag":{"$eq":{"key":"Environment",           |
+    // |         |                | "value":"Prod"}}}                                 |
+    // |         |                |                                                   |
+    // |         |                |                                                   |
+    // +---------+----------------+---------------------------------------------------+
+    // 
+    BucketRule   *string       `json:"bucket_rule"`
     // The user-assigned description of the protection group.
     Description  *string       `json:"description"`
     // The user-assigned name of the protection group.
@@ -409,6 +424,21 @@ type CreateProtectionGroupV1Request struct {
 
 // UpdateProtectionGroupV1Request represents a custom type struct
 type UpdateProtectionGroupV1Request struct {
+    // The following table describes the possible conditions for a bucket to be
+    // automatically added to a protection group.
+    // 
+    // +---------+----------------+---------------------------------------------------+
+    // |  Field  | Rule Condition |                    Description                    |
+    // +=========+================+===================================================+
+    // | aws_tag | $eq            | Denotes the AWS tag(s) to conditionalize on       |
+    // |         |                |                                                   |
+    // |         |                | {"aws_tag":{"$eq":{"key":"Environment",           |
+    // |         |                | "value":"Prod"}}}                                 |
+    // |         |                |                                                   |
+    // |         |                |                                                   |
+    // +---------+----------------+---------------------------------------------------+
+    // 
+    BucketRule   *string       `json:"bucket_rule"`
     // The user-assigned description of the protection group.
     Description  *string       `json:"description"`
     // The user-assigned name of the protection group.

@@ -10,7 +10,7 @@ import (
 
 // RestoredVmwareVmsV1Client represents a custom type interface
 type RestoredVmwareVmsV1Client interface {
-    //  Restores the specified source VM backup to the specified target destination. The source VM must be one that was backed up by Clumio.
+    // RestoreVmwareVm Restores the specified source VM backup to the specified target destination. The source VM must be one that was backed up by Clumio.
     RestoreVmwareVm(
         body models.RestoreVmwareVmV1Request)(
         *models.RestoreVMwareVMResponse,  *apiutils.APIError)

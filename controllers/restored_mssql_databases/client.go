@@ -10,7 +10,7 @@ import (
 
 // RestoredMssqlDatabasesV1Client represents a custom type interface
 type RestoredMssqlDatabasesV1Client interface {
-    //  Creates a restored MSSQL database from a given backup or to a specified point in time.
+    // RestoreMssqlDatabase Creates a restored MSSQL database from a given backup or to a specified point in time.
     RestoreMssqlDatabase(
         embed *string, 
         body models.RestoreMssqlDatabaseV1Request)(

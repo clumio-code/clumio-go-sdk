@@ -8,9 +8,9 @@ import (
     "fmt"
 
     "github.com/clumio-code/clumio-go-sdk/api_utils"
+    "github.com/clumio-code/clumio-go-sdk/common"
     "github.com/clumio-code/clumio-go-sdk/config"
     "github.com/clumio-code/clumio-go-sdk/models"
-    "github.com/go-resty/resty/v2"
 )
 
 // PolicyRulesV1 represents a custom type struct
@@ -18,7 +18,7 @@ type PolicyRulesV1 struct {
     config config.Config
 }
 
-//  ListPolicyRules Returns a list of policy rules.
+// ListPolicyRules Returns a list of policy rules.
 func (p *PolicyRulesV1) ListPolicyRules(
     limit *int64, 
     start *string, 
@@ -27,13 +27,11 @@ func (p *PolicyRulesV1) ListPolicyRules(
     filter *string)(
     *models.ListRulesResponse, *apiutils.APIError){
 
-    var err error = nil
     queryBuilder := p.config.BaseUrl + "/policies/rules"
 
     
     header := "application/policy-rules=v1+json"
     var result *models.ListRulesResponse
-    client := resty.New()
     defaultInt64 := int64(0)
     defaultString := "" 
     
@@ -54,7 +52,6 @@ func (p *PolicyRulesV1) ListPolicyRules(
         filter = &defaultString
     }
     
-
     queryParams := map[string]string{
         "limit": fmt.Sprintf("%v", *limit),
         "start": *start,
@@ -63,37 +60,24 @@ func (p *PolicyRulesV1) ListPolicyRules(
         "filter": *filter,
     }
 
-    res, err := client.R().
-        SetQueryParams(queryParams).
-        SetHeader("Accept", header).
-        SetAuthToken(p.config.Token).
-        SetResult(&result).
-        Get(queryBuilder)
+    apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
+        Config: p.config,
+        RequestUrl: queryBuilder,
+        QueryParams: queryParams,
+        AcceptHeader: header,
+        Result: &result,
+        RequestType: common.Get,
+    })
 
-    if err != nil {
-        return nil, &apiutils.APIError{
-            ResponseCode: 500,
-            Reason:       "Internal Server Error",
-            Response:     []byte(fmt.Sprintf("%v", err)),
-        }
-    }
-    if !res.IsSuccess(){
-        return nil, &apiutils.APIError{
-            ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
-            Response:     res.Body(),
-        }
-    }
-    return result, nil
+    return result, apiErr
 }
 
 
-//  CreatePolicyRule Creates a new policy rule. Policy rules determine how a policy should be assigned to assets.
+// CreatePolicyRule Creates a new policy rule. Policy rules determine how a policy should be assigned to assets.
 func (p *PolicyRulesV1) CreatePolicyRule(
     body *models.CreatePolicyRuleV1Request)(
     *models.CreateRuleResponse, *apiutils.APIError){
 
-    var err error = nil
     queryBuilder := p.config.BaseUrl + "/policies/rules"
 
     bytes, err := json.Marshal(body)
@@ -107,39 +91,25 @@ func (p *PolicyRulesV1) CreatePolicyRule(
     payload := string(bytes)
     header := "application/policy-rules=v1+json"
     var result *models.CreateRuleResponse
-    client := resty.New()
 
-    res, err := client.R().
-        SetHeader("Accept", header).
-        SetAuthToken(p.config.Token).
-        SetBody(payload).
-        SetResult(&result).
-        Post(queryBuilder)
+    apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
+        Config: p.config,
+        RequestUrl: queryBuilder,
+        AcceptHeader: header,
+        Body: payload,
+        Result: &result,
+        RequestType: common.Post,
+    })
 
-    if err != nil {
-        return nil, &apiutils.APIError{
-            ResponseCode: 500,
-            Reason:       "Internal Server Error",
-            Response:     []byte(fmt.Sprintf("%v", err)),
-        }
-    }
-    if !res.IsSuccess(){
-        return nil, &apiutils.APIError{
-            ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
-            Response:     res.Body(),
-        }
-    }
-    return result, nil
+    return result, apiErr
 }
 
 
-//  ReadPolicyRule Returns a representation of the specified policy rule.
+// ReadPolicyRule Returns a representation of the specified policy rule.
 func (p *PolicyRulesV1) ReadPolicyRule(
     ruleId string)(
     *models.ReadRuleResponse, *apiutils.APIError){
 
-    var err error = nil
     pathURL := "/policies/rules/{rule_id}"
     //process optional template parameters
     pathParams := map[string]string{
@@ -150,40 +120,26 @@ func (p *PolicyRulesV1) ReadPolicyRule(
     
     header := "application/policy-rules=v1+json"
     var result *models.ReadRuleResponse
-    client := resty.New()
 
-    res, err := client.R().
-        SetPathParams(pathParams).
-        SetHeader("Accept", header).
-        SetAuthToken(p.config.Token).
-        SetResult(&result).
-        Get(queryBuilder)
+    apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
+        Config: p.config,
+        RequestUrl: queryBuilder,
+        PathParams: pathParams,
+        AcceptHeader: header,
+        Result: &result,
+        RequestType: common.Get,
+    })
 
-    if err != nil {
-        return nil, &apiutils.APIError{
-            ResponseCode: 500,
-            Reason:       "Internal Server Error",
-            Response:     []byte(fmt.Sprintf("%v", err)),
-        }
-    }
-    if !res.IsSuccess(){
-        return nil, &apiutils.APIError{
-            ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
-            Response:     res.Body(),
-        }
-    }
-    return result, nil
+    return result, apiErr
 }
 
 
-//  UpdatePolicyRule Updates an existing policy rule.
+// UpdatePolicyRule Updates an existing policy rule.
 func (p *PolicyRulesV1) UpdatePolicyRule(
     ruleId string, 
     body *models.UpdatePolicyRuleV1Request)(
     *models.UpdateRuleResponse, *apiutils.APIError){
 
-    var err error = nil
     pathURL := "/policies/rules/{rule_id}"
     //process optional template parameters
     pathParams := map[string]string{
@@ -202,40 +158,26 @@ func (p *PolicyRulesV1) UpdatePolicyRule(
     payload := string(bytes)
     header := "application/policy-rules=v1+json"
     var result *models.UpdateRuleResponse
-    client := resty.New()
 
-    res, err := client.R().
-        SetPathParams(pathParams).
-        SetHeader("Accept", header).
-        SetAuthToken(p.config.Token).
-        SetBody(payload).
-        SetResult(&result).
-        Put(queryBuilder)
+    apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
+        Config: p.config,
+        RequestUrl: queryBuilder,
+        PathParams: pathParams,
+        AcceptHeader: header,
+        Body: payload,
+        Result: &result,
+        RequestType: common.Put,
+    })
 
-    if err != nil {
-        return nil, &apiutils.APIError{
-            ResponseCode: 500,
-            Reason:       "Internal Server Error",
-            Response:     []byte(fmt.Sprintf("%v", err)),
-        }
-    }
-    if !res.IsSuccess(){
-        return nil, &apiutils.APIError{
-            ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
-            Response:     res.Body(),
-        }
-    }
-    return result, nil
+    return result, apiErr
 }
 
 
-//  DeletePolicyRule Deletes the specified policy rule.
+// DeletePolicyRule Deletes the specified policy rule.
 func (p *PolicyRulesV1) DeletePolicyRule(
     ruleId string)(
     *models.DeleteRuleResponse, *apiutils.APIError){
 
-    var err error = nil
     pathURL := "/policies/rules/{rule_id}"
     //process optional template parameters
     pathParams := map[string]string{
@@ -246,28 +188,15 @@ func (p *PolicyRulesV1) DeletePolicyRule(
     
     header := "application/policy-rules=v1+json"
     var result *models.DeleteRuleResponse
-    client := resty.New()
 
-    res, err := client.R().
-        SetPathParams(pathParams).
-        SetHeader("Accept", header).
-        SetAuthToken(p.config.Token).
-        SetResult(&result).
-        Delete(queryBuilder)
+    apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
+        Config: p.config,
+        RequestUrl: queryBuilder,
+        PathParams: pathParams,
+        AcceptHeader: header,
+        Result: &result,
+        RequestType: common.Delete,
+    })
 
-    if err != nil {
-        return nil, &apiutils.APIError{
-            ResponseCode: 500,
-            Reason:       "Internal Server Error",
-            Response:     []byte(fmt.Sprintf("%v", err)),
-        }
-    }
-    if !res.IsSuccess(){
-        return nil, &apiutils.APIError{
-            ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
-            Response:     res.Body(),
-        }
-    }
-    return result, nil
+    return result, apiErr
 }

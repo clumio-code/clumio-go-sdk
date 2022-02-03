@@ -10,7 +10,7 @@ import (
 
 // PostProcessAwsConnectionV1Client represents a custom type interface
 type PostProcessAwsConnectionV1Client interface {
-    //  Performs post-processing after AWS Connection Create, Update or Delete. This API should only be invoked by the Clumio Terraform provider and should not be invoked manually.
+    // PostProcessAwsConnection Performs post-processing after AWS Connection Create, Update or Delete. This API should only be invoked by the Clumio Terraform provider and should not be invoked manually.
     PostProcessAwsConnection(
         body *models.PostProcessAwsConnectionV1Request)(
         interface{},  *apiutils.APIError)

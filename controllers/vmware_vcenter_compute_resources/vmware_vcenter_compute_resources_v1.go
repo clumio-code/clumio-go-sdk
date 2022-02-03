@@ -7,9 +7,9 @@ import (
     "fmt"
 
     "github.com/clumio-code/clumio-go-sdk/api_utils"
+    "github.com/clumio-code/clumio-go-sdk/common"
     "github.com/clumio-code/clumio-go-sdk/config"
     "github.com/clumio-code/clumio-go-sdk/models"
-    "github.com/go-resty/resty/v2"
 )
 
 // VmwareVcenterComputeResourcesV1 represents a custom type struct
@@ -17,7 +17,7 @@ type VmwareVcenterComputeResourcesV1 struct {
     config config.Config
 }
 
-//  ListVmwareVcenterComputeResources Returns a list of VMware compute resources in the specified vCenter server.
+// ListVmwareVcenterComputeResources Returns a list of VMware compute resources in the specified vCenter server.
 //  
 //  The following table lists the supported Clumio protection statuses:
 //  
@@ -38,7 +38,6 @@ func (v *VmwareVcenterComputeResourcesV1) ListVmwareVcenterComputeResources(
     embed *string)(
     *models.ListComputeResourcesResponse, *apiutils.APIError){
 
-    var err error = nil
     pathURL := "/datasources/vmware/vcenters/{vcenter_id}/compute-resources"
     //process optional template parameters
     pathParams := map[string]string{
@@ -49,7 +48,6 @@ func (v *VmwareVcenterComputeResourcesV1) ListVmwareVcenterComputeResources(
     
     header := "application/vmware-vcenter-compute-resources=v1+json"
     var result *models.ListComputeResourcesResponse
-    client := resty.New()
     defaultInt64 := int64(0)
     defaultString := "" 
     
@@ -67,7 +65,6 @@ func (v *VmwareVcenterComputeResourcesV1) ListVmwareVcenterComputeResources(
         embed = &defaultString
     }
     
-
     queryParams := map[string]string{
         "limit": fmt.Sprintf("%v", *limit),
         "start": *start,
@@ -75,40 +72,27 @@ func (v *VmwareVcenterComputeResourcesV1) ListVmwareVcenterComputeResources(
         "embed": *embed,
     }
 
-    res, err := client.R().
-        SetQueryParams(queryParams).
-        SetPathParams(pathParams).
-        SetHeader("Accept", header).
-        SetAuthToken(v.config.Token).
-        SetResult(&result).
-        Get(queryBuilder)
+    apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
+        Config: v.config,
+        RequestUrl: queryBuilder,
+        QueryParams: queryParams,
+        PathParams: pathParams,
+        AcceptHeader: header,
+        Result: &result,
+        RequestType: common.Get,
+    })
 
-    if err != nil {
-        return nil, &apiutils.APIError{
-            ResponseCode: 500,
-            Reason:       "Internal Server Error",
-            Response:     []byte(fmt.Sprintf("%v", err)),
-        }
-    }
-    if !res.IsSuccess(){
-        return nil, &apiutils.APIError{
-            ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
-            Response:     res.Body(),
-        }
-    }
-    return result, nil
+    return result, apiErr
 }
 
 
-//  ReadVmwareVcenterComputeResource Returns a representation of the specified VMware compute resource.
+// ReadVmwareVcenterComputeResource Returns a representation of the specified VMware compute resource.
 func (v *VmwareVcenterComputeResourcesV1) ReadVmwareVcenterComputeResource(
     vcenterId string, 
     computeResourceId string, 
     embed *string)(
     *models.ReadComputeResourceResponse, *apiutils.APIError){
 
-    var err error = nil
     pathURL := "/datasources/vmware/vcenters/{vcenter_id}/compute-resources/{compute_resource_id}"
     //process optional template parameters
     pathParams := map[string]string{
@@ -120,7 +104,6 @@ func (v *VmwareVcenterComputeResourcesV1) ReadVmwareVcenterComputeResource(
     
     header := "application/vmware-vcenter-compute-resources=v1+json"
     var result *models.ReadComputeResourceResponse
-    client := resty.New()
     defaultString := "" 
     
 
@@ -128,32 +111,19 @@ func (v *VmwareVcenterComputeResourcesV1) ReadVmwareVcenterComputeResource(
         embed = &defaultString
     }
     
-
     queryParams := map[string]string{
         "embed": *embed,
     }
 
-    res, err := client.R().
-        SetQueryParams(queryParams).
-        SetPathParams(pathParams).
-        SetHeader("Accept", header).
-        SetAuthToken(v.config.Token).
-        SetResult(&result).
-        Get(queryBuilder)
+    apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
+        Config: v.config,
+        RequestUrl: queryBuilder,
+        QueryParams: queryParams,
+        PathParams: pathParams,
+        AcceptHeader: header,
+        Result: &result,
+        RequestType: common.Get,
+    })
 
-    if err != nil {
-        return nil, &apiutils.APIError{
-            ResponseCode: 500,
-            Reason:       "Internal Server Error",
-            Response:     []byte(fmt.Sprintf("%v", err)),
-        }
-    }
-    if !res.IsSuccess(){
-        return nil, &apiutils.APIError{
-            ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
-            Response:     res.Body(),
-        }
-    }
-    return result, nil
+    return result, apiErr
 }

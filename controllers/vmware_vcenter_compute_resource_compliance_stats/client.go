@@ -10,7 +10,7 @@ import (
 
 // VmwareVcenterComputeResourceComplianceStatsV1Client represents a custom type interface
 type VmwareVcenterComputeResourceComplianceStatsV1Client interface {
-    //  Returns a representation of the compliance statistics of the specified VMware compute resource.
+    // ReadVmwareVcenterComputeResourceComplianceStats Returns a representation of the compliance statistics of the specified VMware compute resource.
     ReadVmwareVcenterComputeResourceComplianceStats(
         vcenterId string, 
         computeResourceId string)(

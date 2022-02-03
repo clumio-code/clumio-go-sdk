@@ -8,9 +8,9 @@ import (
     "fmt"
 
     "github.com/clumio-code/clumio-go-sdk/api_utils"
+    "github.com/clumio-code/clumio-go-sdk/common"
     "github.com/clumio-code/clumio-go-sdk/config"
     "github.com/clumio-code/clumio-go-sdk/models"
-    "github.com/go-resty/resty/v2"
 )
 
 // RestoredFilesV1 represents a custom type struct
@@ -18,20 +18,18 @@ type RestoredFilesV1 struct {
     config config.Config
 }
 
-//  ListRestoredFiles Gets the list of active restored files for an asset.
+// ListRestoredFiles Gets the list of active restored files for an asset.
 func (r *RestoredFilesV1) ListRestoredFiles(
     limit *int64, 
     start *string, 
     filter string)(
     *models.RestoredFilesResponse, *apiutils.APIError){
 
-    var err error = nil
     queryBuilder := r.config.BaseUrl + "/restores/files"
 
     
     header := "application/restored-files=v1+json"
     var result *models.RestoredFilesResponse
-    client := resty.New()
     defaultInt64 := int64(0)
     defaultString := "" 
     
@@ -43,44 +41,30 @@ func (r *RestoredFilesV1) ListRestoredFiles(
         start = &defaultString
     }
     
-
     queryParams := map[string]string{
         "limit": fmt.Sprintf("%v", *limit),
         "start": *start,
         "filter": filter,
     }
 
-    res, err := client.R().
-        SetQueryParams(queryParams).
-        SetHeader("Accept", header).
-        SetAuthToken(r.config.Token).
-        SetResult(&result).
-        Get(queryBuilder)
+    apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
+        Config: r.config,
+        RequestUrl: queryBuilder,
+        QueryParams: queryParams,
+        AcceptHeader: header,
+        Result: &result,
+        RequestType: common.Get,
+    })
 
-    if err != nil {
-        return nil, &apiutils.APIError{
-            ResponseCode: 500,
-            Reason:       "Internal Server Error",
-            Response:     []byte(fmt.Sprintf("%v", err)),
-        }
-    }
-    if !res.IsSuccess(){
-        return nil, &apiutils.APIError{
-            ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
-            Response:     res.Body(),
-        }
-    }
-    return result, nil
+    return result, apiErr
 }
 
 
-//  RestoreFiles Restores one or more files from the specified backup.
+// RestoreFiles Restores one or more files from the specified backup.
 func (r *RestoredFilesV1) RestoreFiles(
     body models.RestoreFilesV1Request)(
     *models.RestoreFileResponse, *apiutils.APIError){
 
-    var err error = nil
     queryBuilder := r.config.BaseUrl + "/restores/files"
 
     bytes, err := json.Marshal(body)
@@ -94,28 +78,15 @@ func (r *RestoredFilesV1) RestoreFiles(
     payload := string(bytes)
     header := "application/restored-files=v1+json"
     var result *models.RestoreFileResponse
-    client := resty.New()
 
-    res, err := client.R().
-        SetHeader("Accept", header).
-        SetAuthToken(r.config.Token).
-        SetBody(payload).
-        SetResult(&result).
-        Post(queryBuilder)
+    apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
+        Config: r.config,
+        RequestUrl: queryBuilder,
+        AcceptHeader: header,
+        Body: payload,
+        Result: &result,
+        RequestType: common.Post,
+    })
 
-    if err != nil {
-        return nil, &apiutils.APIError{
-            ResponseCode: 500,
-            Reason:       "Internal Server Error",
-            Response:     []byte(fmt.Sprintf("%v", err)),
-        }
-    }
-    if !res.IsSuccess(){
-        return nil, &apiutils.APIError{
-            ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
-            Response:     res.Body(),
-        }
-    }
-    return result, nil
+    return result, apiErr
 }

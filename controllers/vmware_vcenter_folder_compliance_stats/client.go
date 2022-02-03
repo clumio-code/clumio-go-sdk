@@ -10,7 +10,7 @@ import (
 
 // VmwareVcenterFolderComplianceStatsV1Client represents a custom type interface
 type VmwareVcenterFolderComplianceStatsV1Client interface {
-    //  Returns the compliance statistics of VMs under folders and subfolders of the specified VMware folder.
+    // ReadVmwareVcenterFolderComplianceStats Returns the compliance statistics of VMs under folders and subfolders of the specified VMware folder.
     ReadVmwareVcenterFolderComplianceStats(
         vcenterId string, 
         folderId string)(
