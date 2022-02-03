@@ -7,6 +7,7 @@ import (
     "fmt"
 
     "github.com/clumio-code/clumio-go-sdk/api_utils"
+    "github.com/clumio-code/clumio-go-sdk/common"
     "github.com/clumio-code/clumio-go-sdk/config"
     "github.com/clumio-code/clumio-go-sdk/models"
     "github.com/go-resty/resty/v2"
@@ -39,7 +40,8 @@ func (v *VmwareVcenterTagComplianceStatsV1) ReadVmwareVcenterTagComplianceStats(
 
     res, err := client.R().
         SetPathParams(pathParams).
-        SetHeader("Accept", header).
+        SetHeader(common.AcceptHeader, header).
+        SetHeader(common.OrgUnitContextHeader, v.config.OrganizationalUnitContext).
         SetAuthToken(v.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -47,14 +49,14 @@ func (v *VmwareVcenterTagComplianceStatsV1) ReadVmwareVcenterTagComplianceStats(
     if err != nil {
         return nil, &apiutils.APIError{
             ResponseCode: 500,
-            Reason:       "Internal Server Error",
+            Reason:       common.InternalServerError,
             Response:     []byte(fmt.Sprintf("%v", err)),
         }
     }
     if !res.IsSuccess(){
         return nil, &apiutils.APIError{
             ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
+            Reason:       common.NonSuccessStatusCodeError,
             Response:     res.Body(),
         }
     }

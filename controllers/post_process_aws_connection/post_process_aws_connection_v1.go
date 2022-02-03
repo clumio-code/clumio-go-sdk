@@ -8,6 +8,7 @@ import (
     "fmt"
 
     "github.com/clumio-code/clumio-go-sdk/api_utils"
+    "github.com/clumio-code/clumio-go-sdk/common"
     "github.com/clumio-code/clumio-go-sdk/config"
     "github.com/clumio-code/clumio-go-sdk/models"
     "github.com/go-resty/resty/v2"
@@ -40,7 +41,8 @@ func (p *PostProcessAwsConnectionV1) PostProcessAwsConnection(
     client := resty.New()
 
     res, err := client.R().
-        SetHeader("Accept", header).
+        SetHeader(common.AcceptHeader, header).
+        SetHeader(common.OrgUnitContextHeader, p.config.OrganizationalUnitContext).
         SetAuthToken(p.config.Token).
         SetBody(payload).
         SetResult(&result).
@@ -49,14 +51,14 @@ func (p *PostProcessAwsConnectionV1) PostProcessAwsConnection(
     if err != nil {
         return nil, &apiutils.APIError{
             ResponseCode: 500,
-            Reason:       "Internal Server Error",
+            Reason:       common.InternalServerError,
             Response:     []byte(fmt.Sprintf("%v", err)),
         }
     }
     if !res.IsSuccess(){
         return nil, &apiutils.APIError{
             ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
+            Reason:       common.NonSuccessStatusCodeError,
             Response:     res.Body(),
         }
     }

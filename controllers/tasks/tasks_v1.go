@@ -8,6 +8,7 @@ import (
     "fmt"
 
     "github.com/clumio-code/clumio-go-sdk/api_utils"
+    "github.com/clumio-code/clumio-go-sdk/common"
     "github.com/clumio-code/clumio-go-sdk/config"
     "github.com/clumio-code/clumio-go-sdk/models"
     "github.com/go-resty/resty/v2"
@@ -139,7 +140,8 @@ func (t *TasksV1) ListTasks(
 
     res, err := client.R().
         SetQueryParams(queryParams).
-        SetHeader("Accept", header).
+        SetHeader(common.AcceptHeader, header).
+        SetHeader(common.OrgUnitContextHeader, t.config.OrganizationalUnitContext).
         SetAuthToken(t.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -147,14 +149,14 @@ func (t *TasksV1) ListTasks(
     if err != nil {
         return nil, &apiutils.APIError{
             ResponseCode: 500,
-            Reason:       "Internal Server Error",
+            Reason:       common.InternalServerError,
             Response:     []byte(fmt.Sprintf("%v", err)),
         }
     }
     if !res.IsSuccess(){
         return nil, &apiutils.APIError{
             ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
+            Reason:       common.NonSuccessStatusCodeError,
             Response:     res.Body(),
         }
     }
@@ -182,7 +184,8 @@ func (t *TasksV1) ReadTask(
 
     res, err := client.R().
         SetPathParams(pathParams).
-        SetHeader("Accept", header).
+        SetHeader(common.AcceptHeader, header).
+        SetHeader(common.OrgUnitContextHeader, t.config.OrganizationalUnitContext).
         SetAuthToken(t.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -190,14 +193,14 @@ func (t *TasksV1) ReadTask(
     if err != nil {
         return nil, &apiutils.APIError{
             ResponseCode: 500,
-            Reason:       "Internal Server Error",
+            Reason:       common.InternalServerError,
             Response:     []byte(fmt.Sprintf("%v", err)),
         }
     }
     if !res.IsSuccess(){
         return nil, &apiutils.APIError{
             ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
+            Reason:       common.NonSuccessStatusCodeError,
             Response:     res.Body(),
         }
     }
@@ -234,7 +237,8 @@ func (t *TasksV1) UpdateTask(
 
     res, err := client.R().
         SetPathParams(pathParams).
-        SetHeader("Accept", header).
+        SetHeader(common.AcceptHeader, header).
+        SetHeader(common.OrgUnitContextHeader, t.config.OrganizationalUnitContext).
         SetAuthToken(t.config.Token).
         SetBody(payload).
         SetResult(&result).
@@ -243,14 +247,14 @@ func (t *TasksV1) UpdateTask(
     if err != nil {
         return nil, &apiutils.APIError{
             ResponseCode: 500,
-            Reason:       "Internal Server Error",
+            Reason:       common.InternalServerError,
             Response:     []byte(fmt.Sprintf("%v", err)),
         }
     }
     if !res.IsSuccess(){
         return nil, &apiutils.APIError{
             ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
+            Reason:       common.NonSuccessStatusCodeError,
             Response:     res.Body(),
         }
     }

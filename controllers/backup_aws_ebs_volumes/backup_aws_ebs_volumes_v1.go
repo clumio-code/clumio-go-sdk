@@ -8,6 +8,7 @@ import (
     "fmt"
 
     "github.com/clumio-code/clumio-go-sdk/api_utils"
+    "github.com/clumio-code/clumio-go-sdk/common"
     "github.com/clumio-code/clumio-go-sdk/config"
     "github.com/clumio-code/clumio-go-sdk/models"
     "github.com/go-resty/resty/v2"
@@ -55,7 +56,8 @@ func (b *BackupAwsEbsVolumesV1) ListBackupAwsEbsVolumes(
 
     res, err := client.R().
         SetQueryParams(queryParams).
-        SetHeader("Accept", header).
+        SetHeader(common.AcceptHeader, header).
+        SetHeader(common.OrgUnitContextHeader, b.config.OrganizationalUnitContext).
         SetAuthToken(b.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -63,14 +65,14 @@ func (b *BackupAwsEbsVolumesV1) ListBackupAwsEbsVolumes(
     if err != nil {
         return nil, &apiutils.APIError{
             ResponseCode: 500,
-            Reason:       "Internal Server Error",
+            Reason:       common.InternalServerError,
             Response:     []byte(fmt.Sprintf("%v", err)),
         }
     }
     if !res.IsSuccess(){
         return nil, &apiutils.APIError{
             ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
+            Reason:       common.NonSuccessStatusCodeError,
             Response:     res.Body(),
         }
     }
@@ -100,7 +102,8 @@ func (b *BackupAwsEbsVolumesV1) CreateBackupAwsEbsVolume(
     client := resty.New()
 
     res, err := client.R().
-        SetHeader("Accept", header).
+        SetHeader(common.AcceptHeader, header).
+        SetHeader(common.OrgUnitContextHeader, b.config.OrganizationalUnitContext).
         SetAuthToken(b.config.Token).
         SetBody(payload).
         SetResult(&result).
@@ -109,14 +112,14 @@ func (b *BackupAwsEbsVolumesV1) CreateBackupAwsEbsVolume(
     if err != nil {
         return nil, &apiutils.APIError{
             ResponseCode: 500,
-            Reason:       "Internal Server Error",
+            Reason:       common.InternalServerError,
             Response:     []byte(fmt.Sprintf("%v", err)),
         }
     }
     if !res.IsSuccess(){
         return nil, &apiutils.APIError{
             ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
+            Reason:       common.NonSuccessStatusCodeError,
             Response:     res.Body(),
         }
     }
@@ -144,7 +147,8 @@ func (b *BackupAwsEbsVolumesV1) ReadBackupAwsEbsVolume(
 
     res, err := client.R().
         SetPathParams(pathParams).
-        SetHeader("Accept", header).
+        SetHeader(common.AcceptHeader, header).
+        SetHeader(common.OrgUnitContextHeader, b.config.OrganizationalUnitContext).
         SetAuthToken(b.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -152,14 +156,14 @@ func (b *BackupAwsEbsVolumesV1) ReadBackupAwsEbsVolume(
     if err != nil {
         return nil, &apiutils.APIError{
             ResponseCode: 500,
-            Reason:       "Internal Server Error",
+            Reason:       common.InternalServerError,
             Response:     []byte(fmt.Sprintf("%v", err)),
         }
     }
     if !res.IsSuccess(){
         return nil, &apiutils.APIError{
             ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
+            Reason:       common.NonSuccessStatusCodeError,
             Response:     res.Body(),
         }
     }

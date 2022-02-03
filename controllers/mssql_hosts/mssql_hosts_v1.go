@@ -8,6 +8,7 @@ import (
     "fmt"
 
     "github.com/clumio-code/clumio-go-sdk/api_utils"
+    "github.com/clumio-code/clumio-go-sdk/common"
     "github.com/clumio-code/clumio-go-sdk/config"
     "github.com/clumio-code/clumio-go-sdk/models"
     "github.com/go-resty/resty/v2"
@@ -60,7 +61,8 @@ func (m *MssqlHostsV1) ListMssqlHostConnections(
 
     res, err := client.R().
         SetQueryParams(queryParams).
-        SetHeader("Accept", header).
+        SetHeader(common.AcceptHeader, header).
+        SetHeader(common.OrgUnitContextHeader, m.config.OrganizationalUnitContext).
         SetAuthToken(m.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -68,14 +70,14 @@ func (m *MssqlHostsV1) ListMssqlHostConnections(
     if err != nil {
         return nil, &apiutils.APIError{
             ResponseCode: 500,
-            Reason:       "Internal Server Error",
+            Reason:       common.InternalServerError,
             Response:     []byte(fmt.Sprintf("%v", err)),
         }
     }
     if !res.IsSuccess(){
         return nil, &apiutils.APIError{
             ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
+            Reason:       common.NonSuccessStatusCodeError,
             Response:     res.Body(),
         }
     }
@@ -105,7 +107,8 @@ func (m *MssqlHostsV1) CreateMssqlHostConnections(
     client := resty.New()
 
     res, err := client.R().
-        SetHeader("Accept", header).
+        SetHeader(common.AcceptHeader, header).
+        SetHeader(common.OrgUnitContextHeader, m.config.OrganizationalUnitContext).
         SetAuthToken(m.config.Token).
         SetBody(payload).
         SetResult(&result).
@@ -114,14 +117,14 @@ func (m *MssqlHostsV1) CreateMssqlHostConnections(
     if err != nil {
         return nil, &apiutils.APIError{
             ResponseCode: 500,
-            Reason:       "Internal Server Error",
+            Reason:       common.InternalServerError,
             Response:     []byte(fmt.Sprintf("%v", err)),
         }
     }
     if !res.IsSuccess(){
         return nil, &apiutils.APIError{
             ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
+            Reason:       common.NonSuccessStatusCodeError,
             Response:     res.Body(),
         }
     }
@@ -164,7 +167,8 @@ func (m *MssqlHostsV1) DeleteMssqlHostConnections(
 
     res, err := client.R().
         SetQueryParams(queryParams).
-        SetHeader("Accept", header).
+        SetHeader(common.AcceptHeader, header).
+        SetHeader(common.OrgUnitContextHeader, m.config.OrganizationalUnitContext).
         SetAuthToken(m.config.Token).
         SetBody(payload).
         SetResult(&result).
@@ -173,14 +177,14 @@ func (m *MssqlHostsV1) DeleteMssqlHostConnections(
     if err != nil {
         return nil, &apiutils.APIError{
             ResponseCode: 500,
-            Reason:       "Internal Server Error",
+            Reason:       common.InternalServerError,
             Response:     []byte(fmt.Sprintf("%v", err)),
         }
     }
     if !res.IsSuccess(){
         return nil, &apiutils.APIError{
             ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
+            Reason:       common.NonSuccessStatusCodeError,
             Response:     res.Body(),
         }
     }
@@ -223,7 +227,8 @@ func (m *MssqlHostsV1) MoveMssqlHostConnections(
 
     res, err := client.R().
         SetQueryParams(queryParams).
-        SetHeader("Accept", header).
+        SetHeader(common.AcceptHeader, header).
+        SetHeader(common.OrgUnitContextHeader, m.config.OrganizationalUnitContext).
         SetAuthToken(m.config.Token).
         SetBody(payload).
         SetResult(&result).
@@ -232,14 +237,14 @@ func (m *MssqlHostsV1) MoveMssqlHostConnections(
     if err != nil {
         return nil, &apiutils.APIError{
             ResponseCode: 500,
-            Reason:       "Internal Server Error",
+            Reason:       common.InternalServerError,
             Response:     []byte(fmt.Sprintf("%v", err)),
         }
     }
     if !res.IsSuccess(){
         return nil, &apiutils.APIError{
             ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
+            Reason:       common.NonSuccessStatusCodeError,
             Response:     res.Body(),
         }
     }
@@ -269,7 +274,8 @@ func (m *MssqlHostsV1) CreateMssqlHostConnectionCredentials(
     client := resty.New()
 
     res, err := client.R().
-        SetHeader("Accept", header).
+        SetHeader(common.AcceptHeader, header).
+        SetHeader(common.OrgUnitContextHeader, m.config.OrganizationalUnitContext).
         SetAuthToken(m.config.Token).
         SetBody(payload).
         SetResult(&result).
@@ -278,14 +284,14 @@ func (m *MssqlHostsV1) CreateMssqlHostConnectionCredentials(
     if err != nil {
         return nil, &apiutils.APIError{
             ResponseCode: 500,
-            Reason:       "Internal Server Error",
+            Reason:       common.InternalServerError,
             Response:     []byte(fmt.Sprintf("%v", err)),
         }
     }
     if !res.IsSuccess(){
         return nil, &apiutils.APIError{
             ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
+            Reason:       common.NonSuccessStatusCodeError,
             Response:     res.Body(),
         }
     }
@@ -313,7 +319,8 @@ func (m *MssqlHostsV1) ReadMssqlHostConnections(
 
     res, err := client.R().
         SetPathParams(pathParams).
-        SetHeader("Accept", header).
+        SetHeader(common.AcceptHeader, header).
+        SetHeader(common.OrgUnitContextHeader, m.config.OrganizationalUnitContext).
         SetAuthToken(m.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -321,14 +328,14 @@ func (m *MssqlHostsV1) ReadMssqlHostConnections(
     if err != nil {
         return nil, &apiutils.APIError{
             ResponseCode: 500,
-            Reason:       "Internal Server Error",
+            Reason:       common.InternalServerError,
             Response:     []byte(fmt.Sprintf("%v", err)),
         }
     }
     if !res.IsSuccess(){
         return nil, &apiutils.APIError{
             ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
+            Reason:       common.NonSuccessStatusCodeError,
             Response:     res.Body(),
         }
     }
@@ -378,7 +385,8 @@ func (m *MssqlHostsV1) ListMssqlHosts(
 
     res, err := client.R().
         SetQueryParams(queryParams).
-        SetHeader("Accept", header).
+        SetHeader(common.AcceptHeader, header).
+        SetHeader(common.OrgUnitContextHeader, m.config.OrganizationalUnitContext).
         SetAuthToken(m.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -386,14 +394,14 @@ func (m *MssqlHostsV1) ListMssqlHosts(
     if err != nil {
         return nil, &apiutils.APIError{
             ResponseCode: 500,
-            Reason:       "Internal Server Error",
+            Reason:       common.InternalServerError,
             Response:     []byte(fmt.Sprintf("%v", err)),
         }
     }
     if !res.IsSuccess(){
         return nil, &apiutils.APIError{
             ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
+            Reason:       common.NonSuccessStatusCodeError,
             Response:     res.Body(),
         }
     }
@@ -421,7 +429,8 @@ func (m *MssqlHostsV1) ReadMssqlHosts(
 
     res, err := client.R().
         SetPathParams(pathParams).
-        SetHeader("Accept", header).
+        SetHeader(common.AcceptHeader, header).
+        SetHeader(common.OrgUnitContextHeader, m.config.OrganizationalUnitContext).
         SetAuthToken(m.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -429,14 +438,14 @@ func (m *MssqlHostsV1) ReadMssqlHosts(
     if err != nil {
         return nil, &apiutils.APIError{
             ResponseCode: 500,
-            Reason:       "Internal Server Error",
+            Reason:       common.InternalServerError,
             Response:     []byte(fmt.Sprintf("%v", err)),
         }
     }
     if !res.IsSuccess(){
         return nil, &apiutils.APIError{
             ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
+            Reason:       common.NonSuccessStatusCodeError,
             Response:     res.Body(),
         }
     }

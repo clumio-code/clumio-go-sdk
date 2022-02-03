@@ -8,6 +8,7 @@ import (
     "fmt"
 
     "github.com/clumio-code/clumio-go-sdk/api_utils"
+    "github.com/clumio-code/clumio-go-sdk/common"
     "github.com/clumio-code/clumio-go-sdk/config"
     "github.com/clumio-code/clumio-go-sdk/models"
     "github.com/go-resty/resty/v2"
@@ -55,7 +56,8 @@ func (o *OrganizationalUnitsV1) ListOrganizationalUnits(
 
     res, err := client.R().
         SetQueryParams(queryParams).
-        SetHeader("Accept", header).
+        SetHeader(common.AcceptHeader, header).
+        SetHeader(common.OrgUnitContextHeader, o.config.OrganizationalUnitContext).
         SetAuthToken(o.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -63,14 +65,14 @@ func (o *OrganizationalUnitsV1) ListOrganizationalUnits(
     if err != nil {
         return nil, &apiutils.APIError{
             ResponseCode: 500,
-            Reason:       "Internal Server Error",
+            Reason:       common.InternalServerError,
             Response:     []byte(fmt.Sprintf("%v", err)),
         }
     }
     if !res.IsSuccess(){
         return nil, &apiutils.APIError{
             ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
+            Reason:       common.NonSuccessStatusCodeError,
             Response:     res.Body(),
         }
     }
@@ -113,7 +115,8 @@ func (o *OrganizationalUnitsV1) CreateOrganizationalUnit(
 
     res, err := client.R().
         SetQueryParams(queryParams).
-        SetHeader("Accept", header).
+        SetHeader(common.AcceptHeader, header).
+        SetHeader(common.OrgUnitContextHeader, o.config.OrganizationalUnitContext).
         SetAuthToken(o.config.Token).
         SetBody(payload).
         SetResult(&result).
@@ -122,14 +125,14 @@ func (o *OrganizationalUnitsV1) CreateOrganizationalUnit(
     if err != nil {
         return nil, &apiutils.APIError{
             ResponseCode: 500,
-            Reason:       "Internal Server Error",
+            Reason:       common.InternalServerError,
             Response:     []byte(fmt.Sprintf("%v", err)),
         }
     }
     if !res.IsSuccess(){
         return nil, &apiutils.APIError{
             ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
+            Reason:       common.NonSuccessStatusCodeError,
             Response:     res.Body(),
         }
     }
@@ -157,7 +160,8 @@ func (o *OrganizationalUnitsV1) ReadOrganizationalUnit(
 
     res, err := client.R().
         SetPathParams(pathParams).
-        SetHeader("Accept", header).
+        SetHeader(common.AcceptHeader, header).
+        SetHeader(common.OrgUnitContextHeader, o.config.OrganizationalUnitContext).
         SetAuthToken(o.config.Token).
         SetResult(&result).
         Get(queryBuilder)
@@ -165,14 +169,14 @@ func (o *OrganizationalUnitsV1) ReadOrganizationalUnit(
     if err != nil {
         return nil, &apiutils.APIError{
             ResponseCode: 500,
-            Reason:       "Internal Server Error",
+            Reason:       common.InternalServerError,
             Response:     []byte(fmt.Sprintf("%v", err)),
         }
     }
     if !res.IsSuccess(){
         return nil, &apiutils.APIError{
             ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
+            Reason:       common.NonSuccessStatusCodeError,
             Response:     res.Body(),
         }
     }
@@ -213,7 +217,8 @@ func (o *OrganizationalUnitsV1) DeleteOrganizationalUnit(
     res, err := client.R().
         SetQueryParams(queryParams).
         SetPathParams(pathParams).
-        SetHeader("Accept", header).
+        SetHeader(common.AcceptHeader, header).
+        SetHeader(common.OrgUnitContextHeader, o.config.OrganizationalUnitContext).
         SetAuthToken(o.config.Token).
         SetResult(&result).
         Delete(queryBuilder)
@@ -221,14 +226,14 @@ func (o *OrganizationalUnitsV1) DeleteOrganizationalUnit(
     if err != nil {
         return nil, &apiutils.APIError{
             ResponseCode: 500,
-            Reason:       "Internal Server Error",
+            Reason:       common.InternalServerError,
             Response:     []byte(fmt.Sprintf("%v", err)),
         }
     }
     if !res.IsSuccess(){
         return nil, &apiutils.APIError{
             ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
+            Reason:       common.NonSuccessStatusCodeError,
             Response:     res.Body(),
         }
     }
@@ -279,7 +284,8 @@ func (o *OrganizationalUnitsV1) PatchOrganizationalUnit(
     res, err := client.R().
         SetQueryParams(queryParams).
         SetPathParams(pathParams).
-        SetHeader("Accept", header).
+        SetHeader(common.AcceptHeader, header).
+        SetHeader(common.OrgUnitContextHeader, o.config.OrganizationalUnitContext).
         SetAuthToken(o.config.Token).
         SetBody(payload).
         SetResult(&result).
@@ -288,14 +294,14 @@ func (o *OrganizationalUnitsV1) PatchOrganizationalUnit(
     if err != nil {
         return nil, &apiutils.APIError{
             ResponseCode: 500,
-            Reason:       "Internal Server Error",
+            Reason:       common.InternalServerError,
             Response:     []byte(fmt.Sprintf("%v", err)),
         }
     }
     if !res.IsSuccess(){
         return nil, &apiutils.APIError{
             ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
+            Reason:       common.NonSuccessStatusCodeError,
             Response:     res.Body(),
         }
     }
