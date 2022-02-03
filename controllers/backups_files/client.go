@@ -10,14 +10,14 @@ import (
 
 // BackupsFilesV1Client represents a custom type interface
 type BackupsFilesV1Client interface {
-    //  Retrieve the list of files whose name matches a given regex pattern.
+    // ListFiles Retrieve the list of files whose name matches a given regex pattern.
     ListFiles(
         limit *int64, 
         start *string, 
         filter string)(
         *models.FileSearchResponse,  *apiutils.APIError)
     
-    //  Retrieve the list of versions of the file.
+    // ListFileVersions Retrieve the list of versions of the file.
     ListFileVersions(
         searchResultId string, 
         limit *int64, 
@@ -27,7 +27,7 @@ type BackupsFilesV1Client interface {
 }
 
 // NewBackupsFilesV1 returns BackupsFilesV1Client
-func NewBackupsFilesV1(config config.Config) BackupsFilesV1Client{
+func NewBackupsFilesV1(config config.Config) BackupsFilesV1Client {
     client := new(BackupsFilesV1)
     client.config = config
     return client

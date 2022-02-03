@@ -10,7 +10,7 @@ import (
 
 // VmwareVcenterResourcePoolsV1Client represents a custom type interface
 type VmwareVcenterResourcePoolsV1Client interface {
-    //  Returns a list of resource pools in the specified vCenter server.
+    // ListVmwareVcenterResourcePools Returns a list of resource pools in the specified vCenter server.
     ListVmwareVcenterResourcePools(
         vcenterId string, 
         limit *int64, 
@@ -18,7 +18,7 @@ type VmwareVcenterResourcePoolsV1Client interface {
         filter *string)(
         *models.ListResourcePoolsResponse,  *apiutils.APIError)
     
-    //  Returns a representation of the specified resource pool.
+    // ReadVmwareVcenterResourcePool Returns a representation of the specified resource pool.
     ReadVmwareVcenterResourcePool(
         vcenterId string, 
         resourcePoolId string)(
@@ -27,7 +27,7 @@ type VmwareVcenterResourcePoolsV1Client interface {
 }
 
 // NewVmwareVcenterResourcePoolsV1 returns VmwareVcenterResourcePoolsV1Client
-func NewVmwareVcenterResourcePoolsV1(config config.Config) VmwareVcenterResourcePoolsV1Client{
+func NewVmwareVcenterResourcePoolsV1(config config.Config) VmwareVcenterResourcePoolsV1Client {
     client := new(VmwareVcenterResourcePoolsV1)
     client.config = config
     return client

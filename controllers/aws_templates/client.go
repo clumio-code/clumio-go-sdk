@@ -10,12 +10,12 @@ import (
 
 // AwsTemplatesV1Client represents a custom type interface
 type AwsTemplatesV1Client interface {
-    //  Returns the AWS CloudFormation and Terraform templates available to install to connect
+    // ReadConnectionTemplates Returns the AWS CloudFormation and Terraform templates available to install to connect
     //  to Clumio.
     ReadConnectionTemplates()(
         *models.ReadAWSTemplatesV2Response,  *apiutils.APIError)
     
-    //  Returns the URLs for AWS CloudFormation and terraform templates  corresponding
+    // CreateConnectionTemplate Returns the URLs for AWS CloudFormation and terraform templates  corresponding
     //  to a given configuration of asset types.
     CreateConnectionTemplate(
         body *models.CreateConnectionTemplateV1Request)(
@@ -24,7 +24,7 @@ type AwsTemplatesV1Client interface {
 }
 
 // NewAwsTemplatesV1 returns AwsTemplatesV1Client
-func NewAwsTemplatesV1(config config.Config) AwsTemplatesV1Client{
+func NewAwsTemplatesV1(config config.Config) AwsTemplatesV1Client {
     client := new(AwsTemplatesV1)
     client.config = config
     return client

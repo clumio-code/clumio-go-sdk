@@ -10,7 +10,7 @@ import (
 
 // VmwareVcenterTagComplianceStatsV1Client represents a custom type interface
 type VmwareVcenterTagComplianceStatsV1Client interface {
-    //  Returns the compliance statistics of the specified tag.
+    // ReadVmwareVcenterTagComplianceStats Returns the compliance statistics of the specified tag.
     ReadVmwareVcenterTagComplianceStats(
         vcenterId string, 
         tagId string)(
@@ -19,7 +19,7 @@ type VmwareVcenterTagComplianceStatsV1Client interface {
 }
 
 // NewVmwareVcenterTagComplianceStatsV1 returns VmwareVcenterTagComplianceStatsV1Client
-func NewVmwareVcenterTagComplianceStatsV1(config config.Config) VmwareVcenterTagComplianceStatsV1Client{
+func NewVmwareVcenterTagComplianceStatsV1(config config.Config) VmwareVcenterTagComplianceStatsV1Client {
     client := new(VmwareVcenterTagComplianceStatsV1)
     client.config = config
     return client

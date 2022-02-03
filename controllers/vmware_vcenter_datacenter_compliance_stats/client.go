@@ -10,7 +10,7 @@ import (
 
 // VmwareVcenterDatacenterComplianceStatsV1Client represents a custom type interface
 type VmwareVcenterDatacenterComplianceStatsV1Client interface {
-    //  Returns a representation of the compliance statistics of the specified data center.
+    // ReadVmwareVcenterDatacenterComplianceStats Returns a representation of the compliance statistics of the specified data center.
     ReadVmwareVcenterDatacenterComplianceStats(
         vcenterId string, 
         datacenterId string)(
@@ -19,7 +19,7 @@ type VmwareVcenterDatacenterComplianceStatsV1Client interface {
 }
 
 // NewVmwareVcenterDatacenterComplianceStatsV1 returns VmwareVcenterDatacenterComplianceStatsV1Client
-func NewVmwareVcenterDatacenterComplianceStatsV1(config config.Config) VmwareVcenterDatacenterComplianceStatsV1Client{
+func NewVmwareVcenterDatacenterComplianceStatsV1(config config.Config) VmwareVcenterDatacenterComplianceStatsV1Client {
     client := new(VmwareVcenterDatacenterComplianceStatsV1)
     client.config = config
     return client

@@ -10,7 +10,7 @@ import (
 
 // VmwareVcenterCategoriesV1Client represents a custom type interface
 type VmwareVcenterCategoriesV1Client interface {
-    //  Returns a list of tag categories in the specified vCenter server.
+    // ListVmwareVcenterCategories Returns a list of tag categories in the specified vCenter server.
     ListVmwareVcenterCategories(
         vcenterId string, 
         limit *int64, 
@@ -18,7 +18,7 @@ type VmwareVcenterCategoriesV1Client interface {
         filter *string)(
         *models.ListTagCategories2Response,  *apiutils.APIError)
     
-    //  Returns a representation of the specified tag category.
+    // ReadVmwareVcenterCategory Returns a representation of the specified tag category.
     ReadVmwareVcenterCategory(
         vcenterId string, 
         categoryId string)(
@@ -27,7 +27,7 @@ type VmwareVcenterCategoriesV1Client interface {
 }
 
 // NewVmwareVcenterCategoriesV1 returns VmwareVcenterCategoriesV1Client
-func NewVmwareVcenterCategoriesV1(config config.Config) VmwareVcenterCategoriesV1Client{
+func NewVmwareVcenterCategoriesV1(config config.Config) VmwareVcenterCategoriesV1Client {
     client := new(VmwareVcenterCategoriesV1)
     client.config = config
     return client

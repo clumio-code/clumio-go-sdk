@@ -10,7 +10,7 @@ import (
 
 // PolicyRulesV1Client represents a custom type interface
 type PolicyRulesV1Client interface {
-    //  Returns a list of policy rules.
+    // ListPolicyRules Returns a list of policy rules.
     ListPolicyRules(
         limit *int64, 
         start *string, 
@@ -19,23 +19,23 @@ type PolicyRulesV1Client interface {
         filter *string)(
         *models.ListRulesResponse,  *apiutils.APIError)
     
-    //  Creates a new policy rule. Policy rules determine how a policy should be assigned to assets.
+    // CreatePolicyRule Creates a new policy rule. Policy rules determine how a policy should be assigned to assets.
     CreatePolicyRule(
         body *models.CreatePolicyRuleV1Request)(
         *models.CreateRuleResponse,  *apiutils.APIError)
     
-    //  Returns a representation of the specified policy rule.
+    // ReadPolicyRule Returns a representation of the specified policy rule.
     ReadPolicyRule(
         ruleId string)(
         *models.ReadRuleResponse,  *apiutils.APIError)
     
-    //  Updates an existing policy rule.
+    // UpdatePolicyRule Updates an existing policy rule.
     UpdatePolicyRule(
         ruleId string, 
         body *models.UpdatePolicyRuleV1Request)(
         *models.UpdateRuleResponse,  *apiutils.APIError)
     
-    //  Deletes the specified policy rule.
+    // DeletePolicyRule Deletes the specified policy rule.
     DeletePolicyRule(
         ruleId string)(
         *models.DeleteRuleResponse,  *apiutils.APIError)
@@ -43,7 +43,7 @@ type PolicyRulesV1Client interface {
 }
 
 // NewPolicyRulesV1 returns PolicyRulesV1Client
-func NewPolicyRulesV1(config config.Config) PolicyRulesV1Client{
+func NewPolicyRulesV1(config config.Config) PolicyRulesV1Client {
     client := new(PolicyRulesV1)
     client.config = config
     return client

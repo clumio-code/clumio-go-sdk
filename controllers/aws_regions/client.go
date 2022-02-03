@@ -10,7 +10,7 @@ import (
 
 // AwsRegionsV1Client represents a custom type interface
 type AwsRegionsV1Client interface {
-    //  Returns a list of valid regions for creating AWS connections
+    // ListConnectionAwsRegions Returns a list of valid regions for creating AWS connections
     ListConnectionAwsRegions(
         limit *int64, 
         start *string, 
@@ -20,7 +20,7 @@ type AwsRegionsV1Client interface {
 }
 
 // NewAwsRegionsV1 returns AwsRegionsV1Client
-func NewAwsRegionsV1(config config.Config) AwsRegionsV1Client{
+func NewAwsRegionsV1(config config.Config) AwsRegionsV1Client {
     client := new(AwsRegionsV1)
     client.config = config
     return client

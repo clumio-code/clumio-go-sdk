@@ -10,7 +10,7 @@ import (
 
 // VmwareVcenterFoldersV1Client represents a custom type interface
 type VmwareVcenterFoldersV1Client interface {
-    //  Returns a list of VMware folders in the specified vCenter server.
+    // ListVmwareVcenterFolders Returns a list of VMware folders in the specified vCenter server.
     //  
     //  The following table lists the supported Clumio folder types:
     //  
@@ -34,7 +34,7 @@ type VmwareVcenterFoldersV1Client interface {
         embed *string)(
         *models.ListFoldersResponse,  *apiutils.APIError)
     
-    //  Returns a representation of the specified VMware folder.
+    // ReadVmwareVcenterFolder Returns a representation of the specified VMware folder.
     ReadVmwareVcenterFolder(
         vcenterId string, 
         folderId string, 
@@ -44,7 +44,7 @@ type VmwareVcenterFoldersV1Client interface {
 }
 
 // NewVmwareVcenterFoldersV1 returns VmwareVcenterFoldersV1Client
-func NewVmwareVcenterFoldersV1(config config.Config) VmwareVcenterFoldersV1Client{
+func NewVmwareVcenterFoldersV1(config config.Config) VmwareVcenterFoldersV1Client {
     client := new(VmwareVcenterFoldersV1)
     client.config = config
     return client

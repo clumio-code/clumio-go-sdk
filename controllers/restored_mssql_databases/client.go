@@ -10,7 +10,7 @@ import (
 
 // RestoredMssqlDatabasesV1Client represents a custom type interface
 type RestoredMssqlDatabasesV1Client interface {
-    //  Creates a restored MSSQL database from a given backup or to a specified point in time.
+    // RestoreMssqlDatabase Creates a restored MSSQL database from a given backup or to a specified point in time.
     RestoreMssqlDatabase(
         embed *string, 
         body models.RestoreMssqlDatabaseV1Request)(
@@ -19,7 +19,7 @@ type RestoredMssqlDatabasesV1Client interface {
 }
 
 // NewRestoredMssqlDatabasesV1 returns RestoredMssqlDatabasesV1Client
-func NewRestoredMssqlDatabasesV1(config config.Config) RestoredMssqlDatabasesV1Client{
+func NewRestoredMssqlDatabasesV1(config config.Config) RestoredMssqlDatabasesV1Client {
     client := new(RestoredMssqlDatabasesV1)
     client.config = config
     return client

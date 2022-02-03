@@ -10,7 +10,7 @@ import (
 
 // VmwareVcenterNetworksV1Client represents a custom type interface
 type VmwareVcenterNetworksV1Client interface {
-    //  Returns a list of networks in the specified vCenter server.
+    // ListVmwareVcenterNetworks Returns a list of networks in the specified vCenter server.
     ListVmwareVcenterNetworks(
         vcenterId string, 
         limit *int64, 
@@ -18,7 +18,7 @@ type VmwareVcenterNetworksV1Client interface {
         filter *string)(
         *models.ListVMwareVCenterNetworksResponse,  *apiutils.APIError)
     
-    //  Returns a representation of the specified network.
+    // ReadVmwareVcenterNetwork Returns a representation of the specified network.
     ReadVmwareVcenterNetwork(
         vcenterId string, 
         networkId string)(
@@ -27,7 +27,7 @@ type VmwareVcenterNetworksV1Client interface {
 }
 
 // NewVmwareVcenterNetworksV1 returns VmwareVcenterNetworksV1Client
-func NewVmwareVcenterNetworksV1(config config.Config) VmwareVcenterNetworksV1Client{
+func NewVmwareVcenterNetworksV1(config config.Config) VmwareVcenterNetworksV1Client {
     client := new(VmwareVcenterNetworksV1)
     client.config = config
     return client
