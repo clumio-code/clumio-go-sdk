@@ -10,14 +10,14 @@ import (
 
 // RestoredFilesV1Client represents a custom type interface
 type RestoredFilesV1Client interface {
-    //  Gets the list of active restored files for an asset.
+    // ListRestoredFiles Gets the list of active restored files for an asset.
     ListRestoredFiles(
         limit *int64, 
         start *string, 
         filter string)(
         *models.RestoredFilesResponse,  *apiutils.APIError)
     
-    //  Restores one or more files from the specified backup.
+    // RestoreFiles Restores one or more files from the specified backup.
     RestoreFiles(
         body models.RestoreFilesV1Request)(
         *models.RestoreFileResponse,  *apiutils.APIError)
@@ -25,7 +25,7 @@ type RestoredFilesV1Client interface {
 }
 
 // NewRestoredFilesV1 returns RestoredFilesV1Client
-func NewRestoredFilesV1(config config.Config) RestoredFilesV1Client{
+func NewRestoredFilesV1(config config.Config) RestoredFilesV1Client {
     client := new(RestoredFilesV1)
     client.config = config
     return client

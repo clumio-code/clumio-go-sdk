@@ -10,14 +10,14 @@ import (
 
 // BackupFilesystemsV1Client represents a custom type interface
 type BackupFilesystemsV1Client interface {
-    //  Returns a list of filesystems.
+    // ListBackupFilesystems Returns a list of filesystems.
     ListBackupFilesystems(
         backupId string, 
         limit *int64, 
         start *string)(
         *models.ListFileSystemsResponse,  *apiutils.APIError)
     
-    //  Returns a representation of the specified filesystem.
+    // ReadFilesystem Returns a representation of the specified filesystem.
     ReadFilesystem(
         filesystemId string, 
         backupId string)(
@@ -26,7 +26,7 @@ type BackupFilesystemsV1Client interface {
 }
 
 // NewBackupFilesystemsV1 returns BackupFilesystemsV1Client
-func NewBackupFilesystemsV1(config config.Config) BackupFilesystemsV1Client{
+func NewBackupFilesystemsV1(config config.Config) BackupFilesystemsV1Client {
     client := new(BackupFilesystemsV1)
     client.config = config
     return client

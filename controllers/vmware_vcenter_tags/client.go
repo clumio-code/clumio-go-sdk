@@ -10,7 +10,7 @@ import (
 
 // VmwareVcenterTagsV1Client represents a custom type interface
 type VmwareVcenterTagsV1Client interface {
-    //  Returns a list of tags in the specified vCenter server.
+    // ListVmwareVcenterTags Returns a list of tags in the specified vCenter server.
     ListVmwareVcenterTags(
         vcenterId string, 
         limit *int64, 
@@ -19,7 +19,7 @@ type VmwareVcenterTagsV1Client interface {
         embed *string)(
         *models.ListTagsResponse,  *apiutils.APIError)
     
-    //  Returns a representation of the specified tag.
+    // ReadVmwareVcenterTag Returns a representation of the specified tag.
     ReadVmwareVcenterTag(
         vcenterId string, 
         tagId string, 
@@ -29,7 +29,7 @@ type VmwareVcenterTagsV1Client interface {
 }
 
 // NewVmwareVcenterTagsV1 returns VmwareVcenterTagsV1Client
-func NewVmwareVcenterTagsV1(config config.Config) VmwareVcenterTagsV1Client{
+func NewVmwareVcenterTagsV1(config config.Config) VmwareVcenterTagsV1Client {
     client := new(VmwareVcenterTagsV1)
     client.config = config
     return client

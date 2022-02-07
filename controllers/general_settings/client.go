@@ -10,11 +10,11 @@ import (
 
 // GeneralSettingsV2Client represents a custom type interface
 type GeneralSettingsV2Client interface {
-    //  Retrieves organization-wide setting details, including password and security settings.
+    // ReadGeneralSettings Retrieves organization-wide setting details, including password and security settings.
     ReadGeneralSettings()(
         *models.ReadGeneralSettingsResponseV2,  *apiutils.APIError)
     
-    //  Updates organization-wide settings, including password and security settings.
+    // UpdateGeneralSettings Updates organization-wide settings, including password and security settings.
     UpdateGeneralSettings(
         body *models.UpdateGeneralSettingsV2Request)(
         *models.PatchGeneralSettingsResponseV2,  *apiutils.APIError)
@@ -22,7 +22,7 @@ type GeneralSettingsV2Client interface {
 }
 
 // NewGeneralSettingsV2 returns GeneralSettingsV2Client
-func NewGeneralSettingsV2(config config.Config) GeneralSettingsV2Client{
+func NewGeneralSettingsV2(config config.Config) GeneralSettingsV2Client {
     client := new(GeneralSettingsV2)
     client.config = config
     return client

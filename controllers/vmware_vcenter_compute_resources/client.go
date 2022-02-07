@@ -10,7 +10,7 @@ import (
 
 // VmwareVcenterComputeResourcesV1Client represents a custom type interface
 type VmwareVcenterComputeResourcesV1Client interface {
-    //  Returns a list of VMware compute resources in the specified vCenter server.
+    // ListVmwareVcenterComputeResources Returns a list of VMware compute resources in the specified vCenter server.
     //  
     //  The following table lists the supported Clumio protection statuses:
     //  
@@ -31,7 +31,7 @@ type VmwareVcenterComputeResourcesV1Client interface {
         embed *string)(
         *models.ListComputeResourcesResponse,  *apiutils.APIError)
     
-    //  Returns a representation of the specified VMware compute resource.
+    // ReadVmwareVcenterComputeResource Returns a representation of the specified VMware compute resource.
     ReadVmwareVcenterComputeResource(
         vcenterId string, 
         computeResourceId string, 
@@ -41,7 +41,7 @@ type VmwareVcenterComputeResourcesV1Client interface {
 }
 
 // NewVmwareVcenterComputeResourcesV1 returns VmwareVcenterComputeResourcesV1Client
-func NewVmwareVcenterComputeResourcesV1(config config.Config) VmwareVcenterComputeResourcesV1Client{
+func NewVmwareVcenterComputeResourcesV1(config config.Config) VmwareVcenterComputeResourcesV1Client {
     client := new(VmwareVcenterComputeResourcesV1)
     client.config = config
     return client

@@ -4,6 +4,7 @@
 package config
 
 type Config struct {
-	Token   string
-	BaseUrl string
+	Token                     string
+	BaseUrl                   string
+	OrganizationalUnitContext string
 }

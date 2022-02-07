@@ -8,9 +8,9 @@ import (
     "fmt"
 
     "github.com/clumio-code/clumio-go-sdk/api_utils"
+    "github.com/clumio-code/clumio-go-sdk/common"
     "github.com/clumio-code/clumio-go-sdk/config"
     "github.com/clumio-code/clumio-go-sdk/models"
-    "github.com/go-resty/resty/v2"
 )
 
 // GeneralSettingsV2 represents a custom type struct
@@ -18,48 +18,33 @@ type GeneralSettingsV2 struct {
     config config.Config
 }
 
-//  ReadGeneralSettings Retrieves organization-wide setting details, including password and security settings.
+// ReadGeneralSettings Retrieves organization-wide setting details, including password and security settings.
 func (g *GeneralSettingsV2) ReadGeneralSettings()(
-    *models.ReadGeneralSettingsResponseV2, *apiutils.APIError){
+    *models.ReadGeneralSettingsResponseV2, *apiutils.APIError) {
 
-    var err error = nil
     queryBuilder := g.config.BaseUrl + "/settings/general"
 
     
     header := "application/general-settings=v2+json"
     var result *models.ReadGeneralSettingsResponseV2
-    client := resty.New()
 
-    res, err := client.R().
-        SetHeader("Accept", header).
-        SetAuthToken(g.config.Token).
-        SetResult(&result).
-        Get(queryBuilder)
+    apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
+        Config: g.config,
+        RequestUrl: queryBuilder,
+        AcceptHeader: header,
+        Result: &result,
+        RequestType: common.Get,
+    })
 
-    if err != nil {
-        return nil, &apiutils.APIError{
-            ResponseCode: 500,
-            Reason:       "Internal Server Error",
-            Response:     []byte(fmt.Sprintf("%v", err)),
-        }
-    }
-    if !res.IsSuccess(){
-        return nil, &apiutils.APIError{
-            ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
-            Response:     res.Body(),
-        }
-    }
-    return result, nil
+    return result, apiErr
 }
 
 
-//  UpdateGeneralSettings Updates organization-wide settings, including password and security settings.
+// UpdateGeneralSettings Updates organization-wide settings, including password and security settings.
 func (g *GeneralSettingsV2) UpdateGeneralSettings(
     body *models.UpdateGeneralSettingsV2Request)(
-    *models.PatchGeneralSettingsResponseV2, *apiutils.APIError){
+    *models.PatchGeneralSettingsResponseV2, *apiutils.APIError) {
 
-    var err error = nil
     queryBuilder := g.config.BaseUrl + "/settings/general"
 
     bytes, err := json.Marshal(body)
@@ -73,28 +58,15 @@ func (g *GeneralSettingsV2) UpdateGeneralSettings(
     payload := string(bytes)
     header := "application/general-settings=v2+json"
     var result *models.PatchGeneralSettingsResponseV2
-    client := resty.New()
 
-    res, err := client.R().
-        SetHeader("Accept", header).
-        SetAuthToken(g.config.Token).
-        SetBody(payload).
-        SetResult(&result).
-        Patch(queryBuilder)
+    apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
+        Config: g.config,
+        RequestUrl: queryBuilder,
+        AcceptHeader: header,
+        Body: payload,
+        Result: &result,
+        RequestType: common.Patch,
+    })
 
-    if err != nil {
-        return nil, &apiutils.APIError{
-            ResponseCode: 500,
-            Reason:       "Internal Server Error",
-            Response:     []byte(fmt.Sprintf("%v", err)),
-        }
-    }
-    if !res.IsSuccess(){
-        return nil, &apiutils.APIError{
-            ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
-            Response:     res.Body(),
-        }
-    }
-    return result, nil
+    return result, apiErr
 }

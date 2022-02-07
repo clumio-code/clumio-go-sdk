@@ -10,7 +10,7 @@ import (
 
 // AuditTrailsV1Client represents a custom type interface
 type AuditTrailsV1Client interface {
-    //  Returns a list of audit trails.
+    // ListAuditTrails Returns a list of audit trails.
     ListAuditTrails(
         limit *int64, 
         start *string, 
@@ -20,7 +20,7 @@ type AuditTrailsV1Client interface {
 }
 
 // NewAuditTrailsV1 returns AuditTrailsV1Client
-func NewAuditTrailsV1(config config.Config) AuditTrailsV1Client{
+func NewAuditTrailsV1(config config.Config) AuditTrailsV1Client {
     client := new(AuditTrailsV1)
     client.config = config
     return client

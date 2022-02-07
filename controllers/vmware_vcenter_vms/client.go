@@ -10,7 +10,7 @@ import (
 
 // VmwareVcenterVmsV1Client represents a custom type interface
 type VmwareVcenterVmsV1Client interface {
-    //  Returns a list of VMs in the specified vCenter server.
+    // ListVmwareVcenterVms Returns a list of VMs in the specified vCenter server.
     ListVmwareVcenterVms(
         vcenterId string, 
         limit *int64, 
@@ -19,7 +19,7 @@ type VmwareVcenterVmsV1Client interface {
         embed *string)(
         *models.ListVmsResponse,  *apiutils.APIError)
     
-    //  Returns a representation of the specified VM.
+    // ReadVmwareVcenterVm Returns a representation of the specified VM.
     ReadVmwareVcenterVm(
         vcenterId string, 
         vmId string, 
@@ -29,7 +29,7 @@ type VmwareVcenterVmsV1Client interface {
 }
 
 // NewVmwareVcenterVmsV1 returns VmwareVcenterVmsV1Client
-func NewVmwareVcenterVmsV1(config config.Config) VmwareVcenterVmsV1Client{
+func NewVmwareVcenterVmsV1(config config.Config) VmwareVcenterVmsV1Client {
     client := new(VmwareVcenterVmsV1)
     client.config = config
     return client

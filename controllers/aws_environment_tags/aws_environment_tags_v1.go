@@ -7,9 +7,9 @@ import (
     "fmt"
 
     "github.com/clumio-code/clumio-go-sdk/api_utils"
+    "github.com/clumio-code/clumio-go-sdk/common"
     "github.com/clumio-code/clumio-go-sdk/config"
     "github.com/clumio-code/clumio-go-sdk/models"
-    "github.com/go-resty/resty/v2"
 )
 
 // AwsEnvironmentTagsV1 represents a custom type struct
@@ -17,7 +17,7 @@ type AwsEnvironmentTagsV1 struct {
     config config.Config
 }
 
-//  ListAwsEnvironmentTags Returns a list of AWS tags in the specified environment.
+// ListAwsEnvironmentTags Returns a list of AWS tags in the specified environment.
 func (a *AwsEnvironmentTagsV1) ListAwsEnvironmentTags(
     environmentId string, 
     currentCount *int64, 
@@ -27,9 +27,8 @@ func (a *AwsEnvironmentTagsV1) ListAwsEnvironmentTags(
     start *string, 
     filter *string, 
     embed *string)(
-    *models.ListAwsTagsResponse, *apiutils.APIError){
+    *models.ListAwsTagsResponse, *apiutils.APIError) {
 
-    var err error = nil
     pathURL := "/datasources/aws/environments/{environment_id}/tags"
     //process optional template parameters
     pathParams := map[string]string{
@@ -40,34 +39,31 @@ func (a *AwsEnvironmentTagsV1) ListAwsEnvironmentTags(
     
     header := "application/aws-environment-tags=v1+json"
     var result *models.ListAwsTagsResponse
-    client := resty.New()
     defaultInt64 := int64(0)
     defaultString := "" 
     
-
-    if currentCount == nil{
+    if currentCount == nil {
         currentCount = &defaultInt64
     }
-    if limit == nil{
+    if limit == nil {
         limit = &defaultInt64
     }
-    if totalCount == nil{
+    if totalCount == nil {
         totalCount = &defaultInt64
     }
-    if totalPagesCount == nil{
+    if totalPagesCount == nil {
         totalPagesCount = &defaultInt64
     }
-    if start == nil{
+    if start == nil {
         start = &defaultString
     }
-    if filter == nil{
+    if filter == nil {
         filter = &defaultString
     }
-    if embed == nil{
+    if embed == nil {
         embed = &defaultString
     }
     
-
     queryParams := map[string]string{
         "currentCount": fmt.Sprintf("%v", *currentCount),
         "limit": fmt.Sprintf("%v", *limit),
@@ -78,40 +74,27 @@ func (a *AwsEnvironmentTagsV1) ListAwsEnvironmentTags(
         "embed": *embed,
     }
 
-    res, err := client.R().
-        SetQueryParams(queryParams).
-        SetPathParams(pathParams).
-        SetHeader("Accept", header).
-        SetAuthToken(a.config.Token).
-        SetResult(&result).
-        Get(queryBuilder)
+    apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
+        Config: a.config,
+        RequestUrl: queryBuilder,
+        QueryParams: queryParams,
+        PathParams: pathParams,
+        AcceptHeader: header,
+        Result: &result,
+        RequestType: common.Get,
+    })
 
-    if err != nil {
-        return nil, &apiutils.APIError{
-            ResponseCode: 500,
-            Reason:       "Internal Server Error",
-            Response:     []byte(fmt.Sprintf("%v", err)),
-        }
-    }
-    if !res.IsSuccess(){
-        return nil, &apiutils.APIError{
-            ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
-            Response:     res.Body(),
-        }
-    }
-    return result, nil
+    return result, apiErr
 }
 
 
-//  ReadAwsEnvironmentTag Returns a representation of the specified AWS tag in the specified environment.
+// ReadAwsEnvironmentTag Returns a representation of the specified AWS tag in the specified environment.
 func (a *AwsEnvironmentTagsV1) ReadAwsEnvironmentTag(
     environmentId string, 
     tagId string, 
     embed *string)(
-    *models.ReadAwsTagResponse, *apiutils.APIError){
+    *models.ReadAwsTagResponse, *apiutils.APIError) {
 
-    var err error = nil
     pathURL := "/datasources/aws/environments/{environment_id}/tags/{tag_id}"
     //process optional template parameters
     pathParams := map[string]string{
@@ -123,52 +106,36 @@ func (a *AwsEnvironmentTagsV1) ReadAwsEnvironmentTag(
     
     header := "application/aws-environment-tags=v1+json"
     var result *models.ReadAwsTagResponse
-    client := resty.New()
     defaultString := "" 
     
-
-    if embed == nil{
+    if embed == nil {
         embed = &defaultString
     }
     
-
     queryParams := map[string]string{
         "embed": *embed,
     }
 
-    res, err := client.R().
-        SetQueryParams(queryParams).
-        SetPathParams(pathParams).
-        SetHeader("Accept", header).
-        SetAuthToken(a.config.Token).
-        SetResult(&result).
-        Get(queryBuilder)
+    apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
+        Config: a.config,
+        RequestUrl: queryBuilder,
+        QueryParams: queryParams,
+        PathParams: pathParams,
+        AcceptHeader: header,
+        Result: &result,
+        RequestType: common.Get,
+    })
 
-    if err != nil {
-        return nil, &apiutils.APIError{
-            ResponseCode: 500,
-            Reason:       "Internal Server Error",
-            Response:     []byte(fmt.Sprintf("%v", err)),
-        }
-    }
-    if !res.IsSuccess(){
-        return nil, &apiutils.APIError{
-            ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
-            Response:     res.Body(),
-        }
-    }
-    return result, nil
+    return result, apiErr
 }
 
 
-//  ReadAwsEnvironmentTagEbsVolumesComplianceStats Returns the specified AWS tag's EBS compliance statistics.
+// ReadAwsEnvironmentTagEbsVolumesComplianceStats Returns the specified AWS tag's EBS compliance statistics.
 func (a *AwsEnvironmentTagsV1) ReadAwsEnvironmentTagEbsVolumesComplianceStats(
     environmentId string, 
     tagId string)(
-    *models.ReadEbsTagComplianceStatsResponse, *apiutils.APIError){
+    *models.ReadEbsTagComplianceStatsResponse, *apiutils.APIError) {
 
-    var err error = nil
     pathURL := "/datasources/aws/environments/{environment_id}/tags/{tag_id}/stats/compliance/ebs-volumes"
     //process optional template parameters
     pathParams := map[string]string{
@@ -180,28 +147,15 @@ func (a *AwsEnvironmentTagsV1) ReadAwsEnvironmentTagEbsVolumesComplianceStats(
     
     header := "application/aws-environment-tags=v1+json"
     var result *models.ReadEbsTagComplianceStatsResponse
-    client := resty.New()
 
-    res, err := client.R().
-        SetPathParams(pathParams).
-        SetHeader("Accept", header).
-        SetAuthToken(a.config.Token).
-        SetResult(&result).
-        Get(queryBuilder)
+    apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
+        Config: a.config,
+        RequestUrl: queryBuilder,
+        PathParams: pathParams,
+        AcceptHeader: header,
+        Result: &result,
+        RequestType: common.Get,
+    })
 
-    if err != nil {
-        return nil, &apiutils.APIError{
-            ResponseCode: 500,
-            Reason:       "Internal Server Error",
-            Response:     []byte(fmt.Sprintf("%v", err)),
-        }
-    }
-    if !res.IsSuccess(){
-        return nil, &apiutils.APIError{
-            ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
-            Response:     res.Body(),
-        }
-    }
-    return result, nil
+    return result, apiErr
 }

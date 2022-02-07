@@ -10,7 +10,7 @@ import (
 
 // AwsCloudformationTemplatesV1Client represents a custom type interface
 type AwsCloudformationTemplatesV1Client interface {
-    //  Returns the AWS CloudFormation templates available to install to connect
+    // ReadAwsConnectionTemplates Returns the AWS CloudFormation templates available to install to connect
     //  to Clumio. The provided URL will be pasted into the Amazon S3 URL field when
     //  creating the CloudFormation stack.
     ReadAwsConnectionTemplates()(
@@ -19,7 +19,7 @@ type AwsCloudformationTemplatesV1Client interface {
 }
 
 // NewAwsCloudformationTemplatesV1 returns AwsCloudformationTemplatesV1Client
-func NewAwsCloudformationTemplatesV1(config config.Config) AwsCloudformationTemplatesV1Client{
+func NewAwsCloudformationTemplatesV1(config config.Config) AwsCloudformationTemplatesV1Client {
     client := new(AwsCloudformationTemplatesV1)
     client.config = config
     return client

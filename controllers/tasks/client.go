@@ -10,7 +10,7 @@ import (
 
 // TasksV1Client represents a custom type interface
 type TasksV1Client interface {
-    //  Returns a list of tasks. Tasks include scheduled backup and on-demand restore related tasks.
+    // ListTasks Returns a list of tasks. Tasks include scheduled backup and on-demand restore related tasks.
     //  
     //  The following table describes the supported task types.
     //  
@@ -101,12 +101,12 @@ type TasksV1Client interface {
         filter *string)(
         *models.ListTasksResponse,  *apiutils.APIError)
     
-    //  Returns a representation of the specified task.
+    // ReadTask Returns a representation of the specified task.
     ReadTask(
         taskId string)(
         *models.ReadTaskResponse,  *apiutils.APIError)
     
-    //  Manages the specified task. Managing a task includes aborting a task that is in queue or in progress.
+    // UpdateTask Manages the specified task. Managing a task includes aborting a task that is in queue or in progress.
     UpdateTask(
         taskId string, 
         body *models.UpdateTaskV1Request)(
@@ -115,7 +115,7 @@ type TasksV1Client interface {
 }
 
 // NewTasksV1 returns TasksV1Client
-func NewTasksV1(config config.Config) TasksV1Client{
+func NewTasksV1(config config.Config) TasksV1Client {
     client := new(TasksV1)
     client.config = config
     return client

@@ -8,9 +8,9 @@ import (
     "fmt"
 
     "github.com/clumio-code/clumio-go-sdk/api_utils"
+    "github.com/clumio-code/clumio-go-sdk/common"
     "github.com/clumio-code/clumio-go-sdk/config"
     "github.com/clumio-code/clumio-go-sdk/models"
-    "github.com/go-resty/resty/v2"
 )
 
 // RestoredVmwareVmsV1 represents a custom type struct
@@ -18,12 +18,11 @@ type RestoredVmwareVmsV1 struct {
     config config.Config
 }
 
-//  RestoreVmwareVm Restores the specified source VM backup to the specified target destination. The source VM must be one that was backed up by Clumio.
+// RestoreVmwareVm Restores the specified source VM backup to the specified target destination. The source VM must be one that was backed up by Clumio.
 func (r *RestoredVmwareVmsV1) RestoreVmwareVm(
     body models.RestoreVmwareVmV1Request)(
-    *models.RestoreVMwareVMResponse, *apiutils.APIError){
+    *models.RestoreVMwareVMResponse, *apiutils.APIError) {
 
-    var err error = nil
     queryBuilder := r.config.BaseUrl + "/restores/vmware/vms"
 
     bytes, err := json.Marshal(body)
@@ -37,28 +36,15 @@ func (r *RestoredVmwareVmsV1) RestoreVmwareVm(
     payload := string(bytes)
     header := "application/restored-vmware-vms=v1+json"
     var result *models.RestoreVMwareVMResponse
-    client := resty.New()
 
-    res, err := client.R().
-        SetHeader("Accept", header).
-        SetAuthToken(r.config.Token).
-        SetBody(payload).
-        SetResult(&result).
-        Post(queryBuilder)
+    apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
+        Config: r.config,
+        RequestUrl: queryBuilder,
+        AcceptHeader: header,
+        Body: payload,
+        Result: &result,
+        RequestType: common.Post,
+    })
 
-    if err != nil {
-        return nil, &apiutils.APIError{
-            ResponseCode: 500,
-            Reason:       "Internal Server Error",
-            Response:     []byte(fmt.Sprintf("%v", err)),
-        }
-    }
-    if !res.IsSuccess(){
-        return nil, &apiutils.APIError{
-            ResponseCode: res.RawResponse.StatusCode,
-            Reason:       "Non-success status code returned.",
-            Response:     res.Body(),
-        }
-    }
-    return result, nil
+    return result, apiErr
 }

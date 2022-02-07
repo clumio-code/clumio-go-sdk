@@ -10,14 +10,14 @@ import (
 
 // MssqlInstanceV1Client represents a custom type interface
 type MssqlInstanceV1Client interface {
-    //  Returns a list of Instances
+    // ListMssqlInstance Returns a list of Instances
     ListMssqlInstance(
         limit *int64, 
         start *string, 
         filter *string)(
         *models.ListMssqlInstancesResponse,  *apiutils.APIError)
     
-    //  Returns a representation of the specified instance.
+    // ReadMssqlInstance Returns a representation of the specified instance.
     ReadMssqlInstance(
         instanceId string)(
         *models.ReadMssqlInstanceResponse,  *apiutils.APIError)
@@ -25,7 +25,7 @@ type MssqlInstanceV1Client interface {
 }
 
 // NewMssqlInstanceV1 returns MssqlInstanceV1Client
-func NewMssqlInstanceV1(config config.Config) MssqlInstanceV1Client{
+func NewMssqlInstanceV1(config config.Config) MssqlInstanceV1Client {
     client := new(MssqlInstanceV1)
     client.config = config
     return client

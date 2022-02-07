@@ -10,7 +10,7 @@ import (
 
 // IndividualAlertsV1Client represents a custom type interface
 type IndividualAlertsV1Client interface {
-    //  Returns a list of individual alerts.
+    // ListIndividualAlerts Returns a list of individual alerts.
     //  
     //  Each alert is associated with a cause, which represents the issue that generated the alert,
     //  and each cause belongs to a general alert alert type. Some alert types may be associated with multiple causes.
@@ -46,13 +46,13 @@ type IndividualAlertsV1Client interface {
         embed *string)(
         *models.ListAlertsResponse,  *apiutils.APIError)
     
-    //  Returns a representation of the specified individual alert.
+    // ReadIndividualAlert Returns a representation of the specified individual alert.
     ReadIndividualAlert(
         individualAlertId string, 
         embed *string)(
         *models.ReadAlertResponse,  *apiutils.APIError)
     
-    //  Manages an existing individual alert. Managing an individual alert includes clearing the alert and adding notes to the specified alert.
+    // UpdateIndividualAlert Manages an existing individual alert. Managing an individual alert includes clearing the alert and adding notes to the specified alert.
     UpdateIndividualAlert(
         individualAlertId string, 
         embed *string, 
@@ -62,7 +62,7 @@ type IndividualAlertsV1Client interface {
 }
 
 // NewIndividualAlertsV1 returns IndividualAlertsV1Client
-func NewIndividualAlertsV1(config config.Config) IndividualAlertsV1Client{
+func NewIndividualAlertsV1(config config.Config) IndividualAlertsV1Client {
     client := new(IndividualAlertsV1)
     client.config = config
     return client

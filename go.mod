@@ -3,6 +3,4 @@ module github.com/clumio-code/clumio-go-sdk
 
 go 1.16
 
-require (
-	github.com/go-resty/resty/v2 v2.7.0
-)
+require github.com/go-resty/resty/v2 v2.7.0

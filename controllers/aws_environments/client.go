@@ -10,7 +10,7 @@ import (
 
 // AwsEnvironmentsV1Client represents a custom type interface
 type AwsEnvironmentsV1Client interface {
-    //  Returns a list of AWS environments.
+    // ListAwsEnvironments Returns a list of AWS environments.
     ListAwsEnvironments(
         limit *int64, 
         start *string, 
@@ -18,7 +18,7 @@ type AwsEnvironmentsV1Client interface {
         embed *string)(
         *models.ListAWSEnvironmentsResponse,  *apiutils.APIError)
     
-    //  Returns a representation of the specified AWS environment.
+    // ReadAwsEnvironment Returns a representation of the specified AWS environment.
     ReadAwsEnvironment(
         environmentId string, 
         embed *string)(
@@ -27,7 +27,7 @@ type AwsEnvironmentsV1Client interface {
 }
 
 // NewAwsEnvironmentsV1 returns AwsEnvironmentsV1Client
-func NewAwsEnvironmentsV1(config config.Config) AwsEnvironmentsV1Client{
+func NewAwsEnvironmentsV1(config config.Config) AwsEnvironmentsV1Client {
     client := new(AwsEnvironmentsV1)
     client.config = config
     return client
