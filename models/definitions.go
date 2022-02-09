@@ -776,38 +776,40 @@ type BackupWindow struct {
 // Bucket represents a custom type struct
 type Bucket struct {
     // Embedded responses related to the resource.
-    Embedded                 interface{}    `json:"_embedded"`
+    Embedded                 interface{}          `json:"_embedded"`
     // URLs to pages related to the resource.
-    Links                    *BucketLinks   `json:"_links"`
+    Links                    *BucketLinks         `json:"_links"`
     // The AWS-assigned ID of the account associated with the S3 bucket.
-    AccountNativeId          *string        `json:"account_native_id"`
+    AccountNativeId          *string              `json:"account_native_id"`
     // The AWS region associated with the S3 bucket.
-    AwsRegion                *string        `json:"aws_region"`
+    AwsRegion                *string              `json:"aws_region"`
+    // The Cloudwatch metrics of the bucket.
+    CloudwatchMetrics        *S3CloudwatchMetrics `json:"cloudwatch_metrics"`
     // The timestamp of when the bucket was created. Represented in RFC-3339 format.
-    CreationTimestamp        *string        `json:"creation_timestamp"`
+    CreationTimestamp        *string              `json:"creation_timestamp"`
     // Encryption configuration of the bucket
-    EncryptionConfiguration  *string        `json:"encryption_configuration"`
+    EncryptionConfiguration  *string              `json:"encryption_configuration"`
     // The Clumio-assigned ID of the AWS environment associated with the S3 bucket.
-    EnvironmentId            *string        `json:"environment_id"`
+    EnvironmentId            *string              `json:"environment_id"`
     // The Clumio-assigned ID of the bucket.
-    Id                       *string        `json:"id"`
+    Id                       *string              `json:"id"`
     // The AWS-assigned name of the bucket.
-    Name                     *string        `json:"name"`
+    Name                     *string              `json:"name"`
     // Number of objects in bucket.
-    ObjectCount              *int64         `json:"object_count"`
+    ObjectCount              *int64               `json:"object_count"`
     // The Clumio-assigned ID of the organizational unit associated with the S3 bucket.
-    OrganizationalUnitId     *string        `json:"organizational_unit_id"`
+    OrganizationalUnitId     *string              `json:"organizational_unit_id"`
     // Protection group count reflects how many protection groups are linked to this
     // bucket
-    ProtectionGroupCount     *int64         `json:"protection_group_count"`
+    ProtectionGroupCount     *int64               `json:"protection_group_count"`
     // Replication configuration of the bucket
-    ReplicationConfiguration *string        `json:"replication_configuration"`
+    ReplicationConfiguration *string              `json:"replication_configuration"`
     // Size of bucket in bytes.
-    SizeBytes                *int64         `json:"size_bytes"`
+    SizeBytes                *int64               `json:"size_bytes"`
     // A tag created through AWS console which can be applied to EBS volumes.
-    Tags                     []*AwsTagModel `json:"tags"`
+    Tags                     []*AwsTagModel       `json:"tags"`
     // Version configuration of the bucket
-    VersionConfiguration     *string        `json:"version_configuration"`
+    VersionConfiguration     *string              `json:"version_configuration"`
 }
 
 // BucketLinks represents a custom type struct.
@@ -2934,6 +2936,21 @@ type ProtectionGroup struct {
     Links                     *ProtectionGroupLinks                 `json:"_links"`
     // Number of buckets
     BucketCount               *int64                                `json:"bucket_count"`
+    // The following table describes the possible conditions for a bucket to be
+    // automatically added to a protection group.
+    // 
+    // +---------+----------------+---------------------------------------------------+
+    // |  Field  | Rule Condition |                    Description                    |
+    // +=========+================+===================================================+
+    // | aws_tag | $eq            | Denotes the AWS tag(s) to conditionalize on       |
+    // |         |                |                                                   |
+    // |         |                | {"aws_tag":{"$eq":{"key":"Environment",           |
+    // |         |                | "value":"Prod"}}}                                 |
+    // |         |                |                                                   |
+    // |         |                |                                                   |
+    // +---------+----------------+---------------------------------------------------+
+    // 
+    BucketRule                *string                               `json:"bucket_rule"`
     // The compliance statistics of workloads associated with this entity.
     ComplianceStats           *ProtectionComplianceStatsWithSeeding `json:"compliance_stats"`
     // The compliance status of the protected protection group. Possible values include
@@ -3655,6 +3672,102 @@ type RuleListLinks struct {
 type RulePriority struct {
     // The rule ID before which this rule should be inserted.
     BeforeRuleId *string `json:"before_rule_id"`
+}
+
+// S3BucketSizeRes represents a custom type struct.
+// The size breakdown in bytes with timestamps of a bucket per storage class.
+type S3BucketSizeRes struct {
+    // Size of Deep Archive Object Overhead in bytes.
+    DeepArchiveObjectOverhead                 *int64  `json:"deep_archive_object_overhead"`
+    // Timestamp when CloudWatch reported the Deep Archive Object Overhead size.
+    DeepArchiveObjectOverheadRetrievedTime    *string `json:"deep_archive_object_overhead_retrieved_time"`
+    // Size of Deep Archive S3 Object Overhead in bytes.
+    DeepArchiveS3ObjectOverhead               *int64  `json:"deep_archive_s_3_object_overhead"`
+    // Timestamp when CloudWatch reported the Deep Archive S3 Object Overhead size.
+    DeepArchiveS3ObjectOverheadRetrievedTime  *string `json:"deep_archive_s_3_object_overhead_retrieved_time"`
+    // Size of Deep Archive Staging Storage objects in bytes.
+    DeepArchiveStagingStorage                 *int64  `json:"deep_archive_staging_storage"`
+    // Timestamp when CloudWatch reported the Deep Archive Staging Storage objects size.
+    DeepArchiveStagingStorageRetrievedTime    *string `json:"deep_archive_staging_storage_retrieved_time"`
+    // Size of Deep Archive Storage objects in bytes.
+    DeepArchiveStorage                        *int64  `json:"deep_archive_storage"`
+    // Timestamp when CloudWatch reported the Deep Archive Storage objects size.
+    DeepArchiveStorageRetrievedTime           *string `json:"deep_archive_storage_retrieved_time"`
+    // Size of Glacier Object Overhead in bytes.
+    GlacierObjectOverhead                     *int64  `json:"glacier_object_overhead"`
+    // Timestamp when CloudWatch reported the Glacier Object Overhead size.
+    GlacierObjectOverheadRetrievedTime        *string `json:"glacier_object_overhead_retrieved_time"`
+    // Size of Glacier S3 Object Overhead in bytes.
+    GlacierS3ObjectOverhead                   *int64  `json:"glacier_s_3_object_overhead"`
+    // Timestamp when CloudWatch reported the Glacier S3 Object Overhead size.
+    GlacierS3ObjectOverheadRetrievedTime      *string `json:"glacier_s_3_object_overhead_retrieved_time"`
+    // Size of Glacier Staging Storage objects in bytes.
+    GlacierStagingStorage                     *int64  `json:"glacier_staging_storage"`
+    // Timestamp when CloudWatch reported the Glacier Staging Storage objects size.
+    GlacierStagingStorageRetrievedTime        *string `json:"glacier_staging_storage_retrieved_time"`
+    // Size of Glacier Storage objects in bytes.
+    GlacierStorage                            *int64  `json:"glacier_storage"`
+    // Timestamp when CloudWatch reported the Glacier Storage objects size.
+    GlacierStorageRetrievedTime               *string `json:"glacier_storage_retrieved_time"`
+    // Size of Intelligent-Tiering AA Storage objects in bytes.
+    IntelligentTieringAaStorage               *int64  `json:"intelligent_tiering_aa_storage"`
+    // Timestamp when CloudWatch reported the Intelligent-Tiering AA Storage objects size.
+    IntelligentTieringAaStorageRetrievedTime  *string `json:"intelligent_tiering_aa_storage_retrieved_time"`
+    // Size of Intelligent-Tiering DAA Storage objects in bytes.
+    IntelligentTieringDaaStorage              *int64  `json:"intelligent_tiering_daa_storage"`
+    // Timestamp when CloudWatch reported the Intelligent-Tiering DAA Storage objects size.
+    IntelligentTieringDaaStorageRetrievedTime *string `json:"intelligent_tiering_daa_storage_retrieved_time"`
+    // Size of Intelligent-Tiering FA Storage objects in bytes.
+    IntelligentTieringFaStorage               *int64  `json:"intelligent_tiering_fa_storage"`
+    // Timestamp when CloudWatch reported the Intelligent-Tiering FA Storage objects size.
+    IntelligentTieringFaStorageRetrievedTime  *string `json:"intelligent_tiering_fa_storage_retrieved_time"`
+    // Size of Intelligent-Tiering IA Storage objects in bytes.
+    IntelligentTieringIaStorage               *int64  `json:"intelligent_tiering_ia_storage"`
+    // Timestamp when CloudWatch reported the Intelligent-Tiering IA Storage objects size.
+    IntelligentTieringIaStorageRetrievedTime  *string `json:"intelligent_tiering_ia_storage_retrieved_time"`
+    // Size of OneZone IA Overhead in bytes.
+    OneZoneIaSizeOverhead                     *int64  `json:"one_zone_ia_size_overhead"`
+    // Timestamp when CloudWatch reported the OneZone IA Overhead size.
+    OneZoneIaSizeOverheadRetrievedTime        *string `json:"one_zone_ia_size_overhead_retrieved_time"`
+    // Size of OneZone IA Storage objects in bytes.
+    OneZoneIaStorage                          *int64  `json:"one_zone_ia_storage"`
+    // Timestamp when CloudWatch reported the OneZone IA Storage objects size.
+    OneZoneIaStorageRetrievedTime             *string `json:"one_zone_ia_storage_retrieved_time"`
+    // Size of Reduced Redundancy Storage objects in bytes.
+    ReducedRedundancyStorage                  *int64  `json:"reduced_redundancy_storage"`
+    // Timestamp when CloudWatch reported the Reduced Redundancy Storage objects size.
+    ReducedRedundancyStorageRetrievedTime     *string `json:"reduced_redundancy_storage_retrieved_time"`
+    // Size of Standard IA Object Overhead in bytes.
+    StandardIaObjectOverhead                  *int64  `json:"standard_ia_object_overhead"`
+    // Timestamp when CloudWatch reported the Standard IA Object Overhead size.
+    StandardIaObjectOverheadRetrievedTime     *string `json:"standard_ia_object_overhead_retrieved_time"`
+    // Size of Standard IA Overhead in bytes.
+    StandardIaSizeOverhead                    *int64  `json:"standard_ia_size_overhead"`
+    // Timestamp when CloudWatch reported the Standard IA Overhead size.
+    StandardIaSizeOverheadRetrievedTime       *string `json:"standard_ia_size_overhead_retrieved_time"`
+    // Size of Standard IA Storage objects in bytes.
+    StandardIaStorage                         *int64  `json:"standard_ia_storage"`
+    // Timestamp when CloudWatch reported the Standard IA Storage objects size.
+    StandardIaStorageRetrievedTime            *string `json:"standard_ia_storage_retrieved_time"`
+    // Size of Standard Storage objects in bytes.
+    StandardStorage                           *int64  `json:"standard_storage"`
+    // Timestamp when CloudWatch reported the Standard Storage objects size.
+    StandardStorageRetrievedTime              *string `json:"standard_storage_retrieved_time"`
+}
+
+// S3CloudwatchMetrics represents a custom type struct.
+// The Cloudwatch metrics of the bucket.
+type S3CloudwatchMetrics struct {
+    // Number of objects in bucket.
+    ObjectCount              *int64           `json:"object_count"`
+    // Timestamp when CloudWatch reported the bucket object count.
+    ObjectCountRetrievedTime *string          `json:"object_count_retrieved_time"`
+    // Size of bucket in bytes.
+    SizeBytes                *int64           `json:"size_bytes"`
+    // The size breakdown in bytes with timestamps of a bucket per storage class.
+    SizeBytesPerStorageClass *S3BucketSizeRes `json:"size_bytes_per_storage_class"`
+    // Timestamp when CloudWatch reported the bucket size.
+    SizeBytesRetrievedTime   *string          `json:"size_bytes_retrieved_time"`
 }
 
 // SingleErrorResponse represents a custom type struct

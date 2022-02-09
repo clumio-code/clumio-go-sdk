@@ -4,8 +4,6 @@
 package vmwarevcentercompliancestats
 
 import (
-    "fmt"
-
     "github.com/clumio-code/clumio-go-sdk/api_utils"
     "github.com/clumio-code/clumio-go-sdk/common"
     "github.com/clumio-code/clumio-go-sdk/config"
