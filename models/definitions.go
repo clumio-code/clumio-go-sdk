@@ -5,6 +5,8 @@ package models
 
 // AWSConnection represents a custom type struct
 type AWSConnection struct {
+    // Embedded responses related to the resource.
+    Embedded                 interface{}         `json:"_embedded"`
     // URLs to pages related to the resource.
     Links                    *AWSConnectionLinks `json:"_links"`
     // The alias given to the account on AWS.
@@ -72,9 +74,11 @@ type AWSConnectionConfigModel struct {
 // URLs to pages related to the resource.
 type AWSConnectionLinks struct {
     // The HATEOAS link to this resource.
-    Self                *HateoasSelfLink `json:"_self"`
+    Self                   *HateoasSelfLink `json:"_self"`
     // A resource-specific HATEOAS link.
-    DeleteConnectionAws *HateoasLink     `json:"delete-connection-aws"`
+    DeleteConnectionAws    *HateoasLink     `json:"delete-connection-aws"`
+    // A resource-specific HATEOAS link.
+    ReadOrganizationalUnit *HateoasLink     `json:"read-organizational-unit"`
 }
 
 // AWSConnectionListEmbedded represents a custom type struct.
@@ -143,6 +147,8 @@ type AWSEnvironmentLinks struct {
     ProtectEntities                             *HateoasLink     `json:"protect-entities"`
     // A resource-specific HATEOAS link.
     ReadAwsEnvironmentEbsVolumesComplianceStats *HateoasLink     `json:"read-aws-environment-ebs-volumes-compliance-stats"`
+    // A resource-specific HATEOAS link.
+    ReadOrganizationalUnit                      *HateoasLink     `json:"read-organizational-unit"`
 }
 
 // AWSEnvironmentListEmbedded represents a custom type struct.
@@ -776,40 +782,40 @@ type BackupWindow struct {
 // Bucket represents a custom type struct
 type Bucket struct {
     // Embedded responses related to the resource.
-    Embedded                 interface{}          `json:"_embedded"`
+    Embedded             interface{}          `json:"_embedded"`
     // URLs to pages related to the resource.
-    Links                    *BucketLinks         `json:"_links"`
+    Links                *BucketLinks         `json:"_links"`
     // The AWS-assigned ID of the account associated with the S3 bucket.
-    AccountNativeId          *string              `json:"account_native_id"`
+    AccountNativeId      *string              `json:"account_native_id"`
     // The AWS region associated with the S3 bucket.
-    AwsRegion                *string              `json:"aws_region"`
+    AwsRegion            *string              `json:"aws_region"`
     // The Cloudwatch metrics of the bucket.
-    CloudwatchMetrics        *S3CloudwatchMetrics `json:"cloudwatch_metrics"`
+    CloudwatchMetrics    *S3CloudwatchMetrics `json:"cloudwatch_metrics"`
     // The timestamp of when the bucket was created. Represented in RFC-3339 format.
-    CreationTimestamp        *string              `json:"creation_timestamp"`
-    // Encryption configuration of the bucket
-    EncryptionConfiguration  *string              `json:"encryption_configuration"`
+    CreationTimestamp    *string              `json:"creation_timestamp"`
+    // The AWS encryption output of the bucket.
+    EncryptionSetting    *S3EncryptionOutput  `json:"encryption_setting"`
     // The Clumio-assigned ID of the AWS environment associated with the S3 bucket.
-    EnvironmentId            *string              `json:"environment_id"`
+    EnvironmentId        *string              `json:"environment_id"`
     // The Clumio-assigned ID of the bucket.
-    Id                       *string              `json:"id"`
+    Id                   *string              `json:"id"`
     // The AWS-assigned name of the bucket.
-    Name                     *string              `json:"name"`
+    Name                 *string              `json:"name"`
     // Number of objects in bucket.
-    ObjectCount              *int64               `json:"object_count"`
+    ObjectCount          *int64               `json:"object_count"`
     // The Clumio-assigned ID of the organizational unit associated with the S3 bucket.
-    OrganizationalUnitId     *string              `json:"organizational_unit_id"`
+    OrganizationalUnitId *string              `json:"organizational_unit_id"`
     // Protection group count reflects how many protection groups are linked to this
-    // bucket
-    ProtectionGroupCount     *int64               `json:"protection_group_count"`
-    // Replication configuration of the bucket
-    ReplicationConfiguration *string              `json:"replication_configuration"`
+    // bucket.
+    ProtectionGroupCount *int64               `json:"protection_group_count"`
+    // The AWS replication output of the bucket.
+    ReplicationSetting   *S3ReplicationOutput `json:"replication_setting"`
     // Size of bucket in bytes.
-    SizeBytes                *int64               `json:"size_bytes"`
+    SizeBytes            *int64               `json:"size_bytes"`
     // A tag created through AWS console which can be applied to EBS volumes.
-    Tags                     []*AwsTagModel       `json:"tags"`
-    // Version configuration of the bucket
-    VersionConfiguration     *string              `json:"version_configuration"`
+    Tags                 []*AwsTagModel       `json:"tags"`
+    // The AWS versioning output of the bucket.
+    VersioningSetting    *S3VersioningOutput  `json:"versioning_setting"`
 }
 
 // BucketLinks represents a custom type struct.
@@ -2006,6 +2012,24 @@ type M365GroupingCriteria struct {
     ClumioType *string `json:"type"`
 }
 
+// MSSQLDatabaseBackupAdvancedSetting represents a custom type struct.
+// Additional policy configuration settings for the `mssql_database_backup` operation. If this operation is not of type `mssql_database_backup`, then this field is omitted from the response.
+type MSSQLDatabaseBackupAdvancedSetting struct {
+    // The alternative replica for MSSQL database backups. This setting only applies to Availability Group databases. Possible values include `"primary"`, `"sync_secondary"`, and `"stop"`. If `"stop"` is provided, then backups will not attempt to switch to a different replica when the preferred replica is unavailable. Otherwise, recurring backups will attempt to use either the primary replica or the secondary replica accordingly.
+    AlternativeReplica *string `json:"alternative_replica"`
+    // The primary preferred replica for MSSQL database backups. This setting only applies to Availability Group databases. Possible values include `"primary"` and `"sync_secondary"`. Recurring backup will first attempt to use either the primary replica or the secondary replica accordingly.
+    PreferredReplica   *string `json:"preferred_replica"`
+}
+
+// MSSQLLogBackupAdvancedSetting represents a custom type struct.
+// Additional policy configuration settings for the `mssql_log_backup` operation. If this operation is not of type `mssql_log_backup`, then this field is omitted from the response.
+type MSSQLLogBackupAdvancedSetting struct {
+    // The alternative replica for MSSQL log backups. This setting only applies to Availability Group databases. Possible values include `"primary"`, `"sync_secondary"`, and `"stop"`. If `"stop"` is provided, then backups will not attempt to switch to a different replica when the preferred replica is unavailable. Otherwise, recurring backups will attempt to use either the primary replica or the secondary replica accordingly.
+    AlternativeReplica *string `json:"alternative_replica"`
+    // The primary preferred replica for MSSQL log backups. This setting only applies to Availability Group databases. Possible values include `"primary"` and `"sync_secondary"`. Recurring backup will first attempt to use either the primary replica or the secondary replica accordingly.
+    PreferredReplica   *string `json:"preferred_replica"`
+}
+
 // ManagementGroup represents a custom type struct
 type ManagementGroup struct {
     // URLs to pages related to the resource.
@@ -2766,6 +2790,21 @@ type Policy struct {
     OrganizationalUnitId          *string            `json:"organizational_unit_id"`
 }
 
+// PolicyAdvancedSettings represents a custom type struct.
+// Additional operation-specific policy settings. For operation types which do not support additional settings, this field is `null`.
+type PolicyAdvancedSettings struct {
+    // Additional policy configuration settings for the `mssql_database_backup` operation. If this operation is not of type `mssql_database_backup`, then this field is omitted from the response.
+    Ec2MssqlDatabaseBackup *MSSQLDatabaseBackupAdvancedSetting   `json:"ec2_mssql_database_backup"`
+    // Additional policy configuration settings for the `mssql_log_backup` operation. If this operation is not of type `mssql_log_backup`, then this field is omitted from the response.
+    Ec2MssqlLogBackup      *MSSQLLogBackupAdvancedSetting        `json:"ec2_mssql_log_backup"`
+    // Additional policy configuration settings for the `mssql_database_backup` operation. If this operation is not of type `mssql_database_backup`, then this field is omitted from the response.
+    MssqlDatabaseBackup    *MSSQLDatabaseBackupAdvancedSetting   `json:"mssql_database_backup"`
+    // Additional policy configuration settings for the `mssql_log_backup` operation. If this operation is not of type `mssql_log_backup`, then this field is omitted from the response.
+    MssqlLogBackup         *MSSQLLogBackupAdvancedSetting        `json:"mssql_log_backup"`
+    // Additional policy configuration settings for the `protection_group_backup` operation. If this operation is not of type `protection_group_backup`, then this field is omitted from the response.
+    ProtectionGroupBackup  *ProtectionGroupBackupAdvancedSetting `json:"protection_group_backup"`
+}
+
 // PolicyEmbedded represents a custom type struct.
 // If the `embed` query parameter is set, displays the responses of the related resource,
 // as defined by the embeddable link specified.
@@ -2820,15 +2859,17 @@ type PolicyOperation struct {
     // If set to `immediate`, Clumio starts the backup process right away. If set to `window`, Clumio starts the backup process when the backup window (`backup_window`) opens.
     // If set to `window` and `operation in ("aws_rds_resource_aws_snapshot", "mssql_log_backup", "ec2_mssql_log_backup")`,
     // the backup window will not be determined by Clumio's backup window.
-    ActionSetting *string       `json:"action_setting"`
+    ActionSetting    *string                 `json:"action_setting"`
+    // Additional operation-specific policy settings. For operation types which do not support additional settings, this field is `null`.
+    AdvancedSettings *PolicyAdvancedSettings `json:"advanced_settings"`
     // The start and end times for the customized backup window.
-    BackupWindow  *BackupWindow `json:"backup_window"`
+    BackupWindow     *BackupWindow           `json:"backup_window"`
     // backup_sla captures the SLA parameters
     // backup_sla captures the SLA parameters
-    Slas          []*BackupSLA  `json:"slas"`
+    Slas             []*BackupSLA            `json:"slas"`
     // The operation to be performed for this SLA set. Each SLA set corresponds to one and only one operation.
     // Refer to the Policy Operation table for a complete list of policy operations.
-    ClumioType    *string       `json:"type"`
+    ClumioType       *string                 `json:"type"`
 }
 
 // PrefixFilter represents a custom type struct.
@@ -2936,21 +2977,6 @@ type ProtectionGroup struct {
     Links                     *ProtectionGroupLinks                 `json:"_links"`
     // Number of buckets
     BucketCount               *int64                                `json:"bucket_count"`
-    // The following table describes the possible conditions for a bucket to be
-    // automatically added to a protection group.
-    // 
-    // +---------+----------------+---------------------------------------------------+
-    // |  Field  | Rule Condition |                    Description                    |
-    // +=========+================+===================================================+
-    // | aws_tag | $eq            | Denotes the AWS tag(s) to conditionalize on       |
-    // |         |                |                                                   |
-    // |         |                | {"aws_tag":{"$eq":{"key":"Environment",           |
-    // |         |                | "value":"Prod"}}}                                 |
-    // |         |                |                                                   |
-    // |         |                |                                                   |
-    // +---------+----------------+---------------------------------------------------+
-    // 
-    BucketRule                *string                               `json:"bucket_rule"`
     // The compliance statistics of workloads associated with this entity.
     ComplianceStats           *ProtectionComplianceStatsWithSeeding `json:"compliance_stats"`
     // The compliance status of the protected protection group. Possible values include
@@ -2974,7 +3000,7 @@ type ProtectionGroup struct {
     // ObjectFilter
     // defines which objects will be backed up.
     ObjectFilter              *ObjectFilter                         `json:"object_filter"`
-    // The Clumio-assigned ID of the organizational unit associated with the EBS volume.
+    // The Clumio-assigned ID of the organizational unit associated with the Protection Group.
     OrganizationalUnitId      *string                               `json:"organizational_unit_id"`
     // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
     ProtectionInfo            *ProtectionInfoWithRule               `json:"protection_info"`
@@ -2991,6 +3017,13 @@ type ProtectionGroup struct {
     // Version of the protection group. The version number is incremented every time
     // a change is made to the protection group.
     Version                   *int64                                `json:"version"`
+}
+
+// ProtectionGroupBackupAdvancedSetting represents a custom type struct.
+// Additional policy configuration settings for the `protection_group_backup` operation. If this operation is not of type `protection_group_backup`, then this field is omitted from the response.
+type ProtectionGroupBackupAdvancedSetting struct {
+    // Backup tier to store the backup in. Valid values are: `cold`, `frozen`
+    BackupTier *string `json:"backup_tier"`
 }
 
 // ProtectionGroupBucket represents a custom type struct
@@ -3529,11 +3562,11 @@ type RoleWithETag struct {
 // A rule applies an action subject to a condition criteria.
 type Rule struct {
     // Embedded responses related to the resource.
-    Embedded  *RuleEmbedded `json:"_embedded"`
+    Embedded             *RuleEmbedded `json:"_embedded"`
     // URLs to pages related to the resource.
-    Links     *RuleLinks    `json:"_links"`
+    Links                *RuleLinks    `json:"_links"`
     // An action to be applied subject to the rule criteria.
-    Action    *RuleAction   `json:"action"`
+    Action               *RuleAction   `json:"action"`
     // The following table describes the possible conditions for a rule.
     // 
     // +-----------------------+---------------------------+--------------------------+
@@ -3566,7 +3599,13 @@ type Rule struct {
     // |                       |                           |                          |
     // +-----------------------+---------------------------+--------------------------+
     // | aws_tag               | $eq, $in, $all, $contains | Denotes the AWS tag(s)   |
-    // |                       |                           | to conditionalize on     |
+    // |                       |                           | to conditionalize on.    |
+    // |                       |                           | Max 100 tags allowed in  |
+    // |                       |                           | each rule                |
+    // |                       |                           | and tag key can be upto  |
+    // |                       |                           | 128 characters and value |
+    // |                       |                           | can be upto 256          |
+    // |                       |                           | characters long.         |
     // |                       |                           |                          |
     // |                       |                           | {"aws_tag":{"$eq":{"key" |
     // |                       |                           | :"Environment",          |
@@ -3595,7 +3634,7 @@ type Rule struct {
     // +-----------------------+---------------------------+--------------------------+
     // | entity_type           | $eq, $in                  | Denotes the AWS entity   |
     // |                       |                           | type to conditionalize   |
-    // |                       |                           | on                       |
+    // |                       |                           | on. (Required)           |
     // |                       |                           |                          |
     // |                       |                           | {"entity_type":{"$eq":"a |
     // |                       |                           | ws_rds_instance"}}       |
@@ -3611,13 +3650,15 @@ type Rule struct {
     // |                       |                           |                          |
     // +-----------------------+---------------------------+--------------------------+
     // 
-    Condition *string       `json:"condition"`
+    Condition            *string       `json:"condition"`
     // The Clumio-assigned ID of the policy rule.
-    Id        *string       `json:"id"`
-    // Name of the rule.
-    Name      *string       `json:"name"`
+    Id                   *string       `json:"id"`
+    // Name of the rule. Max 100 characters.
+    Name                 *string       `json:"name"`
+    // The Clumio-assigned ID of the organizational unit (OU) to which the policy rule belongs.
+    OrganizationalUnitId *string       `json:"organizational_unit_id"`
     // A priority relative to other rules.
-    Priority  *RulePriority `json:"priority"`
+    Priority             *RulePriority `json:"priority"`
 }
 
 // RuleAction represents a custom type struct.
@@ -3674,85 +3715,100 @@ type RulePriority struct {
     BeforeRuleId *string `json:"before_rule_id"`
 }
 
+// S3AccessControlTranslation represents a custom type struct.
+// A container for information about access control for replicas.
+type S3AccessControlTranslation struct {
+    // Specifies the replica ownership.
+    Owner *string `json:"owner"`
+}
+
 // S3BucketSizeRes represents a custom type struct.
 // The size breakdown in bytes with timestamps of a bucket per storage class.
 type S3BucketSizeRes struct {
     // Size of Deep Archive Object Overhead in bytes.
-    DeepArchiveObjectOverhead                 *int64  `json:"deep_archive_object_overhead"`
+    DeepArchiveObjectOverhead                   *int64  `json:"deep_archive_object_overhead"`
     // Timestamp when CloudWatch reported the Deep Archive Object Overhead size.
-    DeepArchiveObjectOverheadRetrievedTime    *string `json:"deep_archive_object_overhead_retrieved_time"`
+    DeepArchiveObjectOverheadRetrievedTime      *string `json:"deep_archive_object_overhead_retrieved_time"`
     // Size of Deep Archive S3 Object Overhead in bytes.
-    DeepArchiveS3ObjectOverhead               *int64  `json:"deep_archive_s_3_object_overhead"`
+    DeepArchiveS3ObjectOverhead                 *int64  `json:"deep_archive_s3_object_overhead"`
     // Timestamp when CloudWatch reported the Deep Archive S3 Object Overhead size.
-    DeepArchiveS3ObjectOverheadRetrievedTime  *string `json:"deep_archive_s_3_object_overhead_retrieved_time"`
+    DeepArchiveS3ObjectOverheadRetrievedTime    *string `json:"deep_archive_s3_object_overhead_retrieved_time"`
     // Size of Deep Archive Staging Storage objects in bytes.
-    DeepArchiveStagingStorage                 *int64  `json:"deep_archive_staging_storage"`
+    DeepArchiveStagingStorage                   *int64  `json:"deep_archive_staging_storage"`
     // Timestamp when CloudWatch reported the Deep Archive Staging Storage objects size.
-    DeepArchiveStagingStorageRetrievedTime    *string `json:"deep_archive_staging_storage_retrieved_time"`
+    DeepArchiveStagingStorageRetrievedTime      *string `json:"deep_archive_staging_storage_retrieved_time"`
     // Size of Deep Archive Storage objects in bytes.
-    DeepArchiveStorage                        *int64  `json:"deep_archive_storage"`
+    DeepArchiveStorage                          *int64  `json:"deep_archive_storage"`
     // Timestamp when CloudWatch reported the Deep Archive Storage objects size.
-    DeepArchiveStorageRetrievedTime           *string `json:"deep_archive_storage_retrieved_time"`
+    DeepArchiveStorageRetrievedTime             *string `json:"deep_archive_storage_retrieved_time"`
+    // Size of Glacier Instant Retrieval Storage objects in bytes.
+    GlacierInstantRetrievalStorage              *int64  `json:"glacier_instant_retrieval_storage"`
+    // Timestamp when CloudWatch reported the Glacier Instant Retrieval Storage objects size.
+    GlacierInstantRetrievalStorageRetrievedTime *string `json:"glacier_instant_retrieval_storage_retrieved_time"`
     // Size of Glacier Object Overhead in bytes.
-    GlacierObjectOverhead                     *int64  `json:"glacier_object_overhead"`
+    GlacierObjectOverhead                       *int64  `json:"glacier_object_overhead"`
     // Timestamp when CloudWatch reported the Glacier Object Overhead size.
-    GlacierObjectOverheadRetrievedTime        *string `json:"glacier_object_overhead_retrieved_time"`
+    GlacierObjectOverheadRetrievedTime          *string `json:"glacier_object_overhead_retrieved_time"`
     // Size of Glacier S3 Object Overhead in bytes.
-    GlacierS3ObjectOverhead                   *int64  `json:"glacier_s_3_object_overhead"`
+    GlacierS3ObjectOverhead                     *int64  `json:"glacier_s3_object_overhead"`
     // Timestamp when CloudWatch reported the Glacier S3 Object Overhead size.
-    GlacierS3ObjectOverheadRetrievedTime      *string `json:"glacier_s_3_object_overhead_retrieved_time"`
+    GlacierS3ObjectOverheadRetrievedTime        *string `json:"glacier_s3_object_overhead_retrieved_time"`
     // Size of Glacier Staging Storage objects in bytes.
-    GlacierStagingStorage                     *int64  `json:"glacier_staging_storage"`
+    GlacierStagingStorage                       *int64  `json:"glacier_staging_storage"`
     // Timestamp when CloudWatch reported the Glacier Staging Storage objects size.
-    GlacierStagingStorageRetrievedTime        *string `json:"glacier_staging_storage_retrieved_time"`
+    GlacierStagingStorageRetrievedTime          *string `json:"glacier_staging_storage_retrieved_time"`
     // Size of Glacier Storage objects in bytes.
-    GlacierStorage                            *int64  `json:"glacier_storage"`
+    GlacierStorage                              *int64  `json:"glacier_storage"`
     // Timestamp when CloudWatch reported the Glacier Storage objects size.
-    GlacierStorageRetrievedTime               *string `json:"glacier_storage_retrieved_time"`
+    GlacierStorageRetrievedTime                 *string `json:"glacier_storage_retrieved_time"`
     // Size of Intelligent-Tiering AA Storage objects in bytes.
-    IntelligentTieringAaStorage               *int64  `json:"intelligent_tiering_aa_storage"`
+    IntelligentTieringAaStorage                 *int64  `json:"intelligent_tiering_aa_storage"`
     // Timestamp when CloudWatch reported the Intelligent-Tiering AA Storage objects size.
-    IntelligentTieringAaStorageRetrievedTime  *string `json:"intelligent_tiering_aa_storage_retrieved_time"`
+    IntelligentTieringAaStorageRetrievedTime    *string `json:"intelligent_tiering_aa_storage_retrieved_time"`
+    // Size of Intelligent-Tiering AIA Storage objects in bytes.
+    IntelligentTieringAiaStorage                *int64  `json:"intelligent_tiering_aia_storage"`
+    // Timestamp when CloudWatch reported the Intelligent-Tiering AIA Storage objects size.
+    IntelligentTieringAiaStorageRetrievedTime   *string `json:"intelligent_tiering_aia_storage_retrieved_time"`
     // Size of Intelligent-Tiering DAA Storage objects in bytes.
-    IntelligentTieringDaaStorage              *int64  `json:"intelligent_tiering_daa_storage"`
+    IntelligentTieringDaaStorage                *int64  `json:"intelligent_tiering_daa_storage"`
     // Timestamp when CloudWatch reported the Intelligent-Tiering DAA Storage objects size.
-    IntelligentTieringDaaStorageRetrievedTime *string `json:"intelligent_tiering_daa_storage_retrieved_time"`
+    IntelligentTieringDaaStorageRetrievedTime   *string `json:"intelligent_tiering_daa_storage_retrieved_time"`
     // Size of Intelligent-Tiering FA Storage objects in bytes.
-    IntelligentTieringFaStorage               *int64  `json:"intelligent_tiering_fa_storage"`
+    IntelligentTieringFaStorage                 *int64  `json:"intelligent_tiering_fa_storage"`
     // Timestamp when CloudWatch reported the Intelligent-Tiering FA Storage objects size.
-    IntelligentTieringFaStorageRetrievedTime  *string `json:"intelligent_tiering_fa_storage_retrieved_time"`
+    IntelligentTieringFaStorageRetrievedTime    *string `json:"intelligent_tiering_fa_storage_retrieved_time"`
     // Size of Intelligent-Tiering IA Storage objects in bytes.
-    IntelligentTieringIaStorage               *int64  `json:"intelligent_tiering_ia_storage"`
+    IntelligentTieringIaStorage                 *int64  `json:"intelligent_tiering_ia_storage"`
     // Timestamp when CloudWatch reported the Intelligent-Tiering IA Storage objects size.
-    IntelligentTieringIaStorageRetrievedTime  *string `json:"intelligent_tiering_ia_storage_retrieved_time"`
+    IntelligentTieringIaStorageRetrievedTime    *string `json:"intelligent_tiering_ia_storage_retrieved_time"`
     // Size of OneZone IA Overhead in bytes.
-    OneZoneIaSizeOverhead                     *int64  `json:"one_zone_ia_size_overhead"`
+    OneZoneIaSizeOverhead                       *int64  `json:"one_zone_ia_size_overhead"`
     // Timestamp when CloudWatch reported the OneZone IA Overhead size.
-    OneZoneIaSizeOverheadRetrievedTime        *string `json:"one_zone_ia_size_overhead_retrieved_time"`
+    OneZoneIaSizeOverheadRetrievedTime          *string `json:"one_zone_ia_size_overhead_retrieved_time"`
     // Size of OneZone IA Storage objects in bytes.
-    OneZoneIaStorage                          *int64  `json:"one_zone_ia_storage"`
+    OneZoneIaStorage                            *int64  `json:"one_zone_ia_storage"`
     // Timestamp when CloudWatch reported the OneZone IA Storage objects size.
-    OneZoneIaStorageRetrievedTime             *string `json:"one_zone_ia_storage_retrieved_time"`
+    OneZoneIaStorageRetrievedTime               *string `json:"one_zone_ia_storage_retrieved_time"`
     // Size of Reduced Redundancy Storage objects in bytes.
-    ReducedRedundancyStorage                  *int64  `json:"reduced_redundancy_storage"`
+    ReducedRedundancyStorage                    *int64  `json:"reduced_redundancy_storage"`
     // Timestamp when CloudWatch reported the Reduced Redundancy Storage objects size.
-    ReducedRedundancyStorageRetrievedTime     *string `json:"reduced_redundancy_storage_retrieved_time"`
+    ReducedRedundancyStorageRetrievedTime       *string `json:"reduced_redundancy_storage_retrieved_time"`
     // Size of Standard IA Object Overhead in bytes.
-    StandardIaObjectOverhead                  *int64  `json:"standard_ia_object_overhead"`
+    StandardIaObjectOverhead                    *int64  `json:"standard_ia_object_overhead"`
     // Timestamp when CloudWatch reported the Standard IA Object Overhead size.
-    StandardIaObjectOverheadRetrievedTime     *string `json:"standard_ia_object_overhead_retrieved_time"`
+    StandardIaObjectOverheadRetrievedTime       *string `json:"standard_ia_object_overhead_retrieved_time"`
     // Size of Standard IA Overhead in bytes.
-    StandardIaSizeOverhead                    *int64  `json:"standard_ia_size_overhead"`
+    StandardIaSizeOverhead                      *int64  `json:"standard_ia_size_overhead"`
     // Timestamp when CloudWatch reported the Standard IA Overhead size.
-    StandardIaSizeOverheadRetrievedTime       *string `json:"standard_ia_size_overhead_retrieved_time"`
+    StandardIaSizeOverheadRetrievedTime         *string `json:"standard_ia_size_overhead_retrieved_time"`
     // Size of Standard IA Storage objects in bytes.
-    StandardIaStorage                         *int64  `json:"standard_ia_storage"`
+    StandardIaStorage                           *int64  `json:"standard_ia_storage"`
     // Timestamp when CloudWatch reported the Standard IA Storage objects size.
-    StandardIaStorageRetrievedTime            *string `json:"standard_ia_storage_retrieved_time"`
+    StandardIaStorageRetrievedTime              *string `json:"standard_ia_storage_retrieved_time"`
     // Size of Standard Storage objects in bytes.
-    StandardStorage                           *int64  `json:"standard_storage"`
+    StandardStorage                             *int64  `json:"standard_storage"`
     // Timestamp when CloudWatch reported the Standard Storage objects size.
-    StandardStorageRetrievedTime              *string `json:"standard_storage_retrieved_time"`
+    StandardStorageRetrievedTime                *string `json:"standard_storage_retrieved_time"`
 }
 
 // S3CloudwatchMetrics represents a custom type struct.
@@ -3768,6 +3824,229 @@ type S3CloudwatchMetrics struct {
     SizeBytesPerStorageClass *S3BucketSizeRes `json:"size_bytes_per_storage_class"`
     // Timestamp when CloudWatch reported the bucket size.
     SizeBytesRetrievedTime   *string          `json:"size_bytes_retrieved_time"`
+}
+
+// S3DeleteMarkerReplication represents a custom type struct.
+// Specifies whether Amazon S3 replicates delete markers.
+type S3DeleteMarkerReplication struct {
+    // Indicates whether to replicate delete markers.
+    Status *string `json:"status"`
+}
+
+// S3Destination represents a custom type struct.
+// Specifies information about where to publish analysis or configuration results.
+type S3Destination struct {
+    // A container for information about access control for replicas.
+    AccessControlTranslation *S3AccessControlTranslation `json:"access_control_translation"`
+    // Destination bucket owner account ID.
+    Account                  *string                     `json:"account"`
+    // The Amazon Resource Name (ARN) of the bucket where
+    // you want Amazon S3 to store the results.
+    Bucket                   *string                     `json:"bucket"`
+    // Specifies encryption-related information for an Amazon S3 bucket
+    // that is a destination for replicated objects.
+    EncryptionConfiguration  *S3EncryptionConfiguration  `json:"encryption_configuration"`
+    // A container specifying replication metrics-related settings
+    // enabling replication metrics and events.
+    Metrics                  *S3Metrics                  `json:"metrics"`
+    // A container specifying S3 Replication Time Control (S3 RTC)
+    // related information.
+    ReplicationTime          *S3ReplicationTime          `json:"replication_time"`
+    // The storage class to use when replicating objects.
+    StorageClass             *string                     `json:"storage_class"`
+}
+
+// S3EncryptionConfiguration represents a custom type struct.
+// Specifies encryption-related information for an Amazon S3 bucket
+// that is a destination for replicated objects.
+type S3EncryptionConfiguration struct {
+    // Specifies the ID (Key ARN or Alias ARN) of the customer managed
+    // AWS KMS key stored in AWS Key Management Service (KMS) for the
+    // destination bucket.
+    ReplicaKmsKeyId *string `json:"replica_kms_key_id"`
+}
+
+// S3EncryptionOutput represents a custom type struct.
+// The AWS encryption output of the bucket.
+type S3EncryptionOutput struct {
+    // Specifies the default server-side-encryption configuration.
+    ServerSideEncryptionConfiguration *S3ServerSideEncryptionConfiguration `json:"server_side_encryption_configuration"`
+}
+
+// S3ExistingObjectReplication represents a custom type struct.
+// Configuration to replicate existing source bucket objects.
+type S3ExistingObjectReplication struct {
+    // Specifies whether the existing object replication is enabled.
+    Status *string `json:"status"`
+}
+
+// S3Metrics represents a custom type struct.
+// A container specifying replication metrics-related settings
+// enabling replication metrics and events.
+type S3Metrics struct {
+    // A container specifying the time value for S3 Replication Time
+    // Control (S3 RTC) and replication metrics EventThreshold.
+    EventThreshold *S3ReplicationTimeValue `json:"event_threshold"`
+    // Specifies whether the replication metrics are enabled.
+    Status         *string                 `json:"status"`
+}
+
+// S3ReplicaModifications represents a custom type struct.
+// A filter that you can specify for selection for modifications on replicas.
+type S3ReplicaModifications struct {
+    // Specifies whether Amazon S3 replicates modifications on replicas.
+    Status *string `json:"status"`
+}
+
+// S3ReplicationConfiguration represents a custom type struct.
+// A container for replication rules with a maximum size
+// of 2MB and a maximum of 1,000 rules.
+type S3ReplicationConfiguration struct {
+    // The Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM)
+    // role that Amazon S3 assumes when replicating objects.
+    Role  *string              `json:"role"`
+    // Specifies which Amazon S3 objects to replicate and where to store the replicas.
+    Rules []*S3ReplicationRule `json:"rules"`
+}
+
+// S3ReplicationOutput represents a custom type struct.
+// The AWS replication output of the bucket.
+type S3ReplicationOutput struct {
+    // A container for replication rules with a maximum size
+    // of 2MB and a maximum of 1,000 rules.
+    ReplicationConfiguration *S3ReplicationConfiguration `json:"replication_configuration"`
+}
+
+// S3ReplicationRule represents a custom type struct.
+// Specifies which Amazon S3 objects to replicate and where to store the replicas.
+type S3ReplicationRule struct {
+    // Specifies whether Amazon S3 replicates delete markers.
+    DeleteMarkerReplication   *S3DeleteMarkerReplication   `json:"delete_marker_replication"`
+    // Specifies information about where to publish analysis or configuration results.
+    Destination               *S3Destination               `json:"destination"`
+    // Configuration to replicate existing source bucket objects.
+    ExistingObjectReplication *S3ExistingObjectReplication `json:"existing_object_replication"`
+    // A filter that identifies the subset of objects
+    // to which the replication rule applies.
+    Filter                    *S3ReplicationRuleFilter     `json:"filter"`
+    // A unique identifier for the rule (max 255 characters).
+    Id                        *string                      `json:"id"`
+    // The priority indicates which rule has precedence whenever
+    // two or more replication rules conflict.
+    Priority                  *int64                       `json:"priority"`
+    // A container that describes additional filters for identifying
+    // the source objects that you want to replicate.
+    SourceSelectionCriteria   *S3SourceSelectionCriteria   `json:"source_selection_criteria"`
+    // Specifies whether the rule is enabled.
+    Status                    *string                      `json:"status"`
+}
+
+// S3ReplicationRuleAndOperator represents a custom type struct.
+// A container for specifying rule filters. The filters
+// determine the subset of objects to which the rule applies.
+type S3ReplicationRuleAndOperator struct {
+    // An object key name prefix that identifies
+    // the subset of objects to which the rule applies.
+    Prefix *string  `json:"prefix"`
+    // A container of a key value name pair.
+    Tags   []*S3Tag `json:"tags"`
+}
+
+// S3ReplicationRuleFilter represents a custom type struct.
+// A filter that identifies the subset of objects
+// to which the replication rule applies.
+type S3ReplicationRuleFilter struct {
+    // A container for specifying rule filters. The filters
+    // determine the subset of objects to which the rule applies.
+    And    *S3ReplicationRuleAndOperator `json:"and"`
+    // An object key name prefix that identifies the
+    // subset of objects to which the rule applies.
+    Prefix *string                       `json:"prefix"`
+    // A container of a key value name pair.
+    Tag    *S3Tag                        `json:"tag"`
+}
+
+// S3ReplicationTime represents a custom type struct.
+// A container specifying S3 Replication Time Control (S3 RTC)
+// related information.
+type S3ReplicationTime struct {
+    // Specifies whether the replication time is enabled.
+    Status *string                 `json:"status"`
+    // A container specifying the time value for S3 Replication Time
+    // Control (S3 RTC) and replication metrics EventThreshold.
+    Time   *S3ReplicationTimeValue `json:"time"`
+}
+
+// S3ReplicationTimeValue represents a custom type struct.
+// A container specifying the time value for S3 Replication Time
+// Control (S3 RTC) and replication metrics EventThreshold.
+type S3ReplicationTimeValue struct {
+    // Contains an integer specifying time in minutes.
+    Minutes *int64 `json:"minutes"`
+}
+
+// S3ServerSideEncryptionByDefault represents a custom type struct.
+// Describes the default server-side encryption to apply to new objects in the bucket.
+type S3ServerSideEncryptionByDefault struct {
+    // AWS Key Management Service (KMS) customer AWS KMS key ID to use for the default encryption.
+    KmsMasterKeyId *string `json:"kms_master_key_id"`
+    // Server-side encryption algorithm to use for the default encryption.
+    SseAlgorithm   *string `json:"sse_algorithm"`
+}
+
+// S3ServerSideEncryptionConfiguration represents a custom type struct.
+// Specifies the default server-side-encryption configuration.
+type S3ServerSideEncryptionConfiguration struct {
+    // Specifies the default server-side encryption configuration.
+    Rules []*S3ServerSideEncryptionRule `json:"rules"`
+}
+
+// S3ServerSideEncryptionRule represents a custom type struct.
+// Specifies the default server-side encryption configuration.
+type S3ServerSideEncryptionRule struct {
+    // Describes the default server-side encryption to apply to new objects in the bucket.
+    ApplyServerSideEncryptionByDefault *S3ServerSideEncryptionByDefault `json:"apply_server_side_encryption_by_default"`
+    // Specifies whether Amazon S3 should use an S3 Bucket Key with server-side
+    // encryption using KMS (SSE-KMS) for new objects in the bucket.
+    BucketKeyEnabled                   *bool                            `json:"bucket_key_enabled"`
+}
+
+// S3SourceSelectionCriteria represents a custom type struct.
+// A container that describes additional filters for identifying
+// the source objects that you want to replicate.
+type S3SourceSelectionCriteria struct {
+    // A filter that you can specify for selection for modifications on replicas.
+    ReplicaModifications   *S3ReplicaModifications   `json:"replica_modifications"`
+    // A container for filter information for the selection of
+    // S3 objects encrypted with AWS KMS.
+    SseKmsEncryptedObjects *S3SseKmsEncryptedObjects `json:"sse_kms_encrypted_objects"`
+}
+
+// S3SseKmsEncryptedObjects represents a custom type struct.
+// A container for filter information for the selection of
+// S3 objects encrypted with AWS KMS.
+type S3SseKmsEncryptedObjects struct {
+    // Specifies whether Amazon S3 replicates objects created with server-side
+    // encryption using an AWS KMS key stored in AWS Key Management Service.
+    Status *string `json:"status"`
+}
+
+// S3Tag represents a custom type struct.
+// A container of a key value name pair.
+type S3Tag struct {
+    // Name of the object key.
+    Key   *string `json:"key"`
+    // Value of the tag.
+    Value *string `json:"value"`
+}
+
+// S3VersioningOutput represents a custom type struct.
+// The AWS versioning output of the bucket.
+type S3VersioningOutput struct {
+    // Specifies whether MFA delete is enabled in the bucket versioning configuration.
+    MfaDelete *string `json:"mfa_delete"`
+    // The versioning state of the bucket.
+    Status    *string `json:"status"`
 }
 
 // SingleErrorResponse represents a custom type struct
@@ -4026,9 +4305,11 @@ type Task struct {
 // URLs to pages related to the resource.
 type TaskLinks struct {
     // The HATEOAS link to this resource.
-    Self       *HateoasSelfLink `json:"_self"`
+    Self                   *HateoasSelfLink `json:"_self"`
     // A resource-specific HATEOAS link.
-    UpdateTask *HateoasLink     `json:"update-task"`
+    ReadOrganizationalUnit *HateoasLink     `json:"read-organizational-unit"`
+    // A resource-specific HATEOAS link.
+    UpdateTask             *HateoasLink     `json:"update-task"`
 }
 
 // TaskListEmbedded represents a custom type struct.

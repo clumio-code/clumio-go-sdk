@@ -20,6 +20,8 @@ type PolicyRulesV1Client interface {
         *models.ListRulesResponse,  *apiutils.APIError)
     
     // CreatePolicyRule Creates a new policy rule. Policy rules determine how a policy should be assigned to assets.
+    //  Additionally, to create a rule in the context of another Organizational Unit, refer to the
+    //  Getting Started documentation.
     CreatePolicyRule(
         body *models.CreatePolicyRuleV1Request)(
         *models.CreateRuleResponse,  *apiutils.APIError)

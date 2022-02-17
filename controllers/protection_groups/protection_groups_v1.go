@@ -95,7 +95,9 @@ func (p *ProtectionGroupsV1) ReadProtectionGroup(
 //  datasources/protection-groups read/listing is asynchronous and may take a few
 //  seconds to minutes at most. As a result, the protection group won't be protectable
 //  via /policies/assignments until it appears in the /datasources/protection-groups
-//  endpoint.
+//  endpoint. Additionally, to create a protection group in the context of another Organizational
+//  Unit, refer to the Getting Started
+//  documentation.
 func (p *ProtectionGroupsV1) CreateProtectionGroup(
     body models.CreateProtectionGroupV1Request)(
     *models.CreateProtectionGroupResponse, *apiutils.APIError) {

@@ -77,22 +77,25 @@ type CreateAwsConnectionV1Request struct {
 // The body of the request.
 type PostProcessAwsConnectionV1Request struct {
     // The AWS-assigned ID of the account associated with the connection.
-    AccountNativeId  *string `json:"account_native_id"`
+    AccountNativeId  *string            `json:"account_native_id"`
     // The AWS region associated with the connection. For example, `us-east-1`.
-    AwsRegion        *string `json:"aws_region"`
+    AwsRegion        *string            `json:"aws_region"`
     // ClumioEventPubId is the Clumio Event Pub SNS topic ID.
-    ClumioEventPubId *string `json:"clumio_event_pub_id"`
+    ClumioEventPubId *string            `json:"clumio_event_pub_id"`
     // Configuration represents the AWS connection configuration in json string format
-    Configuration    *string `json:"configuration"`
+    Configuration    *string            `json:"configuration"`
+    // Properties is a key value map meant to be used for passing additional information
+    // like resource IDs/ARNs.
+    Properties       map[string]*string `json:"properties"`
     // RequestType indicates whether this is a Create, Update or Delete request
-    RequestType      *string `json:"request_type"`
+    RequestType      *string            `json:"request_type"`
     // RoleArn is the ARN of the ClumioIAMRole created in the customer account
-    RoleArn          *string `json:"role_arn"`
+    RoleArn          *string            `json:"role_arn"`
     // Role External Id is the unique string passed while creating the AWS resources .
-    RoleExternalId   *string `json:"role_external_id"`
+    RoleExternalId   *string            `json:"role_external_id"`
     // The 36-character Clumio AWS integration ID token used to identify the
     // installation of the CloudFormation/Terraform template on the account.
-    Token            *string `json:"token"`
+    Token            *string            `json:"token"`
 }
 
 // CreateConnectionTemplateV1Request represents a custom type struct.
@@ -256,7 +259,13 @@ type CreatePolicyRuleV1Request struct {
     // |                       |                           |                          |
     // +-----------------------+---------------------------+--------------------------+
     // | aws_tag               | $eq, $in, $all, $contains | Denotes the AWS tag(s)   |
-    // |                       |                           | to conditionalize on     |
+    // |                       |                           | to conditionalize on.    |
+    // |                       |                           | Max 100 tags allowed in  |
+    // |                       |                           | each rule                |
+    // |                       |                           | and tag key can be upto  |
+    // |                       |                           | 128 characters and value |
+    // |                       |                           | can be upto 256          |
+    // |                       |                           | characters long.         |
     // |                       |                           |                          |
     // |                       |                           | {"aws_tag":{"$eq":{"key" |
     // |                       |                           | :"Environment",          |
@@ -285,7 +294,7 @@ type CreatePolicyRuleV1Request struct {
     // +-----------------------+---------------------------+--------------------------+
     // | entity_type           | $eq, $in                  | Denotes the AWS entity   |
     // |                       |                           | type to conditionalize   |
-    // |                       |                           | on                       |
+    // |                       |                           | on. (Required)           |
     // |                       |                           |                          |
     // |                       |                           | {"entity_type":{"$eq":"a |
     // |                       |                           | ws_rds_instance"}}       |
@@ -302,7 +311,7 @@ type CreatePolicyRuleV1Request struct {
     // +-----------------------+---------------------------+--------------------------+
     // 
     Condition *string       `json:"condition"`
-    // Name of the rule.
+    // Name of the rule. Max 100 characters.
     Name      *string       `json:"name"`
     // A priority relative to other rules.
     Priority  *RulePriority `json:"priority"`
@@ -344,7 +353,13 @@ type UpdatePolicyRuleV1Request struct {
     // |                       |                           |                          |
     // +-----------------------+---------------------------+--------------------------+
     // | aws_tag               | $eq, $in, $all, $contains | Denotes the AWS tag(s)   |
-    // |                       |                           | to conditionalize on     |
+    // |                       |                           | to conditionalize on.    |
+    // |                       |                           | Max 100 tags allowed in  |
+    // |                       |                           | each rule                |
+    // |                       |                           | and tag key can be upto  |
+    // |                       |                           | 128 characters and value |
+    // |                       |                           | can be upto 256          |
+    // |                       |                           | characters long.         |
     // |                       |                           |                          |
     // |                       |                           | {"aws_tag":{"$eq":{"key" |
     // |                       |                           | :"Environment",          |
@@ -373,7 +388,7 @@ type UpdatePolicyRuleV1Request struct {
     // +-----------------------+---------------------------+--------------------------+
     // | entity_type           | $eq, $in                  | Denotes the AWS entity   |
     // |                       |                           | type to conditionalize   |
-    // |                       |                           | on                       |
+    // |                       |                           | on. (Required)           |
     // |                       |                           |                          |
     // |                       |                           | {"entity_type":{"$eq":"a |
     // |                       |                           | ws_rds_instance"}}       |
@@ -390,7 +405,7 @@ type UpdatePolicyRuleV1Request struct {
     // +-----------------------+---------------------------+--------------------------+
     // 
     Condition *string       `json:"condition"`
-    // Name of the rule.
+    // Name of the rule. Max 100 characters.
     Name      *string       `json:"name"`
     // A priority relative to other rules.
     Priority  *RulePriority `json:"priority"`
@@ -398,21 +413,6 @@ type UpdatePolicyRuleV1Request struct {
 
 // CreateProtectionGroupV1Request represents a custom type struct
 type CreateProtectionGroupV1Request struct {
-    // The following table describes the possible conditions for a bucket to be
-    // automatically added to a protection group.
-    // 
-    // +---------+----------------+---------------------------------------------------+
-    // |  Field  | Rule Condition |                    Description                    |
-    // +=========+================+===================================================+
-    // | aws_tag | $eq            | Denotes the AWS tag(s) to conditionalize on       |
-    // |         |                |                                                   |
-    // |         |                | {"aws_tag":{"$eq":{"key":"Environment",           |
-    // |         |                | "value":"Prod"}}}                                 |
-    // |         |                |                                                   |
-    // |         |                |                                                   |
-    // +---------+----------------+---------------------------------------------------+
-    // 
-    BucketRule   *string       `json:"bucket_rule"`
     // The user-assigned description of the protection group.
     Description  *string       `json:"description"`
     // The user-assigned name of the protection group.
@@ -424,21 +424,6 @@ type CreateProtectionGroupV1Request struct {
 
 // UpdateProtectionGroupV1Request represents a custom type struct
 type UpdateProtectionGroupV1Request struct {
-    // The following table describes the possible conditions for a bucket to be
-    // automatically added to a protection group.
-    // 
-    // +---------+----------------+---------------------------------------------------+
-    // |  Field  | Rule Condition |                    Description                    |
-    // +=========+================+===================================================+
-    // | aws_tag | $eq            | Denotes the AWS tag(s) to conditionalize on       |
-    // |         |                |                                                   |
-    // |         |                | {"aws_tag":{"$eq":{"key":"Environment",           |
-    // |         |                | "value":"Prod"}}}                                 |
-    // |         |                |                                                   |
-    // |         |                |                                                   |
-    // +---------+----------------+---------------------------------------------------+
-    // 
-    BucketRule   *string       `json:"bucket_rule"`
     // The user-assigned description of the protection group.
     Description  *string       `json:"description"`
     // The user-assigned name of the protection group.
