@@ -257,7 +257,7 @@ type AlertParentEntity struct {
     // A system-generated ID assigned to this entity.
     Id         *string `json:"id"`
     // The following table describes the entity types that Clumio supports.
-    // 
+    //
     // +--------------------------------+---------------------------------------------+
     // |          Entity Type           |                   Details                   |
     // +================================+=============================================+
@@ -292,7 +292,7 @@ type AlertParentEntity struct {
     // | aws_cmk                        | AWS Customer Master Key used to encrypt     |
     // |                                | data.                                       |
     // +--------------------------------+---------------------------------------------+
-    // 
+    //
     ClumioType *string `json:"type"`
     // A system-generated value assigned to the entity. For example, if the primary entity type is "vmware_vm" for a virtual machine, then the value is the name of the VM.
     Value      *string `json:"value"`
@@ -304,7 +304,7 @@ type AlertPrimaryEntity struct {
     // A system-generated ID assigned to this entity.
     Id         *string `json:"id"`
     // The following table describes the entity types that Clumio supports.
-    // 
+    //
     // +--------------------------------+---------------------------------------------+
     // |          Entity Type           |                   Details                   |
     // +================================+=============================================+
@@ -339,7 +339,7 @@ type AlertPrimaryEntity struct {
     // | aws_cmk                        | AWS Customer Master Key used to encrypt     |
     // |                                | data.                                       |
     // +--------------------------------+---------------------------------------------+
-    // 
+    //
     ClumioType *string `json:"type"`
     // A system-generated value assigned to the entity. For example, if the primary entity type is "vmware_vm" for a virtual machine, then the value is the name of the VM.
     Value      *string `json:"value"`
@@ -368,10 +368,10 @@ type AssignPolicyAction struct {
 type AssignmentEntity struct {
     // A system-generated ID assigned of an entity being assigned or unassigned to a policy.
     Id         *string `json:"id"`
-    // 
+    //
     // The type of an entity being associated or disassociated with a policy.
     // Valid primary entity types include the following:
-    // 
+    //
     // +---------------------+---------------------+
     // | Primary Entity Type |       Details       |
     // +=====================+=====================+
@@ -387,7 +387,7 @@ type AssignmentEntity struct {
     // +---------------------+---------------------+
     // | protection_group    | Protection group.   |
     // +---------------------+---------------------+
-    // 
+    //
     ClumioType *string `json:"type"`
 }
 
@@ -408,7 +408,7 @@ type AssignmentInputModel struct {
 // AuditTrails represents a custom type struct
 type AuditTrails struct {
     // The action performed by the user.
-    // 
+    //
     // +------------------+-----------------------------------------------------------+
     // |      Action      |                          Details                          |
     // +==================+===========================================================+
@@ -456,10 +456,10 @@ type AuditTrails struct {
     // +------------------+-----------------------------------------------------------+
     // | granular_restore | Restoring individual files, mails or records              |
     // +------------------+-----------------------------------------------------------+
-    // 
+    //
     Action          *string             `json:"action"`
     // The category of the auditable action performed by the user.
-    // 
+    //
     // +-------------------------+----------------------------------------------------+
     // |        Category         |                      Details                       |
     // +=========================+====================================================+
@@ -504,7 +504,7 @@ type AuditTrails struct {
     // | ecosystem_changes       | Changes in the ecosystem like adding or remvoings  |
     // |                         | VMs                                                |
     // +-------------------------+----------------------------------------------------+
-    // 
+    //
     Category        *string             `json:"category"`
     // Additional details about the activity provided in JSON format.
     Details         *string             `json:"details"`
@@ -538,7 +538,7 @@ type AuditParentEntity struct {
     // A system-generated ID assigned to this entity.
     Id         *string `json:"id"`
     // The following table describes the entity types that Clumio supports.
-    // 
+    //
     // +--------------------------------+---------------------------------------------+
     // |          Entity Type           |                   Details                   |
     // +================================+=============================================+
@@ -573,7 +573,7 @@ type AuditParentEntity struct {
     // | aws_cmk                        | AWS Customer Master Key used to encrypt     |
     // |                                | data.                                       |
     // +--------------------------------+---------------------------------------------+
-    // 
+    //
     ClumioType *string `json:"type"`
     // A system-generated value assigned to the entity. For example, if the primary entity type is "vmware_vm" for a virtual machine, then the value is the name of the VM.
     Value      *string `json:"value"`
@@ -587,7 +587,7 @@ type AuditPrimaryEntity struct {
     // A system-generated ID assigned to this entity.
     Id         *string `json:"id"`
     // The following table describes the entity types that Clumio supports.
-    // 
+    //
     // +--------------------------------+---------------------------------------------+
     // |          Entity Type           |                   Details                   |
     // +================================+=============================================+
@@ -622,7 +622,7 @@ type AuditPrimaryEntity struct {
     // | aws_cmk                        | AWS Customer Master Key used to encrypt     |
     // |                                | data.                                       |
     // +--------------------------------+---------------------------------------------+
-    // 
+    //
     ClumioType *string `json:"type"`
     // A system-generated value assigned to the entity. For example, if the primary entity type is "vmware_vm" for a virtual machine, then the value is the name of the VM.
     Value      *string `json:"value"`
@@ -658,13 +658,13 @@ type AwsDsGroupingCriteria struct {
     // To edit this data group, all organizational units using it must be deleted.
     IsEditable *bool   `json:"is_editable"`
     // The entity type used to group organizational units for AWS resources.
-    // 
+    //
     // +-----------------+-------------------------+
     // |   Entity Type   |         Details         |
     // +=================+=========================+
     // | aws_environment | AWS account and region. |
     // +-----------------+-------------------------+
-    // 
+    //
     ClumioType *string `json:"type"`
 }
 
@@ -1015,7 +1015,7 @@ type ConsolidatedAlertParentEntity struct {
     // A system-generated ID assigned to this entity.
     Id         *string `json:"id"`
     // The following table describes the entity types that Clumio supports.
-    // 
+    //
     // +--------------------------------+---------------------------------------------+
     // |          Entity Type           |                   Details                   |
     // +================================+=============================================+
@@ -1050,7 +1050,7 @@ type ConsolidatedAlertParentEntity struct {
     // | aws_cmk                        | AWS Customer Master Key used to encrypt     |
     // |                                | data.                                       |
     // +--------------------------------+---------------------------------------------+
-    // 
+    //
     ClumioType *string `json:"type"`
     // A system-generated value assigned to the entity. For example, if the primary entity type is "vmware_vm" for a virtual machine, then the value is the name of the VM.
     Value      *string `json:"value"`
@@ -2000,7 +2000,7 @@ type M365GroupingCriteria struct {
     // To edit this data group, all organizational units using it must be deleted.
     IsEditable *bool   `json:"is_editable"`
     // The entity type used to group organizational units for Microsoft 365 resources.
-    // 
+    //
     // +---------------------+------------------------+
     // |     Entity Type     |        Details         |
     // +=====================+========================+
@@ -2008,7 +2008,7 @@ type M365GroupingCriteria struct {
     // +---------------------+------------------------+
     // | microsoft365_group  | Microsoft 365 group.   |
     // +---------------------+------------------------+
-    // 
+    //
     ClumioType *string `json:"type"`
 }
 
@@ -2181,9 +2181,9 @@ type MssqlDatabase struct {
     AvailabilityGroupName                   *string                `json:"availability_group_name"`
     // The policy compliance status of the resource. If the database is not protected,
     // then this field has a value of `null`. Refer to
-    // 
+    //
     // the Compliance Status table
-    // 
+    //
     // for a complete list of compliance statuses.
     ComplianceStatus                        *string                `json:"compliance_status"`
     // The Clumio-assigned ID of the group to which the standalone database belongs, in case of an
@@ -2726,7 +2726,7 @@ type PermissionModel struct {
     Id          *string `json:"id"`
     // Name of the permission.
     // The following table lists the supported permissions for a role:
-    // 
+    //
     // +----------------------------------------------------+-------------------------+
     // |                  Permission Name                   | Full/Partial Applicable |
     // +====================================================+=========================+
@@ -2749,7 +2749,7 @@ type PermissionModel struct {
     // | Other Admin Functions (API Tokens, Tasks, Alerts   | Yes                     |
     // | and Audit Logs)                                    |                         |
     // +----------------------------------------------------+-------------------------+
-    // 
+    //
     Name        *string `json:"name"`
 }
 
@@ -2768,7 +2768,7 @@ type Policy struct {
     // The Clumio-assigned ID of the policy.
     Id                            *string            `json:"id"`
     // The following table describes the possible lock statuses of a policy.
-    // 
+    //
     // +----------+-------------------------------------------------------------------+
     // |  Status  |                            Description                            |
     // +==========+===================================================================+
@@ -2780,7 +2780,7 @@ type Policy struct {
     // | deleting | During policy deletion, concurrent edits or deletion requests     |
     // |          | will be rejected.                                                 |
     // +----------+-------------------------------------------------------------------+
-    // 
+    //
     LockStatus                    *string            `json:"lock_status"`
     // The user-provided name of the policy.
     Name                          *string            `json:"name"`
@@ -2977,6 +2977,21 @@ type ProtectionGroup struct {
     Links                     *ProtectionGroupLinks                 `json:"_links"`
     // Number of buckets
     BucketCount               *int64                                `json:"bucket_count"`
+    // The following table describes the possible conditions for a bucket to be
+    // automatically added to a protection group.
+    //
+    // +---------+----------------+---------------------------------------------------+
+    // |  Field  | Rule Condition |                    Description                    |
+    // +=========+================+===================================================+
+    // | aws_tag | $eq            | Denotes the AWS tag(s) to conditionalize on       |
+    // |         |                |                                                   |
+    // |         |                | {"aws_tag":{"$eq":{"key":"Environment",           |
+    // |         |                | "value":"Prod"}}}                                 |
+    // |         |                |                                                   |
+    // |         |                |                                                   |
+    // +---------+----------------+---------------------------------------------------+
+    //
+    BucketRule                *string                               `json:"bucket_rule"`
     // The compliance statistics of workloads associated with this entity.
     ComplianceStats           *ProtectionComplianceStatsWithSeeding `json:"compliance_stats"`
     // The compliance status of the protected protection group. Possible values include
@@ -3034,6 +3049,10 @@ type ProtectionGroupBucket struct {
     Links                     *ProtectionGroupBucketLinks    `json:"_links"`
     // The AWS-assigned ID of the account associated with the DynamoDB table.
     AccountNativeId           *string                        `json:"account_native_id"`
+    // Whether this bucket was added to this protection group by the bucket rule
+    AddedByBucketRule         *bool                          `json:"added_by_bucket_rule"`
+    // Whether this bucket was added to this protection group by the user
+    AddedByUser               *bool                          `json:"added_by_user"`
     // The AWS region associated with the DynamoDB table.
     AwsRegion                 *string                        `json:"aws_region"`
     // The Clumio-assigned ID of the bucket
@@ -3178,7 +3197,7 @@ type ProtectionInfo struct {
     // The type of entity from which protection was inherited.
     // If protection was not inherited, then this field has a value of `null`.
     // Entities from which protection can be inherited include the following:
-    // 
+    //
     // +--------------------------------+---------------------------------+
     // |     Inheriting Entity Type     |             Details             |
     // +================================+=================================+
@@ -3198,7 +3217,7 @@ type ProtectionInfo struct {
     // +--------------------------------+---------------------------------+
     // | vmware_compute_resource_folder | VMware compute resource folder. |
     // +--------------------------------+---------------------------------+
-    // 
+    //
     InheritingEntityType *string `json:"inheriting_entity_type"`
     // A system-generated ID assigned to the policy protecting this resource.
     PolicyId             *string `json:"policy_id"`
@@ -3221,7 +3240,7 @@ type ProtectionInfoWithRule struct {
     // The type of entity from which protection was inherited.
     // If protection was not inherited, then this field has a value of `null`.
     // Entities from which protection can be inherited include the following:
-    // 
+    //
     // +--------------------------------+---------------------------------+
     // |     Inheriting Entity Type     |             Details             |
     // +================================+=================================+
@@ -3241,7 +3260,7 @@ type ProtectionInfoWithRule struct {
     // +--------------------------------+---------------------------------+
     // | vmware_compute_resource_folder | VMware compute resource folder. |
     // +--------------------------------+---------------------------------+
-    // 
+    //
     InheritingEntityType *string `json:"inheriting_entity_type"`
     // A system-generated ID assigned to the policy protecting this resource.
     PolicyId             *string `json:"policy_id"`
@@ -3415,7 +3434,7 @@ type RestEntity struct {
     // A system-generated ID assigned to this entity.
     Id         *string `json:"id"`
     // The following table describes the entity types that Clumio supports.
-    // 
+    //
     // +--------------------------------+---------------------------------------------+
     // |          Entity Type           |                   Details                   |
     // +================================+=============================================+
@@ -3450,7 +3469,7 @@ type RestEntity struct {
     // | aws_cmk                        | AWS Customer Master Key used to encrypt     |
     // |                                | data.                                       |
     // +--------------------------------+---------------------------------------------+
-    // 
+    //
     ClumioType *string `json:"type"`
     // A system-generated value assigned to the entity. For example, if the primary entity type is "vmware_vm" for a virtual machine, then the value is the name of the VM.
     Value      *string `json:"value"`
@@ -3568,7 +3587,7 @@ type Rule struct {
     // An action to be applied subject to the rule criteria.
     Action               *RuleAction   `json:"action"`
     // The following table describes the possible conditions for a rule.
-    // 
+    //
     // +-----------------------+---------------------------+--------------------------+
     // |         Field         |      Rule Condition       |       Description        |
     // +=======================+===========================+==========================+
@@ -3649,7 +3668,7 @@ type Rule struct {
     // |                       |                           |                          |
     // |                       |                           |                          |
     // +-----------------------+---------------------------+--------------------------+
-    // 
+    //
     Condition            *string       `json:"condition"`
     // The Clumio-assigned ID of the policy rule.
     Id                   *string       `json:"id"`
@@ -3814,16 +3833,20 @@ type S3BucketSizeRes struct {
 // S3CloudwatchMetrics represents a custom type struct.
 // The Cloudwatch metrics of the bucket.
 type S3CloudwatchMetrics struct {
+    // The average size of object in bucket.
+    AverageObjectSizeBytes     *float64         `json:"average_object_size_bytes"`
+    // Timestamp when average size of the bucket is calculated.
+    AverageObjectSizeBytesTime *string          `json:"average_object_size_bytes_time"`
     // Number of objects in bucket.
-    ObjectCount              *int64           `json:"object_count"`
+    ObjectCount                *int64           `json:"object_count"`
     // Timestamp when CloudWatch reported the bucket object count.
-    ObjectCountRetrievedTime *string          `json:"object_count_retrieved_time"`
+    ObjectCountRetrievedTime   *string          `json:"object_count_retrieved_time"`
     // Size of bucket in bytes.
-    SizeBytes                *int64           `json:"size_bytes"`
+    SizeBytes                  *int64           `json:"size_bytes"`
     // The size breakdown in bytes with timestamps of a bucket per storage class.
-    SizeBytesPerStorageClass *S3BucketSizeRes `json:"size_bytes_per_storage_class"`
+    SizeBytesPerStorageClass   *S3BucketSizeRes `json:"size_bytes_per_storage_class"`
     // Timestamp when CloudWatch reported the bucket size.
-    SizeBytesRetrievedTime   *string          `json:"size_bytes_retrieved_time"`
+    SizeBytesRetrievedTime     *string          `json:"size_bytes_retrieved_time"`
 }
 
 // S3DeleteMarkerReplication represents a custom type struct.
@@ -4232,7 +4255,7 @@ type Task struct {
     // URLs to pages related to the resource.
     Links              *TaskLinks         `json:"_links"`
     // The task category. Examples of task types include "backup", "restore", "snapshot", and "system".
-    // 
+    //
     // +-------------------+----------------------------------------------------------+
     // |     Category      |                       Description                        |
     // +===================+==========================================================+
@@ -4257,7 +4280,7 @@ type Task struct {
     // |                   | resources, such as organizational_unit_update and        |
     // |                   | policy_update.                                           |
     // +-------------------+----------------------------------------------------------+
-    // 
+    //
     Category           *string            `json:"category"`
     // The timestamp of when the task was created. Represented in RFC-3339 format.
     CreatedTimestamp   *string            `json:"created_timestamp"`
@@ -4265,7 +4288,7 @@ type Task struct {
     // then this field has a value of `null`. Represented in RFC-3339 format.
     EndTimestamp       *string            `json:"end_timestamp"`
     // The task genre. A genre is a high-level collection of task categories.
-    // 
+    //
     // +----------------+-------------------------------------------------------------+
     // |     Genre      |                         Description                         |
     // +================+=============================================================+
@@ -4275,7 +4298,7 @@ type Task struct {
     // | administrative | Encompasses management, system, and report_generation       |
     // |                | tasks.                                                      |
     // +----------------+-------------------------------------------------------------+
-    // 
+    //
     Genre              *string            `json:"genre"`
     // The Clumio-assigned ID of the task.
     Id                 *string            `json:"id"`
@@ -4340,7 +4363,7 @@ type TaskParentEntity struct {
     // A system-generated ID assigned to this entity.
     Id         *string `json:"id"`
     // The following table describes the entity types that Clumio supports.
-    // 
+    //
     // +--------------------------------+---------------------------------------------+
     // |          Entity Type           |                   Details                   |
     // +================================+=============================================+
@@ -4375,7 +4398,7 @@ type TaskParentEntity struct {
     // | aws_cmk                        | AWS Customer Master Key used to encrypt     |
     // |                                | data.                                       |
     // +--------------------------------+---------------------------------------------+
-    // 
+    //
     ClumioType *string `json:"type"`
     // A system-generated value assigned to the entity. For example, if the primary entity type is "vmware_vm" for a virtual machine, then the value is the name of the VM.
     Value      *string `json:"value"`
@@ -4387,7 +4410,7 @@ type TaskPrimaryEntity struct {
     // A system-generated ID assigned to this entity.
     Id         *string `json:"id"`
     // The following table describes the entity types that Clumio supports.
-    // 
+    //
     // +--------------------------------+---------------------------------------------+
     // |          Entity Type           |                   Details                   |
     // +================================+=============================================+
@@ -4422,7 +4445,7 @@ type TaskPrimaryEntity struct {
     // | aws_cmk                        | AWS Customer Master Key used to encrypt     |
     // |                                | data.                                       |
     // +--------------------------------+---------------------------------------------+
-    // 
+    //
     ClumioType *string `json:"type"`
     // A system-generated value assigned to the entity. For example, if the primary entity type is "vmware_vm" for a virtual machine, then the value is the name of the VM.
     Value      *string `json:"value"`
@@ -4970,7 +4993,7 @@ type VMwareDsGroupingCriteria struct {
     // To edit this data group, all organizational units using it must be deleted.
     IsEditable *bool   `json:"is_editable"`
     // The entity type used to group organizational units for VMware resources.
-    // 
+    //
     // +--------------------------------+---------------------------------+
     // |         vmware_vcenter         |         VMware vCenter.         |
     // +================================+=================================+
@@ -4988,7 +5011,7 @@ type VMwareDsGroupingCriteria struct {
     // +--------------------------------+---------------------------------+
     // | vmware_tag                     | VMware tag.                     |
     // +--------------------------------+---------------------------------+
-    // 
+    //
     ClumioType *string `json:"type"`
 }
 
