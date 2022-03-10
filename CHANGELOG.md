@@ -1,3 +1,5 @@
+## 0.2.2
+Bucket rule added to protection-group APIs.
 ## 0.2.1
 Additional parameters added to protection-group APIs.
 ## 0.2.0

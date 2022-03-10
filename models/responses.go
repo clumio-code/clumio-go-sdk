@@ -7,6 +7,10 @@ package models
 type AddBucketToProtectionGroupResponse struct {
     // The AWS-assigned ID of the account associated with the DynamoDB table.
     AccountNativeId           *string `json:"account_native_id"`
+    // Whether this bucket was added to this protection group by the bucket rule
+    AddedByBucketRule         *bool   `json:"added_by_bucket_rule"`
+    // Whether this bucket was added to this protection group by the user
+    AddedByUser               *bool   `json:"added_by_user"`
     // The AWS region associated with the DynamoDB table.
     AwsRegion                 *string `json:"aws_region"`
     // The Clumio-assigned ID of the bucket
@@ -222,6 +226,21 @@ type CreateProtectionGroupResponse struct {
     Links                     *ProtectionGroupVersionLinks `json:"_links"`
     // Number of buckets
     BucketCount               *int64                       `json:"bucket_count"`
+    // The following table describes the possible conditions for a bucket to be
+    // automatically added to a protection group.
+    // 
+    // +---------+----------------+---------------------------------------------------+
+    // |  Field  | Rule Condition |                    Description                    |
+    // +=========+================+===================================================+
+    // | aws_tag | $eq            | Denotes the AWS tag(s) to conditionalize on       |
+    // |         |                |                                                   |
+    // |         |                | {"aws_tag":{"$eq":{"key":"Environment",           |
+    // |         |                | "value":"Prod"}}}                                 |
+    // |         |                |                                                   |
+    // |         |                |                                                   |
+    // +---------+----------------+---------------------------------------------------+
+    // 
+    BucketRule                *string                      `json:"bucket_rule"`
     // Creation time of the protection group in RFC-3339 format.
     CreatedTimestamp          *string                      `json:"created_timestamp"`
     // The user-assigned description of the protection group.
@@ -313,6 +332,10 @@ type CreateUserResponse struct {
 type DeleteBucketFromProtectionGroupResponse struct {
     // The AWS-assigned ID of the account associated with the DynamoDB table.
     AccountNativeId           *string `json:"account_native_id"`
+    // Whether this bucket was added to this protection group by the bucket rule
+    AddedByBucketRule         *bool   `json:"added_by_bucket_rule"`
+    // Whether this bucket was added to this protection group by the user
+    AddedByUser               *bool   `json:"added_by_user"`
     // The AWS region associated with the DynamoDB table.
     AwsRegion                 *string `json:"aws_region"`
     // The Clumio-assigned ID of the bucket
@@ -2172,6 +2195,21 @@ type ReadProtectionGroupResponse struct {
     Links                     *ProtectionGroupLinks                 `json:"_links"`
     // Number of buckets
     BucketCount               *int64                                `json:"bucket_count"`
+    // The following table describes the possible conditions for a bucket to be
+    // automatically added to a protection group.
+    // 
+    // +---------+----------------+---------------------------------------------------+
+    // |  Field  | Rule Condition |                    Description                    |
+    // +=========+================+===================================================+
+    // | aws_tag | $eq            | Denotes the AWS tag(s) to conditionalize on       |
+    // |         |                |                                                   |
+    // |         |                | {"aws_tag":{"$eq":{"key":"Environment",           |
+    // |         |                | "value":"Prod"}}}                                 |
+    // |         |                |                                                   |
+    // |         |                |                                                   |
+    // +---------+----------------+---------------------------------------------------+
+    // 
+    BucketRule                *string                               `json:"bucket_rule"`
     // The compliance statistics of workloads associated with this entity.
     ComplianceStats           *ProtectionComplianceStatsWithSeeding `json:"compliance_stats"`
     // The compliance status of the protected protection group. Possible values include
@@ -2224,6 +2262,10 @@ type ReadProtectionGroupS3AssetResponse struct {
     Links                     *ProtectionGroupBucketLinks    `json:"_links"`
     // The AWS-assigned ID of the account associated with the DynamoDB table.
     AccountNativeId           *string                        `json:"account_native_id"`
+    // Whether this bucket was added to this protection group by the bucket rule
+    AddedByBucketRule         *bool                          `json:"added_by_bucket_rule"`
+    // Whether this bucket was added to this protection group by the user
+    AddedByUser               *bool                          `json:"added_by_user"`
     // The AWS region associated with the DynamoDB table.
     AwsRegion                 *string                        `json:"aws_region"`
     // The Clumio-assigned ID of the bucket
@@ -3098,6 +3140,21 @@ type UpdateProtectionGroupResponse struct {
     Links                     *ProtectionGroupVersionLinks `json:"_links"`
     // Number of buckets
     BucketCount               *int64                       `json:"bucket_count"`
+    // The following table describes the possible conditions for a bucket to be
+    // automatically added to a protection group.
+    // 
+    // +---------+----------------+---------------------------------------------------+
+    // |  Field  | Rule Condition |                    Description                    |
+    // +=========+================+===================================================+
+    // | aws_tag | $eq            | Denotes the AWS tag(s) to conditionalize on       |
+    // |         |                |                                                   |
+    // |         |                | {"aws_tag":{"$eq":{"key":"Environment",           |
+    // |         |                | "value":"Prod"}}}                                 |
+    // |         |                |                                                   |
+    // |         |                |                                                   |
+    // +---------+----------------+---------------------------------------------------+
+    // 
+    BucketRule                *string                      `json:"bucket_rule"`
     // Creation time of the protection group in RFC-3339 format.
     CreatedTimestamp          *string                      `json:"created_timestamp"`
     // The user-assigned description of the protection group.
