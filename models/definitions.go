@@ -2977,6 +2977,21 @@ type ProtectionGroup struct {
     Links                     *ProtectionGroupLinks                 `json:"_links"`
     // Number of buckets
     BucketCount               *int64                                `json:"bucket_count"`
+    // The following table describes the possible conditions for a bucket to be
+    // automatically added to a protection group.
+    // 
+    // +---------+----------------+---------------------------------------------------+
+    // |  Field  | Rule Condition |                    Description                    |
+    // +=========+================+===================================================+
+    // | aws_tag | $eq            | Denotes the AWS tag(s) to conditionalize on       |
+    // |         |                |                                                   |
+    // |         |                | {"aws_tag":{"$eq":{"key":"Environment",           |
+    // |         |                | "value":"Prod"}}}                                 |
+    // |         |                |                                                   |
+    // |         |                |                                                   |
+    // +---------+----------------+---------------------------------------------------+
+    // 
+    BucketRule                *string                               `json:"bucket_rule"`
     // The compliance statistics of workloads associated with this entity.
     ComplianceStats           *ProtectionComplianceStatsWithSeeding `json:"compliance_stats"`
     // The compliance status of the protected protection group. Possible values include
@@ -3034,6 +3049,10 @@ type ProtectionGroupBucket struct {
     Links                     *ProtectionGroupBucketLinks    `json:"_links"`
     // The AWS-assigned ID of the account associated with the DynamoDB table.
     AccountNativeId           *string                        `json:"account_native_id"`
+    // Whether this bucket was added to this protection group by the bucket rule
+    AddedByBucketRule         *bool                          `json:"added_by_bucket_rule"`
+    // Whether this bucket was added to this protection group by the user
+    AddedByUser               *bool                          `json:"added_by_user"`
     // The AWS region associated with the DynamoDB table.
     AwsRegion                 *string                        `json:"aws_region"`
     // The Clumio-assigned ID of the bucket
@@ -3814,16 +3833,20 @@ type S3BucketSizeRes struct {
 // S3CloudwatchMetrics represents a custom type struct.
 // The Cloudwatch metrics of the bucket.
 type S3CloudwatchMetrics struct {
+    // The average size of object in bucket.
+    AverageObjectSizeBytes     *float64         `json:"average_object_size_bytes"`
+    // Timestamp when average size of the bucket is calculated.
+    AverageObjectSizeBytesTime *string          `json:"average_object_size_bytes_time"`
     // Number of objects in bucket.
-    ObjectCount              *int64           `json:"object_count"`
+    ObjectCount                *int64           `json:"object_count"`
     // Timestamp when CloudWatch reported the bucket object count.
-    ObjectCountRetrievedTime *string          `json:"object_count_retrieved_time"`
+    ObjectCountRetrievedTime   *string          `json:"object_count_retrieved_time"`
     // Size of bucket in bytes.
-    SizeBytes                *int64           `json:"size_bytes"`
+    SizeBytes                  *int64           `json:"size_bytes"`
     // The size breakdown in bytes with timestamps of a bucket per storage class.
-    SizeBytesPerStorageClass *S3BucketSizeRes `json:"size_bytes_per_storage_class"`
+    SizeBytesPerStorageClass   *S3BucketSizeRes `json:"size_bytes_per_storage_class"`
     // Timestamp when CloudWatch reported the bucket size.
-    SizeBytesRetrievedTime   *string          `json:"size_bytes_retrieved_time"`
+    SizeBytesRetrievedTime     *string          `json:"size_bytes_retrieved_time"`
 }
 
 // S3DeleteMarkerReplication represents a custom type struct.
