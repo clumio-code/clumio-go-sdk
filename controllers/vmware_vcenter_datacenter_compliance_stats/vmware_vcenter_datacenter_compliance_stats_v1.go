@@ -30,7 +30,7 @@ func (v *VmwareVcenterDatacenterComplianceStatsV1) ReadVmwareVcenterDatacenterCo
     queryBuilder := v.config.BaseUrl + pathURL
 
     
-    header := "application/vmware-vcenter-datacenter-compliance-stats=v1+json"
+    header := "application/api.clumio.vmware-vcenter-datacenter-compliance-stats=v1+json"
     var result *models.ReadVMwareDatacenterStatsResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{

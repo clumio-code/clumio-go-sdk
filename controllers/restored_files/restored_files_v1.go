@@ -28,7 +28,7 @@ func (r *RestoredFilesV1) ListRestoredFiles(
     queryBuilder := r.config.BaseUrl + "/restores/files"
 
     
-    header := "application/restored-files=v1+json"
+    header := "application/api.clumio.restored-files=v1+json"
     var result *models.RestoredFilesResponse
     defaultInt64 := int64(0)
     defaultString := "" 
@@ -75,7 +75,7 @@ func (r *RestoredFilesV1) RestoreFiles(
         }
     }
     payload := string(bytes)
-    header := "application/restored-files=v1+json"
+    header := "application/api.clumio.restored-files=v1+json"
     var result *models.RestoreFileResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{

@@ -33,7 +33,7 @@ func (v *VmwareVcenterCategoriesV1) ListVmwareVcenterCategories(
     queryBuilder := v.config.BaseUrl + pathURL
 
     
-    header := "application/vmware-vcenter-categories=v1+json"
+    header := "application/api.clumio.vmware-vcenter-categories=v1+json"
     var result *models.ListTagCategories2Response
     defaultInt64 := int64(0)
     defaultString := "" 
@@ -83,7 +83,7 @@ func (v *VmwareVcenterCategoriesV1) ReadVmwareVcenterCategory(
     queryBuilder := v.config.BaseUrl + pathURL
 
     
-    header := "application/vmware-vcenter-categories=v1+json"
+    header := "application/api.clumio.vmware-vcenter-categories=v1+json"
     var result *models.ReadTagCategory2Response
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{

@@ -24,7 +24,7 @@ func (a *AwsCloudformationTemplatesV1) ReadAwsConnectionTemplates()(
     queryBuilder := a.config.BaseUrl + "/connections/aws/cloudformation-templates"
 
     
-    header := "application/aws-cloudformation-templates=v1+json"
+    header := "application/api.clumio.aws-cloudformation-templates=v1+json"
     var result *models.ReadAWSTemplatesResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{

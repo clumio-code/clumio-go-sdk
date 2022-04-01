@@ -34,7 +34,7 @@ func (r *ReportDownloadsV1) ListReportDownloads(
         }
     }
     payload := string(bytes)
-    header := "application/report-downloads=v1+json"
+    header := "application/api.clumio.report-downloads=v1+json"
     var result *models.ListReportDownloadsResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
@@ -66,7 +66,7 @@ func (r *ReportDownloadsV1) CreateReportDownload(
         }
     }
     payload := string(bytes)
-    header := "application/report-downloads=v1+json"
+    header := "application/api.clumio.report-downloads=v1+json"
     var result *models.CreateReportDownloadResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{

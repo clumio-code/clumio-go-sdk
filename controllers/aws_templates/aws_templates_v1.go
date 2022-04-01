@@ -26,7 +26,7 @@ func (a *AwsTemplatesV1) ReadConnectionTemplates()(
     queryBuilder := a.config.BaseUrl + "/connections/aws/templates"
 
     
-    header := "application/aws-templates=v1+json"
+    header := "application/api.clumio.aws-templates=v1+json"
     var result *models.ReadAWSTemplatesV2Response
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
@@ -58,7 +58,7 @@ func (a *AwsTemplatesV1) CreateConnectionTemplate(
         }
     }
     payload := string(bytes)
-    header := "application/aws-templates=v1+json"
+    header := "application/api.clumio.aws-templates=v1+json"
     var result *models.CreateAWSTemplateV2Response
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{

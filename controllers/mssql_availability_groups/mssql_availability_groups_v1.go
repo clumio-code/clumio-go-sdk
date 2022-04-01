@@ -27,7 +27,7 @@ func (m *MssqlAvailabilityGroupsV1) ListMssqlAvailabilityGroups(
     queryBuilder := m.config.BaseUrl + "/datasources/mssql/availability-groups"
 
     
-    header := "application/mssql-availability-groups=v1+json"
+    header := "application/api.clumio.mssql-availability-groups=v1+json"
     var result *models.ListMssqlAGsResponse
     defaultInt64 := int64(0)
     defaultString := "" 
@@ -74,7 +74,7 @@ func (m *MssqlAvailabilityGroupsV1) ReadMssqlAvailabilityGroup(
     queryBuilder := m.config.BaseUrl + pathURL
 
     
-    header := "application/mssql-availability-groups=v1+json"
+    header := "application/api.clumio.mssql-availability-groups=v1+json"
     var result *models.ReadMssqlAGResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{

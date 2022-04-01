@@ -29,7 +29,7 @@ func (m *MssqlHostsV1) ListMssqlHostConnections(
     queryBuilder := m.config.BaseUrl + "/connections/mssql/hosts"
 
     
-    header := "application/mssql-hosts=v1+json"
+    header := "application/api.clumio.mssql-hosts=v1+json"
     var result *models.ListHcmHostsResponse
     defaultInt64 := int64(0)
     defaultString := "" 
@@ -83,7 +83,7 @@ func (m *MssqlHostsV1) CreateMssqlHostConnections(
         }
     }
     payload := string(bytes)
-    header := "application/mssql-hosts=v1+json"
+    header := "application/api.clumio.mssql-hosts=v1+json"
     var result *models.CreateHcmHostResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
@@ -116,7 +116,7 @@ func (m *MssqlHostsV1) DeleteMssqlHostConnections(
         }
     }
     payload := string(bytes)
-    header := "application/mssql-hosts=v1+json"
+    header := "application/api.clumio.mssql-hosts=v1+json"
     var result *models.DeleteHcmHostResponse
     defaultString := "" 
     
@@ -159,7 +159,7 @@ func (m *MssqlHostsV1) MoveMssqlHostConnections(
         }
     }
     payload := string(bytes)
-    header := "application/mssql-hosts=v1+json"
+    header := "application/api.clumio.mssql-hosts=v1+json"
     var result *models.MoveHcmHostsResponse
     defaultString := "" 
     
@@ -201,7 +201,7 @@ func (m *MssqlHostsV1) CreateMssqlHostConnectionCredentials(
         }
     }
     payload := string(bytes)
-    header := "application/mssql-hosts=v1+json"
+    header := "application/api.clumio.mssql-hosts=v1+json"
     var result *models.CreateHostECCredentialsResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
@@ -230,7 +230,7 @@ func (m *MssqlHostsV1) ReadMssqlHostConnections(
     queryBuilder := m.config.BaseUrl + pathURL
 
     
-    header := "application/mssql-hosts=v1+json"
+    header := "application/api.clumio.mssql-hosts=v1+json"
     var result *models.ReadHcmHostResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
@@ -257,7 +257,7 @@ func (m *MssqlHostsV1) ListMssqlHosts(
     queryBuilder := m.config.BaseUrl + "/datasources/mssql/hosts"
 
     
-    header := "application/mssql-hosts=v1+json"
+    header := "application/api.clumio.mssql-hosts=v1+json"
     var result *models.ListMssqlHostsResponse
     defaultInt64 := int64(0)
     defaultString := "" 
@@ -308,7 +308,7 @@ func (m *MssqlHostsV1) ReadMssqlHosts(
     queryBuilder := m.config.BaseUrl + pathURL
 
     
-    header := "application/mssql-hosts=v1+json"
+    header := "application/api.clumio.mssql-hosts=v1+json"
     var result *models.ReadMssqlHostResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{

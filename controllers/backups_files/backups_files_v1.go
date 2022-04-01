@@ -27,7 +27,7 @@ func (b *BackupsFilesV1) ListFiles(
     queryBuilder := b.config.BaseUrl + "/backups/files/search"
 
     
-    header := "application/backups-files=v1+json"
+    header := "application/api.clumio.backups-files=v1+json"
     var result *models.FileSearchResponse
     defaultInt64 := int64(0)
     defaultString := "" 
@@ -73,7 +73,7 @@ func (b *BackupsFilesV1) ListFileVersions(
     queryBuilder := b.config.BaseUrl + pathURL
 
     
-    header := "application/backups-files=v1+json"
+    header := "application/api.clumio.backups-files=v1+json"
     var result *models.FileListResponse
     defaultInt64 := int64(0)
     defaultString := "" 

@@ -28,7 +28,7 @@ func (a *AwsEnvironmentsV1) ListAwsEnvironments(
     queryBuilder := a.config.BaseUrl + "/datasources/aws/environments"
 
     
-    header := "application/aws-environments=v1+json"
+    header := "application/api.clumio.aws-environments=v1+json"
     var result *models.ListAWSEnvironmentsResponse
     defaultInt64 := int64(0)
     defaultString := "" 
@@ -80,7 +80,7 @@ func (a *AwsEnvironmentsV1) ReadAwsEnvironment(
     queryBuilder := a.config.BaseUrl + pathURL
 
     
-    header := "application/aws-environments=v1+json"
+    header := "application/api.clumio.aws-environments=v1+json"
     var result *models.ReadAWSEnvironmentResponse
     defaultString := "" 
     

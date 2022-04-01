@@ -30,7 +30,7 @@ func (v *VmwareVcenterTagComplianceStatsV1) ReadVmwareVcenterTagComplianceStats(
     queryBuilder := v.config.BaseUrl + pathURL
 
     
-    header := "application/vmware-vcenter-tag-compliance-stats=v1+json"
+    header := "application/api.clumio.vmware-vcenter-tag-compliance-stats=v1+json"
     var result *models.ReadVMwareTagStatsResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{

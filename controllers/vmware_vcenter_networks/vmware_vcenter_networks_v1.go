@@ -33,7 +33,7 @@ func (v *VmwareVcenterNetworksV1) ListVmwareVcenterNetworks(
     queryBuilder := v.config.BaseUrl + pathURL
 
     
-    header := "application/vmware-vcenter-networks=v1+json"
+    header := "application/api.clumio.vmware-vcenter-networks=v1+json"
     var result *models.ListVMwareVCenterNetworksResponse
     defaultInt64 := int64(0)
     defaultString := "" 
@@ -83,7 +83,7 @@ func (v *VmwareVcenterNetworksV1) ReadVmwareVcenterNetwork(
     queryBuilder := v.config.BaseUrl + pathURL
 
     
-    header := "application/vmware-vcenter-networks=v1+json"
+    header := "application/api.clumio.vmware-vcenter-networks=v1+json"
     var result *models.ReadVMwareVCenterNetworkResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{

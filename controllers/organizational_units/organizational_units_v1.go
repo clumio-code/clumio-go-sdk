@@ -28,7 +28,7 @@ func (o *OrganizationalUnitsV1) ListOrganizationalUnits(
     queryBuilder := o.config.BaseUrl + "/organizational-units"
 
     
-    header := "application/organizational-units=v1+json"
+    header := "application/api.clumio.organizational-units=v1+json"
     var result *models.ListOrganizationalUnitsResponse
     defaultInt64 := int64(0)
     defaultString := "" 
@@ -79,7 +79,7 @@ func (o *OrganizationalUnitsV1) CreateOrganizationalUnit(
         }
     }
     payload := string(bytes)
-    header := "application/organizational-units=v1+json"
+    header := "application/api.clumio.organizational-units=v1+json"
     var result *models.CreateOrganizationalUnitResponse
     defaultString := "" 
     
@@ -118,7 +118,7 @@ func (o *OrganizationalUnitsV1) ReadOrganizationalUnit(
     queryBuilder := o.config.BaseUrl + pathURL
 
     
-    header := "application/organizational-units=v1+json"
+    header := "application/api.clumio.organizational-units=v1+json"
     var result *models.ReadOrganizationalUnitResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
@@ -148,7 +148,7 @@ func (o *OrganizationalUnitsV1) DeleteOrganizationalUnit(
     queryBuilder := o.config.BaseUrl + pathURL
 
     
-    header := "application/organizational-units=v1+json"
+    header := "application/api.clumio.organizational-units=v1+json"
     var result *models.DeleteOrganizationalUnitResponse
     defaultString := "" 
     
@@ -198,7 +198,7 @@ func (o *OrganizationalUnitsV1) PatchOrganizationalUnit(
         }
     }
     payload := string(bytes)
-    header := "application/organizational-units=v1+json"
+    header := "application/api.clumio.organizational-units=v1+json"
     var result *models.PatchOrganizationalUnitResponse
     defaultString := "" 
     

@@ -35,7 +35,7 @@ func (r *RestoredMssqlDatabasesV1) RestoreMssqlDatabase(
         }
     }
     payload := string(bytes)
-    header := "application/restored-mssql-databases=v1+json"
+    header := "application/api.clumio.restored-mssql-databases=v1+json"
     var result *models.CreateMssqlDatabaseRestoreResponse
     defaultString := "" 
     

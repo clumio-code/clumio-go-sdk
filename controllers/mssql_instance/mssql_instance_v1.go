@@ -27,7 +27,7 @@ func (m *MssqlInstanceV1) ListMssqlInstance(
     queryBuilder := m.config.BaseUrl + "/datasources/mssql/instances"
 
     
-    header := "application/mssql-instance=v1+json"
+    header := "application/api.clumio.mssql-instance=v1+json"
     var result *models.ListMssqlInstancesResponse
     defaultInt64 := int64(0)
     defaultString := "" 
@@ -74,7 +74,7 @@ func (m *MssqlInstanceV1) ReadMssqlInstance(
     queryBuilder := m.config.BaseUrl + pathURL
 
     
-    header := "application/mssql-instance=v1+json"
+    header := "application/api.clumio.mssql-instance=v1+json"
     var result *models.ReadMssqlInstanceResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{

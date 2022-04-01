@@ -27,7 +27,7 @@ func (a *AwsS3BucketsV1) ListAwsS3Buckets(
     queryBuilder := a.config.BaseUrl + "/datasources/aws/s3-buckets"
 
     
-    header := "application/aws-s3-buckets=v1+json"
+    header := "application/api.clumio.aws-s3-buckets=v1+json"
     var result *models.ListBucketsResponse
     defaultInt64 := int64(0)
     defaultString := "" 
@@ -74,7 +74,7 @@ func (a *AwsS3BucketsV1) ReadAwsS3Bucket(
     queryBuilder := a.config.BaseUrl + pathURL
 
     
-    header := "application/aws-s3-buckets=v1+json"
+    header := "application/api.clumio.aws-s3-buckets=v1+json"
     var result *models.ReadBucketResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
