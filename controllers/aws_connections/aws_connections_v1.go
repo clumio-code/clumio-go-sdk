@@ -28,7 +28,7 @@ func (a *AwsConnectionsV1) ListAwsConnections(
     queryBuilder := a.config.BaseUrl + "/connections/aws"
 
     
-    header := "application/aws-connections=v1+json"
+    header := "application/api.clumio.aws-connections=v1+json"
     var result *models.ListAWSConnectionsResponse
     defaultInt64 := int64(0)
     defaultString := "" 
@@ -78,7 +78,7 @@ func (a *AwsConnectionsV1) CreateAwsConnection(
         }
     }
     payload := string(bytes)
-    header := "application/aws-connections=v1+json"
+    header := "application/api.clumio.aws-connections=v1+json"
     var result *models.CreateAWSConnectionResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
@@ -107,7 +107,7 @@ func (a *AwsConnectionsV1) ReadAwsConnection(
     queryBuilder := a.config.BaseUrl + pathURL
 
     
-    header := "application/aws-connections=v1+json"
+    header := "application/api.clumio.aws-connections=v1+json"
     var result *models.ReadAWSConnectionResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
@@ -136,7 +136,7 @@ func (a *AwsConnectionsV1) DeleteAwsConnection(
     queryBuilder := a.config.BaseUrl + pathURL
 
     
-    header := "application/aws-connections=v1+json"
+    header := "application/api.clumio.aws-connections=v1+json"
     var result interface{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
@@ -174,7 +174,7 @@ func (a *AwsConnectionsV1) UpdateAwsConnection(
         }
     }
     payload := string(bytes)
-    header := "application/aws-connections=v1+json"
+    header := "application/api.clumio.aws-connections=v1+json"
     var result *models.UpdateAWSConnectionResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{

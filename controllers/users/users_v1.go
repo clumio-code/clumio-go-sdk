@@ -28,7 +28,7 @@ func (u *UsersV1) ListUsers(
     queryBuilder := u.config.BaseUrl + "/users"
 
     
-    header := "application/users=v1+json"
+    header := "application/api.clumio.users=v1+json"
     var result *models.ListUsersResponse
     defaultInt64 := int64(0)
     defaultString := "" 
@@ -78,7 +78,7 @@ func (u *UsersV1) CreateUser(
         }
     }
     payload := string(bytes)
-    header := "application/users=v1+json"
+    header := "application/api.clumio.users=v1+json"
     var result *models.CreateUserResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
@@ -110,7 +110,7 @@ func (u *UsersV1) UpdateUserProfile(
         }
     }
     payload := string(bytes)
-    header := "application/users=v1+json"
+    header := "application/api.clumio.users=v1+json"
     var result *models.EditProfileResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
@@ -139,7 +139,7 @@ func (u *UsersV1) ReadUser(
     queryBuilder := u.config.BaseUrl + pathURL
 
     
-    header := "application/users=v1+json"
+    header := "application/api.clumio.users=v1+json"
     var result *models.ReadUserResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
@@ -168,7 +168,7 @@ func (u *UsersV1) DeleteUser(
     queryBuilder := u.config.BaseUrl + pathURL
 
     
-    header := "application/users=v1+json"
+    header := "application/api.clumio.users=v1+json"
     var result interface{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
@@ -207,7 +207,7 @@ func (u *UsersV1) UpdateUser(
         }
     }
     payload := string(bytes)
-    header := "application/users=v1+json"
+    header := "application/api.clumio.users=v1+json"
     var result *models.UpdateUserResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
@@ -246,7 +246,7 @@ func (u *UsersV1) ChangePassword(
         }
     }
     payload := string(bytes)
-    header := "application/users=v1+json"
+    header := "application/api.clumio.users=v1+json"
     var result interface{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{

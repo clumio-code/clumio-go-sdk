@@ -34,7 +34,7 @@ func (p *PostProcessAwsConnectionV1) PostProcessAwsConnection(
         }
     }
     payload := string(bytes)
-    header := "application/post-process-aws-connection=v1+json"
+    header := "application/api.clumio.post-process-aws-connection=v1+json"
     var result interface{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{

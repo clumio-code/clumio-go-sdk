@@ -28,7 +28,7 @@ func (a *AwsEbsVolumesV1) ListAwsEbsVolumes(
     queryBuilder := a.config.BaseUrl + "/datasources/aws/ebs-volumes"
 
     
-    header := "application/aws-ebs-volumes=v1+json"
+    header := "application/api.clumio.aws-ebs-volumes=v1+json"
     var result *models.ListEbsVolumesResponse
     defaultInt64 := int64(0)
     defaultString := "" 
@@ -80,7 +80,7 @@ func (a *AwsEbsVolumesV1) ReadAwsEbsVolume(
     queryBuilder := a.config.BaseUrl + pathURL
 
     
-    header := "application/aws-ebs-volumes=v1+json"
+    header := "application/api.clumio.aws-ebs-volumes=v1+json"
     var result *models.ReadEbsVolumeResponse
     defaultString := "" 
     

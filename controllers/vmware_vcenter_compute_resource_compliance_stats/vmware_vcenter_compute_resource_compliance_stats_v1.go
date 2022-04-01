@@ -30,7 +30,7 @@ func (v *VmwareVcenterComputeResourceComplianceStatsV1) ReadVmwareVcenterCompute
     queryBuilder := v.config.BaseUrl + pathURL
 
     
-    header := "application/vmware-vcenter-compute-resource-compliance-stats=v1+json"
+    header := "application/api.clumio.vmware-vcenter-compute-resource-compliance-stats=v1+json"
     var result *models.ReadVMwareComputeResourceStatsResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{

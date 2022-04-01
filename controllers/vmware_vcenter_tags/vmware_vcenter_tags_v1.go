@@ -34,7 +34,7 @@ func (v *VmwareVcenterTagsV1) ListVmwareVcenterTags(
     queryBuilder := v.config.BaseUrl + pathURL
 
     
-    header := "application/vmware-vcenter-tags=v1+json"
+    header := "application/api.clumio.vmware-vcenter-tags=v1+json"
     var result *models.ListTagsResponse
     defaultInt64 := int64(0)
     defaultString := "" 
@@ -89,7 +89,7 @@ func (v *VmwareVcenterTagsV1) ReadVmwareVcenterTag(
     queryBuilder := v.config.BaseUrl + pathURL
 
     
-    header := "application/vmware-vcenter-tags=v1+json"
+    header := "application/api.clumio.vmware-vcenter-tags=v1+json"
     var result *models.ReadTagResponse
     defaultString := "" 
     

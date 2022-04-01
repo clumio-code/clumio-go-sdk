@@ -36,7 +36,7 @@ func (b *BackupFilesystemDirectoriesV1) ReadBackupFilesystemDirectory(
     queryBuilder := b.config.BaseUrl + pathURL
 
     
-    header := "application/backup-filesystem-directories=v1+json"
+    header := "application/api.clumio.backup-filesystem-directories=v1+json"
     var result *models.ReadDirectoryResponse
     defaultInt64 := int64(0)
     defaultString := "" 

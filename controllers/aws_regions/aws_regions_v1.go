@@ -27,7 +27,7 @@ func (a *AwsRegionsV1) ListConnectionAwsRegions(
     queryBuilder := a.config.BaseUrl + "/connections/aws/regions"
 
     
-    header := "application/aws-regions=v1+json"
+    header := "application/api.clumio.aws-regions=v1+json"
     var result *models.ListAWSRegionsResponse
     defaultInt64 := int64(0)
     defaultString := "" 

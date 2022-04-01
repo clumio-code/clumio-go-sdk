@@ -27,7 +27,7 @@ func (p *ProtectionGroupsS3AssetsV1) ListProtectionGroupS3Assets(
     queryBuilder := p.config.BaseUrl + "/datasources/protection-groups/s3-assets"
 
     
-    header := "application/protection-groups-s3-assets=v1+json"
+    header := "application/api.clumio.protection-groups-s3-assets=v1+json"
     var result *models.ListProtectionGroupS3AssetsResponse
     defaultInt64 := int64(0)
     defaultString := "" 
@@ -74,7 +74,7 @@ func (p *ProtectionGroupsS3AssetsV1) ReadProtectionGroupS3Asset(
     queryBuilder := p.config.BaseUrl + pathURL
 
     
-    header := "application/protection-groups-s3-assets=v1+json"
+    header := "application/api.clumio.protection-groups-s3-assets=v1+json"
     var result *models.ReadProtectionGroupS3AssetResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{

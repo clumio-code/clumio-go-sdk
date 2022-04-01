@@ -30,7 +30,7 @@ func (p *PolicyRulesV1) ListPolicyRules(
     queryBuilder := p.config.BaseUrl + "/policies/rules"
 
     
-    header := "application/policy-rules=v1+json"
+    header := "application/api.clumio.policy-rules=v1+json"
     var result *models.ListRulesResponse
     defaultInt64 := int64(0)
     defaultString := "" 
@@ -90,7 +90,7 @@ func (p *PolicyRulesV1) CreatePolicyRule(
         }
     }
     payload := string(bytes)
-    header := "application/policy-rules=v1+json"
+    header := "application/api.clumio.policy-rules=v1+json"
     var result *models.CreateRuleResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
@@ -119,7 +119,7 @@ func (p *PolicyRulesV1) ReadPolicyRule(
     queryBuilder := p.config.BaseUrl + pathURL
 
     
-    header := "application/policy-rules=v1+json"
+    header := "application/api.clumio.policy-rules=v1+json"
     var result *models.ReadRuleResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
@@ -157,7 +157,7 @@ func (p *PolicyRulesV1) UpdatePolicyRule(
         }
     }
     payload := string(bytes)
-    header := "application/policy-rules=v1+json"
+    header := "application/api.clumio.policy-rules=v1+json"
     var result *models.UpdateRuleResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
@@ -187,7 +187,7 @@ func (p *PolicyRulesV1) DeletePolicyRule(
     queryBuilder := p.config.BaseUrl + pathURL
 
     
-    header := "application/policy-rules=v1+json"
+    header := "application/api.clumio.policy-rules=v1+json"
     var result *models.DeleteRuleResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{

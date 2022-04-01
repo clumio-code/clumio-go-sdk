@@ -33,7 +33,7 @@ func (v *VmwareVcenterHostsV1) ListVmwareVcenterHosts(
     queryBuilder := v.config.BaseUrl + pathURL
 
     
-    header := "application/vmware-vcenter-hosts=v1+json"
+    header := "application/api.clumio.vmware-vcenter-hosts=v1+json"
     var result *models.ListHostsResponse
     defaultInt64 := int64(0)
     defaultString := "" 
@@ -83,7 +83,7 @@ func (v *VmwareVcenterHostsV1) ReadVmwareVcenterHost(
     queryBuilder := v.config.BaseUrl + pathURL
 
     
-    header := "application/vmware-vcenter-hosts=v1+json"
+    header := "application/api.clumio.vmware-vcenter-hosts=v1+json"
     var result *models.ReadHostResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{

@@ -25,7 +25,7 @@ func (g *GeneralSettingsV2) ReadGeneralSettings()(
     queryBuilder := g.config.BaseUrl + "/settings/general"
 
     
-    header := "application/general-settings=v2+json"
+    header := "application/api.clumio.general-settings=v2+json"
     var result *models.ReadGeneralSettingsResponseV2
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
@@ -56,7 +56,7 @@ func (g *GeneralSettingsV2) UpdateGeneralSettings(
         }
     }
     payload := string(bytes)
-    header := "application/general-settings=v2+json"
+    header := "application/api.clumio.general-settings=v2+json"
     var result *models.PatchGeneralSettingsResponseV2
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{

@@ -33,7 +33,7 @@ func (v *VmwareVcenterResourcePoolsV1) ListVmwareVcenterResourcePools(
     queryBuilder := v.config.BaseUrl + pathURL
 
     
-    header := "application/vmware-vcenter-resource-pools=v1+json"
+    header := "application/api.clumio.vmware-vcenter-resource-pools=v1+json"
     var result *models.ListResourcePoolsResponse
     defaultInt64 := int64(0)
     defaultString := "" 
@@ -83,7 +83,7 @@ func (v *VmwareVcenterResourcePoolsV1) ReadVmwareVcenterResourcePool(
     queryBuilder := v.config.BaseUrl + pathURL
 
     
-    header := "application/vmware-vcenter-resource-pools=v1+json"
+    header := "application/api.clumio.vmware-vcenter-resource-pools=v1+json"
     var result *models.ReadResourcePoolResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{

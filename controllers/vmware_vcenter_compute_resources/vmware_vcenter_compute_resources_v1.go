@@ -46,7 +46,7 @@ func (v *VmwareVcenterComputeResourcesV1) ListVmwareVcenterComputeResources(
     queryBuilder := v.config.BaseUrl + pathURL
 
     
-    header := "application/vmware-vcenter-compute-resources=v1+json"
+    header := "application/api.clumio.vmware-vcenter-compute-resources=v1+json"
     var result *models.ListComputeResourcesResponse
     defaultInt64 := int64(0)
     defaultString := "" 
@@ -101,7 +101,7 @@ func (v *VmwareVcenterComputeResourcesV1) ReadVmwareVcenterComputeResource(
     queryBuilder := v.config.BaseUrl + pathURL
 
     
-    header := "application/vmware-vcenter-compute-resources=v1+json"
+    header := "application/api.clumio.vmware-vcenter-compute-resources=v1+json"
     var result *models.ReadComputeResourceResponse
     defaultString := "" 
     

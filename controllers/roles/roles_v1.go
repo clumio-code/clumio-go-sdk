@@ -24,7 +24,7 @@ func (r *RolesV1) ListRoles()(
     queryBuilder := r.config.BaseUrl + "/roles"
 
     
-    header := "application/roles=v1+json"
+    header := "application/api.clumio.roles=v1+json"
     var result *models.ListRolesResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
@@ -52,7 +52,7 @@ func (r *RolesV1) ReadRole(
     queryBuilder := r.config.BaseUrl + pathURL
 
     
-    header := "application/roles=v1+json"
+    header := "application/api.clumio.roles=v1+json"
     var result *models.ReadRoleResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{

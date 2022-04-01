@@ -33,7 +33,7 @@ func (m *ManagementSubgroupsV1) ListManagementSubgroups(
     queryBuilder := m.config.BaseUrl + pathURL
 
     
-    header := "application/management-subgroups=v1+json"
+    header := "application/api.clumio.management-subgroups=v1+json"
     var result *models.ListSubgroupsResponse
     defaultInt64 := int64(0)
     defaultString := "" 
@@ -81,7 +81,7 @@ func (m *ManagementSubgroupsV1) ReadManagementSubgroup(
     queryBuilder := m.config.BaseUrl + pathURL
 
     
-    header := "application/management-subgroups=v1+json"
+    header := "application/api.clumio.management-subgroups=v1+json"
     var result *models.ReadSubgroupResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
@@ -121,7 +121,7 @@ func (m *ManagementSubgroupsV1) UpdateManagementSubgroup(
         }
     }
     payload := string(bytes)
-    header := "application/management-subgroups=v1+json"
+    header := "application/api.clumio.management-subgroups=v1+json"
     var result *models.UpdateSubgroupResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{

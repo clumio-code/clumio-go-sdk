@@ -30,7 +30,7 @@ func (v *VmwareVcenterFolderComplianceStatsV1) ReadVmwareVcenterFolderCompliance
     queryBuilder := v.config.BaseUrl + pathURL
 
     
-    header := "application/vmware-vcenter-folder-compliance-stats=v1+json"
+    header := "application/api.clumio.vmware-vcenter-folder-compliance-stats=v1+json"
     var result *models.ReadVMwareFolderStatsResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{

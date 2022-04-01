@@ -34,7 +34,7 @@ func (r *RestoredAwsEbsVolumesV1) RestoreAwsEbsVolume(
         }
     }
     payload := string(bytes)
-    header := "application/restored-aws-ebs-volumes=v1+json"
+    header := "application/api.clumio.restored-aws-ebs-volumes=v1+json"
     var result interface{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{

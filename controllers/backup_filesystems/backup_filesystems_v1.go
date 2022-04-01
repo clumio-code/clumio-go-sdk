@@ -32,7 +32,7 @@ func (b *BackupFilesystemsV1) ListBackupFilesystems(
     queryBuilder := b.config.BaseUrl + pathURL
 
     
-    header := "application/backup-filesystems=v1+json"
+    header := "application/api.clumio.backup-filesystems=v1+json"
     var result *models.ListFileSystemsResponse
     defaultInt64 := int64(0)
     defaultString := "" 
@@ -78,7 +78,7 @@ func (b *BackupFilesystemsV1) ReadFilesystem(
     queryBuilder := b.config.BaseUrl + pathURL
 
     
-    header := "application/backup-filesystems=v1+json"
+    header := "application/api.clumio.backup-filesystems=v1+json"
     var result *models.ReadFileSystemResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{

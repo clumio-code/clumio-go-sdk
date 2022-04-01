@@ -28,7 +28,7 @@ func (p *ProtectionGroupsV1) ListProtectionGroups(
     queryBuilder := p.config.BaseUrl + "/datasources/protection-groups"
 
     
-    header := "application/protection-groups=v1+json"
+    header := "application/api.clumio.protection-groups=v1+json"
     var result *models.ListProtectionGroupsResponse
     defaultInt64 := int64(0)
     defaultString := "" 
@@ -75,7 +75,7 @@ func (p *ProtectionGroupsV1) ReadProtectionGroup(
     queryBuilder := p.config.BaseUrl + pathURL
 
     
-    header := "application/protection-groups=v1+json"
+    header := "application/api.clumio.protection-groups=v1+json"
     var result *models.ReadProtectionGroupResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
@@ -113,7 +113,7 @@ func (p *ProtectionGroupsV1) CreateProtectionGroup(
         }
     }
     payload := string(bytes)
-    header := "application/protection-groups=v1+json"
+    header := "application/api.clumio.protection-groups=v1+json"
     var result *models.CreateProtectionGroupResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
@@ -154,7 +154,7 @@ func (p *ProtectionGroupsV1) UpdateProtectionGroup(
         }
     }
     payload := string(bytes)
-    header := "application/protection-groups=v1+json"
+    header := "application/api.clumio.protection-groups=v1+json"
     var result *models.UpdateProtectionGroupResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
@@ -187,7 +187,7 @@ func (p *ProtectionGroupsV1) DeleteProtectionGroup(
     queryBuilder := p.config.BaseUrl + pathURL
 
     
-    header := "application/protection-groups=v1+json"
+    header := "application/api.clumio.protection-groups=v1+json"
     var result interface{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
@@ -229,7 +229,7 @@ func (p *ProtectionGroupsV1) AddBucketProtectionGroup(
         }
     }
     payload := string(bytes)
-    header := "application/protection-groups=v1+json"
+    header := "application/api.clumio.protection-groups=v1+json"
     var result *models.AddBucketToProtectionGroupResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
@@ -265,7 +265,7 @@ func (p *ProtectionGroupsV1) DeleteBucketProtectionGroup(
     queryBuilder := p.config.BaseUrl + pathURL
 
     
-    header := "application/protection-groups=v1+json"
+    header := "application/api.clumio.protection-groups=v1+json"
     var result *models.DeleteBucketFromProtectionGroupResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{

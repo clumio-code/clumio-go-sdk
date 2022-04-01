@@ -49,7 +49,7 @@ func (v *VmwareVcenterFoldersV1) ListVmwareVcenterFolders(
     queryBuilder := v.config.BaseUrl + pathURL
 
     
-    header := "application/vmware-vcenter-folders=v1+json"
+    header := "application/api.clumio.vmware-vcenter-folders=v1+json"
     var result *models.ListFoldersResponse
     defaultInt64 := int64(0)
     defaultString := "" 
@@ -104,7 +104,7 @@ func (v *VmwareVcenterFoldersV1) ReadVmwareVcenterFolder(
     queryBuilder := v.config.BaseUrl + pathURL
 
     
-    header := "application/vmware-vcenter-folders=v1+json"
+    header := "application/api.clumio.vmware-vcenter-folders=v1+json"
     var result *models.ReadFolderResponse
     defaultString := "" 
     

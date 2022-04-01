@@ -37,7 +37,7 @@ func (a *AwsEnvironmentTagsV1) ListAwsEnvironmentTags(
     queryBuilder := a.config.BaseUrl + pathURL
 
     
-    header := "application/aws-environment-tags=v1+json"
+    header := "application/api.clumio.aws-environment-tags=v1+json"
     var result *models.ListAwsTagsResponse
     defaultInt64 := int64(0)
     defaultString := "" 
@@ -104,7 +104,7 @@ func (a *AwsEnvironmentTagsV1) ReadAwsEnvironmentTag(
     queryBuilder := a.config.BaseUrl + pathURL
 
     
-    header := "application/aws-environment-tags=v1+json"
+    header := "application/api.clumio.aws-environment-tags=v1+json"
     var result *models.ReadAwsTagResponse
     defaultString := "" 
     
@@ -145,7 +145,7 @@ func (a *AwsEnvironmentTagsV1) ReadAwsEnvironmentTagEbsVolumesComplianceStats(
     queryBuilder := a.config.BaseUrl + pathURL
 
     
-    header := "application/aws-environment-tags=v1+json"
+    header := "application/api.clumio.aws-environment-tags=v1+json"
     var result *models.ReadEbsTagComplianceStatsResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{

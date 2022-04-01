@@ -112,7 +112,7 @@ func (t *TasksV1) ListTasks(
     queryBuilder := t.config.BaseUrl + "/tasks"
 
     
-    header := "application/tasks=v1+json"
+    header := "application/api.clumio.tasks=v1+json"
     var result *models.ListTasksResponse
     defaultInt64 := int64(0)
     defaultString := "" 
@@ -159,7 +159,7 @@ func (t *TasksV1) ReadTask(
     queryBuilder := t.config.BaseUrl + pathURL
 
     
-    header := "application/tasks=v1+json"
+    header := "application/api.clumio.tasks=v1+json"
     var result *models.ReadTaskResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
@@ -197,7 +197,7 @@ func (t *TasksV1) UpdateTask(
         }
     }
     payload := string(bytes)
-    header := "application/tasks=v1+json"
+    header := "application/api.clumio.tasks=v1+json"
     var result *models.UpdateTaskResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{

@@ -57,7 +57,7 @@ func (i *IndividualAlertsV1) ListIndividualAlerts(
     queryBuilder := i.config.BaseUrl + "/alerts/individual"
 
     
-    header := "application/individual-alerts=v1+json"
+    header := "application/api.clumio.individual-alerts=v1+json"
     var result *models.ListAlertsResponse
     defaultInt64 := int64(0)
     defaultString := "" 
@@ -113,7 +113,7 @@ func (i *IndividualAlertsV1) ReadIndividualAlert(
     queryBuilder := i.config.BaseUrl + pathURL
 
     
-    header := "application/individual-alerts=v1+json"
+    header := "application/api.clumio.individual-alerts=v1+json"
     var result *models.ReadAlertResponse
     defaultString := "" 
     
@@ -162,7 +162,7 @@ func (i *IndividualAlertsV1) UpdateIndividualAlert(
         }
     }
     payload := string(bytes)
-    header := "application/individual-alerts=v1+json"
+    header := "application/api.clumio.individual-alerts=v1+json"
     var result *models.UpdateAlertResponse
     defaultString := "" 
     

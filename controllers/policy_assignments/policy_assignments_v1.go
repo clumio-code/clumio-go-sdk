@@ -36,7 +36,7 @@ func (p *PolicyAssignmentsV1) SetPolicyAssignments(
         }
     }
     payload := string(bytes)
-    header := "application/policy-assignments=v1+json"
+    header := "application/api.clumio.policy-assignments=v1+json"
     var result *models.SetAssignmentsResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{

@@ -29,7 +29,7 @@ func (b *BackupMssqlDatabasesV1) ListBackupMssqlDatabases(
     queryBuilder := b.config.BaseUrl + "/backups/mssql/databases"
 
     
-    header := "application/backup-mssql-databases=v1+json"
+    header := "application/api.clumio.backup-mssql-databases=v1+json"
     var result *models.ListMssqlDatabaseBackupsResponse
     defaultInt64 := int64(0)
     defaultString := "" 
@@ -84,7 +84,7 @@ func (b *BackupMssqlDatabasesV1) CreateBackupMssqlDatabase(
         }
     }
     payload := string(bytes)
-    header := "application/backup-mssql-databases=v1+json"
+    header := "application/api.clumio.backup-mssql-databases=v1+json"
     var result *models.OnDemandMssqlBackupResponse
     defaultString := "" 
     
@@ -123,7 +123,7 @@ func (b *BackupMssqlDatabasesV1) ReadBackupMssqlDatabase(
     queryBuilder := b.config.BaseUrl + pathURL
 
     
-    header := "application/backup-mssql-databases=v1+json"
+    header := "application/api.clumio.backup-mssql-databases=v1+json"
     var result *models.ReadMssqlDatabaseBackupResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{

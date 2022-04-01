@@ -27,7 +27,7 @@ func (a *AuditTrailsV1) ListAuditTrails(
     queryBuilder := a.config.BaseUrl + "/audit-trails"
 
     
-    header := "application/audit-trails=v1+json"
+    header := "application/api.clumio.audit-trails=v1+json"
     var result *models.ListAuditTrailsResponse
     defaultInt64 := int64(0)
     defaultString := "" 

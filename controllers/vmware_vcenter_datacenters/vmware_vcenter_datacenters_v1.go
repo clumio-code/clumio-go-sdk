@@ -34,7 +34,7 @@ func (v *VmwareVcenterDatacentersV1) ListVmwareVcenterDatacenters(
     queryBuilder := v.config.BaseUrl + pathURL
 
     
-    header := "application/vmware-vcenter-datacenters=v1+json"
+    header := "application/api.clumio.vmware-vcenter-datacenters=v1+json"
     var result *models.ListDatacentersResponse
     defaultInt64 := int64(0)
     defaultString := "" 
@@ -89,7 +89,7 @@ func (v *VmwareVcenterDatacentersV1) ReadVmwareVcenterDatacenter(
     queryBuilder := v.config.BaseUrl + pathURL
 
     
-    header := "application/vmware-vcenter-datacenters=v1+json"
+    header := "application/api.clumio.vmware-vcenter-datacenters=v1+json"
     var result *models.ReadDatacenterResponse
     defaultString := "" 
     

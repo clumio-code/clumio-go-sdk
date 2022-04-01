@@ -92,7 +92,7 @@ func (p *PolicyDefinitionsV1) ListPolicyDefinitions(
     queryBuilder := p.config.BaseUrl + "/policies/definitions"
 
     
-    header := "application/policy-definitions=v1+json"
+    header := "application/api.clumio.policy-definitions=v1+json"
     var result *models.ListPoliciesResponse
     defaultString := "" 
     
@@ -137,7 +137,7 @@ func (p *PolicyDefinitionsV1) CreatePolicyDefinition(
         }
     }
     payload := string(bytes)
-    header := "application/policy-definitions=v1+json"
+    header := "application/api.clumio.policy-definitions=v1+json"
     var result *models.CreatePolicyResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
@@ -167,7 +167,7 @@ func (p *PolicyDefinitionsV1) ReadPolicyDefinition(
     queryBuilder := p.config.BaseUrl + pathURL
 
     
-    header := "application/policy-definitions=v1+json"
+    header := "application/api.clumio.policy-definitions=v1+json"
     var result *models.ReadPolicyResponse
     defaultString := "" 
     
@@ -216,7 +216,7 @@ func (p *PolicyDefinitionsV1) UpdatePolicyDefinition(
         }
     }
     payload := string(bytes)
-    header := "application/policy-definitions=v1+json"
+    header := "application/api.clumio.policy-definitions=v1+json"
     var result *models.UpdatePolicyResponse
     defaultString := "" 
     
@@ -256,7 +256,7 @@ func (p *PolicyDefinitionsV1) DeletePolicyDefinition(
     queryBuilder := p.config.BaseUrl + pathURL
 
     
-    header := "application/policy-definitions=v1+json"
+    header := "application/api.clumio.policy-definitions=v1+json"
     var result interface{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
