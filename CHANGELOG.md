@@ -1,3 +1,5 @@
+## 0.2.5
+APIs added for backup and restore of protection-group s3 assets.
 ## 0.2.4
 Bug fix release for fixing incorrect version headers.
 ## 0.2.3

@@ -63,14 +63,21 @@ type CreateAwsConnectionV1Request struct {
     // Organizational-Units documentation.
     OrganizationalUnitId     *string   `json:"organizational_unit_id"`
     // The asset types enabled for protect. This is only populated if "protect"
-    // is enabled. Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL"].
-    // EBS and RDS are mandatory datasources.
+    // is enabled. Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
+    // EBS and RDS are mandatory datasources. (Deprecated)
     ProtectAssetTypesEnabled []*string `json:"protect_asset_types_enabled"`
     // The services to be enabled for this configuration. Valid values are
     // ["discover"], ["discover", "protect"]. This is only set when the
     // registration is created, the enabled services are obtained directly from
-    // the installed template after that.
+    // the installed template after that. (Deprecated)
     ServicesEnabled          []*string `json:"services_enabled"`
+}
+
+// CreateAwsConnectionTemplateV1Request represents a custom type struct.
+// The body of the request.
+type CreateAwsConnectionTemplateV1Request struct {
+    // TODO: Add struct field description
+    Protect *ProtectTemplateConfig `json:"protect"`
 }
 
 // PostProcessAwsConnectionV1Request represents a custom type struct.
@@ -101,8 +108,9 @@ type PostProcessAwsConnectionV1Request struct {
 // CreateConnectionTemplateV1Request represents a custom type struct.
 // The body of the request.
 type CreateConnectionTemplateV1Request struct {
-    // TODO: Add struct field description
-    Config *AWSConnectionConfigModel `json:"config"`
+    // The asset types for which the template is to be generated. Possible
+    // asset types are ["EBS", "RDS", "DynamoDB", "EC2MSSQL"].
+    AssetTypesEnabled []*string `json:"asset_types_enabled"`
 }
 
 // UpdateAwsConnectionV1Request represents a custom type struct
@@ -770,6 +778,22 @@ type RestoreMssqlDatabaseV1Request struct {
     Source *MssqlRestoreSource `json:"source"`
     // The configuration of the MSSQL database to which the data has to be restored.
     Target *MssqlRestoreTarget `json:"target"`
+}
+
+// RestoreProtectionGroupV1Request represents a custom type struct
+type RestoreProtectionGroupV1Request struct {
+    // The parameters for initiating a protection group restore from a backup.
+    Source *ProtectionGroupRestoreSource `json:"source"`
+    // The destination where the protection group will be restored.
+    Target *ProtectionGroupRestoreTarget `json:"target"`
+}
+
+// RestoreProtectionGroupS3AssetV1Request represents a custom type struct
+type RestoreProtectionGroupS3AssetV1Request struct {
+    // The parameters for initiating a protection group S3 asset restore from a backup.
+    Source *ProtectionGroupS3AssetRestoreSource `json:"source"`
+    // The destination where the protection group will be restored.
+    Target *ProtectionGroupRestoreTarget        `json:"target"`
 }
 
 // RestoreVmwareVmV1Request represents a custom type struct
