@@ -102,7 +102,7 @@ type PolicyDefinitionsV1Client interface {
     // DeletePolicyDefinition Deletes the specified policy.
     DeletePolicyDefinition(
         policyId string)(
-        interface{},  *apiutils.APIError)
+        *models.DeletePolicyResponse,  *apiutils.APIError)
     
 }
 

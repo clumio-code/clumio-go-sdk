@@ -246,7 +246,7 @@ func (p *PolicyDefinitionsV1) UpdatePolicyDefinition(
 // DeletePolicyDefinition Deletes the specified policy.
 func (p *PolicyDefinitionsV1) DeletePolicyDefinition(
     policyId string)(
-    interface{}, *apiutils.APIError) {
+    *models.DeletePolicyResponse, *apiutils.APIError) {
 
     pathURL := "/policies/definitions/{policy_id}"
     //process optional template parameters
@@ -257,7 +257,7 @@ func (p *PolicyDefinitionsV1) DeletePolicyDefinition(
 
     
     header := "application/api.clumio.policy-definitions=v1+json"
-    var result interface{}
+    var result *models.DeletePolicyResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: p.config,

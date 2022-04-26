@@ -19,6 +19,10 @@ type AWSConnection struct {
     ClumioAwsAccountId       *string             `json:"clumio_aws_account_id"`
     // Clumio AWS Region
     ClumioAwsRegion          *string             `json:"clumio_aws_region"`
+    // The consolidated configuration of the Clumio Cloud Protect and Clumio Cloud Discover products for this connection.
+    // If this connection is deprecated to use unconsolidated configuration, then this field has a
+    // value of `null`.
+    Config                   *ConsolidatedConfig `json:"config"`
     // The status of the connection. Possible values include "connecting",
     // "connected", and "unlinked".
     ConnectionStatus         *string             `json:"connection_status"`
@@ -45,13 +49,13 @@ type AWSConnection struct {
     // value of `null`.
     Protect                  *ProtectConfig      `json:"protect"`
     // The asset types enabled for protect. This is only populated if "protect"
-    // is enabled. Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL"].
-    // EBS and RDS are mandatory datasources.
+    // is enabled. Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
+    // EBS and RDS are mandatory datasources. (Deprecated)
     ProtectAssetTypesEnabled []*string           `json:"protect_asset_types_enabled"`
     // The services to be enabled for this configuration. Valid values are
     // ["discover"], ["discover", "protect"]. This is only set when the
     // registration is created, the enabled services are obtained directly from
-    // the installed template after that.
+    // the installed template after that. (Deprecated)
     ServicesEnabled          []*string           `json:"services_enabled"`
     // The Amazon Resource Name of the installed CloudFormation stack in this AWS account
     StackArn                 *string             `json:"stack_arn"`
@@ -62,12 +66,6 @@ type AWSConnection struct {
     // will be pasted into the ClumioToken field when creating the
     // CloudFormation stack.
     Token                    *string             `json:"token"`
-}
-
-// AWSConnectionConfigModel represents a custom type struct
-type AWSConnectionConfigModel struct {
-    // TODO: Add struct field description
-    Protect *ProtectTemplateConfig `json:"protect"`
 }
 
 // AWSConnectionLinks represents a custom type struct.
@@ -115,6 +113,10 @@ type AWSEnvironment struct {
     AwsAz                []*string               `json:"aws_az"`
     // The AWS region associated with the environment. For example, `us-west-2`.
     AwsRegion            *string                 `json:"aws_region"`
+    // The consolidated configuration of the Clumio Cloud Protect and Clumio Cloud Discover products for this connection.
+    // If this connection is deprecated to use unconsolidated configuration, then this field has a
+    // value of `null`.
+    Config               *ConsolidatedConfig     `json:"config"`
     // The Clumio-assigned ID of the connection associated with the environment.
     ConnectionId         *string                 `json:"connection_id"`
     // The status of the connection to the environment, which is mediated by a CloudFormation stack.
@@ -782,40 +784,42 @@ type BackupWindow struct {
 // Bucket represents a custom type struct
 type Bucket struct {
     // Embedded responses related to the resource.
-    Embedded             interface{}          `json:"_embedded"`
+    Embedded                 interface{}                                   `json:"_embedded"`
     // URLs to pages related to the resource.
-    Links                *BucketLinks         `json:"_links"`
+    Links                    *BucketLinks                                  `json:"_links"`
     // The AWS-assigned ID of the account associated with the S3 bucket.
-    AccountNativeId      *string              `json:"account_native_id"`
+    AccountNativeId          *string                                       `json:"account_native_id"`
     // The AWS region associated with the S3 bucket.
-    AwsRegion            *string              `json:"aws_region"`
+    AwsRegion                *string                                       `json:"aws_region"`
+    // The total size breakdown of S3 buckets in bytes per storage class. This parameter aggregates relevant fields from cloudwatch_metrics > size_bytes_per_storage_class
+    BucketSizeBytesBreakdown *S3BucketsInventorySummaryBucketSizeBreakdown `json:"bucket_size_bytes_breakdown"`
     // The Cloudwatch metrics of the bucket.
-    CloudwatchMetrics    *S3CloudwatchMetrics `json:"cloudwatch_metrics"`
+    CloudwatchMetrics        *S3CloudwatchMetrics                          `json:"cloudwatch_metrics"`
     // The timestamp of when the bucket was created. Represented in RFC-3339 format.
-    CreationTimestamp    *string              `json:"creation_timestamp"`
+    CreationTimestamp        *string                                       `json:"creation_timestamp"`
     // The AWS encryption output of the bucket.
-    EncryptionSetting    *S3EncryptionOutput  `json:"encryption_setting"`
+    EncryptionSetting        *S3EncryptionOutput                           `json:"encryption_setting"`
     // The Clumio-assigned ID of the AWS environment associated with the S3 bucket.
-    EnvironmentId        *string              `json:"environment_id"`
+    EnvironmentId            *string                                       `json:"environment_id"`
     // The Clumio-assigned ID of the bucket.
-    Id                   *string              `json:"id"`
+    Id                       *string                                       `json:"id"`
     // The AWS-assigned name of the bucket.
-    Name                 *string              `json:"name"`
+    Name                     *string                                       `json:"name"`
     // Number of objects in bucket.
-    ObjectCount          *int64               `json:"object_count"`
+    ObjectCount              *int64                                        `json:"object_count"`
     // The Clumio-assigned ID of the organizational unit associated with the S3 bucket.
-    OrganizationalUnitId *string              `json:"organizational_unit_id"`
+    OrganizationalUnitId     *string                                       `json:"organizational_unit_id"`
     // Protection group count reflects how many protection groups are linked to this
     // bucket.
-    ProtectionGroupCount *int64               `json:"protection_group_count"`
+    ProtectionGroupCount     *int64                                        `json:"protection_group_count"`
     // The AWS replication output of the bucket.
-    ReplicationSetting   *S3ReplicationOutput `json:"replication_setting"`
+    ReplicationSetting       *S3ReplicationOutput                          `json:"replication_setting"`
     // Size of bucket in bytes.
-    SizeBytes            *int64               `json:"size_bytes"`
+    SizeBytes                *int64                                        `json:"size_bytes"`
     // A tag created through AWS console which can be applied to EBS volumes.
-    Tags                 []*AwsTagModel       `json:"tags"`
+    Tags                     []*AwsTagModel                                `json:"tags"`
     // The AWS versioning output of the bucket.
-    VersioningSetting    *S3VersioningOutput  `json:"versioning_setting"`
+    VersioningSetting        *S3VersioningOutput                           `json:"versioning_setting"`
 }
 
 // BucketLinks represents a custom type struct.
@@ -1056,6 +1060,21 @@ type ConsolidatedAlertParentEntity struct {
     Value      *string `json:"value"`
 }
 
+// ConsolidatedConfig represents a custom type struct.
+// The consolidated configuration of the Clumio Cloud Protect and Clumio Cloud Discover products for this connection.
+// If this connection is deprecated to use unconsolidated configuration, then this field has a
+// value of `null`.
+type ConsolidatedConfig struct {
+    // The asset types supported on the current version of the feature
+    AssetTypesEnabled        []*string     `json:"asset_types_enabled"`
+    // TODO: Add struct field description
+    Ebs                      *EbsAssetInfo `json:"ebs"`
+    // The current version of the feature.
+    InstalledTemplateVersion *string       `json:"installed_template_version"`
+    // TODO: Add struct field description
+    Rds                      *RdsAssetInfo `json:"rds"`
+}
+
 // DataAccessObject represents a custom type struct.
 // Specifies information about the data-access method for accessing the restored
 // file.
@@ -1230,25 +1249,6 @@ type DiscoverConfig struct {
     AssetTypesEnabled        []*string `json:"asset_types_enabled"`
     // The current version of the feature.
     InstalledTemplateVersion *string   `json:"installed_template_version"`
-}
-
-// DiscoverTemplateInfo represents a custom type struct.
-// The latest available CloudFormation template for Clumio Discover.
-type DiscoverTemplateInfo struct {
-    // The AWS asset types supported with the available version of the template.
-    AssetTypesEnabled        []*string `json:"asset_types_enabled"`
-    // The latest available URL for the template.
-    AvailableTemplateUrl     *string   `json:"available_template_url"`
-    // The latest available version for the template.
-    AvailableTemplateVersion *string   `json:"available_template_version"`
-}
-
-// DiscoverTemplateInfoV2 represents a custom type struct
-type DiscoverTemplateInfoV2 struct {
-    // The AWS asset types supported with the available version of the template.
-    AssetTypesEnabled        []*string `json:"asset_types_enabled"`
-    // The latest available version for the template.
-    AvailableTemplateVersion *string   `json:"available_template_version"`
 }
 
 // EBS represents a custom type struct
@@ -2914,33 +2914,6 @@ type ProtectTemplateConfig struct {
     AssetTypesEnabled []*string `json:"asset_types_enabled"`
 }
 
-// ProtectTemplateInfo represents a custom type struct.
-// The latest available CloudFormation template for Clumio Cloud Protect.
-type ProtectTemplateInfo struct {
-    // The AWS asset types supported with the available version of the template.
-    AssetTypesEnabled        []*string        `json:"asset_types_enabled"`
-    // The latest available URL for the template.
-    AvailableTemplateUrl     *string          `json:"available_template_url"`
-    // The latest available version for the template.
-    AvailableTemplateVersion *string          `json:"available_template_version"`
-    // TODO: Add struct field description
-    Ebs                      *EbsTemplateInfo `json:"ebs"`
-    // TODO: Add struct field description
-    Rds                      *RdsTemplateInfo `json:"rds"`
-}
-
-// ProtectTemplateInfoV2 represents a custom type struct
-type ProtectTemplateInfoV2 struct {
-    // The AWS asset types supported with the available version of the template.
-    AssetTypesEnabled        []*string        `json:"asset_types_enabled"`
-    // The latest available version for the template.
-    AvailableTemplateVersion *string          `json:"available_template_version"`
-    // TODO: Add struct field description
-    Ebs                      *EbsTemplateInfo `json:"ebs"`
-    // TODO: Add struct field description
-    Rds                      *RdsTemplateInfo `json:"rds"`
-}
-
 // ProtectedStatsDeprecated represents a custom type struct.
 // ProtectedStatsDeprecated contains the compliance stats for policies which are protected along with
 // the unprotected policies count
@@ -3034,11 +3007,70 @@ type ProtectionGroup struct {
     Version                   *int64                                `json:"version"`
 }
 
+// ProtectionGroupBackup represents a custom type struct
+type ProtectionGroupBackup struct {
+    // URLs to pages related to the resource.
+    Links                  *ProtectionGroupBackupLinks `json:"_links"`
+    // The number of objects in the protection group that were successfully backed up.
+    BackedUpObjectCount    *int64                      `json:"backed_up_object_count"`
+    // The total size in bytes of objects in the protection group that were
+    // successfully backed up.
+    BackedUpSizeBytes      *int64                      `json:"backed_up_size_bytes"`
+    // The timestamp of when this backup expires. Represented in RFC-3339 format.
+    ExpirationTimestamp    *string                     `json:"expiration_timestamp"`
+    // The number of objects in the protection group that failed to be backed up.
+    FailedObjectCount      *int64                      `json:"failed_object_count"`
+    // The total size in bytes of objects in the protection group that failed
+    // to be backed up.
+    FailedSizeBytes        *int64                      `json:"failed_size_bytes"`
+    // The Clumio-assigned ID of the protection group backup.
+    Id                     *string                     `json:"id"`
+    // The Clumio-assigned ID of the protection group.
+    ProtectionGroupId      *string                     `json:"protection_group_id"`
+    // The user-assigned name of the protection group.
+    ProtectionGroupName    *string                     `json:"protection_group_name"`
+    // The version of the protection group at the time the backup was taken.
+    ProtectionGroupVersion *int64                      `json:"protection_group_version"`
+    // The timestamp of when this backup started. Represented in RFC-3339 format.
+    StartTimestamp         *string                     `json:"start_timestamp"`
+    // The type of backup. Possible values include `protection_group_backup`.
+    ClumioType             *string                     `json:"type"`
+}
+
 // ProtectionGroupBackupAdvancedSetting represents a custom type struct.
 // Additional policy configuration settings for the `protection_group_backup` operation. If this operation is not of type `protection_group_backup`, then this field is omitted from the response.
 type ProtectionGroupBackupAdvancedSetting struct {
     // Backup tier to store the backup in. Valid values are: `cold`, `frozen`
     BackupTier *string `json:"backup_tier"`
+}
+
+// ProtectionGroupBackupLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type ProtectionGroupBackupLinks struct {
+    // The HATEOAS link to this resource.
+    Self *HateoasSelfLink `json:"_self"`
+}
+
+// ProtectionGroupBackupListEmbedded represents a custom type struct.
+// Embedded responses related to the resource.
+type ProtectionGroupBackupListEmbedded struct {
+    // TODO: Add struct field description
+    Items []*ProtectionGroupBackup `json:"items"`
+}
+
+// ProtectionGroupBackupListLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type ProtectionGroupBackupListLinks struct {
+    // The HATEOAS link to the first page of results.
+    First *HateoasFirstLink `json:"_first"`
+    // The HATEOAS link to the last page of results.
+    Last  *HateoasLastLink  `json:"_last"`
+    // The HATEOAS link to the next page of results.
+    Next  *HateoasNextLink  `json:"_next"`
+    // The HATEOAS link to the previous page of results.
+    Prev  *HateoasPrevLink  `json:"_prev"`
+    // The HATEOAS link to this resource.
+    Self  *HateoasSelfLink  `json:"_self"`
 }
 
 // ProtectionGroupBucket represents a custom type struct
@@ -3179,6 +3211,120 @@ type ProtectionGroupListLinks struct {
     Prev  *HateoasPrevLink  `json:"_prev"`
     // The HATEOAS link to this resource.
     Self  *HateoasSelfLink  `json:"_self"`
+}
+
+// ProtectionGroupRestoreSource represents a custom type struct.
+// The parameters for initiating a protection group restore from a backup.
+type ProtectionGroupRestoreSource struct {
+    // The Clumio-assigned ID of the protection group backup to be restored. Use the
+    // [GET /backups/protection-groups](#operation/list-backup-protection-groups)
+    // endpoint to fetch valid values.
+    BackupId                  *string              `json:"backup_id"`
+    // Search for or restore only objects that pass the source object filter.
+    ObjectFilters             *SourceObjectFilters `json:"object_filters"`
+    // A list of Clumio-assigned IDs of protection group S3 assets, representing the
+    // buckets within the protection group to restore from. Use the
+    // [GET /datasources/protection-groups/s3-assets](#operation/list-protection-group-s3-assets)
+    // endpoint to fetch valid values.
+    ProtectionGroupS3AssetIds []*string            `json:"protection_group_s3_asset_ids"`
+}
+
+// ProtectionGroupRestoreTarget represents a custom type struct.
+// The destination where the protection group will be restored.
+type ProtectionGroupRestoreTarget struct {
+    // The Clumio-assigned ID of the bucket to which the backup must be restored.
+    // Use the [GET /datasources/aws/s3-buckets](#operation/list-aws-s3-buckets) endpoint
+    // to fetch valid values.
+    BucketId      *string              `json:"bucket_id"`
+    // The Clumio-assigned ID of the AWS environment to be used as the restore destination.
+    // Use the [GET /datasources/aws/s3-buckets/{bucket_id}](#operation/read-aws-s3-bucket) endpoint
+    // to fetch the environment ID for a bucket.
+    EnvironmentId *string              `json:"environment_id"`
+    // If overwrite is set to true, we will overwrite an object if it exists. If it's set to false,
+    // then we will fail the restore if an object already exists. The default value is false.
+    Overwrite     *bool                `json:"overwrite"`
+    // Prefix to restore the objects under. If more than one bucket is restored, the
+    // bucket name will be appended to the prefix.
+    Prefix        *string              `json:"prefix"`
+    // Storage class for restored objects. Valid values are: `S3 Standard`, `S3 Standard-IA`,
+    // `S3 Intelligent-Tiering` and `S3 One Zone-IA`.
+    StorageClass  *string              `json:"storage_class"`
+    // A tag created through AWS Console which can be applied to EBS volumes.
+    Tags          []*AwsTagCommonModel `json:"tags"`
+}
+
+// ProtectionGroupS3AssetBackup represents a custom type struct
+type ProtectionGroupS3AssetBackup struct {
+    // URLs to pages related to the resource.
+    Links                    *ProtectionGroupS3AssetBackupLinks `json:"_links"`
+    // The number of objects in the protection group S3 asset that were successfully backed up.
+    BackedUpObjectCount      *uint64                            `json:"backed_up_object_count"`
+    // The total size in bytes of objects in the protection group S3 asset that were
+    // successfully backed up.
+    BackedUpSizeBytes        *uint64                            `json:"backed_up_size_bytes"`
+    // The Clumio-assigned ID of the bucket.
+    BucketId                 *string                            `json:"bucket_id"`
+    // The name of the bucket.
+    BucketName               *string                            `json:"bucket_name"`
+    // The timestamp of when this backup expires. Represented in RFC-3339 format.
+    ExpirationTimestamp      *string                            `json:"expiration_timestamp"`
+    // The number of objects in the protection group S3 asset that failed to be backed up.
+    FailedObjectCount        *uint64                            `json:"failed_object_count"`
+    // The total size in bytes of objects in the protection group S3 asset that failed
+    // to be backed up.
+    FailedSizeBytes          *uint64                            `json:"failed_size_bytes"`
+    // The Clumio-assigned ID of the protection group S3 asset backup.
+    Id                       *string                            `json:"id"`
+    // The Clumio-assigned ID of the protection group.
+    ProtectionGroupId        *string                            `json:"protection_group_id"`
+    // The Clumio-assigned ID of the protection group S3 asset.
+    ProtectionGroupS3AssetId *string                            `json:"protection_group_s3_asset_id"`
+    // The version of the protection group at the time the backup was taken.
+    ProtectionGroupVersion   *int64                             `json:"protection_group_version"`
+    // The timestamp of when this backup started. Represented in RFC-3339 format.
+    StartTimestamp           *string                            `json:"start_timestamp"`
+    // The type of backup. Possible values include `protection_group_s3_asset_backup`.
+    ClumioType               *string                            `json:"type"`
+}
+
+// ProtectionGroupS3AssetBackupLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type ProtectionGroupS3AssetBackupLinks struct {
+    // The HATEOAS link to this resource.
+    Self *HateoasSelfLink `json:"_self"`
+}
+
+// ProtectionGroupS3AssetBackupListEmbedded represents a custom type struct.
+// Embedded responses related to the resource.
+type ProtectionGroupS3AssetBackupListEmbedded struct {
+    // TODO: Add struct field description
+    Items []*ProtectionGroupS3AssetBackup `json:"items"`
+}
+
+// ProtectionGroupS3AssetBackupListLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type ProtectionGroupS3AssetBackupListLinks struct {
+    // The HATEOAS link to the first page of results.
+    First *HateoasFirstLink `json:"_first"`
+    // The HATEOAS link to the last page of results.
+    Last  *HateoasLastLink  `json:"_last"`
+    // The HATEOAS link to the next page of results.
+    Next  *HateoasNextLink  `json:"_next"`
+    // The HATEOAS link to the previous page of results.
+    Prev  *HateoasPrevLink  `json:"_prev"`
+    // The HATEOAS link to this resource.
+    Self  *HateoasSelfLink  `json:"_self"`
+}
+
+// ProtectionGroupS3AssetRestoreSource represents a custom type struct.
+// The parameters for initiating a protection group S3 asset restore from a backup.
+type ProtectionGroupS3AssetRestoreSource struct {
+    // The Clumio-assigned ID of the protection group S3 asset backup to be restored. Use the
+    // [GET /backups/protection-groups/s3-assets](#operation/list-backup-protection-group-s3-assets)
+    // endpoint to fetch valid values.
+    BackupId      *string              `json:"backup_id"`
+    // Search for or restore only objects that pass the source object filter.
+    ObjectFilters *SourceObjectFilters `json:"object_filters"`
 }
 
 // ProtectionGroupVersionLinks represents a custom type struct.
@@ -3830,6 +3976,27 @@ type S3BucketSizeRes struct {
     StandardStorageRetrievedTime                *string `json:"standard_storage_retrieved_time"`
 }
 
+// S3BucketsInventorySummaryBucketSizeBreakdown represents a custom type struct.
+// The total size breakdown of S3 buckets in bytes per storage class. This parameter aggregates relevant fields from cloudwatch_metrics > size_bytes_per_storage_class
+type S3BucketsInventorySummaryBucketSizeBreakdown struct {
+    // Size of Glacier Deep Archive Storage in bytes.
+    GlacierDeepArchiveStorageBytes       *int64 `json:"glacier_deep_archive_storage_bytes"`
+    // Size of Glacier Flexible Retrieval Storage in bytes.
+    GlacierFlexibleRetrievalStorageBytes *int64 `json:"glacier_flexible_retrieval_storage_bytes"`
+    // Size of Glacier Instant Retrieval Storage in bytes.
+    GlacierInstantRetrievalStorageBytes  *int64 `json:"glacier_instant_retrieval_storage_bytes"`
+    // Size of Intelligent-Tiering Storage objects in bytes.
+    IntelligentTieringStorageBytes       *int64 `json:"intelligent_tiering_storage_bytes"`
+    // Size of OneZone-IA Storage in bytes.
+    OneZoneIaStorageBytes                *int64 `json:"one_zone_ia_storage_bytes"`
+    // Size of Reduced Redundancy Storage in bytes.
+    ReducedRedundancyStorageBytes        *int64 `json:"reduced_redundancy_storage_bytes"`
+    // Size of Standard-IA Storage in bytes.
+    StandardIaStorageBytes               *int64 `json:"standard_ia_storage_bytes"`
+    // Size of Standard Storage in bytes.
+    StandardStorageBytes                 *int64 `json:"standard_storage_bytes"`
+}
+
 // S3CloudwatchMetrics represents a custom type struct.
 // The Cloudwatch metrics of the bucket.
 type S3CloudwatchMetrics struct {
@@ -4078,6 +4245,34 @@ type SingleErrorResponse struct {
     ErrorCode    *uint32 `json:"error_code"`
     // The reason for the error.
     ErrorMessage *string `json:"error_message"`
+}
+
+// SourceObjectFilters represents a custom type struct.
+// Search for or restore only objects that pass the source object filter.
+type SourceObjectFilters struct {
+    // Filter for objects with this etag.
+    Etag               *string   `json:"etag"`
+    // If set to true, filter for latest versions only. Otherwise all versions will
+    // be returned.
+    LatestVersionOnly  *bool     `json:"latest_version_only"`
+    // Filter for objects with at most this size in bytes.
+    MaxObjectSizeBytes *int64    `json:"max_object_size_bytes"`
+    // Filter for objects with at least this size in bytes.
+    MinObjectSizeBytes *int64    `json:"min_object_size_bytes"`
+    // Filter for objects whose key contains this string.
+    ObjectKeyContains  *string   `json:"object_key_contains"`
+    // Filter for objects whose key matches this string.
+    ObjectKeyMatches   *string   `json:"object_key_matches"`
+    // Filter for objects that start with this key prefix.
+    ObjectKeyPrefix    *string   `json:"object_key_prefix"`
+    // Filter for objects that end with this key suffix.
+    ObjectKeySuffix    *string   `json:"object_key_suffix"`
+    // Storage class to include in the restore. If not specified, then all objects across all storage
+    // classes will be restored. Valid values are: `S3 Standard`, `S3 Standard-IA`, `S3 Intelligent-Tiering`
+    // and `S3 One Zone-IA`.
+    StorageClasses     []*string `json:"storage_classes"`
+    // Filter for objects with this version ID.
+    VersionId          *string   `json:"version_id"`
 }
 
 // Subgroup represents a custom type struct
@@ -4451,12 +4646,16 @@ type TaskPrimaryEntity struct {
     Value      *string `json:"value"`
 }
 
-// TemplateConfiguration represents a custom type struct
-type TemplateConfiguration struct {
+// TemplateConfigurationV2 represents a custom type struct
+type TemplateConfigurationV2 struct {
+    // The AWS asset types supported with the available version of the template.
+    AssetTypesEnabled        []*string        `json:"asset_types_enabled"`
+    // The latest available version for the template.
+    AvailableTemplateVersion *string          `json:"available_template_version"`
     // TODO: Add struct field description
-    Discover *DiscoverTemplateInfoV2 `json:"discover"`
+    Ebs                      *EbsTemplateInfo `json:"ebs"`
     // TODO: Add struct field description
-    Protect  *ProtectTemplateInfoV2  `json:"protect"`
+    Rds                      *RdsTemplateInfo `json:"rds"`
 }
 
 // UnprotectEntitiesHateoasLink represents a custom type struct.

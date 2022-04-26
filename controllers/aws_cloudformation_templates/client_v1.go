@@ -16,6 +16,12 @@ type AwsCloudformationTemplatesV1Client interface {
     ReadAwsConnectionTemplates()(
         *models.ReadAWSTemplatesResponse,  *apiutils.APIError)
     
+    // CreateAwsConnectionTemplate Returns the AWS CloudFormation template URL corresponding to a given
+    //  configuration of asset types.
+    CreateAwsConnectionTemplate(
+        body *models.CreateAwsConnectionTemplateV1Request)(
+        *models.CreateAWSTemplateResponse,  *apiutils.APIError)
+    
 }
 
 // NewAwsCloudformationTemplatesV1 returns AwsCloudformationTemplatesV1Client

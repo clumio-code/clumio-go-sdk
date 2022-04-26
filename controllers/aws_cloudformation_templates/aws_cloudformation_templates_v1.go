@@ -4,6 +4,9 @@
 package awscloudformationtemplates
 
 import (
+    "encoding/json"
+    "fmt"
+
     "github.com/clumio-code/clumio-go-sdk/api_utils"
     "github.com/clumio-code/clumio-go-sdk/common"
     "github.com/clumio-code/clumio-go-sdk/config"
@@ -33,6 +36,39 @@ func (a *AwsCloudformationTemplatesV1) ReadAwsConnectionTemplates()(
         AcceptHeader: header,
         Result: &result,
         RequestType: common.Get,
+    })
+
+    return result, apiErr
+}
+
+
+// CreateAwsConnectionTemplate Returns the AWS CloudFormation template URL corresponding to a given
+//  configuration of asset types.
+func (a *AwsCloudformationTemplatesV1) CreateAwsConnectionTemplate(
+    body *models.CreateAwsConnectionTemplateV1Request)(
+    *models.CreateAWSTemplateResponse, *apiutils.APIError) {
+
+    queryBuilder := a.config.BaseUrl + "/connections/aws/cloudformation-templates"
+
+    bytes, err := json.Marshal(body)
+    if err != nil {
+        return nil, &apiutils.APIError{
+            ResponseCode: 500,
+            Reason:       fmt.Sprintf("Failed to Marshal Request Body %v", body),
+            Response:     []byte(fmt.Sprintf("%v", err)),
+        }
+    }
+    payload := string(bytes)
+    header := "application/api.clumio.aws-cloudformation-templates=v1+json"
+    var result *models.CreateAWSTemplateResponse
+
+    apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
+        Config: a.config,
+        RequestUrl: queryBuilder,
+        AcceptHeader: header,
+        Body: payload,
+        Result: &result,
+        RequestType: common.Post,
     })
 
     return result, apiErr
