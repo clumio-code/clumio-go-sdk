@@ -55,7 +55,8 @@ type AWSConnection struct {
     // The services to be enabled for this configuration. Valid values are
     // ["discover"], ["discover", "protect"]. This is only set when the
     // registration is created, the enabled services are obtained directly from
-    // the installed template after that. (Deprecated)
+    // the installed template after that. (Deprecated as all connections will have
+    // both discover and protect enabled)
     ServicesEnabled          []*string           `json:"services_enabled"`
     // The Amazon Resource Name of the installed CloudFormation stack in this AWS account
     StackArn                 *string             `json:"stack_arn"`
