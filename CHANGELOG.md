@@ -1,3 +1,5 @@
+## 0.2.6
+Patch version to add the sdk version and api client headers while invoking REST API from SDK.
 ## 0.2.5
 APIs added for backup and restore of protection-group s3 assets.
 ## 0.2.4

@@ -11,8 +11,12 @@ import (
 )
 
 const (
+    sdkVersion = "v0.2.6"
+
     AcceptHeader         = "Accept"
     OrgUnitContextHeader = "x-clumio-organizationalunit-context"
+    ApiClientHeader      = "x-clumio-api-client"
+    SDKVersionHeader     = "x-clumio-sdk-version"
 
     InternalServerError       = "Internal Server Error"
     NonSuccessStatusCodeError = "Non-success status code returned."
@@ -42,6 +46,8 @@ func InvokeAPI(request *InvokeAPIRequest)*apiutils.APIError {
     req := client.R().
         SetHeader(AcceptHeader, request.AcceptHeader).
         SetHeader(OrgUnitContextHeader, request.Config.OrganizationalUnitContext).
+        SetHeader(ApiClientHeader, "clumio-go-sdk").
+        SetHeader(SDKVersionHeader, fmt.Sprintf("clumio-go-sdk:%v", sdkVersion)).
         SetAuthToken(request.Config.Token).
         SetResult(request.Result)
 
