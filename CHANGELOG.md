@@ -1,3 +1,5 @@
+## 0.2.7
+APIs added for wallets and kms post process.
 ## 0.2.6
 Patch version to add the sdk version and api client headers while invoking REST API from SDK.
 ## 0.2.5
