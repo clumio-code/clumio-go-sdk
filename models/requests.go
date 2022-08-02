@@ -213,7 +213,7 @@ type CreatePolicyDefinitionV1Request struct {
     ActivationStatus     *string            `json:"activation_status"`
     // The user-provided name of the policy.
     Name                 *string            `json:"name"`
-    // The SLAs of an individual operation.
+    // TODO: Add struct field description
     Operations           []*PolicyOperation `json:"operations"`
     // The Clumio-assigned ID of the organizational unit associated with the policy.
     OrganizationalUnitId *string            `json:"organizational_unit_id"`
@@ -226,7 +226,7 @@ type UpdatePolicyDefinitionV1Request struct {
     ActivationStatus     *string            `json:"activation_status"`
     // The user-provided name of the policy.
     Name                 *string            `json:"name"`
-    // The SLAs of an individual operation.
+    // TODO: Add struct field description
     Operations           []*PolicyOperation `json:"operations"`
     // The Clumio-assigned ID of the organizational unit associated with the policy.
     OrganizationalUnitId *string            `json:"organizational_unit_id"`
@@ -895,4 +895,30 @@ type ChangePasswordV1Request struct {
     // and include the following: one uppercase character, one lowercase character, one number, and one special character.
     // Spaces are not allowed.
     NewPassword     *string `json:"new_password"`
+}
+
+// CreateWalletV1Request represents a custom type struct
+type CreateWalletV1Request struct {
+    // AWS Account ID to associate with the wallet.
+    AccountNativeId *string `json:"account_native_id"`
+}
+
+// PostProcessKmsV1Request represents a custom type struct.
+// The body of the request.
+type PostProcessKmsV1Request struct {
+    // The AWS-assigned ID of the account associated with the connection.
+    AccountNativeId     *string `json:"account_native_id"`
+    // The AWS region associated with the connection. For example, `us-east-1`.
+    AwsRegion           *string `json:"aws_region"`
+    // The multi-region CMK Key ID.
+    MultiRegionCmkKeyId *string `json:"multi_region_cmk_key_id"`
+    // Other regions where the stack set instances are created.
+    OtherRegions        *string `json:"other_regions"`
+    // Indicates whether this is a Create, Update or Delete request.
+    RequestType         *string `json:"request_type"`
+    // The stack set ID.
+    StackSetId          *string `json:"stack_set_id"`
+    // The 36-character Clumio AWS integration ID token used to identify the
+    // installation of the CloudFormation/Terraform template on the account.
+    Token               *string `json:"token"`
 }

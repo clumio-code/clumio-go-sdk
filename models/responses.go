@@ -6,41 +6,43 @@ package models
 // AddBucketToProtectionGroupResponse represents a custom type struct for Success
 type AddBucketToProtectionGroupResponse struct {
     // The AWS-assigned ID of the account associated with the DynamoDB table.
-    AccountNativeId           *string `json:"account_native_id"`
+    AccountNativeId               *string `json:"account_native_id"`
     // Whether this bucket was added to this protection group by the bucket rule
-    AddedByBucketRule         *bool   `json:"added_by_bucket_rule"`
+    AddedByBucketRule             *bool   `json:"added_by_bucket_rule"`
     // Whether this bucket was added to this protection group by the user
-    AddedByUser               *bool   `json:"added_by_user"`
+    AddedByUser                   *bool   `json:"added_by_user"`
     // The AWS region associated with the DynamoDB table.
-    AwsRegion                 *string `json:"aws_region"`
+    AwsRegion                     *string `json:"aws_region"`
     // The Clumio-assigned ID of the bucket
-    BucketId                  *string `json:"bucket_id"`
+    BucketId                      *string `json:"bucket_id"`
     // The name of the bucket
-    BucketName                *string `json:"bucket_name"`
+    BucketName                    *string `json:"bucket_name"`
     // Creation time of the protection group in RFC-3339 format.
-    CreatedTimestamp          *string `json:"created_timestamp"`
+    CreatedTimestamp              *string `json:"created_timestamp"`
     // The Clumio-assigned ID of the AWS environment associated with the protection group.
-    EnvironmentId             *string `json:"environment_id"`
+    EnvironmentId                 *string `json:"environment_id"`
     // The Clumio-assigned ID of the protection group
-    GroupId                   *string `json:"group_id"`
+    GroupId                       *string `json:"group_id"`
     // The name of the protection group
-    GroupName                 *string `json:"group_name"`
+    GroupName                     *string `json:"group_name"`
     // The Clumio-assigned ID that represents the bucket within the protection group.
-    Id                        *string `json:"id"`
+    Id                            *string `json:"id"`
     // Determines whether the protection group bucket has been deleted
-    IsDeleted                 *bool   `json:"is_deleted"`
+    IsDeleted                     *bool   `json:"is_deleted"`
     // Time of the last backup in RFC-3339 format.
-    LastBackupTimestamp       *string `json:"last_backup_timestamp"`
+    LastBackupTimestamp           *string `json:"last_backup_timestamp"`
+    // Time of the last successful continuous backup in RFC-3339 format.
+    LastContinuousBackupTimestamp *string `json:"last_continuous_backup_timestamp"`
     // Time of the last discover sync in RFC-3339 format.
-    LastDiscoverSyncTimestamp *string `json:"last_discover_sync_timestamp"`
+    LastDiscoverSyncTimestamp     *string `json:"last_discover_sync_timestamp"`
     // The Clumio-assigned ID of the organizational unit associated with the protection group.
-    OrganizationalUnitId      *string `json:"organizational_unit_id"`
+    OrganizationalUnitId          *string `json:"organizational_unit_id"`
     // Cumulative count of all unexpired objects in each backup (any new or updated since
     // the last backup) that have been backed up as part of this protection group
-    TotalBackedUpObjectCount  *int64  `json:"total_backed_up_object_count"`
+    TotalBackedUpObjectCount      *int64  `json:"total_backed_up_object_count"`
     // Cumulative size of all unexpired objects in each backup (any new or updated since
     // the last backup) that have been backed up as part of this protection group
-    TotalBackedUpSizeBytes    *int64  `json:"total_backed_up_size_bytes"`
+    TotalBackedUpSizeBytes        *int64  `json:"total_backed_up_size_bytes"`
 }
 
 // CreateAWSConnectionResponse represents a custom type struct for Success
@@ -112,11 +114,9 @@ type CreateAWSConnectionResponse struct {
 // CreateAWSTemplateResponse represents a custom type struct for Success
 type CreateAWSTemplateResponse struct {
     // The latest available URL for the template.
-    CloudformationUrl *string                  `json:"cloudformation_url"`
+    AvailableTemplateUrl *string                `json:"available_template_url"`
     // TODO: Add struct field description
-    Config            *TemplateConfigurationV2 `json:"config"`
-    // The latest available URL for the terraform template.
-    TerraformUrl      *string                  `json:"terraform_url"`
+    Config               *TemplateConfiguration `json:"config"`
 }
 
 // CreateAWSTemplateV2Response represents a custom type struct for Success
@@ -227,7 +227,7 @@ type CreatePolicyResponse struct {
     LockStatus                    *string            `json:"lock_status"`
     // The user-provided name of the policy.
     Name                          *string            `json:"name"`
-    // The SLAs of an individual operation.
+    // TODO: Add struct field description
     Operations                    []*PolicyOperation `json:"operations"`
     // The Clumio-assigned ID of the organizational unit associated with the policy.
     OrganizationalUnitId          *string            `json:"organizational_unit_id"`
@@ -343,44 +343,91 @@ type CreateUserResponse struct {
     OrganizationalUnitCount       *int64        `json:"organizational_unit_count"`
 }
 
+// CreateWalletResponse represents a custom type struct for Success
+type CreateWalletResponse struct {
+    // Embedded responses related to the resource.
+    Embedded                       interface{}  `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links                          *WalletLinks `json:"_links"`
+    // AWS Account ID associated with the wallet.
+    AccountNativeId                *string      `json:"account_native_id"`
+    // Clumio AWS Account ID for the customer
+    ClumioAwsAccountId             *string      `json:"clumio_aws_account_id"`
+    // Clumio Control Plane AWS Account ID
+    ClumioControlPlaneAwsAccountId *string      `json:"clumio_control_plane_aws_account_id"`
+    // DeploymentURL is an (external) link to an AWS console page for quick-creation
+    // of the stack.
+    DeploymentUrl                  *string      `json:"deployment_url"`
+    // ErrorCode is a short string describing the error, if any.
+    ErrorCode                      *string      `json:"error_code"`
+    // ErrorMessage is a longer description explaining the error, if any, and how to
+    // fix it.
+    ErrorMessage                   *string      `json:"error_message"`
+    // The Clumio-assigned ID of the wallet.
+    Id                             *string      `json:"id"`
+    // The regions where the wallet is installed.
+    InstalledRegions               []*string    `json:"installed_regions"`
+    // RoleArn is the AWS Resource Name of the IAM Role created by the stack.
+    RoleArn                        *string      `json:"role_arn"`
+    // The version of the stack used or being used.
+    StackVersion                   *int64       `json:"stack_version"`
+    // State describes the state of the wallet. Valid states are:
+    // Waiting: The wallet has been created, but a stack hasn't been created. The
+    // wallet can't be used in this state.
+    // Enabled: The wallet has been created and a stack has been created for the
+    // wallet. This is the normal expected state of a wallet in use.
+    // Error:   The wallet is inaccessible. See ErrorCode and ErrorMessage fields for
+    // additional details.
+    State                          *string      `json:"state"`
+    // The supported regions for the wallet.
+    SupportedRegions               []*string    `json:"supported_regions"`
+    // TemplateURL is the URL to the CloudFormation template to be used to create the
+    // CloudFormation stack.
+    TemplateUrl                    *string      `json:"template_url"`
+    // Token is used to identify and authenticate the CloudFormation stack creation.
+    Token                          *string      `json:"token"`
+}
+
 // DeleteBucketFromProtectionGroupResponse represents a custom type struct for Success
 type DeleteBucketFromProtectionGroupResponse struct {
     // The AWS-assigned ID of the account associated with the DynamoDB table.
-    AccountNativeId           *string `json:"account_native_id"`
+    AccountNativeId               *string `json:"account_native_id"`
     // Whether this bucket was added to this protection group by the bucket rule
-    AddedByBucketRule         *bool   `json:"added_by_bucket_rule"`
+    AddedByBucketRule             *bool   `json:"added_by_bucket_rule"`
     // Whether this bucket was added to this protection group by the user
-    AddedByUser               *bool   `json:"added_by_user"`
+    AddedByUser                   *bool   `json:"added_by_user"`
     // The AWS region associated with the DynamoDB table.
-    AwsRegion                 *string `json:"aws_region"`
+    AwsRegion                     *string `json:"aws_region"`
     // The Clumio-assigned ID of the bucket
-    BucketId                  *string `json:"bucket_id"`
+    BucketId                      *string `json:"bucket_id"`
     // The name of the bucket
-    BucketName                *string `json:"bucket_name"`
+    BucketName                    *string `json:"bucket_name"`
     // Creation time of the protection group in RFC-3339 format.
-    CreatedTimestamp          *string `json:"created_timestamp"`
+    CreatedTimestamp              *string `json:"created_timestamp"`
     // The Clumio-assigned ID of the AWS environment associated with the protection group.
-    EnvironmentId             *string `json:"environment_id"`
+    EnvironmentId                 *string `json:"environment_id"`
     // The Clumio-assigned ID of the protection group
-    GroupId                   *string `json:"group_id"`
+    GroupId                       *string `json:"group_id"`
     // The name of the protection group
-    GroupName                 *string `json:"group_name"`
+    GroupName                     *string `json:"group_name"`
     // The Clumio-assigned ID that represents the bucket within the protection group.
-    Id                        *string `json:"id"`
+    Id                            *string `json:"id"`
     // Determines whether the protection group bucket has been deleted
-    IsDeleted                 *bool   `json:"is_deleted"`
+    IsDeleted                     *bool   `json:"is_deleted"`
     // Time of the last backup in RFC-3339 format.
-    LastBackupTimestamp       *string `json:"last_backup_timestamp"`
+    LastBackupTimestamp           *string `json:"last_backup_timestamp"`
+    // Time of the last successful continuous backup in RFC-3339 format.
+    LastContinuousBackupTimestamp *string `json:"last_continuous_backup_timestamp"`
     // Time of the last discover sync in RFC-3339 format.
-    LastDiscoverSyncTimestamp *string `json:"last_discover_sync_timestamp"`
+    LastDiscoverSyncTimestamp     *string `json:"last_discover_sync_timestamp"`
     // The Clumio-assigned ID of the organizational unit associated with the protection group.
-    OrganizationalUnitId      *string `json:"organizational_unit_id"`
+    OrganizationalUnitId          *string `json:"organizational_unit_id"`
     // Cumulative count of all unexpired objects in each backup (any new or updated since
     // the last backup) that have been backed up as part of this protection group
-    TotalBackedUpObjectCount  *int64  `json:"total_backed_up_object_count"`
+    TotalBackedUpObjectCount      *int64  `json:"total_backed_up_object_count"`
     // Cumulative size of all unexpired objects in each backup (any new or updated since
     // the last backup) that have been backed up as part of this protection group
-    TotalBackedUpSizeBytes    *int64  `json:"total_backed_up_size_bytes"`
+    TotalBackedUpSizeBytes        *int64  `json:"total_backed_up_size_bytes"`
 }
 
 // DeleteHcmHostResponse represents a custom type struct for Success
@@ -1320,6 +1367,20 @@ type ListVmsResponse struct {
     TotalPagesCount *int64          `json:"total_pages_count"`
 }
 
+// ListWalletsResponse represents a custom type struct for Success
+type ListWalletsResponse struct {
+    // Embedded responses related to the resource.
+    Embedded     *WalletListEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links        *WalletListLinks    `json:"_links"`
+    // The number of items listed on the current page.
+    CurrentCount *int64              `json:"current_count"`
+    // The maximum number of items displayed per page in the response.
+    Limit        *int64              `json:"limit"`
+    // The page token used to get this response.
+    Start        *string             `json:"start"`
+}
+
 // MoveHcmHostsResponse represents a custom type struct for Success
 type MoveHcmHostsResponse struct {
     // Embedded responses related to the resource.
@@ -1495,8 +1556,10 @@ type ReadAWSEnvironmentResponse struct {
 
 // ReadAWSTemplatesResponse represents a custom type struct for Success
 type ReadAWSTemplatesResponse struct {
-    // TODO: Add struct field description
-    Config *TemplateConfigurationV2 `json:"config"`
+    // The latest available CloudFormation template for Clumio Discover.
+    Discover *DiscoverTemplateInfo `json:"discover"`
+    // The latest available CloudFormation template for Clumio Cloud Protect.
+    Protect  *ProtectTemplateInfo  `json:"protect"`
 }
 
 // ReadAWSTemplatesV2Response represents a custom type struct for Success
@@ -1802,6 +1865,8 @@ type ReadEbsVolumeResponse struct {
     HasDirectAssignment      *bool                   `json:"has_direct_assignment"`
     // The Clumio-assigned ID of the EBS volume.
     Id                       *string                 `json:"id"`
+    // Iops of the volume.
+    Iops                     *int64                  `json:"iops"`
     // Determines whether the EBS volume has been deleted. If `true`, the volume has been
     // deleted.
     IsDeleted                *bool                   `json:"is_deleted"`
@@ -1870,6 +1935,8 @@ type ReadFileSystemResponse struct {
     // points that correspond to Windows drive letters. All other mount points are
     // identified by a '/'.
     MountPath            *string             `json:"mount_path"`
+    // The number of files (including directories) indexed in the file system.
+    NumFilesIndexed      *int64              `json:"num_files_indexed"`
     // The total amount of memory available to the filesystem in bytes.
     Size                 *uint64             `json:"size"`
     // The type of the filesystem. This field is populated with values returned from
@@ -2253,7 +2320,7 @@ type ReadPolicyResponse struct {
     LockStatus                    *string            `json:"lock_status"`
     // The user-provided name of the policy.
     Name                          *string            `json:"name"`
-    // The SLAs of an individual operation.
+    // TODO: Add struct field description
     Operations                    []*PolicyOperation `json:"operations"`
     // The Clumio-assigned ID of the organizational unit associated with the policy.
     OrganizationalUnitId          *string            `json:"organizational_unit_id"`
@@ -2393,55 +2460,57 @@ type ReadProtectionGroupS3AssetBackupResponse struct {
 // ReadProtectionGroupS3AssetResponse represents a custom type struct for Success
 type ReadProtectionGroupS3AssetResponse struct {
     // TODO: Add struct field description
-    Embedded                  *ProtectionGroupBucketEmbedded `json:"_embedded"`
+    Embedded                      *ProtectionGroupBucketEmbedded `json:"_embedded"`
     // TODO: Add struct field description
-    Links                     *ProtectionGroupBucketLinks    `json:"_links"`
+    Links                         *ProtectionGroupBucketLinks    `json:"_links"`
     // The AWS-assigned ID of the account associated with the DynamoDB table.
-    AccountNativeId           *string                        `json:"account_native_id"`
+    AccountNativeId               *string                        `json:"account_native_id"`
     // Whether this bucket was added to this protection group by the bucket rule
-    AddedByBucketRule         *bool                          `json:"added_by_bucket_rule"`
+    AddedByBucketRule             *bool                          `json:"added_by_bucket_rule"`
     // Whether this bucket was added to this protection group by the user
-    AddedByUser               *bool                          `json:"added_by_user"`
+    AddedByUser                   *bool                          `json:"added_by_user"`
     // The AWS region associated with the DynamoDB table.
-    AwsRegion                 *string                        `json:"aws_region"`
+    AwsRegion                     *string                        `json:"aws_region"`
     // The Clumio-assigned ID of the bucket
-    BucketId                  *string                        `json:"bucket_id"`
+    BucketId                      *string                        `json:"bucket_id"`
     // The name of the bucket
-    BucketName                *string                        `json:"bucket_name"`
+    BucketName                    *string                        `json:"bucket_name"`
     // The compliance status of the protected protection group. Possible values include
     // "compliant" and "noncompliant". If the table is not protected, then this field has
     // a value of `null`.
-    ComplianceStatus          *string                        `json:"compliance_status"`
+    ComplianceStatus              *string                        `json:"compliance_status"`
     // Creation time of the protection group in RFC-3339 format.
-    CreatedTimestamp          *string                        `json:"created_timestamp"`
+    CreatedTimestamp              *string                        `json:"created_timestamp"`
     // The Clumio-assigned ID of the AWS environment associated with the protection group.
-    EnvironmentId             *string                        `json:"environment_id"`
+    EnvironmentId                 *string                        `json:"environment_id"`
     // The Clumio-assigned ID of the protection group
-    GroupId                   *string                        `json:"group_id"`
+    GroupId                       *string                        `json:"group_id"`
     // The name of the protection group
-    GroupName                 *string                        `json:"group_name"`
+    GroupName                     *string                        `json:"group_name"`
     // The Clumio-assigned ID that represents the bucket within the protection group.
-    Id                        *string                        `json:"id"`
+    Id                            *string                        `json:"id"`
     // Determines whether the protection group bucket has been deleted
-    IsDeleted                 *bool                          `json:"is_deleted"`
+    IsDeleted                     *bool                          `json:"is_deleted"`
     // Time of the last backup in RFC-3339 format.
-    LastBackupTimestamp       *string                        `json:"last_backup_timestamp"`
+    LastBackupTimestamp           *string                        `json:"last_backup_timestamp"`
+    // Time of the last successful continuous backup in RFC-3339 format.
+    LastContinuousBackupTimestamp *string                        `json:"last_continuous_backup_timestamp"`
     // Time of the last discover sync in RFC-3339 format.
-    LastDiscoverSyncTimestamp *string                        `json:"last_discover_sync_timestamp"`
+    LastDiscoverSyncTimestamp     *string                        `json:"last_discover_sync_timestamp"`
     // The Clumio-assigned ID of the organizational unit associated with the protection group.
-    OrganizationalUnitId      *string                        `json:"organizational_unit_id"`
+    OrganizationalUnitId          *string                        `json:"organizational_unit_id"`
     // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
-    ProtectionInfo            *ProtectionInfoWithRule        `json:"protection_info"`
+    ProtectionInfo                *ProtectionInfoWithRule        `json:"protection_info"`
     // The protection status of the protection group. Possible values include "protected",
     // "unprotected", and "unsupported". If the protection group does not support backups, then
     // this field has a value of `unsupported`.
-    ProtectionStatus          *string                        `json:"protection_status"`
+    ProtectionStatus              *string                        `json:"protection_status"`
     // Cumulative count of all unexpired objects in each backup (any new or updated since
     // the last backup) that have been backed up as part of this protection group
-    TotalBackedUpObjectCount  *int64                         `json:"total_backed_up_object_count"`
+    TotalBackedUpObjectCount      *int64                         `json:"total_backed_up_object_count"`
     // Cumulative size of all unexpired objects in each backup (any new or updated since
     // the last backup) that have been backed up as part of this protection group
-    TotalBackedUpSizeBytes    *int64                         `json:"total_backed_up_size_bytes"`
+    TotalBackedUpSizeBytes        *int64                         `json:"total_backed_up_size_bytes"`
 }
 
 // ReadResourcePoolResponse represents a custom type struct for Success
@@ -3026,6 +3095,96 @@ type ReadVmResponse struct {
     VmFolder              *VMFolderModel                `json:"vm_folder"`
 }
 
+// ReadWalletResponse represents a custom type struct for Success
+type ReadWalletResponse struct {
+    // Embedded responses related to the resource.
+    Embedded                       interface{}  `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links                          *WalletLinks `json:"_links"`
+    // AWS Account ID associated with the wallet.
+    AccountNativeId                *string      `json:"account_native_id"`
+    // Clumio AWS Account ID for the customer
+    ClumioAwsAccountId             *string      `json:"clumio_aws_account_id"`
+    // Clumio Control Plane AWS Account ID
+    ClumioControlPlaneAwsAccountId *string      `json:"clumio_control_plane_aws_account_id"`
+    // DeploymentURL is an (external) link to an AWS console page for quick-creation
+    // of the stack.
+    DeploymentUrl                  *string      `json:"deployment_url"`
+    // ErrorCode is a short string describing the error, if any.
+    ErrorCode                      *string      `json:"error_code"`
+    // ErrorMessage is a longer description explaining the error, if any, and how to
+    // fix it.
+    ErrorMessage                   *string      `json:"error_message"`
+    // The Clumio-assigned ID of the wallet.
+    Id                             *string      `json:"id"`
+    // The regions where the wallet is installed.
+    InstalledRegions               []*string    `json:"installed_regions"`
+    // RoleArn is the AWS Resource Name of the IAM Role created by the stack.
+    RoleArn                        *string      `json:"role_arn"`
+    // The version of the stack used or being used.
+    StackVersion                   *int64       `json:"stack_version"`
+    // State describes the state of the wallet. Valid states are:
+    // Waiting: The wallet has been created, but a stack hasn't been created. The
+    // wallet can't be used in this state.
+    // Enabled: The wallet has been created and a stack has been created for the
+    // wallet. This is the normal expected state of a wallet in use.
+    // Error:   The wallet is inaccessible. See ErrorCode and ErrorMessage fields for
+    // additional details.
+    State                          *string      `json:"state"`
+    // The supported regions for the wallet.
+    SupportedRegions               []*string    `json:"supported_regions"`
+    // TemplateURL is the URL to the CloudFormation template to be used to create the
+    // CloudFormation stack.
+    TemplateUrl                    *string      `json:"template_url"`
+    // Token is used to identify and authenticate the CloudFormation stack creation.
+    Token                          *string      `json:"token"`
+}
+
+// RefreshWalletResponse represents a custom type struct for Success
+type RefreshWalletResponse struct {
+    // Embedded responses related to the resource.
+    Embedded                       interface{}  `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links                          *WalletLinks `json:"_links"`
+    // AWS Account ID associated with the wallet.
+    AccountNativeId                *string      `json:"account_native_id"`
+    // Clumio AWS Account ID for the customer
+    ClumioAwsAccountId             *string      `json:"clumio_aws_account_id"`
+    // Clumio Control Plane AWS Account ID
+    ClumioControlPlaneAwsAccountId *string      `json:"clumio_control_plane_aws_account_id"`
+    // DeploymentURL is an (external) link to an AWS console page for quick-creation
+    // of the stack.
+    DeploymentUrl                  *string      `json:"deployment_url"`
+    // ErrorCode is a short string describing the error, if any.
+    ErrorCode                      *string      `json:"error_code"`
+    // ErrorMessage is a longer description explaining the error, if any, and how to
+    // fix it.
+    ErrorMessage                   *string      `json:"error_message"`
+    // The Clumio-assigned ID of the wallet.
+    Id                             *string      `json:"id"`
+    // The regions where the wallet is installed.
+    InstalledRegions               []*string    `json:"installed_regions"`
+    // RoleArn is the AWS Resource Name of the IAM Role created by the stack.
+    RoleArn                        *string      `json:"role_arn"`
+    // The version of the stack used or being used.
+    StackVersion                   *int64       `json:"stack_version"`
+    // State describes the state of the wallet. Valid states are:
+    // Waiting: The wallet has been created, but a stack hasn't been created. The
+    // wallet can't be used in this state.
+    // Enabled: The wallet has been created and a stack has been created for the
+    // wallet. This is the normal expected state of a wallet in use.
+    // Error:   The wallet is inaccessible. See ErrorCode and ErrorMessage fields for
+    // additional details.
+    State                          *string      `json:"state"`
+    // The supported regions for the wallet.
+    SupportedRegions               []*string    `json:"supported_regions"`
+    // TemplateURL is the URL to the CloudFormation template to be used to create the
+    // CloudFormation stack.
+    TemplateUrl                    *string      `json:"template_url"`
+    // Token is used to identify and authenticate the CloudFormation stack creation.
+    Token                          *string      `json:"token"`
+}
+
 // RestoreFileResponse represents a custom type struct for Success
 type RestoreFileResponse struct {
     // Embedded responses related to the resource.
@@ -3283,7 +3442,7 @@ type UpdatePolicyResponse struct {
     LockStatus                    *string            `json:"lock_status"`
     // The user-provided name of the policy.
     Name                          *string            `json:"name"`
-    // The SLAs of an individual operation.
+    // TODO: Add struct field description
     Operations                    []*PolicyOperation `json:"operations"`
     // The Clumio-assigned ID of the organizational unit associated with the policy.
     OrganizationalUnitId          *string            `json:"organizational_unit_id"`
