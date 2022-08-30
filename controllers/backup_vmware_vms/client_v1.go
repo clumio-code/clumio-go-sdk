@@ -17,7 +17,7 @@ type BackupVmwareVmsV1Client interface {
         filter *string)(
         *models.ListVMBackupsResponse,  *apiutils.APIError)
     
-    // CreateBackupVmwareVm Performs an on-demand backup for the specified VM. The VM must be protected with a policy that includes a service level agreement (SLA) configured for on-demand backups.
+    // CreateBackupVmwareVm Performs an on-demand backup for the specified VM.
     CreateBackupVmwareVm(
         body models.CreateBackupVmwareVmV1Request)(
         interface{},  *apiutils.APIError)

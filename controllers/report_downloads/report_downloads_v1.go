@@ -18,7 +18,7 @@ type ReportDownloadsV1 struct {
     config config.Config
 }
 
-// ListReportDownloads List unexpired report downloads.
+// ListReportDownloads Returns a list of unexpired, generated reports.
 func (r *ReportDownloadsV1) ListReportDownloads(
     body models.ListReportDownloadsV1Request)(
     *models.ListReportDownloadsResponse, *apiutils.APIError) {
@@ -50,7 +50,7 @@ func (r *ReportDownloadsV1) ListReportDownloads(
 }
 
 
-// CreateReportDownload Create a new Report download.
+// CreateReportDownload Generates a report of a specified type given certain general conditions such as time range and other type-specific filters.
 func (r *ReportDownloadsV1) CreateReportDownload(
     body models.CreateReportDownloadV1Request)(
     *models.CreateReportDownloadResponse, *apiutils.APIError) {

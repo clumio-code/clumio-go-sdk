@@ -62,7 +62,7 @@ func (b *BackupVmwareVmsV1) ListBackupVmwareVms(
 }
 
 
-// CreateBackupVmwareVm Performs an on-demand backup for the specified VM. The VM must be protected with a policy that includes a service level agreement (SLA) configured for on-demand backups.
+// CreateBackupVmwareVm Performs an on-demand backup for the specified VM.
 func (b *BackupVmwareVmsV1) CreateBackupVmwareVm(
     body models.CreateBackupVmwareVmV1Request)(
     interface{}, *apiutils.APIError) {
