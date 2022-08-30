@@ -62,7 +62,7 @@ func (b *BackupAwsEbsVolumesV1) ListBackupAwsEbsVolumes(
 }
 
 
-// CreateBackupAwsEbsVolume Performs an on-demand backup for the specified EBS volume. The EBS volume must be protected with a policy that includes a service level agreement (SLA) configured for on-demand backups.
+// CreateBackupAwsEbsVolume Performs an on-demand backup for the specified EBS volume.
 func (b *BackupAwsEbsVolumesV1) CreateBackupAwsEbsVolume(
     body models.CreateBackupAwsEbsVolumeV1Request)(
     interface{}, *apiutils.APIError) {

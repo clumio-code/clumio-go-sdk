@@ -27,24 +27,30 @@ type UpdateIndividualAlertV1Request struct {
 
 // CreateBackupAwsEbsVolumeV1Request represents a custom type struct
 type CreateBackupAwsEbsVolumeV1Request struct {
+    // Settings for requesting on-demand backup directly
+    Settings *OnDemandSetting `json:"settings"`
     // Performs the operation on the EBS volume with the specified Clumio-assigned ID.
-    VolumeId *string `json:"volume_id"`
+    VolumeId *string          `json:"volume_id"`
 }
 
 // CreateBackupMssqlDatabaseV1Request represents a custom type struct
 type CreateBackupMssqlDatabaseV1Request struct {
     // Performs the operation on the Mssql asset with the specified Clumio-assigned ID.
-    AssetId    *string `json:"asset_id"`
+    AssetId    *string          `json:"asset_id"`
+    // Settings for requesting on-demand backup directly
+    Settings   *OnDemandSetting `json:"settings"`
     // The type of the backup. Possible values - `mssql_database_backup`, `mssql_log_backup`.
-    ClumioType *string `json:"type"`
+    ClumioType *string          `json:"type"`
 }
 
 // CreateBackupVmwareVmV1Request represents a custom type struct
 type CreateBackupVmwareVmV1Request struct {
+    // Settings for requesting on-demand backup directly
+    Settings  *OnDemandSetting `json:"settings"`
     // Performs the operation on a VM within the specified vCenter server.
-    VcenterId *string `json:"vcenter_id"`
+    VcenterId *string          `json:"vcenter_id"`
     // Performs the operation on the VM with the specified VMware-assigned Managed Object Reference (MoRef) ID.
-    VmId      *string `json:"vm_id"`
+    VmId      *string          `json:"vm_id"`
 }
 
 // CreateAwsConnectionV1Request represents a custom type struct.
@@ -217,6 +223,8 @@ type CreatePolicyDefinitionV1Request struct {
     Operations           []*PolicyOperation `json:"operations"`
     // The Clumio-assigned ID of the organizational unit associated with the policy.
     OrganizationalUnitId *string            `json:"organizational_unit_id"`
+    // The timezone for the policy.
+    Timezone             *string            `json:"timezone"`
 }
 
 // UpdatePolicyDefinitionV1Request represents a custom type struct
@@ -230,6 +238,8 @@ type UpdatePolicyDefinitionV1Request struct {
     Operations           []*PolicyOperation `json:"operations"`
     // The Clumio-assigned ID of the organizational unit associated with the policy.
     OrganizationalUnitId *string            `json:"organizational_unit_id"`
+    // The timezone for the policy.
+    Timezone             *string            `json:"timezone"`
 }
 
 // CreatePolicyRuleV1Request represents a custom type struct
@@ -498,7 +508,8 @@ type ListReportDownloadsV1Request struct {
     // |                 |                  | Filter report downloaded records whose  |
     // |                 |                  | type is one of the given values. The    |
     // |                 |                  | possible values are: "activity",        |
-    // |                 |                  | "compliance".                           |
+    // |                 |                  | "compliance", "audit", and              |
+    // |                 |                  | "consumption".                          |
     // |                 |                  |                                         |
     // |                 |                  | filter={"report_type":{"$in":["complian |
     // |                 |                  | ce"]}}                                  |
@@ -587,6 +598,60 @@ type CreateReportDownloadV1Request struct {
     // |                   |                  |                   | ity_start_timesta |
     // |                   |                  |                   | mp":{"$eq":86400} |
     // |                   |                  |                   | }"                |
+    // |                   |                  |                   |                   |
+    // |                   |                  |                   |                   |
+    // +-------------------+------------------+-------------------+-------------------+
+    // | timestamp         | $gte, $lte, $eq  | Consumption       | timestamp denotes |
+    // |                   |                  |                   | the time filter   |
+    // |                   |                  |                   | for Consumption   |
+    // |                   |                  |                   | reports.          |
+    // |                   |                  |                   | $gte and $lte     |
+    // |                   |                  |                   | accept RFC-3999   |
+    // |                   |                  |                   | timestamps and    |
+    // |                   |                  |                   | $eq accepts a     |
+    // |                   |                  |                   | duration in       |
+    // |                   |                  |                   | seconds           |
+    // |                   |                  |                   | denoting the      |
+    // |                   |                  |                   | offset from the   |
+    // |                   |                  |                   | current time. $eq |
+    // |                   |                  |                   | takes precedence  |
+    // |                   |                  |                   | over both         |
+    // |                   |                  |                   | $gte and $lte so  |
+    // |                   |                  |                   | if $eq is used,   |
+    // |                   |                  |                   | the backend will  |
+    // |                   |                  |                   | use the relative  |
+    // |                   |                  |                   | time filter       |
+    // |                   |                  |                   | instead of        |
+    // |                   |                  |                   | absolute time     |
+    // |                   |                  |                   | filters.          |
+    // |                   |                  |                   |                   |
+    // |                   |                  |                   | "filter": "{\"tim |
+    // |                   |                  |                   | estamp\":{\"$gte\ |
+    // |                   |                  |                   | ":\"2022-07-      |
+    // |                   |                  |                   | 27T14:35:33.735Z\ |
+    // |                   |                  |                   | ",\"$lte\":\"2022 |
+    // |                   |                  |                   | -08-              |
+    // |                   |                  |                   | 03T14:35:33.735Z\ |
+    // |                   |                  |                   | "}}"              |
+    // |                   |                  |                   |                   |
+    // |                   |                  |                   |                   |
+    // +-------------------+------------------+-------------------+-------------------+
+    // | organizational_un | $in              | Consumption       | Organizational    |
+    // | it_id             |                  |                   | Unit ID (OU ID)   |
+    // |                   |                  |                   | filters the       |
+    // |                   |                  |                   | consumption data  |
+    // |                   |                  |                   | generated for the |
+    // |                   |                  |                   | report to the     |
+    // |                   |                  |                   | given OU IDs and  |
+    // |                   |                  |                   | its children.     |
+    // |                   |                  |                   |                   |
+    // |                   |                  |                   | "filter": "{\"org |
+    // |                   |                  |                   | anizational_unit_ |
+    // |                   |                  |                   | id\":{\"$in\":[\" |
+    // |                   |                  |                   | 00000000-0000-    |
+    // |                   |                  |                   | 0000-0000-        |
+    // |                   |                  |                   | 000000000000\"]}} |
+    // |                   |                  |                   | "                 |
     // |                   |                  |                   |                   |
     // |                   |                  |                   |                   |
     // +-------------------+------------------+-------------------+-------------------+
@@ -747,7 +812,7 @@ type CreateReportDownloadV1Request struct {
     // in: query
     Filter     *string `json:"filter"`
     // The report type. Examples of report types include, "activity",
-    // "compliance", "audit".
+    // "compliance", "audit", and "consumption".
     ClumioType *string `json:"type"`
 }
 

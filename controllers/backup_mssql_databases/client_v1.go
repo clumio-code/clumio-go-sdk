@@ -18,7 +18,7 @@ type BackupMssqlDatabasesV1Client interface {
         embed *string)(
         *models.ListMssqlDatabaseBackupsResponse,  *apiutils.APIError)
     
-    // CreateBackupMssqlDatabase Performs an on-demand backup for the specified MSSQL asset. The MSSQL asset must be protected with a policy that includes a service level agreement (SLA) configured for on-demand backups.
+    // CreateBackupMssqlDatabase Performs an on-demand backup for the specified MSSQL asset.
     CreateBackupMssqlDatabase(
         embed *string, 
         body models.CreateBackupMssqlDatabaseV1Request)(

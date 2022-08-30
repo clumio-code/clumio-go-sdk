@@ -231,16 +231,18 @@ type CreatePolicyResponse struct {
     Operations                    []*PolicyOperation `json:"operations"`
     // The Clumio-assigned ID of the organizational unit associated with the policy.
     OrganizationalUnitId          *string            `json:"organizational_unit_id"`
+    // The timezone for the policy.
+    Timezone                      *string            `json:"timezone"`
 }
 
 // CreateProtectionGroupResponse represents a custom type struct for Success
 type CreateProtectionGroupResponse struct {
     // Embedded responses related to the resource.
-    Embedded                  interface{}                  `json:"_embedded"`
+    Embedded                      interface{}                  `json:"_embedded"`
     // URLs to pages related to the resource.
-    Links                     *ProtectionGroupVersionLinks `json:"_links"`
+    Links                         *ProtectionGroupVersionLinks `json:"_links"`
     // Number of buckets
-    BucketCount               *int64                       `json:"bucket_count"`
+    BucketCount                   *int64                       `json:"bucket_count"`
     // The following table describes the possible conditions for a bucket to be
     // automatically added to a protection group.
     // 
@@ -255,35 +257,37 @@ type CreateProtectionGroupResponse struct {
     // |         |                |                                                   |
     // +---------+----------------+---------------------------------------------------+
     // 
-    BucketRule                *string                      `json:"bucket_rule"`
+    BucketRule                    *string                      `json:"bucket_rule"`
     // Creation time of the protection group in RFC-3339 format.
-    CreatedTimestamp          *string                      `json:"created_timestamp"`
+    CreatedTimestamp              *string                      `json:"created_timestamp"`
     // The user-assigned description of the protection group.
-    Description               *string                      `json:"description"`
+    Description                   *string                      `json:"description"`
     // The Clumio-assigned ID of the protection group.
-    Id                        *string                      `json:"id"`
+    Id                            *string                      `json:"id"`
     // Time of the last backup in RFC-3339 format.
-    LastBackupTimestamp       *string                      `json:"last_backup_timestamp"`
+    LastBackupTimestamp           *string                      `json:"last_backup_timestamp"`
+    // Time of the last successful continuous backup in RFC-3339 format.
+    LastContinuousBackupTimestamp *string                      `json:"last_continuous_backup_timestamp"`
     // Time of the last discover sync in RFC-3339 format.
-    LastDiscoverSyncTimestamp *string                      `json:"last_discover_sync_timestamp"`
+    LastDiscoverSyncTimestamp     *string                      `json:"last_discover_sync_timestamp"`
     // Modified time of the protection group in RFC-3339 format.
-    ModifiedTimestamp         *string                      `json:"modified_timestamp"`
+    ModifiedTimestamp             *string                      `json:"modified_timestamp"`
     // The user-assigned name of the protection group.
-    Name                      *string                      `json:"name"`
+    Name                          *string                      `json:"name"`
     // ObjectFilter
     // defines which objects will be backed up.
-    ObjectFilter              *ObjectFilter                `json:"object_filter"`
+    ObjectFilter                  *ObjectFilter                `json:"object_filter"`
     // The Clumio-assigned ID of the organizational unit associated with the Protection Group.
-    OrganizationalUnitId      *string                      `json:"organizational_unit_id"`
+    OrganizationalUnitId          *string                      `json:"organizational_unit_id"`
     // Cumulative count of all unexpired objects in each backup (any new or updated since
     // the last backup) that have been backed up as part of this protection group
-    TotalBackedUpObjectCount  *int64                       `json:"total_backed_up_object_count"`
+    TotalBackedUpObjectCount      *int64                       `json:"total_backed_up_object_count"`
     // Cumulative size of all unexpired objects in each backup (any new or updated since
     // the last backup) that have been backed up as part of this protection group
-    TotalBackedUpSizeBytes    *int64                       `json:"total_backed_up_size_bytes"`
+    TotalBackedUpSizeBytes        *int64                       `json:"total_backed_up_size_bytes"`
     // Version of the protection group. The version number is incremented every time
     // a change is made to the protection group.
-    Version                   *int64                       `json:"version"`
+    Version                       *int64                       `json:"version"`
 }
 
 // CreateReportDownloadResponse represents a custom type struct for Success
@@ -351,9 +355,9 @@ type CreateWalletResponse struct {
     Links                          *WalletLinks `json:"_links"`
     // AWS Account ID associated with the wallet.
     AccountNativeId                *string      `json:"account_native_id"`
-    // Clumio AWS Account ID for the customer
+    // Clumio AWS Account ID for the customer.
     ClumioAwsAccountId             *string      `json:"clumio_aws_account_id"`
-    // Clumio Control Plane AWS Account ID
+    // Clumio Control Plane AWS Account ID.
     ClumioControlPlaneAwsAccountId *string      `json:"clumio_control_plane_aws_account_id"`
     // DeploymentURL is an (external) link to an AWS console page for quick-creation
     // of the stack.
@@ -1652,6 +1656,8 @@ type ReadBucketResponse struct {
     EncryptionSetting        *S3EncryptionOutput                           `json:"encryption_setting"`
     // The Clumio-assigned ID of the AWS environment associated with the S3 bucket.
     EnvironmentId            *string                                       `json:"environment_id"`
+    // The EventBridge enablement state for the S3 bucket.
+    EventBridgeEnabled       *bool                                         `json:"event_bridge_enabled"`
     // The Clumio-assigned ID of the bucket.
     Id                       *string                                       `json:"id"`
     // The AWS-assigned name of the bucket.
@@ -2324,6 +2330,8 @@ type ReadPolicyResponse struct {
     Operations                    []*PolicyOperation `json:"operations"`
     // The Clumio-assigned ID of the organizational unit associated with the policy.
     OrganizationalUnitId          *string            `json:"organizational_unit_id"`
+    // The timezone for the policy.
+    Timezone                      *string            `json:"timezone"`
 }
 
 // ReadProtectionGroupBackupResponse represents a custom type struct for Success
@@ -2359,11 +2367,11 @@ type ReadProtectionGroupBackupResponse struct {
 // ReadProtectionGroupResponse represents a custom type struct for Success
 type ReadProtectionGroupResponse struct {
     // Embedded responses related to the resource.
-    Embedded                  *ProtectionGroupEmbedded              `json:"_embedded"`
+    Embedded                      *ProtectionGroupEmbedded              `json:"_embedded"`
     // URLs to pages related to the resource.
-    Links                     *ProtectionGroupLinks                 `json:"_links"`
+    Links                         *ProtectionGroupLinks                 `json:"_links"`
     // Number of buckets
-    BucketCount               *int64                                `json:"bucket_count"`
+    BucketCount                   *int64                                `json:"bucket_count"`
     // The following table describes the possible conditions for a bucket to be
     // automatically added to a protection group.
     // 
@@ -2378,49 +2386,51 @@ type ReadProtectionGroupResponse struct {
     // |         |                |                                                   |
     // +---------+----------------+---------------------------------------------------+
     // 
-    BucketRule                *string                               `json:"bucket_rule"`
+    BucketRule                    *string                               `json:"bucket_rule"`
     // The compliance statistics of workloads associated with this entity.
-    ComplianceStats           *ProtectionComplianceStatsWithSeeding `json:"compliance_stats"`
+    ComplianceStats               *ProtectionComplianceStatsWithSeeding `json:"compliance_stats"`
     // The compliance status of the protected protection group. Possible values include
     // "compliant" and "noncompliant". If the table is not protected, then this field has
     // a value of `null`.
-    ComplianceStatus          *string                               `json:"compliance_status"`
+    ComplianceStatus              *string                               `json:"compliance_status"`
     // Creation time of the protection group in RFC-3339 format.
-    CreatedTimestamp          *string                               `json:"created_timestamp"`
+    CreatedTimestamp              *string                               `json:"created_timestamp"`
     // The user-assigned description of the protection group.
-    Description               *string                               `json:"description"`
+    Description                   *string                               `json:"description"`
     // The Clumio-assigned ID of the protection group.
-    Id                        *string                               `json:"id"`
+    Id                            *string                               `json:"id"`
     // Time of the last backup in RFC-3339 format.
-    LastBackupTimestamp       *string                               `json:"last_backup_timestamp"`
+    LastBackupTimestamp           *string                               `json:"last_backup_timestamp"`
+    // Time of the last successful continuous backup in RFC-3339 format.
+    LastContinuousBackupTimestamp *string                               `json:"last_continuous_backup_timestamp"`
     // Time of the last discover sync in RFC-3339 format.
-    LastDiscoverSyncTimestamp *string                               `json:"last_discover_sync_timestamp"`
+    LastDiscoverSyncTimestamp     *string                               `json:"last_discover_sync_timestamp"`
     // Modified time of the protection group in RFC-3339 format.
-    ModifiedTimestamp         *string                               `json:"modified_timestamp"`
+    ModifiedTimestamp             *string                               `json:"modified_timestamp"`
     // The user-assigned name of the protection group.
-    Name                      *string                               `json:"name"`
+    Name                          *string                               `json:"name"`
     // ObjectFilter
     // defines which objects will be backed up.
-    ObjectFilter              *ObjectFilter                         `json:"object_filter"`
+    ObjectFilter                  *ObjectFilter                         `json:"object_filter"`
     // The Clumio-assigned ID of the organizational unit associated with the Protection Group.
-    OrganizationalUnitId      *string                               `json:"organizational_unit_id"`
+    OrganizationalUnitId          *string                               `json:"organizational_unit_id"`
     // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
-    ProtectionInfo            *ProtectionInfoWithRule               `json:"protection_info"`
+    ProtectionInfo                *ProtectionInfoWithRule               `json:"protection_info"`
     // The protection status of the protection group. Possible values include "protected",
     // "unprotected", and "unsupported". If the protection group does not support backups, then
     // this field has a value of `unsupported`.
-    ProtectionStatus          *string                               `json:"protection_status"`
+    ProtectionStatus              *string                               `json:"protection_status"`
     // The list of AWS regions that this protection group is linked to
-    Regions                   []*string                             `json:"regions"`
+    Regions                       []*string                             `json:"regions"`
     // Cumulative count of all unexpired objects in each backup (any new or updated since
     // the last backup) that have been backed up as part of this protection group
-    TotalBackedUpObjectCount  *int64                                `json:"total_backed_up_object_count"`
+    TotalBackedUpObjectCount      *int64                                `json:"total_backed_up_object_count"`
     // Cumulative size of all unexpired objects in each backup (any new or updated since
     // the last backup) that have been backed up as part of this protection group
-    TotalBackedUpSizeBytes    *int64                                `json:"total_backed_up_size_bytes"`
+    TotalBackedUpSizeBytes        *int64                                `json:"total_backed_up_size_bytes"`
     // Version of the protection group. The version number is incremented every time
     // a change is made to the protection group.
-    Version                   *int64                                `json:"version"`
+    Version                       *int64                                `json:"version"`
 }
 
 // ReadProtectionGroupS3AssetBackupResponse represents a custom type struct for Success
@@ -3103,9 +3113,9 @@ type ReadWalletResponse struct {
     Links                          *WalletLinks `json:"_links"`
     // AWS Account ID associated with the wallet.
     AccountNativeId                *string      `json:"account_native_id"`
-    // Clumio AWS Account ID for the customer
+    // Clumio AWS Account ID for the customer.
     ClumioAwsAccountId             *string      `json:"clumio_aws_account_id"`
-    // Clumio Control Plane AWS Account ID
+    // Clumio Control Plane AWS Account ID.
     ClumioControlPlaneAwsAccountId *string      `json:"clumio_control_plane_aws_account_id"`
     // DeploymentURL is an (external) link to an AWS console page for quick-creation
     // of the stack.
@@ -3148,9 +3158,9 @@ type RefreshWalletResponse struct {
     Links                          *WalletLinks `json:"_links"`
     // AWS Account ID associated with the wallet.
     AccountNativeId                *string      `json:"account_native_id"`
-    // Clumio AWS Account ID for the customer
+    // Clumio AWS Account ID for the customer.
     ClumioAwsAccountId             *string      `json:"clumio_aws_account_id"`
-    // Clumio Control Plane AWS Account ID
+    // Clumio Control Plane AWS Account ID.
     ClumioControlPlaneAwsAccountId *string      `json:"clumio_control_plane_aws_account_id"`
     // DeploymentURL is an (external) link to an AWS console page for quick-creation
     // of the stack.
@@ -3448,16 +3458,18 @@ type UpdatePolicyResponse struct {
     OrganizationalUnitId          *string            `json:"organizational_unit_id"`
     // The Clumio-assigned ID of the task generated by this request.
     TaskId                        *string            `json:"task_id"`
+    // The timezone for the policy.
+    Timezone                      *string            `json:"timezone"`
 }
 
 // UpdateProtectionGroupResponse represents a custom type struct for Success
 type UpdateProtectionGroupResponse struct {
     // Embedded responses related to the resource.
-    Embedded                  interface{}                  `json:"_embedded"`
+    Embedded                      interface{}                  `json:"_embedded"`
     // URLs to pages related to the resource.
-    Links                     *ProtectionGroupVersionLinks `json:"_links"`
+    Links                         *ProtectionGroupVersionLinks `json:"_links"`
     // Number of buckets
-    BucketCount               *int64                       `json:"bucket_count"`
+    BucketCount                   *int64                       `json:"bucket_count"`
     // The following table describes the possible conditions for a bucket to be
     // automatically added to a protection group.
     // 
@@ -3472,35 +3484,37 @@ type UpdateProtectionGroupResponse struct {
     // |         |                |                                                   |
     // +---------+----------------+---------------------------------------------------+
     // 
-    BucketRule                *string                      `json:"bucket_rule"`
+    BucketRule                    *string                      `json:"bucket_rule"`
     // Creation time of the protection group in RFC-3339 format.
-    CreatedTimestamp          *string                      `json:"created_timestamp"`
+    CreatedTimestamp              *string                      `json:"created_timestamp"`
     // The user-assigned description of the protection group.
-    Description               *string                      `json:"description"`
+    Description                   *string                      `json:"description"`
     // The Clumio-assigned ID of the protection group.
-    Id                        *string                      `json:"id"`
+    Id                            *string                      `json:"id"`
     // Time of the last backup in RFC-3339 format.
-    LastBackupTimestamp       *string                      `json:"last_backup_timestamp"`
+    LastBackupTimestamp           *string                      `json:"last_backup_timestamp"`
+    // Time of the last successful continuous backup in RFC-3339 format.
+    LastContinuousBackupTimestamp *string                      `json:"last_continuous_backup_timestamp"`
     // Time of the last discover sync in RFC-3339 format.
-    LastDiscoverSyncTimestamp *string                      `json:"last_discover_sync_timestamp"`
+    LastDiscoverSyncTimestamp     *string                      `json:"last_discover_sync_timestamp"`
     // Modified time of the protection group in RFC-3339 format.
-    ModifiedTimestamp         *string                      `json:"modified_timestamp"`
+    ModifiedTimestamp             *string                      `json:"modified_timestamp"`
     // The user-assigned name of the protection group.
-    Name                      *string                      `json:"name"`
+    Name                          *string                      `json:"name"`
     // ObjectFilter
     // defines which objects will be backed up.
-    ObjectFilter              *ObjectFilter                `json:"object_filter"`
+    ObjectFilter                  *ObjectFilter                `json:"object_filter"`
     // The Clumio-assigned ID of the organizational unit associated with the Protection Group.
-    OrganizationalUnitId      *string                      `json:"organizational_unit_id"`
+    OrganizationalUnitId          *string                      `json:"organizational_unit_id"`
     // Cumulative count of all unexpired objects in each backup (any new or updated since
     // the last backup) that have been backed up as part of this protection group
-    TotalBackedUpObjectCount  *int64                       `json:"total_backed_up_object_count"`
+    TotalBackedUpObjectCount      *int64                       `json:"total_backed_up_object_count"`
     // Cumulative size of all unexpired objects in each backup (any new or updated since
     // the last backup) that have been backed up as part of this protection group
-    TotalBackedUpSizeBytes    *int64                       `json:"total_backed_up_size_bytes"`
+    TotalBackedUpSizeBytes        *int64                       `json:"total_backed_up_size_bytes"`
     // Version of the protection group. The version number is incremented every time
     // a change is made to the protection group.
-    Version                   *int64                       `json:"version"`
+    Version                       *int64                       `json:"version"`
 }
 
 // UpdateRuleResponse represents a custom type struct for Success

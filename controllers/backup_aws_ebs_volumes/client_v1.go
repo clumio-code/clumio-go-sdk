@@ -17,7 +17,7 @@ type BackupAwsEbsVolumesV1Client interface {
         filter *string)(
         *models.ListEBSBackupsResponseV1,  *apiutils.APIError)
     
-    // CreateBackupAwsEbsVolume Performs an on-demand backup for the specified EBS volume. The EBS volume must be protected with a policy that includes a service level agreement (SLA) configured for on-demand backups.
+    // CreateBackupAwsEbsVolume Performs an on-demand backup for the specified EBS volume.
     CreateBackupAwsEbsVolume(
         body models.CreateBackupAwsEbsVolumeV1Request)(
         interface{},  *apiutils.APIError)

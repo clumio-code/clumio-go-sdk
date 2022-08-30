@@ -1,3 +1,5 @@
+## 0.2.8
+Additional request parameters added to EBS, VMWare backup, policy and protection-group APIs.
 ## 0.2.7
 APIs added for wallets and kms post process.
 ## 0.2.6
