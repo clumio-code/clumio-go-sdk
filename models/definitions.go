@@ -1346,6 +1346,13 @@ type EBS struct {
     VolumeNativeId           *string                 `json:"volume_native_id"`
 }
 
+// EBSBackupAdvancedSetting represents a custom type struct.
+// Backup tier to store the backup in. Valid values are: `` for standard, `lite`
+type EBSBackupAdvancedSetting struct {
+    // TODO: Add struct field description
+    BackupTier *string `json:"backup_tier"`
+}
+
 // EBSBackupLinksV1 represents a custom type struct.
 // URLs to pages related to the resource.
 type EBSBackupLinksV1 struct {
@@ -1431,6 +1438,13 @@ type EBSRestoreTargetV1 struct {
     KmsKeyNativeId *string              `json:"kms_key_native_id"`
     // A tag created through AWS Console which can be applied to EBS volumes.
     Tags           []*AwsTagCommonModel `json:"tags"`
+}
+
+// EC2BackupAdvancedSetting represents a custom type struct.
+// Backup tier to store the backup in. Valid values are: `` for standard, `lite`
+type EC2BackupAdvancedSetting struct {
+    // TODO: Add struct field description
+    BackupTier *string `json:"backup_tier"`
 }
 
 // EbsAssetInfo represents a custom type struct
@@ -2832,6 +2846,10 @@ type Policy struct {
 // PolicyAdvancedSettings represents a custom type struct.
 // Additional operation-specific policy settings. For operation types which do not support additional settings, this field is `null`.
 type PolicyAdvancedSettings struct {
+    // Backup tier to store the backup in. Valid values are: `` for standard, `lite`
+    AwsEbsVolumeBackup     *EBSBackupAdvancedSetting             `json:"aws_ebs_volume_backup"`
+    // Backup tier to store the backup in. Valid values are: `` for standard, `lite`
+    AwsEc2InstanceBackup   *EC2BackupAdvancedSetting             `json:"aws_ec2_instance_backup"`
     // Additional policy configuration settings for the `mssql_database_backup` operation. If this operation is not of type `mssql_database_backup`, then this field is omitted from the response.
     Ec2MssqlDatabaseBackup *MSSQLDatabaseBackupAdvancedSetting   `json:"ec2_mssql_database_backup"`
     // Additional policy configuration settings for the `mssql_log_backup` operation. If this operation is not of type `mssql_log_backup`, then this field is omitted from the response.
@@ -2893,6 +2911,10 @@ type PolicyListLinks struct {
 
 // PolicyOperation represents a custom type struct
 type PolicyOperation struct {
+    // The next start time of this operation.
+    Nextstarttime    *int64                  `json:"NextStartTime"`
+    // The previous start time of this operation.
+    Prevstarttime    *int64                  `json:"PrevStartTime"`
     // Determines whether the protection policy should take action now or during the specified backup window.
     // If set to `immediate`, Clumio starts the backup process right away. If set to `window`, Clumio starts the backup process when the backup window (`backup_window`) opens.
     // If set to `window` and `operation in ("aws_rds_resource_aws_snapshot", "mssql_log_backup", "ec2_mssql_log_backup")`,
@@ -5677,31 +5699,29 @@ type VmListLinks struct {
 // Wallet represents a custom type struct
 type Wallet struct {
     // Embedded responses related to the resource.
-    Embedded                       interface{}  `json:"_embedded"`
+    Embedded           interface{}  `json:"_embedded"`
     // URLs to pages related to the resource.
-    Links                          *WalletLinks `json:"_links"`
+    Links              *WalletLinks `json:"_links"`
     // AWS Account ID associated with the wallet.
-    AccountNativeId                *string      `json:"account_native_id"`
-    // Clumio AWS Account ID for the customer.
-    ClumioAwsAccountId             *string      `json:"clumio_aws_account_id"`
-    // Clumio Control Plane AWS Account ID.
-    ClumioControlPlaneAwsAccountId *string      `json:"clumio_control_plane_aws_account_id"`
+    AccountNativeId    *string      `json:"account_native_id"`
+    // Clumio AWS Account ID.
+    ClumioAwsAccountId *string      `json:"clumio_aws_account_id"`
     // DeploymentURL is an (external) link to an AWS console page for quick-creation
     // of the stack.
-    DeploymentUrl                  *string      `json:"deployment_url"`
+    DeploymentUrl      *string      `json:"deployment_url"`
     // ErrorCode is a short string describing the error, if any.
-    ErrorCode                      *string      `json:"error_code"`
+    ErrorCode          *string      `json:"error_code"`
     // ErrorMessage is a longer description explaining the error, if any, and how to
     // fix it.
-    ErrorMessage                   *string      `json:"error_message"`
+    ErrorMessage       *string      `json:"error_message"`
     // The Clumio-assigned ID of the wallet.
-    Id                             *string      `json:"id"`
+    Id                 *string      `json:"id"`
     // The regions where the wallet is installed.
-    InstalledRegions               []*string    `json:"installed_regions"`
+    InstalledRegions   []*string    `json:"installed_regions"`
     // RoleArn is the AWS Resource Name of the IAM Role created by the stack.
-    RoleArn                        *string      `json:"role_arn"`
+    RoleArn            *string      `json:"role_arn"`
     // The version of the stack used or being used.
-    StackVersion                   *int64       `json:"stack_version"`
+    StackVersion       *int64       `json:"stack_version"`
     // State describes the state of the wallet. Valid states are:
     // Waiting: The wallet has been created, but a stack hasn't been created. The
     // wallet can't be used in this state.
@@ -5709,14 +5729,14 @@ type Wallet struct {
     // wallet. This is the normal expected state of a wallet in use.
     // Error:   The wallet is inaccessible. See ErrorCode and ErrorMessage fields for
     // additional details.
-    State                          *string      `json:"state"`
+    State              *string      `json:"state"`
     // The supported regions for the wallet.
-    SupportedRegions               []*string    `json:"supported_regions"`
+    SupportedRegions   []*string    `json:"supported_regions"`
     // TemplateURL is the URL to the CloudFormation template to be used to create the
     // CloudFormation stack.
-    TemplateUrl                    *string      `json:"template_url"`
+    TemplateUrl        *string      `json:"template_url"`
     // Token is used to identify and authenticate the CloudFormation stack creation.
-    Token                          *string      `json:"token"`
+    Token              *string      `json:"token"`
 }
 
 // WalletLinks represents a custom type struct.

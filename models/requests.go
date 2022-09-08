@@ -972,18 +972,22 @@ type CreateWalletV1Request struct {
 // The body of the request.
 type PostProcessKmsV1Request struct {
     // The AWS-assigned ID of the account associated with the connection.
-    AccountNativeId     *string `json:"account_native_id"`
+    AccountNativeId       *string `json:"account_native_id"`
     // The AWS region associated with the connection. For example, `us-east-1`.
-    AwsRegion           *string `json:"aws_region"`
+    AwsRegion             *string `json:"aws_region"`
+    // Whether the CMK was created or an existing CMK was used.
+    CreatedMultiRegionCmk *bool   `json:"created_multi_region_cmk"`
     // The multi-region CMK Key ID.
-    MultiRegionCmkKeyId *string `json:"multi_region_cmk_key_id"`
-    // Other regions where the stack set instances are created.
-    OtherRegions        *string `json:"other_regions"`
+    MultiRegionCmkKeyId   *string `json:"multi_region_cmk_key_id"`
     // Indicates whether this is a Create, Update or Delete request.
-    RequestType         *string `json:"request_type"`
-    // The stack set ID.
-    StackSetId          *string `json:"stack_set_id"`
+    RequestType           *string `json:"request_type"`
+    // The ARN of the role.
+    RoleArn               *string `json:"role_arn"`
+    // The external ID to use with the role.
+    RoleExternalId        *string `json:"role_external_id"`
+    // The ID of the role.
+    RoleId                *string `json:"role_id"`
     // The 36-character Clumio AWS integration ID token used to identify the
     // installation of the CloudFormation/Terraform template on the account.
-    Token               *string `json:"token"`
+    Token                 *string `json:"token"`
 }
