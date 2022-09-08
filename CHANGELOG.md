@@ -1,3 +1,5 @@
+## 0.2.9
+Changes related to wallet APIs and advanced policy settings added for EC2 and EBS.
 ## 0.2.8
 Additional request parameters added to EBS, VMWare backup, policy and protection-group APIs.
 ## 0.2.7
