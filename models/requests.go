@@ -872,6 +872,136 @@ type RestoreVmwareVmV1Request struct {
     Target  *VMRestoreTarget  `json:"target"`
 }
 
+// UpdateAutoUserProvisioningSettingV1Request represents a custom type struct
+type UpdateAutoUserProvisioningSettingV1Request struct {
+    // Whether auto user provisioning is enabled or not.
+    IsEnabled *bool `json:"is_enabled"`
+}
+
+// CreateAutoUserProvisioningRuleV1Request represents a custom type struct
+type CreateAutoUserProvisioningRuleV1Request struct {
+    // The following table describes the possible conditions for a rule.
+    // 
+    // +--------------------------+-------------------------+-------------------------+
+    // |     Group Selection      |     Rule Condition      |       Description       |
+    // +==========================+=========================+=========================+
+    // | This group               |                         | User must belong to the |
+    // |                          |                         | specified group.        |
+    // |                          | {"user.groups":{"$eq":" |                         |
+    // |                          | Admin"}}                |                         |
+    // |                          |                         |                         |
+    // |                          |                         |                         |
+    // +--------------------------+-------------------------+-------------------------+
+    // | ANY of these groups      |                         | User must belong to at  |
+    // |                          |                         | least one of the        |
+    // |                          | {"user.groups":{"$in":[ | specified groups.       |
+    // |                          | "Admin", "Eng",         |                         |
+    // |                          | "Sales"]}}              |                         |
+    // |                          |                         |                         |
+    // |                          |                         |                         |
+    // +--------------------------+-------------------------+-------------------------+
+    // | ALL of these groups      |                         | User must belong to all |
+    // |                          |                         | the specified groups.   |
+    // |                          | {"user.groups":{"$all": |                         |
+    // |                          | ["Admin", "Eng",        |                         |
+    // |                          | "Sales"]}}              |                         |
+    // |                          |                         |                         |
+    // |                          |                         |                         |
+    // +--------------------------+-------------------------+-------------------------+
+    // | Group CONTAINS this      |                         | User's group must       |
+    // | keyword                  |                         | contain the specified   |
+    // |                          | {"user.groups":{"$conta | keyword.                |
+    // |                          | ins":{"$in":["Admin"]}} |                         |
+    // |                          | }                       |                         |
+    // |                          |                         |                         |
+    // |                          |                         |                         |
+    // +--------------------------+-------------------------+-------------------------+
+    // | Group CONTAINS ANY of    |                         | User's group must       |
+    // | these keywords           |                         | contain at least one of |
+    // |                          | {"user.groups":{"$conta | the specified keywords. |
+    // |                          | ins":{"$in":["Admin",   |                         |
+    // |                          | "Eng", "Sales"]}}}      |                         |
+    // |                          |                         |                         |
+    // |                          |                         |                         |
+    // +--------------------------+-------------------------+-------------------------+
+    // | Group CONTAINS ALL of    |                         | User's group must       |
+    // | these keywords           |                         | contain all the         |
+    // |                          | {"user.groups":{"$conta | specified keywords.     |
+    // |                          | ins":{"$all":["Admin",  |                         |
+    // |                          | "Eng", "Sales"]}}}      |                         |
+    // |                          |                         |                         |
+    // |                          |                         |                         |
+    // +--------------------------+-------------------------+-------------------------+
+    // 
+    Condition *string        `json:"condition"`
+    // Unique name assigned to the rule.
+    Name      *string        `json:"name"`
+    // Specifies the role and the organizational units to be assigned to the user subject to the rule criteria.
+    Provision *RuleProvision `json:"provision"`
+}
+
+// UpdateAutoUserProvisioningRuleV1Request represents a custom type struct
+type UpdateAutoUserProvisioningRuleV1Request struct {
+    // The following table describes the possible conditions for a rule.
+    // 
+    // +--------------------------+-------------------------+-------------------------+
+    // |     Group Selection      |     Rule Condition      |       Description       |
+    // +==========================+=========================+=========================+
+    // | This group               |                         | User must belong to the |
+    // |                          |                         | specified group.        |
+    // |                          | {"user.groups":{"$eq":" |                         |
+    // |                          | Admin"}}                |                         |
+    // |                          |                         |                         |
+    // |                          |                         |                         |
+    // +--------------------------+-------------------------+-------------------------+
+    // | ANY of these groups      |                         | User must belong to at  |
+    // |                          |                         | least one of the        |
+    // |                          | {"user.groups":{"$in":[ | specified groups.       |
+    // |                          | "Admin", "Eng",         |                         |
+    // |                          | "Sales"]}}              |                         |
+    // |                          |                         |                         |
+    // |                          |                         |                         |
+    // +--------------------------+-------------------------+-------------------------+
+    // | ALL of these groups      |                         | User must belong to all |
+    // |                          |                         | the specified groups.   |
+    // |                          | {"user.groups":{"$all": |                         |
+    // |                          | ["Admin", "Eng",        |                         |
+    // |                          | "Sales"]}}              |                         |
+    // |                          |                         |                         |
+    // |                          |                         |                         |
+    // +--------------------------+-------------------------+-------------------------+
+    // | Group CONTAINS this      |                         | User's group must       |
+    // | keyword                  |                         | contain the specified   |
+    // |                          | {"user.groups":{"$conta | keyword.                |
+    // |                          | ins":{"$in":["Admin"]}} |                         |
+    // |                          | }                       |                         |
+    // |                          |                         |                         |
+    // |                          |                         |                         |
+    // +--------------------------+-------------------------+-------------------------+
+    // | Group CONTAINS ANY of    |                         | User's group must       |
+    // | these keywords           |                         | contain at least one of |
+    // |                          | {"user.groups":{"$conta | the specified keywords. |
+    // |                          | ins":{"$in":["Admin",   |                         |
+    // |                          | "Eng", "Sales"]}}}      |                         |
+    // |                          |                         |                         |
+    // |                          |                         |                         |
+    // +--------------------------+-------------------------+-------------------------+
+    // | Group CONTAINS ALL of    |                         | User's group must       |
+    // | these keywords           |                         | contain all the         |
+    // |                          | {"user.groups":{"$conta | specified keywords.     |
+    // |                          | ins":{"$all":["Admin",  |                         |
+    // |                          | "Eng", "Sales"]}}}      |                         |
+    // |                          |                         |                         |
+    // |                          |                         |                         |
+    // +--------------------------+-------------------------+-------------------------+
+    // 
+    Condition *string        `json:"condition"`
+    // Unique name assigned to the rule.
+    Name      *string        `json:"name"`
+    // Specifies the role and the organizational units to be assigned to the user subject to the rule criteria.
+    Provision *RuleProvision `json:"provision"`
+}
+
 // UpdateGeneralSettingsV2Request represents a custom type struct
 type UpdateGeneralSettingsV2Request struct {
     // The length of time before a user is logged out of the Clumio system due to inactivity. Measured in seconds.
@@ -990,4 +1120,6 @@ type PostProcessKmsV1Request struct {
     // The 36-character Clumio AWS integration ID token used to identify the
     // installation of the CloudFormation/Terraform template on the account.
     Token                 *string `json:"token"`
+    // The cloudformation/terraform template version used.
+    Version               *uint64 `json:"version"`
 }

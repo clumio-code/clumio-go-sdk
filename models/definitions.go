@@ -653,6 +653,125 @@ type AuditTrailListLinks struct {
     Self  *HateoasSelfLink  `json:"_self"`
 }
 
+// AutoUserProvisioningRuleEmbedded represents a custom type struct.
+// Embedded responses related to the resource.
+type AutoUserProvisioningRuleEmbedded struct {
+    // Embeds the associated organizational units for the OU UUIDs in the response
+    // if requested using the `embed` query parameter.
+    ReadOrganizationalUnit interface{} `json:"read-organizational-unit"`
+    // Embeds the associated role for the role UUID in the response if requested using the `embed` query parameter.
+    ReadRole               interface{} `json:"read-role"`
+}
+
+// AutoUserProvisioningRuleLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type AutoUserProvisioningRuleLinks struct {
+    // The HATEOAS link to this resource.
+    Self                           *HateoasSelfLink `json:"_self"`
+    // A resource-specific HATEOAS link.
+    DeleteAutoUserProvisioningRule *HateoasLink     `json:"delete-auto-user-provisioning-rule"`
+    // A resource-specific HATEOAS link.
+    UpdateAutoUserProvisioningRule *HateoasLink     `json:"update-auto-user-provisioning-rule"`
+}
+
+// AutoUserProvisioningRuleListEmbedded represents a custom type struct.
+// Embedded responses related to the resource.
+type AutoUserProvisioningRuleListEmbedded struct {
+    // AutoUserProvisioningRuleWithETag to support etag string to be calculated
+    Items []*AutoUserProvisioningRuleWithETag `json:"items"`
+}
+
+// AutoUserProvisioningRuleListLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type AutoUserProvisioningRuleListLinks struct {
+    // The HATEOAS link to the first page of results.
+    First                          *HateoasFirstLink `json:"_first"`
+    // The HATEOAS link to the next page of results.
+    Next                           *HateoasNextLink  `json:"_next"`
+    // The HATEOAS link to this resource.
+    Self                           *HateoasSelfLink  `json:"_self"`
+    // A resource-specific HATEOAS link.
+    CreateAutoUserProvisioningRule *HateoasLink      `json:"create-auto-user-provisioning-rule"`
+}
+
+// AutoUserProvisioningRuleWithETag represents a custom type struct.
+// AutoUserProvisioningRuleWithETag to support etag string to be calculated
+type AutoUserProvisioningRuleWithETag struct {
+    // Embedded responses related to the resource.
+    Embedded  *AutoUserProvisioningRuleEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links     *AutoUserProvisioningRuleLinks    `json:"_links"`
+    // The following table describes the possible conditions for a rule.
+    // 
+    // +--------------------------+-------------------------+-------------------------+
+    // |     Group Selection      |     Rule Condition      |       Description       |
+    // +==========================+=========================+=========================+
+    // | This group               |                         | User must belong to the |
+    // |                          |                         | specified group.        |
+    // |                          | {"user.groups":{"$eq":" |                         |
+    // |                          | Admin"}}                |                         |
+    // |                          |                         |                         |
+    // |                          |                         |                         |
+    // +--------------------------+-------------------------+-------------------------+
+    // | ANY of these groups      |                         | User must belong to at  |
+    // |                          |                         | least one of the        |
+    // |                          | {"user.groups":{"$in":[ | specified groups.       |
+    // |                          | "Admin", "Eng",         |                         |
+    // |                          | "Sales"]}}              |                         |
+    // |                          |                         |                         |
+    // |                          |                         |                         |
+    // +--------------------------+-------------------------+-------------------------+
+    // | ALL of these groups      |                         | User must belong to all |
+    // |                          |                         | the specified groups.   |
+    // |                          | {"user.groups":{"$all": |                         |
+    // |                          | ["Admin", "Eng",        |                         |
+    // |                          | "Sales"]}}              |                         |
+    // |                          |                         |                         |
+    // |                          |                         |                         |
+    // +--------------------------+-------------------------+-------------------------+
+    // | Group CONTAINS this      |                         | User's group must       |
+    // | keyword                  |                         | contain the specified   |
+    // |                          | {"user.groups":{"$conta | keyword.                |
+    // |                          | ins":{"$in":["Admin"]}} |                         |
+    // |                          | }                       |                         |
+    // |                          |                         |                         |
+    // |                          |                         |                         |
+    // +--------------------------+-------------------------+-------------------------+
+    // | Group CONTAINS ANY of    |                         | User's group must       |
+    // | these keywords           |                         | contain at least one of |
+    // |                          | {"user.groups":{"$conta | the specified keywords. |
+    // |                          | ins":{"$in":["Admin",   |                         |
+    // |                          | "Eng", "Sales"]}}}      |                         |
+    // |                          |                         |                         |
+    // |                          |                         |                         |
+    // +--------------------------+-------------------------+-------------------------+
+    // | Group CONTAINS ALL of    |                         | User's group must       |
+    // | these keywords           |                         | contain all the         |
+    // |                          | {"user.groups":{"$conta | specified keywords.     |
+    // |                          | ins":{"$all":["Admin",  |                         |
+    // |                          | "Eng", "Sales"]}}}      |                         |
+    // |                          |                         |                         |
+    // |                          |                         |                         |
+    // +--------------------------+-------------------------+-------------------------+
+    // 
+    Condition *string                           `json:"condition"`
+    // Unique name assigned to the rule.
+    Name      *string                           `json:"name"`
+    // Specifies the role and the organizational units to be assigned to the user subject to the rule criteria.
+    Provision *RuleProvision                    `json:"provision"`
+    // The Clumio-assigned ID of the rule.
+    RuleId    *string                           `json:"rule_id"`
+}
+
+// AutoUserProvisioningSettingLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type AutoUserProvisioningSettingLinks struct {
+    // The HATEOAS link to this resource.
+    Self                              *HateoasSelfLink `json:"_self"`
+    // A resource-specific HATEOAS link.
+    UpdateAutoUserProvisioningSetting *HateoasLink     `json:"update-auto-user-provisioning-setting"`
+}
+
 // AwsDsGroupingCriteria represents a custom type struct.
 // The entity type used to group organizational units for AWS resources.
 type AwsDsGroupingCriteria struct {
@@ -776,7 +895,7 @@ type BackupSLA struct {
 // BackupWindow represents a custom type struct.
 // The start and end times for the customized backup window.
 type BackupWindow struct {
-    // The time when the backup window closes. Specify the end time in the format `hh:mm`, where `hh` represents the hour of the day and `mm` represents the minute of the day based on the 24 hour clock. If the backup window closes while a backup is in progress, the entire backup process is aborted. Clumio will perform the next backup when the backup window opens again.
+    // The time when the backup window closes. Specify the end time in the format `hh:mm`, where `hh` represents the hour of the day and `mm` represents the minute of the day, based on a 24 hour clock. Leave empty if you do not want to specify an end time. If the backup window closes while a backup is in progress, the entire backup process is aborted. Clumio will perform the next backup when the backup window re-opens.
     EndTime   *string `json:"end_time"`
     // The time when the backup window opens. Specify the start time in the format `hh:mm`, where `hh` represents the hour of the day and `mm` represents the minute of the day based on the 24 hour clock.
     StartTime *string `json:"start_time"`
@@ -2315,9 +2434,9 @@ type MssqlDatabaseBackup struct {
 // MssqlDatabaseBackupEmbedded represents a custom type struct.
 // Embedded responses related to the resource.
 type MssqlDatabaseBackupEmbedded struct {
-    // Embedded types
+    // Embeds details about the management group if requested using the `embed` query.
     ReadManagementGroup    interface{} `json:"read-management-group"`
-    // Embedded types
+    // Embeds details about the management subgroup if requested using the `embed` query.
     ReadManagementSubgroup interface{} `json:"read-management-subgroup"`
 }
 
@@ -2359,9 +2478,9 @@ type MssqlDatabaseBackupListLinks struct {
 // MssqlDatabaseEmbedded represents a custom type struct.
 // Embedded responses related to the resource.
 type MssqlDatabaseEmbedded struct {
-    // Embedded types
+    // Embeds details about the management group if requested using the `embed` query.
     ReadManagementGroup    interface{} `json:"read-management-group"`
-    // Embedded types
+    // Embeds details about the management subgroup if requested using the `embed` query.
     ReadManagementSubgroup interface{} `json:"read-management-subgroup"`
     // Embeds the associated policy of a protected resource in the response if requested using the `embed` query parameter. Unprotected resources will not have an associated policy.
     ReadPolicyDefinition   interface{} `json:"read-policy-definition"`
@@ -2456,9 +2575,9 @@ type MssqlHost struct {
 type MssqlHostEmbedded struct {
     // host level stats
     GetMssqlHostStats      interface{} `json:"get-mssql-host-stats"`
-    // Embedded types
+    // Embeds details about the management group if requested using the `embed` query.
     ReadManagementGroup    interface{} `json:"read-management-group"`
-    // Embedded types
+    // Embeds details about the management subgroup if requested using the `embed` query.
     ReadManagementSubgroup interface{} `json:"read-management-subgroup"`
     // Embeds the associated policy of a protected resource in the response if requested using the `embed` query parameter. Unprotected resources will not have an associated policy.
     ReadPolicyDefinition   interface{} `json:"read-policy-definition"`
@@ -2544,9 +2663,9 @@ type MssqlInstance struct {
 type MssqlInstanceEmbedded struct {
     // TODO: Add struct field description
     GetMssqlInstanceStats  interface{} `json:"get-mssql-instance-stats"`
-    // Embedded types
+    // Embeds details about the management group if requested using the `embed` query.
     ReadManagementGroup    interface{} `json:"read-management-group"`
-    // Embedded types
+    // Embeds details about the management subgroup if requested using the `embed` query.
     ReadManagementSubgroup interface{} `json:"read-management-subgroup"`
     // Embeds the associated policy of a protected resource in the response if requested using the `embed` query parameter. Unprotected resources will not have an associated policy.
     ReadPolicyDefinition   interface{} `json:"read-policy-definition"`
@@ -3983,6 +4102,17 @@ type RuleListLinks struct {
 type RulePriority struct {
     // The rule ID before which this rule should be inserted.
     BeforeRuleId *string `json:"before_rule_id"`
+}
+
+// RuleProvision represents a custom type struct.
+// Specifies the role and the organizational units to be assigned to the user subject to the rule criteria.
+type RuleProvision struct {
+    // The Clumio-assigned IDs of the organizational units to be assigned to the user.
+    // Use the [GET /organizational-units](#operation/list-organizational-units) endpoint to fetch valid values.
+    OrganizationalUnitIds []*string `json:"organizational_unit_ids"`
+    // The Clumio-assigned ID of the role to be assigned to the user.
+    // Use the [GET /roles](#operation/list-roles) endpoint to fetch valid values.
+    RoleId                *string   `json:"role_id"`
 }
 
 // S3AccessControlTranslation represents a custom type struct.
