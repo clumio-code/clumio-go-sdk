@@ -1,3 +1,5 @@
+## 0.3.0
+APIs added for Auto User Provisioning.
 ## 0.2.9
 Changes related to wallet APIs and advanced policy settings added for EC2 and EBS.
 ## 0.2.8

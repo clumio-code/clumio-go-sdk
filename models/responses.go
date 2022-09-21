@@ -129,6 +129,74 @@ type CreateAWSTemplateV2Response struct {
     TerraformUrl      *string                  `json:"terraform_url"`
 }
 
+// CreateAutoUserProvisioningRuleResponse represents a custom type struct for Success
+type CreateAutoUserProvisioningRuleResponse struct {
+    // Embedded responses related to the resource.
+    Embedded  *AutoUserProvisioningRuleEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links     *AutoUserProvisioningRuleLinks    `json:"_links"`
+    // The following table describes the possible conditions for a rule.
+    // 
+    // +--------------------------+-------------------------+-------------------------+
+    // |     Group Selection      |     Rule Condition      |       Description       |
+    // +==========================+=========================+=========================+
+    // | This group               |                         | User must belong to the |
+    // |                          |                         | specified group.        |
+    // |                          | {"user.groups":{"$eq":" |                         |
+    // |                          | Admin"}}                |                         |
+    // |                          |                         |                         |
+    // |                          |                         |                         |
+    // +--------------------------+-------------------------+-------------------------+
+    // | ANY of these groups      |                         | User must belong to at  |
+    // |                          |                         | least one of the        |
+    // |                          | {"user.groups":{"$in":[ | specified groups.       |
+    // |                          | "Admin", "Eng",         |                         |
+    // |                          | "Sales"]}}              |                         |
+    // |                          |                         |                         |
+    // |                          |                         |                         |
+    // +--------------------------+-------------------------+-------------------------+
+    // | ALL of these groups      |                         | User must belong to all |
+    // |                          |                         | the specified groups.   |
+    // |                          | {"user.groups":{"$all": |                         |
+    // |                          | ["Admin", "Eng",        |                         |
+    // |                          | "Sales"]}}              |                         |
+    // |                          |                         |                         |
+    // |                          |                         |                         |
+    // +--------------------------+-------------------------+-------------------------+
+    // | Group CONTAINS this      |                         | User's group must       |
+    // | keyword                  |                         | contain the specified   |
+    // |                          | {"user.groups":{"$conta | keyword.                |
+    // |                          | ins":{"$in":["Admin"]}} |                         |
+    // |                          | }                       |                         |
+    // |                          |                         |                         |
+    // |                          |                         |                         |
+    // +--------------------------+-------------------------+-------------------------+
+    // | Group CONTAINS ANY of    |                         | User's group must       |
+    // | these keywords           |                         | contain at least one of |
+    // |                          | {"user.groups":{"$conta | the specified keywords. |
+    // |                          | ins":{"$in":["Admin",   |                         |
+    // |                          | "Eng", "Sales"]}}}      |                         |
+    // |                          |                         |                         |
+    // |                          |                         |                         |
+    // +--------------------------+-------------------------+-------------------------+
+    // | Group CONTAINS ALL of    |                         | User's group must       |
+    // | these keywords           |                         | contain all the         |
+    // |                          | {"user.groups":{"$conta | specified keywords.     |
+    // |                          | ins":{"$all":["Admin",  |                         |
+    // |                          | "Eng", "Sales"]}}}      |                         |
+    // |                          |                         |                         |
+    // |                          |                         |                         |
+    // +--------------------------+-------------------------+-------------------------+
+    // 
+    Condition *string                           `json:"condition"`
+    // Unique name assigned to the rule.
+    Name      *string                           `json:"name"`
+    // Specifies the role and the organizational units to be assigned to the user subject to the rule criteria.
+    Provision *RuleProvision                    `json:"provision"`
+    // The Clumio-assigned ID of the rule.
+    RuleId    *string                           `json:"rule_id"`
+}
+
 // CreateHcmHostResponse represents a custom type struct for Success
 type CreateHcmHostResponse struct {
     // TODO: Add struct field description
@@ -625,6 +693,20 @@ type ListAuditTrailsResponse struct {
     TotalCount      *int64                  `json:"total_count"`
     // The total number of pages of results.
     TotalPagesCount *int64                  `json:"total_pages_count"`
+}
+
+// ListAutoUserProvisioningRulesResponse represents a custom type struct for Success
+type ListAutoUserProvisioningRulesResponse struct {
+    // Embedded responses related to the resource.
+    Embedded     *AutoUserProvisioningRuleListEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links        *AutoUserProvisioningRuleListLinks    `json:"_links"`
+    // The number of items listed on the current page.
+    CurrentCount *int64                                `json:"current_count"`
+    // The maximum number of items displayed per page in the response.
+    Limit        *int64                                `json:"limit"`
+    // The page token used to get this response.
+    Start        *string                               `json:"start"`
 }
 
 // ListAwsTagsResponse represents a custom type struct for Success
@@ -1610,6 +1692,82 @@ type ReadAlertResponse struct {
     // The timestamp of when the alert was last updated. Represented in RFC-3339 format.
     // The alert is updated whenever there is a new occurrence of the same alert within the same entity.
     UpdatedTimestamp    *string                 `json:"updated_timestamp"`
+}
+
+// ReadAutoUserProvisioningRuleResponse represents a custom type struct for Success
+type ReadAutoUserProvisioningRuleResponse struct {
+    // Embedded responses related to the resource.
+    Embedded  *AutoUserProvisioningRuleEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links     *AutoUserProvisioningRuleLinks    `json:"_links"`
+    // The following table describes the possible conditions for a rule.
+    // 
+    // +--------------------------+-------------------------+-------------------------+
+    // |     Group Selection      |     Rule Condition      |       Description       |
+    // +==========================+=========================+=========================+
+    // | This group               |                         | User must belong to the |
+    // |                          |                         | specified group.        |
+    // |                          | {"user.groups":{"$eq":" |                         |
+    // |                          | Admin"}}                |                         |
+    // |                          |                         |                         |
+    // |                          |                         |                         |
+    // +--------------------------+-------------------------+-------------------------+
+    // | ANY of these groups      |                         | User must belong to at  |
+    // |                          |                         | least one of the        |
+    // |                          | {"user.groups":{"$in":[ | specified groups.       |
+    // |                          | "Admin", "Eng",         |                         |
+    // |                          | "Sales"]}}              |                         |
+    // |                          |                         |                         |
+    // |                          |                         |                         |
+    // +--------------------------+-------------------------+-------------------------+
+    // | ALL of these groups      |                         | User must belong to all |
+    // |                          |                         | the specified groups.   |
+    // |                          | {"user.groups":{"$all": |                         |
+    // |                          | ["Admin", "Eng",        |                         |
+    // |                          | "Sales"]}}              |                         |
+    // |                          |                         |                         |
+    // |                          |                         |                         |
+    // +--------------------------+-------------------------+-------------------------+
+    // | Group CONTAINS this      |                         | User's group must       |
+    // | keyword                  |                         | contain the specified   |
+    // |                          | {"user.groups":{"$conta | keyword.                |
+    // |                          | ins":{"$in":["Admin"]}} |                         |
+    // |                          | }                       |                         |
+    // |                          |                         |                         |
+    // |                          |                         |                         |
+    // +--------------------------+-------------------------+-------------------------+
+    // | Group CONTAINS ANY of    |                         | User's group must       |
+    // | these keywords           |                         | contain at least one of |
+    // |                          | {"user.groups":{"$conta | the specified keywords. |
+    // |                          | ins":{"$in":["Admin",   |                         |
+    // |                          | "Eng", "Sales"]}}}      |                         |
+    // |                          |                         |                         |
+    // |                          |                         |                         |
+    // +--------------------------+-------------------------+-------------------------+
+    // | Group CONTAINS ALL of    |                         | User's group must       |
+    // | these keywords           |                         | contain all the         |
+    // |                          | {"user.groups":{"$conta | specified keywords.     |
+    // |                          | ins":{"$all":["Admin",  |                         |
+    // |                          | "Eng", "Sales"]}}}      |                         |
+    // |                          |                         |                         |
+    // |                          |                         |                         |
+    // +--------------------------+-------------------------+-------------------------+
+    // 
+    Condition *string                           `json:"condition"`
+    // Unique name assigned to the rule.
+    Name      *string                           `json:"name"`
+    // Specifies the role and the organizational units to be assigned to the user subject to the rule criteria.
+    Provision *RuleProvision                    `json:"provision"`
+    // The Clumio-assigned ID of the rule.
+    RuleId    *string                           `json:"rule_id"`
+}
+
+// ReadAutoUserProvisioningSettingResponse represents a custom type struct for Success
+type ReadAutoUserProvisioningSettingResponse struct {
+    // URLs to pages related to the resource.
+    Links     *AutoUserProvisioningSettingLinks `json:"_links"`
+    // Whether auto user provisioning is enabled or not.
+    IsEnabled *bool                             `json:"is_enabled"`
 }
 
 // ReadAwsTagResponse represents a custom type struct for Success
@@ -3362,6 +3520,82 @@ type UpdateAlertResponse struct {
     // The timestamp of when the alert was last updated. Represented in RFC-3339 format.
     // The alert is updated whenever there is a new occurrence of the same alert within the same entity.
     UpdatedTimestamp    *string                 `json:"updated_timestamp"`
+}
+
+// UpdateAutoUserProvisioningRuleResponse represents a custom type struct for Success
+type UpdateAutoUserProvisioningRuleResponse struct {
+    // Embedded responses related to the resource.
+    Embedded  *AutoUserProvisioningRuleEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links     *AutoUserProvisioningRuleLinks    `json:"_links"`
+    // The following table describes the possible conditions for a rule.
+    // 
+    // +--------------------------+-------------------------+-------------------------+
+    // |     Group Selection      |     Rule Condition      |       Description       |
+    // +==========================+=========================+=========================+
+    // | This group               |                         | User must belong to the |
+    // |                          |                         | specified group.        |
+    // |                          | {"user.groups":{"$eq":" |                         |
+    // |                          | Admin"}}                |                         |
+    // |                          |                         |                         |
+    // |                          |                         |                         |
+    // +--------------------------+-------------------------+-------------------------+
+    // | ANY of these groups      |                         | User must belong to at  |
+    // |                          |                         | least one of the        |
+    // |                          | {"user.groups":{"$in":[ | specified groups.       |
+    // |                          | "Admin", "Eng",         |                         |
+    // |                          | "Sales"]}}              |                         |
+    // |                          |                         |                         |
+    // |                          |                         |                         |
+    // +--------------------------+-------------------------+-------------------------+
+    // | ALL of these groups      |                         | User must belong to all |
+    // |                          |                         | the specified groups.   |
+    // |                          | {"user.groups":{"$all": |                         |
+    // |                          | ["Admin", "Eng",        |                         |
+    // |                          | "Sales"]}}              |                         |
+    // |                          |                         |                         |
+    // |                          |                         |                         |
+    // +--------------------------+-------------------------+-------------------------+
+    // | Group CONTAINS this      |                         | User's group must       |
+    // | keyword                  |                         | contain the specified   |
+    // |                          | {"user.groups":{"$conta | keyword.                |
+    // |                          | ins":{"$in":["Admin"]}} |                         |
+    // |                          | }                       |                         |
+    // |                          |                         |                         |
+    // |                          |                         |                         |
+    // +--------------------------+-------------------------+-------------------------+
+    // | Group CONTAINS ANY of    |                         | User's group must       |
+    // | these keywords           |                         | contain at least one of |
+    // |                          | {"user.groups":{"$conta | the specified keywords. |
+    // |                          | ins":{"$in":["Admin",   |                         |
+    // |                          | "Eng", "Sales"]}}}      |                         |
+    // |                          |                         |                         |
+    // |                          |                         |                         |
+    // +--------------------------+-------------------------+-------------------------+
+    // | Group CONTAINS ALL of    |                         | User's group must       |
+    // | these keywords           |                         | contain all the         |
+    // |                          | {"user.groups":{"$conta | specified keywords.     |
+    // |                          | ins":{"$all":["Admin",  |                         |
+    // |                          | "Eng", "Sales"]}}}      |                         |
+    // |                          |                         |                         |
+    // |                          |                         |                         |
+    // +--------------------------+-------------------------+-------------------------+
+    // 
+    Condition *string                           `json:"condition"`
+    // Unique name assigned to the rule.
+    Name      *string                           `json:"name"`
+    // Specifies the role and the organizational units to be assigned to the user subject to the rule criteria.
+    Provision *RuleProvision                    `json:"provision"`
+    // The Clumio-assigned ID of the rule.
+    RuleId    *string                           `json:"rule_id"`
+}
+
+// UpdateAutoUserProvisioningSettingResponse represents a custom type struct for Success
+type UpdateAutoUserProvisioningSettingResponse struct {
+    // URLs to pages related to the resource.
+    Links     *AutoUserProvisioningSettingLinks `json:"_links"`
+    // Whether auto user provisioning is enabled or not.
+    IsEnabled *bool                             `json:"is_enabled"`
 }
 
 // UpdateConsolidatedAlertResponse represents a custom type struct for Success
