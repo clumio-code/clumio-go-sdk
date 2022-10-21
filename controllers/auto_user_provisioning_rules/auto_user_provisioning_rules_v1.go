@@ -21,7 +21,8 @@ type AutoUserProvisioningRulesV1 struct {
 // ListAutoUserProvisioningRules Returns a list of auto user provisioning rules.
 func (a *AutoUserProvisioningRulesV1) ListAutoUserProvisioningRules(
     limit *int64, 
-    start *string)(
+    start *string, 
+    filter *string)(
     *models.ListAutoUserProvisioningRulesResponse, *apiutils.APIError) {
 
     queryBuilder := a.config.BaseUrl + "/settings/auto-user-provisioning/rules"
@@ -38,10 +39,14 @@ func (a *AutoUserProvisioningRulesV1) ListAutoUserProvisioningRules(
     if start == nil {
         start = &defaultString
     }
+    if filter == nil {
+        filter = &defaultString
+    }
     
     queryParams := map[string]string{
         "limit": fmt.Sprintf("%v", *limit),
         "start": *start,
+        "filter": *filter,
     }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{

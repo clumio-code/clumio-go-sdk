@@ -166,6 +166,13 @@ type CreateMssqlHostConnectionCredentialsV1Request struct {
     SubgroupId *string `json:"subgroup_id"`
 }
 
+// SetBucketPropertiesV1Request represents a custom type struct.
+// The set of properties that are being updated for the given bucket.
+type SetBucketPropertiesV1Request struct {
+    // True if enabling the bucket for continuous backup, false if disabling
+    EventBridgeEnabled *bool `json:"event_bridge_enabled"`
+}
+
 // UpdateManagementGroupV1Request represents a custom type struct
 type UpdateManagementGroupV1Request struct {
     // Determines whether backups are allowed to occur across different subgroups or cloud connectors.
@@ -217,6 +224,8 @@ type CreatePolicyDefinitionV1Request struct {
     // The status of the policy.
     // Refer to the Policy Activation Status table for a complete list of policy statuses.
     ActivationStatus     *string            `json:"activation_status"`
+    // The created time of the policy in unix time.
+    CreatedTime          *int64             `json:"created_time"`
     // The user-provided name of the policy.
     Name                 *string            `json:"name"`
     // TODO: Add struct field description
@@ -225,6 +234,8 @@ type CreatePolicyDefinitionV1Request struct {
     OrganizationalUnitId *string            `json:"organizational_unit_id"`
     // The timezone for the policy.
     Timezone             *string            `json:"timezone"`
+    // The updated time of the policy in unix time.
+    UpdatedTime          *int64             `json:"updated_time"`
 }
 
 // UpdatePolicyDefinitionV1Request represents a custom type struct
@@ -232,6 +243,8 @@ type UpdatePolicyDefinitionV1Request struct {
     // The status of the policy.
     // Refer to the Policy Activation Status table for a complete list of policy statuses.
     ActivationStatus     *string            `json:"activation_status"`
+    // The created time of the policy in unix time.
+    CreatedTime          *int64             `json:"created_time"`
     // The user-provided name of the policy.
     Name                 *string            `json:"name"`
     // TODO: Add struct field description
@@ -240,6 +253,8 @@ type UpdatePolicyDefinitionV1Request struct {
     OrganizationalUnitId *string            `json:"organizational_unit_id"`
     // The timezone for the policy.
     Timezone             *string            `json:"timezone"`
+    // The updated time of the policy in unix time.
+    UpdatedTime          *int64             `json:"updated_time"`
 }
 
 // CreatePolicyRuleV1Request represents a custom type struct
@@ -486,48 +501,6 @@ type UpdateProtectionGroupV1Request struct {
 type AddBucketProtectionGroupV1Request struct {
     // TODO: Add struct field description
     BucketId *string `json:"bucket_id"`
-}
-
-// ListReportDownloadsV1Request represents a custom type struct
-type ListReportDownloadsV1Request struct {
-    // 
-    // +-----------------+------------------+-----------------------------------------+
-    // |      Field      | Filter Condition |               Description               |
-    // +=================+==================+=========================================+
-    // | start_timestamp | $gte, $lt        | Start timestamp denotes the time filter |
-    // |                 |                  | for listing report CSV downloads.       |
-    // |                 |                  | $gte and $lt accept RFC-3999            |
-    // |                 |                  | timestamps. For example,                |
-    // |                 |                  |                                         |
-    // |                 |                  | "filter":"{"start_timestamp":{"$gt":"20 |
-    // |                 |                  | 19-10-12T07:20:50.52Z"}}"               |
-    // |                 |                  |                                         |
-    // |                 |                  |                                         |
-    // +-----------------+------------------+-----------------------------------------+
-    // | report_type     | $in              |                                         |
-    // |                 |                  | Filter report downloaded records whose  |
-    // |                 |                  | type is one of the given values. The    |
-    // |                 |                  | possible values are: "activity",        |
-    // |                 |                  | "compliance", "audit", and              |
-    // |                 |                  | "consumption".                          |
-    // |                 |                  |                                         |
-    // |                 |                  | filter={"report_type":{"$in":["complian |
-    // |                 |                  | ce"]}}                                  |
-    // |                 |                  |                                         |
-    // |                 |                  |                                         |
-    // +-----------------+------------------+-----------------------------------------+
-    //  
-    // For more information about filtering, refer to the
-    // Filtering section of this guide.
-    // in: query
-    Filter *string `json:"filter"`
-    // Limits the size of the response on each page to the specified number of items.
-    // in: query
-    Limit  *int64  `json:"limit"`
-    // Sets the page number used to browse the collection.
-    // Pages are indexed starting from 1 (i.e., `start=1`).
-    // in: query
-    Start  *string `json:"start"`
 }
 
 // CreateReportDownloadV1Request represents a custom type struct

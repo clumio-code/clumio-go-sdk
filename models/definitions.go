@@ -138,7 +138,7 @@ type AWSEnvironment struct {
 // Embedded responses related to the resource.
 type AWSEnvironmentEmbedded struct {
     // TODO: Add struct field description
-    ReadAwsEnvironmentEbsVolumesComplianceStats interface{} `json:"read-aws-environment-ebs-volumes-compliance-stats"`
+    ReadAwsEnvironmentEbsVolumesComplianceStats *{} `json:"read-aws-environment-ebs-volumes-compliance-stats"`
 }
 
 // AWSEnvironmentLinks represents a custom type struct.
@@ -218,7 +218,7 @@ type Alert struct {
 // Embedded responses related to the resource.
 type AlertEmbedded struct {
     // Embeds the associated consolidated alert in the response.
-    ReadConsolidatedAlert interface{} `json:"read-consolidated-alert"`
+    ReadConsolidatedAlert *{} `json:"read-consolidated-alert"`
 }
 
 // AlertLinks represents a custom type struct.
@@ -658,9 +658,9 @@ type AuditTrailListLinks struct {
 type AutoUserProvisioningRuleEmbedded struct {
     // Embeds the associated organizational units for the OU UUIDs in the response
     // if requested using the `embed` query parameter.
-    ReadOrganizationalUnit interface{} `json:"read-organizational-unit"`
+    ReadOrganizationalUnit *{}   `json:"read-organizational-unit"`
     // Embeds the associated role for the role UUID in the response if requested using the `embed` query parameter.
-    ReadRole               interface{} `json:"read-role"`
+    ReadRole               *None `json:"read-role"`
 }
 
 // AutoUserProvisioningRuleLinks represents a custom type struct.
@@ -825,9 +825,9 @@ type AwsTagCommonModel struct {
 // Embedded responses related to the resource.
 type AwsTagEmbedded struct {
     // TODO: Add struct field description
-    ReadAwsEnvironmentTagEbsVolumesComplianceStats interface{} `json:"read-aws-environment-tag-ebs-volumes-compliance-stats"`
+    ReadAwsEnvironmentTagEbsVolumesComplianceStats *{}   `json:"read-aws-environment-tag-ebs-volumes-compliance-stats"`
     // Embeds the associated policy of a protected resource in the response if requested using the `embed` query parameter. Unprotected resources will not have an associated policy.
-    ReadPolicyDefinition                           interface{} `json:"read-policy-definition"`
+    ReadPolicyDefinition                           *None `json:"read-policy-definition"`
 }
 
 // AwsTagLinks represents a custom type struct.
@@ -1001,11 +1001,11 @@ type ComplianceStatsDeprecated struct {
 // Embedded responses related to the resource.
 type ComputeResourceEmbedded struct {
     // Embeds the associated policy of a protected resource in the response if requested using the `embed` query parameter. Unprotected resources will not have an associated policy.
-    ReadPolicyDefinition                            interface{} `json:"read-policy-definition"`
+    ReadPolicyDefinition                            *None `json:"read-policy-definition"`
     // Embeds the compliance statistics of VMs into each vCenter resource in the response, if requested using the `_embed` query parameter.
-    ReadVmwareVcenterComputeResourceComplianceStats interface{} `json:"read-vmware-vcenter-compute-resource-compliance-stats"`
+    ReadVmwareVcenterComputeResourceComplianceStats *None `json:"read-vmware-vcenter-compute-resource-compliance-stats"`
     // TODO: Add struct field description
-    ReadVmwareVcenterComputeResourceConnectionStats interface{} `json:"read-vmware-vcenter-compute-resource-connection-stats"`
+    ReadVmwareVcenterComputeResourceConnectionStats *{}   `json:"read-vmware-vcenter-compute-resource-connection-stats"`
 }
 
 // ComputeResourceIDModel represents a custom type struct
@@ -1230,9 +1230,9 @@ type DatabaseLinks struct {
 // Embedded responses related to the resource.
 type DatacenterEmbedded struct {
     // Embeds the associated policy of a protected resource in the response if requested using the `embed` query parameter. Unprotected resources will not have an associated policy.
-    ReadPolicyDefinition                       interface{} `json:"read-policy-definition"`
+    ReadPolicyDefinition                       *None `json:"read-policy-definition"`
     // Embeds the compliance statistics of VMs into each vCenter resource in the response, if requested using the `_embed` query parameter.
-    ReadVmwareVcenterDatacenterComplianceStats interface{} `json:"read-vmware-vcenter-datacenter-compliance-stats"`
+    ReadVmwareVcenterDatacenterComplianceStats *None `json:"read-vmware-vcenter-datacenter-compliance-stats"`
 }
 
 // DatacenterLinks represents a custom type struct.
@@ -1582,7 +1582,7 @@ type EbsTemplateInfo struct {
 // Embedded responses related to the resource.
 type EbsVolumeEmbedded struct {
     // Embeds the associated policy of a protected resource in the response if requested using the `embed` query parameter. Unprotected resources will not have an associated policy.
-    ReadPolicyDefinition interface{} `json:"read-policy-definition"`
+    ReadPolicyDefinition *None `json:"read-policy-definition"`
 }
 
 // EbsVolumeLinks represents a custom type struct.
@@ -1660,7 +1660,7 @@ type EntityGroupAssignmetUpdates struct {
 // Embedded responses related to the resource.
 type EntityGroupEmbedded struct {
     // Embeds the associated task of a resource in the response if requested using the `embed` query parameter.
-    ReadTask interface{} `json:"read-task"`
+    ReadTask *None `json:"read-task"`
 }
 
 // EntityModel represents a custom type struct.
@@ -1671,6 +1671,15 @@ type EntityModel struct {
     ParentEntity  *OrganizationalUnitParentEntity  `json:"parent_entity"`
     // The primary object associated with the organizational unit. Examples of primary entities include "aws_environment" and "vmware_vm".
     PrimaryEntity *OrganizationalUnitPrimaryEntity `json:"primary_entity"`
+}
+
+// ErrorModel represents a custom type struct
+type ErrorModel struct {
+    // ErrorCode is a short string describing the error, if any.
+    ErrorCode    *string `json:"error_code"`
+    // ErrorMessage is a longer description explaining the error, if any, and how to
+    // fix it.
+    ErrorMessage *string `json:"error_message"`
 }
 
 // FileDescriptor represents a custom type struct.
@@ -1858,9 +1867,9 @@ type FileVersionsListLinks struct {
 // Embedded responses related to the resource.
 type FolderEmbedded struct {
     // Embeds the associated policy of a protected resource in the response if requested using the `embed` query parameter. Unprotected resources will not have an associated policy.
-    ReadPolicyDefinition                   interface{} `json:"read-policy-definition"`
+    ReadPolicyDefinition                   *None `json:"read-policy-definition"`
     // Embeds the compliance statistics of VMs into each vCenter resource in the response, if requested using the `_embed` query parameter.
-    ReadVmwareVcenterFolderComplianceStats interface{} `json:"read-vmware-vcenter-folder-compliance-stats"`
+    ReadVmwareVcenterFolderComplianceStats *None `json:"read-vmware-vcenter-folder-compliance-stats"`
 }
 
 // FolderLinks represents a custom type struct.
@@ -2286,9 +2295,9 @@ type MssqlAG struct {
 // Embedded responses related to the resource.
 type MssqlAGEmbedded struct {
     // availability group level stats contains compliant database stats
-    GetMssqlAvailabilityGroupStats interface{} `json:"get-mssql-availability-group-stats"`
+    GetMssqlAvailabilityGroupStats *{}   `json:"get-mssql-availability-group-stats"`
     // Embeds the associated policy of a protected resource in the response if requested using the `embed` query parameter. Unprotected resources will not have an associated policy.
-    ReadPolicyDefinition           interface{} `json:"read-policy-definition"`
+    ReadPolicyDefinition           *None `json:"read-policy-definition"`
 }
 
 // MssqlAGLinks represents a custom type struct.
@@ -2435,9 +2444,9 @@ type MssqlDatabaseBackup struct {
 // Embedded responses related to the resource.
 type MssqlDatabaseBackupEmbedded struct {
     // Embeds details about the management group if requested using the `embed` query.
-    ReadManagementGroup    interface{} `json:"read-management-group"`
+    ReadManagementGroup    *None `json:"read-management-group"`
     // Embeds details about the management subgroup if requested using the `embed` query.
-    ReadManagementSubgroup interface{} `json:"read-management-subgroup"`
+    ReadManagementSubgroup *None `json:"read-management-subgroup"`
 }
 
 // MssqlDatabaseBackupLinks represents a custom type struct.
@@ -2479,11 +2488,11 @@ type MssqlDatabaseBackupListLinks struct {
 // Embedded responses related to the resource.
 type MssqlDatabaseEmbedded struct {
     // Embeds details about the management group if requested using the `embed` query.
-    ReadManagementGroup    interface{} `json:"read-management-group"`
+    ReadManagementGroup    *None `json:"read-management-group"`
     // Embeds details about the management subgroup if requested using the `embed` query.
-    ReadManagementSubgroup interface{} `json:"read-management-subgroup"`
+    ReadManagementSubgroup *None `json:"read-management-subgroup"`
     // Embeds the associated policy of a protected resource in the response if requested using the `embed` query parameter. Unprotected resources will not have an associated policy.
-    ReadPolicyDefinition   interface{} `json:"read-policy-definition"`
+    ReadPolicyDefinition   *None `json:"read-policy-definition"`
 }
 
 // MssqlDatabaseFile represents a custom type struct
@@ -2574,13 +2583,13 @@ type MssqlHost struct {
 // Embedded responses related to the resource.
 type MssqlHostEmbedded struct {
     // host level stats
-    GetMssqlHostStats      interface{} `json:"get-mssql-host-stats"`
+    GetMssqlHostStats      *{}   `json:"get-mssql-host-stats"`
     // Embeds details about the management group if requested using the `embed` query.
-    ReadManagementGroup    interface{} `json:"read-management-group"`
+    ReadManagementGroup    *None `json:"read-management-group"`
     // Embeds details about the management subgroup if requested using the `embed` query.
-    ReadManagementSubgroup interface{} `json:"read-management-subgroup"`
+    ReadManagementSubgroup *None `json:"read-management-subgroup"`
     // Embeds the associated policy of a protected resource in the response if requested using the `embed` query parameter. Unprotected resources will not have an associated policy.
-    ReadPolicyDefinition   interface{} `json:"read-policy-definition"`
+    ReadPolicyDefinition   *None `json:"read-policy-definition"`
 }
 
 // MssqlHostLinks represents a custom type struct.
@@ -2662,13 +2671,13 @@ type MssqlInstance struct {
 // Embedded responses related to the resource.
 type MssqlInstanceEmbedded struct {
     // TODO: Add struct field description
-    GetMssqlInstanceStats  interface{} `json:"get-mssql-instance-stats"`
+    GetMssqlInstanceStats  *{}   `json:"get-mssql-instance-stats"`
     // Embeds details about the management group if requested using the `embed` query.
-    ReadManagementGroup    interface{} `json:"read-management-group"`
+    ReadManagementGroup    *None `json:"read-management-group"`
     // Embeds details about the management subgroup if requested using the `embed` query.
-    ReadManagementSubgroup interface{} `json:"read-management-subgroup"`
+    ReadManagementSubgroup *None `json:"read-management-subgroup"`
     // Embeds the associated policy of a protected resource in the response if requested using the `embed` query parameter. Unprotected resources will not have an associated policy.
-    ReadPolicyDefinition   interface{} `json:"read-policy-definition"`
+    ReadPolicyDefinition   *None `json:"read-policy-definition"`
 }
 
 // MssqlInstanceLinks represents a custom type struct.
@@ -2935,6 +2944,8 @@ type Policy struct {
     ActivationStatus              *string            `json:"activation_status"`
     // The Clumio-assigned IDs of the organizational units to whom the policy has been assigned.
     AssignedOrganizationalUnitIds []*string          `json:"assigned_organizational_unit_ids"`
+    // The created time of the policy in unix time.
+    CreatedTime                   *int64             `json:"created_time"`
     // The Clumio-assigned ID of the policy.
     Id                            *string            `json:"id"`
     // The following table describes the possible lock statuses of a policy.
@@ -2960,6 +2971,8 @@ type Policy struct {
     OrganizationalUnitId          *string            `json:"organizational_unit_id"`
     // The timezone for the policy.
     Timezone                      *string            `json:"timezone"`
+    // The updated time of the policy in unix time.
+    UpdatedTime                   *int64             `json:"updated_time"`
 }
 
 // PolicyAdvancedSettings represents a custom type struct.
@@ -2986,9 +2999,9 @@ type PolicyAdvancedSettings struct {
 // as defined by the embeddable link specified.
 type PolicyEmbedded struct {
     // Embeds the EBS compliance statistics into the response.
-    ReadPolicyAwsEbsVolumesComplianceStats interface{} `json:"read-policy-aws-ebs-volumes-compliance-stats"`
+    ReadPolicyAwsEbsVolumesComplianceStats *{} `json:"read-policy-aws-ebs-volumes-compliance-stats"`
     // Embeds the VM compliance statisticss into the response.
-    ReadPolicyVmwareVmsComplianceStats     interface{} `json:"read-policy-vmware-vms-compliance-stats"`
+    ReadPolicyVmwareVmsComplianceStats     *{} `json:"read-policy-vmware-vms-compliance-stats"`
 }
 
 // PolicyLinks represents a custom type struct.
@@ -3030,27 +3043,27 @@ type PolicyListLinks struct {
 
 // PolicyOperation represents a custom type struct
 type PolicyOperation struct {
-    // The next start time of this operation.
-    Nextstarttime    *int64                  `json:"NextStartTime"`
-    // The previous start time of this operation.
-    Prevstarttime    *int64                  `json:"PrevStartTime"`
     // Determines whether the protection policy should take action now or during the specified backup window.
     // If set to `immediate`, Clumio starts the backup process right away. If set to `window`, Clumio starts the backup process when the backup window (`backup_window`) opens.
     // If set to `window` and `operation in ("aws_rds_resource_aws_snapshot", "mssql_log_backup", "ec2_mssql_log_backup")`,
     // the backup window will not be determined by Clumio's backup window.
-    ActionSetting    *string                 `json:"action_setting"`
+    ActionSetting     *string                 `json:"action_setting"`
     // Additional operation-specific policy settings. For operation types which do not support additional settings, this field is `null`.
-    AdvancedSettings *PolicyAdvancedSettings `json:"advanced_settings"`
+    AdvancedSettings  *PolicyAdvancedSettings `json:"advanced_settings"`
     // The start and end times for the customized backup window.
-    BackupWindow     *BackupWindow           `json:"backup_window"`
+    BackupWindow      *BackupWindow           `json:"backup_window"`
     // The start and end times for the customized backup window.
-    BackupWindowTz   *BackupWindow           `json:"backup_window_tz"`
+    BackupWindowTz    *BackupWindow           `json:"backup_window_tz"`
+    // The next start time of this operation in unix time.
+    NextStartTime     *int64                  `json:"next_start_time"`
+    // The previous start time of this operation in unix time.
+    PreviousStartTime *int64                  `json:"previous_start_time"`
     // backup_sla captures the SLA parameters
     // backup_sla captures the SLA parameters
-    Slas             []*BackupSLA            `json:"slas"`
+    Slas              []*BackupSLA            `json:"slas"`
     // The operation to be performed for this SLA set. Each SLA set corresponds to one and only one operation.
     // Refer to the Policy Operation table for a complete list of policy operations.
-    ClumioType       *string                 `json:"type"`
+    ClumioType        *string                 `json:"type"`
 }
 
 // PrefixFilter represents a custom type struct.
@@ -3344,9 +3357,9 @@ type ProtectionGroupBucketEmbedded struct {
     // This embed is for internal use only since an embed results in additional HTTP
     // calls. "embeds" can affect the performance of "list" API calls as an embed is
     // processed once per item in the result list.
-    ReadOrganizationalUnit interface{} `json:"read-organizational-unit"`
+    ReadOrganizationalUnit *{}   `json:"read-organizational-unit"`
     // Embeds the associated policy of a protected resource in the response if requested using the `embed` query parameter. Unprotected resources will not have an associated policy.
-    ReadPolicyDefinition   interface{} `json:"read-policy-definition"`
+    ReadPolicyDefinition   *None `json:"read-policy-definition"`
 }
 
 // ProtectionGroupBucketLinks represents a custom type struct
@@ -3389,9 +3402,9 @@ type ProtectionGroupEmbedded struct {
     // This embed is for internal use only since an embed results in additional HTTP
     // calls. "embeds" can affect the performance of "list" API calls as an embed is
     // processed once per item in the result list.
-    ReadOrganizationalUnit interface{} `json:"read-organizational-unit"`
+    ReadOrganizationalUnit *{}   `json:"read-organizational-unit"`
     // Embeds the associated policy of a protected resource in the response if requested using the `embed` query parameter. Unprotected resources will not have an associated policy.
-    ReadPolicyDefinition   interface{} `json:"read-policy-definition"`
+    ReadPolicyDefinition   *None `json:"read-policy-definition"`
 }
 
 // ProtectionGroupLinks represents a custom type struct.
@@ -3674,7 +3687,7 @@ type ReadPolicyDefinitionHateoasLink struct {
 // Embedded responses related to the resource.
 type ReadTaskHateoasLinks struct {
     // Embeds the associated task of a resource in the response if requested using the `embed` query parameter.
-    ReadTask interface{} `json:"read-task"`
+    ReadTask *None `json:"read-task"`
 }
 
 // ReadVCenterObjectProtectionStatsHateoasLink represents a custom type struct.
@@ -4061,7 +4074,7 @@ type RuleAction struct {
 // Embedded responses related to the resource.
 type RuleEmbedded struct {
     // Embeds the associated policy of a protected resource in the response if requested using the `embed` query parameter. Unprotected resources will not have an associated policy.
-    ReadPolicyDefinition interface{} `json:"read-policy-definition"`
+    ReadPolicyDefinition *None `json:"read-policy-definition"`
 }
 
 // RuleLinks represents a custom type struct.
@@ -4474,6 +4487,12 @@ type S3VersioningOutput struct {
     Status    *string `json:"status"`
 }
 
+// SetBucketPropertiesResponseLinks represents a custom type struct
+type SetBucketPropertiesResponseLinks struct {
+    // The HATEOAS link to this resource.
+    Self *HateoasSelfLink `json:"_self"`
+}
+
 // SingleErrorResponse represents a custom type struct
 type SingleErrorResponse struct {
     // TODO: Add struct field description
@@ -4579,9 +4598,9 @@ type Tag2 struct {
 // Embedded responses related to the resource.
 type Tag2Embedded struct {
     // Embeds the associated policy of a protected resource in the response if requested using the `embed` query parameter. Unprotected resources will not have an associated policy.
-    ReadPolicyDefinition                interface{} `json:"read-policy-definition"`
+    ReadPolicyDefinition                *None `json:"read-policy-definition"`
     // Embeds the compliance statistics of VMs into each vCenter resource in the response, if requested using the `_embed` query parameter.
-    ReadVmwareVcenterTagComplianceStats interface{} `json:"read-vmware-vcenter-tag-compliance-stats"`
+    ReadVmwareVcenterTagComplianceStats *None `json:"read-vmware-vcenter-tag-compliance-stats"`
 }
 
 // Tag2Links represents a custom type struct.
@@ -5652,7 +5671,7 @@ type Vcenter struct {
 // Embedded responses related to the resource.
 type VcenterEmbedded struct {
     // Embeds the compliance statistics of VMs into each vCenter resource in the response, if requested using the `_embed` query parameter.
-    ReadVmwareVcenterComplianceStats interface{} `json:"read-vmware-vcenter-compliance-stats"`
+    ReadVmwareVcenterComplianceStats *None `json:"read-vmware-vcenter-compliance-stats"`
 }
 
 // VcenterLinks represents a custom type struct.
@@ -5765,7 +5784,7 @@ type VmDatacenterLink struct {
 // Embedded responses related to the resource.
 type VmEmbedded struct {
     // Embeds the associated policy of a protected resource in the response if requested using the `embed` query parameter. Unprotected resources will not have an associated policy.
-    ReadPolicyDefinition interface{} `json:"read-policy-definition"`
+    ReadPolicyDefinition *None `json:"read-policy-definition"`
 }
 
 // VmFolderLink represents a custom type struct.
@@ -5829,29 +5848,33 @@ type VmListLinks struct {
 // Wallet represents a custom type struct
 type Wallet struct {
     // Embedded responses related to the resource.
-    Embedded           interface{}  `json:"_embedded"`
+    Embedded           interface{}            `json:"_embedded"`
     // URLs to pages related to the resource.
-    Links              *WalletLinks `json:"_links"`
+    Links              *WalletLinks           `json:"_links"`
     // AWS Account ID associated with the wallet.
-    AccountNativeId    *string      `json:"account_native_id"`
+    AccountNativeId    *string                `json:"account_native_id"`
+    // Version of the template available
+    AvailableVersion   *int64                 `json:"available_version"`
     // Clumio AWS Account ID.
-    ClumioAwsAccountId *string      `json:"clumio_aws_account_id"`
+    ClumioAwsAccountId *string                `json:"clumio_aws_account_id"`
     // DeploymentURL is an (external) link to an AWS console page for quick-creation
     // of the stack.
-    DeploymentUrl      *string      `json:"deployment_url"`
+    DeploymentUrl      *string                `json:"deployment_url"`
     // ErrorCode is a short string describing the error, if any.
-    ErrorCode          *string      `json:"error_code"`
+    ErrorCode          *string                `json:"error_code"`
     // ErrorMessage is a longer description explaining the error, if any, and how to
     // fix it.
-    ErrorMessage       *string      `json:"error_message"`
+    ErrorMessage       *string                `json:"error_message"`
     // The Clumio-assigned ID of the wallet.
-    Id                 *string      `json:"id"`
+    Id                 *string                `json:"id"`
     // The regions where the wallet is installed.
-    InstalledRegions   []*string    `json:"installed_regions"`
+    InstalledRegions   []*string              `json:"installed_regions"`
+    // TODO: Add struct field description
+    KeyErrors          map[string]*ErrorModel `json:"key_errors"`
     // RoleArn is the AWS Resource Name of the IAM Role created by the stack.
-    RoleArn            *string      `json:"role_arn"`
+    RoleArn            *string                `json:"role_arn"`
     // The version of the stack used or being used.
-    StackVersion       *int64       `json:"stack_version"`
+    StackVersion       *int64                 `json:"stack_version"`
     // State describes the state of the wallet. Valid states are:
     // Waiting: The wallet has been created, but a stack hasn't been created. The
     // wallet can't be used in this state.
@@ -5859,14 +5882,14 @@ type Wallet struct {
     // wallet. This is the normal expected state of a wallet in use.
     // Error:   The wallet is inaccessible. See ErrorCode and ErrorMessage fields for
     // additional details.
-    State              *string      `json:"state"`
+    State              *string                `json:"state"`
     // The supported regions for the wallet.
-    SupportedRegions   []*string    `json:"supported_regions"`
+    SupportedRegions   []*string              `json:"supported_regions"`
     // TemplateURL is the URL to the CloudFormation template to be used to create the
     // CloudFormation stack.
-    TemplateUrl        *string      `json:"template_url"`
+    TemplateUrl        *string                `json:"template_url"`
     // Token is used to identify and authenticate the CloudFormation stack creation.
-    Token              *string      `json:"token"`
+    Token              *string                `json:"token"`
 }
 
 // WalletLinks represents a custom type struct.
