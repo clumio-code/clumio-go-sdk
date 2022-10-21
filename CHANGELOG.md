@@ -1,3 +1,5 @@
+## 0.4.0
+New API added for S3 and changes to Report and Auto User Provisioning APIs.
 ## 0.3.0
 APIs added for Auto User Provisioning.
 ## 0.2.9

@@ -1673,6 +1673,15 @@ type EntityModel struct {
     PrimaryEntity *OrganizationalUnitPrimaryEntity `json:"primary_entity"`
 }
 
+// ErrorModel represents a custom type struct
+type ErrorModel struct {
+    // ErrorCode is a short string describing the error, if any.
+    ErrorCode    *string `json:"error_code"`
+    // ErrorMessage is a longer description explaining the error, if any, and how to
+    // fix it.
+    ErrorMessage *string `json:"error_message"`
+}
+
 // FileDescriptor represents a custom type struct.
 // Specifies a file/directory by providing path and file system.
 type FileDescriptor struct {
@@ -2935,6 +2944,8 @@ type Policy struct {
     ActivationStatus              *string            `json:"activation_status"`
     // The Clumio-assigned IDs of the organizational units to whom the policy has been assigned.
     AssignedOrganizationalUnitIds []*string          `json:"assigned_organizational_unit_ids"`
+    // The created time of the policy in unix time.
+    CreatedTime                   *int64             `json:"created_time"`
     // The Clumio-assigned ID of the policy.
     Id                            *string            `json:"id"`
     // The following table describes the possible lock statuses of a policy.
@@ -2960,6 +2971,8 @@ type Policy struct {
     OrganizationalUnitId          *string            `json:"organizational_unit_id"`
     // The timezone for the policy.
     Timezone                      *string            `json:"timezone"`
+    // The updated time of the policy in unix time.
+    UpdatedTime                   *int64             `json:"updated_time"`
 }
 
 // PolicyAdvancedSettings represents a custom type struct.
@@ -3030,27 +3043,27 @@ type PolicyListLinks struct {
 
 // PolicyOperation represents a custom type struct
 type PolicyOperation struct {
-    // The next start time of this operation.
-    Nextstarttime    *int64                  `json:"NextStartTime"`
-    // The previous start time of this operation.
-    Prevstarttime    *int64                  `json:"PrevStartTime"`
     // Determines whether the protection policy should take action now or during the specified backup window.
     // If set to `immediate`, Clumio starts the backup process right away. If set to `window`, Clumio starts the backup process when the backup window (`backup_window`) opens.
     // If set to `window` and `operation in ("aws_rds_resource_aws_snapshot", "mssql_log_backup", "ec2_mssql_log_backup")`,
     // the backup window will not be determined by Clumio's backup window.
-    ActionSetting    *string                 `json:"action_setting"`
+    ActionSetting     *string                 `json:"action_setting"`
     // Additional operation-specific policy settings. For operation types which do not support additional settings, this field is `null`.
-    AdvancedSettings *PolicyAdvancedSettings `json:"advanced_settings"`
+    AdvancedSettings  *PolicyAdvancedSettings `json:"advanced_settings"`
     // The start and end times for the customized backup window.
-    BackupWindow     *BackupWindow           `json:"backup_window"`
+    BackupWindow      *BackupWindow           `json:"backup_window"`
     // The start and end times for the customized backup window.
-    BackupWindowTz   *BackupWindow           `json:"backup_window_tz"`
+    BackupWindowTz    *BackupWindow           `json:"backup_window_tz"`
+    // The next start time of this operation in unix time.
+    NextStartTime     *int64                  `json:"next_start_time"`
+    // The previous start time of this operation in unix time.
+    PreviousStartTime *int64                  `json:"previous_start_time"`
     // backup_sla captures the SLA parameters
     // backup_sla captures the SLA parameters
-    Slas             []*BackupSLA            `json:"slas"`
+    Slas              []*BackupSLA            `json:"slas"`
     // The operation to be performed for this SLA set. Each SLA set corresponds to one and only one operation.
     // Refer to the Policy Operation table for a complete list of policy operations.
-    ClumioType       *string                 `json:"type"`
+    ClumioType        *string                 `json:"type"`
 }
 
 // PrefixFilter represents a custom type struct.
@@ -4474,6 +4487,12 @@ type S3VersioningOutput struct {
     Status    *string `json:"status"`
 }
 
+// SetBucketPropertiesResponseLinks represents a custom type struct
+type SetBucketPropertiesResponseLinks struct {
+    // The HATEOAS link to this resource.
+    Self *HateoasSelfLink `json:"_self"`
+}
+
 // SingleErrorResponse represents a custom type struct
 type SingleErrorResponse struct {
     // TODO: Add struct field description
@@ -5829,29 +5848,33 @@ type VmListLinks struct {
 // Wallet represents a custom type struct
 type Wallet struct {
     // Embedded responses related to the resource.
-    Embedded           interface{}  `json:"_embedded"`
+    Embedded           interface{}            `json:"_embedded"`
     // URLs to pages related to the resource.
-    Links              *WalletLinks `json:"_links"`
+    Links              *WalletLinks           `json:"_links"`
     // AWS Account ID associated with the wallet.
-    AccountNativeId    *string      `json:"account_native_id"`
+    AccountNativeId    *string                `json:"account_native_id"`
+    // Version of the template available
+    AvailableVersion   *int64                 `json:"available_version"`
     // Clumio AWS Account ID.
-    ClumioAwsAccountId *string      `json:"clumio_aws_account_id"`
+    ClumioAwsAccountId *string                `json:"clumio_aws_account_id"`
     // DeploymentURL is an (external) link to an AWS console page for quick-creation
     // of the stack.
-    DeploymentUrl      *string      `json:"deployment_url"`
+    DeploymentUrl      *string                `json:"deployment_url"`
     // ErrorCode is a short string describing the error, if any.
-    ErrorCode          *string      `json:"error_code"`
+    ErrorCode          *string                `json:"error_code"`
     // ErrorMessage is a longer description explaining the error, if any, and how to
     // fix it.
-    ErrorMessage       *string      `json:"error_message"`
+    ErrorMessage       *string                `json:"error_message"`
     // The Clumio-assigned ID of the wallet.
-    Id                 *string      `json:"id"`
+    Id                 *string                `json:"id"`
     // The regions where the wallet is installed.
-    InstalledRegions   []*string    `json:"installed_regions"`
+    InstalledRegions   []*string              `json:"installed_regions"`
+    // TODO: Add struct field description
+    KeyErrors          map[string]*ErrorModel `json:"key_errors"`
     // RoleArn is the AWS Resource Name of the IAM Role created by the stack.
-    RoleArn            *string      `json:"role_arn"`
+    RoleArn            *string                `json:"role_arn"`
     // The version of the stack used or being used.
-    StackVersion       *int64       `json:"stack_version"`
+    StackVersion       *int64                 `json:"stack_version"`
     // State describes the state of the wallet. Valid states are:
     // Waiting: The wallet has been created, but a stack hasn't been created. The
     // wallet can't be used in this state.
@@ -5859,14 +5882,14 @@ type Wallet struct {
     // wallet. This is the normal expected state of a wallet in use.
     // Error:   The wallet is inaccessible. See ErrorCode and ErrorMessage fields for
     // additional details.
-    State              *string      `json:"state"`
+    State              *string                `json:"state"`
     // The supported regions for the wallet.
-    SupportedRegions   []*string    `json:"supported_regions"`
+    SupportedRegions   []*string              `json:"supported_regions"`
     // TemplateURL is the URL to the CloudFormation template to be used to create the
     // CloudFormation stack.
-    TemplateUrl        *string      `json:"template_url"`
+    TemplateUrl        *string                `json:"template_url"`
     // Token is used to identify and authenticate the CloudFormation stack creation.
-    Token              *string      `json:"token"`
+    Token              *string                `json:"token"`
 }
 
 // WalletLinks represents a custom type struct.

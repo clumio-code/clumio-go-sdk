@@ -20,28 +20,40 @@ type ReportDownloadsV1 struct {
 
 // ListReportDownloads Returns a list of unexpired, generated reports.
 func (r *ReportDownloadsV1) ListReportDownloads(
-    body models.ListReportDownloadsV1Request)(
+    limit *int64, 
+    start *string, 
+    filter *string)(
     *models.ListReportDownloadsResponse, *apiutils.APIError) {
 
     queryBuilder := r.config.BaseUrl + "/reports/downloads"
 
-    bytes, err := json.Marshal(body)
-    if err != nil {
-        return nil, &apiutils.APIError{
-            ResponseCode: 500,
-            Reason:       fmt.Sprintf("Failed to Marshal Request Body %v", body),
-            Response:     []byte(fmt.Sprintf("%v", err)),
-        }
-    }
-    payload := string(bytes)
+    
     header := "application/api.clumio.report-downloads=v1+json"
     var result *models.ListReportDownloadsResponse
+    defaultInt64 := int64(0)
+    defaultString := "" 
+    
+    if limit == nil {
+        limit = &defaultInt64
+    }
+    if start == nil {
+        start = &defaultString
+    }
+    if filter == nil {
+        filter = &defaultString
+    }
+    
+    queryParams := map[string]string{
+        "limit": fmt.Sprintf("%v", *limit),
+        "start": *start,
+        "filter": *filter,
+    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: r.config,
         RequestUrl: queryBuilder,
+        QueryParams: queryParams,
         AcceptHeader: header,
-        Body: payload,
         Result: &result,
         RequestType: common.Get,
     })

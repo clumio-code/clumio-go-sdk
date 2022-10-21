@@ -276,6 +276,8 @@ type CreatePolicyResponse struct {
     ActivationStatus              *string            `json:"activation_status"`
     // The Clumio-assigned IDs of the organizational units to whom the policy has been assigned.
     AssignedOrganizationalUnitIds []*string          `json:"assigned_organizational_unit_ids"`
+    // The created time of the policy in unix time.
+    CreatedTime                   *int64             `json:"created_time"`
     // The Clumio-assigned ID of the policy.
     Id                            *string            `json:"id"`
     // The following table describes the possible lock statuses of a policy.
@@ -301,6 +303,8 @@ type CreatePolicyResponse struct {
     OrganizationalUnitId          *string            `json:"organizational_unit_id"`
     // The timezone for the policy.
     Timezone                      *string            `json:"timezone"`
+    // The updated time of the policy in unix time.
+    UpdatedTime                   *int64             `json:"updated_time"`
 }
 
 // CreateProtectionGroupResponse represents a custom type struct for Success
@@ -418,29 +422,33 @@ type CreateUserResponse struct {
 // CreateWalletResponse represents a custom type struct for Success
 type CreateWalletResponse struct {
     // Embedded responses related to the resource.
-    Embedded           interface{}  `json:"_embedded"`
+    Embedded           interface{}            `json:"_embedded"`
     // URLs to pages related to the resource.
-    Links              *WalletLinks `json:"_links"`
+    Links              *WalletLinks           `json:"_links"`
     // AWS Account ID associated with the wallet.
-    AccountNativeId    *string      `json:"account_native_id"`
+    AccountNativeId    *string                `json:"account_native_id"`
+    // Version of the template available
+    AvailableVersion   *int64                 `json:"available_version"`
     // Clumio AWS Account ID.
-    ClumioAwsAccountId *string      `json:"clumio_aws_account_id"`
+    ClumioAwsAccountId *string                `json:"clumio_aws_account_id"`
     // DeploymentURL is an (external) link to an AWS console page for quick-creation
     // of the stack.
-    DeploymentUrl      *string      `json:"deployment_url"`
+    DeploymentUrl      *string                `json:"deployment_url"`
     // ErrorCode is a short string describing the error, if any.
-    ErrorCode          *string      `json:"error_code"`
+    ErrorCode          *string                `json:"error_code"`
     // ErrorMessage is a longer description explaining the error, if any, and how to
     // fix it.
-    ErrorMessage       *string      `json:"error_message"`
+    ErrorMessage       *string                `json:"error_message"`
     // The Clumio-assigned ID of the wallet.
-    Id                 *string      `json:"id"`
+    Id                 *string                `json:"id"`
     // The regions where the wallet is installed.
-    InstalledRegions   []*string    `json:"installed_regions"`
+    InstalledRegions   []*string              `json:"installed_regions"`
+    // TODO: Add struct field description
+    KeyErrors          map[string]*ErrorModel `json:"key_errors"`
     // RoleArn is the AWS Resource Name of the IAM Role created by the stack.
-    RoleArn            *string      `json:"role_arn"`
+    RoleArn            *string                `json:"role_arn"`
     // The version of the stack used or being used.
-    StackVersion       *int64       `json:"stack_version"`
+    StackVersion       *int64                 `json:"stack_version"`
     // State describes the state of the wallet. Valid states are:
     // Waiting: The wallet has been created, but a stack hasn't been created. The
     // wallet can't be used in this state.
@@ -448,14 +456,14 @@ type CreateWalletResponse struct {
     // wallet. This is the normal expected state of a wallet in use.
     // Error:   The wallet is inaccessible. See ErrorCode and ErrorMessage fields for
     // additional details.
-    State              *string      `json:"state"`
+    State              *string                `json:"state"`
     // The supported regions for the wallet.
-    SupportedRegions   []*string    `json:"supported_regions"`
+    SupportedRegions   []*string              `json:"supported_regions"`
     // TemplateURL is the URL to the CloudFormation template to be used to create the
     // CloudFormation stack.
-    TemplateUrl        *string      `json:"template_url"`
+    TemplateUrl        *string                `json:"template_url"`
     // Token is used to identify and authenticate the CloudFormation stack creation.
-    Token              *string      `json:"token"`
+    Token              *string                `json:"token"`
 }
 
 // DeleteBucketFromProtectionGroupResponse represents a custom type struct for Success
@@ -2463,6 +2471,8 @@ type ReadPolicyResponse struct {
     ActivationStatus              *string            `json:"activation_status"`
     // The Clumio-assigned IDs of the organizational units to whom the policy has been assigned.
     AssignedOrganizationalUnitIds []*string          `json:"assigned_organizational_unit_ids"`
+    // The created time of the policy in unix time.
+    CreatedTime                   *int64             `json:"created_time"`
     // The Clumio-assigned ID of the policy.
     Id                            *string            `json:"id"`
     // The following table describes the possible lock statuses of a policy.
@@ -2488,6 +2498,8 @@ type ReadPolicyResponse struct {
     OrganizationalUnitId          *string            `json:"organizational_unit_id"`
     // The timezone for the policy.
     Timezone                      *string            `json:"timezone"`
+    // The updated time of the policy in unix time.
+    UpdatedTime                   *int64             `json:"updated_time"`
 }
 
 // ReadProtectionGroupBackupResponse represents a custom type struct for Success
@@ -3264,29 +3276,33 @@ type ReadVmResponse struct {
 // ReadWalletResponse represents a custom type struct for Success
 type ReadWalletResponse struct {
     // Embedded responses related to the resource.
-    Embedded           interface{}  `json:"_embedded"`
+    Embedded           interface{}            `json:"_embedded"`
     // URLs to pages related to the resource.
-    Links              *WalletLinks `json:"_links"`
+    Links              *WalletLinks           `json:"_links"`
     // AWS Account ID associated with the wallet.
-    AccountNativeId    *string      `json:"account_native_id"`
+    AccountNativeId    *string                `json:"account_native_id"`
+    // Version of the template available
+    AvailableVersion   *int64                 `json:"available_version"`
     // Clumio AWS Account ID.
-    ClumioAwsAccountId *string      `json:"clumio_aws_account_id"`
+    ClumioAwsAccountId *string                `json:"clumio_aws_account_id"`
     // DeploymentURL is an (external) link to an AWS console page for quick-creation
     // of the stack.
-    DeploymentUrl      *string      `json:"deployment_url"`
+    DeploymentUrl      *string                `json:"deployment_url"`
     // ErrorCode is a short string describing the error, if any.
-    ErrorCode          *string      `json:"error_code"`
+    ErrorCode          *string                `json:"error_code"`
     // ErrorMessage is a longer description explaining the error, if any, and how to
     // fix it.
-    ErrorMessage       *string      `json:"error_message"`
+    ErrorMessage       *string                `json:"error_message"`
     // The Clumio-assigned ID of the wallet.
-    Id                 *string      `json:"id"`
+    Id                 *string                `json:"id"`
     // The regions where the wallet is installed.
-    InstalledRegions   []*string    `json:"installed_regions"`
+    InstalledRegions   []*string              `json:"installed_regions"`
+    // TODO: Add struct field description
+    KeyErrors          map[string]*ErrorModel `json:"key_errors"`
     // RoleArn is the AWS Resource Name of the IAM Role created by the stack.
-    RoleArn            *string      `json:"role_arn"`
+    RoleArn            *string                `json:"role_arn"`
     // The version of the stack used or being used.
-    StackVersion       *int64       `json:"stack_version"`
+    StackVersion       *int64                 `json:"stack_version"`
     // State describes the state of the wallet. Valid states are:
     // Waiting: The wallet has been created, but a stack hasn't been created. The
     // wallet can't be used in this state.
@@ -3294,42 +3310,46 @@ type ReadWalletResponse struct {
     // wallet. This is the normal expected state of a wallet in use.
     // Error:   The wallet is inaccessible. See ErrorCode and ErrorMessage fields for
     // additional details.
-    State              *string      `json:"state"`
+    State              *string                `json:"state"`
     // The supported regions for the wallet.
-    SupportedRegions   []*string    `json:"supported_regions"`
+    SupportedRegions   []*string              `json:"supported_regions"`
     // TemplateURL is the URL to the CloudFormation template to be used to create the
     // CloudFormation stack.
-    TemplateUrl        *string      `json:"template_url"`
+    TemplateUrl        *string                `json:"template_url"`
     // Token is used to identify and authenticate the CloudFormation stack creation.
-    Token              *string      `json:"token"`
+    Token              *string                `json:"token"`
 }
 
 // RefreshWalletResponse represents a custom type struct for Success
 type RefreshWalletResponse struct {
     // Embedded responses related to the resource.
-    Embedded           interface{}  `json:"_embedded"`
+    Embedded           interface{}            `json:"_embedded"`
     // URLs to pages related to the resource.
-    Links              *WalletLinks `json:"_links"`
+    Links              *WalletLinks           `json:"_links"`
     // AWS Account ID associated with the wallet.
-    AccountNativeId    *string      `json:"account_native_id"`
+    AccountNativeId    *string                `json:"account_native_id"`
+    // Version of the template available
+    AvailableVersion   *int64                 `json:"available_version"`
     // Clumio AWS Account ID.
-    ClumioAwsAccountId *string      `json:"clumio_aws_account_id"`
+    ClumioAwsAccountId *string                `json:"clumio_aws_account_id"`
     // DeploymentURL is an (external) link to an AWS console page for quick-creation
     // of the stack.
-    DeploymentUrl      *string      `json:"deployment_url"`
+    DeploymentUrl      *string                `json:"deployment_url"`
     // ErrorCode is a short string describing the error, if any.
-    ErrorCode          *string      `json:"error_code"`
+    ErrorCode          *string                `json:"error_code"`
     // ErrorMessage is a longer description explaining the error, if any, and how to
     // fix it.
-    ErrorMessage       *string      `json:"error_message"`
+    ErrorMessage       *string                `json:"error_message"`
     // The Clumio-assigned ID of the wallet.
-    Id                 *string      `json:"id"`
+    Id                 *string                `json:"id"`
     // The regions where the wallet is installed.
-    InstalledRegions   []*string    `json:"installed_regions"`
+    InstalledRegions   []*string              `json:"installed_regions"`
+    // TODO: Add struct field description
+    KeyErrors          map[string]*ErrorModel `json:"key_errors"`
     // RoleArn is the AWS Resource Name of the IAM Role created by the stack.
-    RoleArn            *string      `json:"role_arn"`
+    RoleArn            *string                `json:"role_arn"`
     // The version of the stack used or being used.
-    StackVersion       *int64       `json:"stack_version"`
+    StackVersion       *int64                 `json:"stack_version"`
     // State describes the state of the wallet. Valid states are:
     // Waiting: The wallet has been created, but a stack hasn't been created. The
     // wallet can't be used in this state.
@@ -3337,14 +3357,14 @@ type RefreshWalletResponse struct {
     // wallet. This is the normal expected state of a wallet in use.
     // Error:   The wallet is inaccessible. See ErrorCode and ErrorMessage fields for
     // additional details.
-    State              *string      `json:"state"`
+    State              *string                `json:"state"`
     // The supported regions for the wallet.
-    SupportedRegions   []*string    `json:"supported_regions"`
+    SupportedRegions   []*string              `json:"supported_regions"`
     // TemplateURL is the URL to the CloudFormation template to be used to create the
     // CloudFormation stack.
-    TemplateUrl        *string      `json:"template_url"`
+    TemplateUrl        *string                `json:"template_url"`
     // Token is used to identify and authenticate the CloudFormation stack creation.
-    Token              *string      `json:"token"`
+    Token              *string                `json:"token"`
 }
 
 // RestoreFileResponse represents a custom type struct for Success
@@ -3412,6 +3432,13 @@ type SetAssignmentsResponse struct {
     Links  *ReadTaskHateoasLinks `json:"_links"`
     // The Clumio-assigned ID of the task generated by this request.
     TaskId *string               `json:"task_id"`
+}
+
+// SetBucketPropertiesResponse represents a custom type struct.
+// Accepted
+type SetBucketPropertiesResponse struct {
+    // TODO: Add struct field description
+    Links *SetBucketPropertiesResponseLinks `json:"_links"`
 }
 
 // UpdateAWSConnectionResponse represents a custom type struct for Success
@@ -3661,6 +3688,8 @@ type UpdatePolicyResponse struct {
     ActivationStatus              *string            `json:"activation_status"`
     // The Clumio-assigned IDs of the organizational units to whom the policy has been assigned.
     AssignedOrganizationalUnitIds []*string          `json:"assigned_organizational_unit_ids"`
+    // The created time of the policy in unix time.
+    CreatedTime                   *int64             `json:"created_time"`
     // The Clumio-assigned ID of the policy.
     Id                            *string            `json:"id"`
     // The following table describes the possible lock statuses of a policy.
@@ -3688,6 +3717,8 @@ type UpdatePolicyResponse struct {
     TaskId                        *string            `json:"task_id"`
     // The timezone for the policy.
     Timezone                      *string            `json:"timezone"`
+    // The updated time of the policy in unix time.
+    UpdatedTime                   *int64             `json:"updated_time"`
 }
 
 // UpdateProtectionGroupResponse represents a custom type struct for Success
