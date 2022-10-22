@@ -12,7 +12,9 @@ import (
 type ReportDownloadsV1Client interface {
     // ListReportDownloads Returns a list of unexpired, generated reports.
     ListReportDownloads(
-        body models.ListReportDownloadsV1Request)(
+        limit *int64, 
+        start *string, 
+        filter *string)(
         *models.ListReportDownloadsResponse,  *apiutils.APIError)
     
     // CreateReportDownload Generates a report of a specified type given certain general conditions such as time range and other type-specific filters.

@@ -13,7 +13,8 @@ type AutoUserProvisioningRulesV1Client interface {
     // ListAutoUserProvisioningRules Returns a list of auto user provisioning rules.
     ListAutoUserProvisioningRules(
         limit *int64, 
-        start *string)(
+        start *string, 
+        filter *string)(
         *models.ListAutoUserProvisioningRulesResponse,  *apiutils.APIError)
     
     // CreateAutoUserProvisioningRule Creates a new auto user provisioning rule. Auto user provisioning rules determine the role and

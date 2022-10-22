@@ -7,4 +7,5 @@ type Config struct {
 	Token                     string
 	BaseUrl                   string
 	OrganizationalUnitContext string
+	CustomHeaders             map[string]string
 }
