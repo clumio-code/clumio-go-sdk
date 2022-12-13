@@ -22,6 +22,7 @@ type BackupMssqlDatabasesV1 struct {
 func (b *BackupMssqlDatabasesV1) ListBackupMssqlDatabases(
     limit *int64, 
     start *string, 
+    sort *string, 
     filter *string, 
     embed *string)(
     *models.ListMssqlDatabaseBackupsResponse, *apiutils.APIError) {
@@ -40,6 +41,9 @@ func (b *BackupMssqlDatabasesV1) ListBackupMssqlDatabases(
     if start == nil {
         start = &defaultString
     }
+    if sort == nil {
+        sort = &defaultString
+    }
     if filter == nil {
         filter = &defaultString
     }
@@ -50,6 +54,7 @@ func (b *BackupMssqlDatabasesV1) ListBackupMssqlDatabases(
     queryParams := map[string]string{
         "limit": fmt.Sprintf("%v", *limit),
         "start": *start,
+        "sort": *sort,
         "filter": *filter,
         "embed": *embed,
     }

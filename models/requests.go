@@ -25,9 +25,20 @@ type UpdateIndividualAlertV1Request struct {
     Status *string `json:"status"`
 }
 
+// CreateBackupAwsDynamodbTableV1Request represents a custom type struct
+type CreateBackupAwsDynamodbTableV1Request struct {
+    // Settings for requesting on-demand backup directly.
+    Settings   *OnDemandSetting `json:"settings"`
+    // Performs the operation on the DynamoDB table with the specified Clumio-assigned ID.
+    TableId    *string          `json:"table_id"`
+    // The type of the backup. Possible values - `clumio_backup`, `aws_snapshot`. The
+    // type will be assumed as `aws_snapshot` if the field is left empty.
+    ClumioType *string          `json:"type"`
+}
+
 // CreateBackupAwsEbsVolumeV1Request represents a custom type struct
 type CreateBackupAwsEbsVolumeV1Request struct {
-    // Settings for requesting on-demand backup directly
+    // Settings for requesting on-demand backup directly.
     Settings *OnDemandSetting `json:"settings"`
     // Performs the operation on the EBS volume with the specified Clumio-assigned ID.
     VolumeId *string          `json:"volume_id"`
@@ -37,7 +48,7 @@ type CreateBackupAwsEbsVolumeV1Request struct {
 type CreateBackupMssqlDatabaseV1Request struct {
     // Performs the operation on the Mssql asset with the specified Clumio-assigned ID.
     AssetId    *string          `json:"asset_id"`
-    // Settings for requesting on-demand backup directly
+    // Settings for requesting on-demand backup directly.
     Settings   *OnDemandSetting `json:"settings"`
     // The type of the backup. Possible values - `mssql_database_backup`, `mssql_log_backup`.
     ClumioType *string          `json:"type"`
@@ -45,7 +56,7 @@ type CreateBackupMssqlDatabaseV1Request struct {
 
 // CreateBackupVmwareVmV1Request represents a custom type struct
 type CreateBackupVmwareVmV1Request struct {
-    // Settings for requesting on-demand backup directly
+    // Settings for requesting on-demand backup directly.
     Settings  *OnDemandSetting `json:"settings"`
     // Performs the operation on a VM within the specified vCenter server.
     VcenterId *string          `json:"vcenter_id"`
@@ -223,38 +234,30 @@ type SetPolicyAssignmentsV1Request struct {
 type CreatePolicyDefinitionV1Request struct {
     // The status of the policy.
     // Refer to the Policy Activation Status table for a complete list of policy statuses.
-    ActivationStatus     *string            `json:"activation_status"`
-    // The created time of the policy in unix time.
-    CreatedTime          *int64             `json:"created_time"`
+    ActivationStatus     *string                 `json:"activation_status"`
     // The user-provided name of the policy.
-    Name                 *string            `json:"name"`
+    Name                 *string                 `json:"name"`
     // TODO: Add struct field description
-    Operations           []*PolicyOperation `json:"operations"`
+    Operations           []*PolicyOperationInput `json:"operations"`
     // The Clumio-assigned ID of the organizational unit associated with the policy.
-    OrganizationalUnitId *string            `json:"organizational_unit_id"`
+    OrganizationalUnitId *string                 `json:"organizational_unit_id"`
     // The timezone for the policy.
-    Timezone             *string            `json:"timezone"`
-    // The updated time of the policy in unix time.
-    UpdatedTime          *int64             `json:"updated_time"`
+    Timezone             *string                 `json:"timezone"`
 }
 
 // UpdatePolicyDefinitionV1Request represents a custom type struct
 type UpdatePolicyDefinitionV1Request struct {
     // The status of the policy.
     // Refer to the Policy Activation Status table for a complete list of policy statuses.
-    ActivationStatus     *string            `json:"activation_status"`
-    // The created time of the policy in unix time.
-    CreatedTime          *int64             `json:"created_time"`
+    ActivationStatus     *string                 `json:"activation_status"`
     // The user-provided name of the policy.
-    Name                 *string            `json:"name"`
+    Name                 *string                 `json:"name"`
     // TODO: Add struct field description
-    Operations           []*PolicyOperation `json:"operations"`
+    Operations           []*PolicyOperationInput `json:"operations"`
     // The Clumio-assigned ID of the organizational unit associated with the policy.
-    OrganizationalUnitId *string            `json:"organizational_unit_id"`
+    OrganizationalUnitId *string                 `json:"organizational_unit_id"`
     // The timezone for the policy.
-    Timezone             *string            `json:"timezone"`
-    // The updated time of the policy in unix time.
-    UpdatedTime          *int64             `json:"updated_time"`
+    Timezone             *string                 `json:"timezone"`
 }
 
 // CreatePolicyRuleV1Request represents a custom type struct
@@ -789,12 +792,71 @@ type CreateReportDownloadV1Request struct {
     ClumioType *string `json:"type"`
 }
 
+// RestoreAwsDynamodbTableV1Request represents a custom type struct
+type RestoreAwsDynamodbTableV1Request struct {
+    // The DynamoDB table restore backup or point-in-time restore options. Only one of these fields should be set.
+    Source *DynamoDBTableRestoreSource `json:"source"`
+    // The configuration of the restored DynamoDB table.
+    // For restore from snapshot, use the DynamoDB table configurations present at time of snapshot obtained from
+    // [GET /backups/aws/dynamodb-tables/{backup_id}](#operation/read-backup-aws-dynamodb-table) and for restoring point-in-time,
+    // use the current configuration of the table from [GET /datasources/aws/dynamodb-tables/{table_id}](#operation/read-aws-dynamodb-table).
+    // The table properties are set to empty or to their default values if they are specified as `null`.
+    Target *DynamoDBTableRestoreTarget `json:"target"`
+}
+
+// RestoreRecordsAwsDynamodbTableV1Request represents a custom type struct
+type RestoreRecordsAwsDynamodbTableV1Request struct {
+    // Filters based on which DynamoDB backup records are filtered in the query.
+    QueryFilter *DynamoDBGRRQueryFilter `json:"query_filter"`
+    // The parameters for initiating a DynamoDB table backup query from a backup.
+    Source      *DynamoDBGrrSource      `json:"source"`
+    // The destination information for the operation, representing the access option
+    // for the query results. Users can access the query results by direct download or by
+    // email. The direct download (`direct_download`) option allows users to directly download
+    // the restored file from the Clumio UI. The email (`email`) option allows users to access
+    // the restored file using a downloadable link they receive by email. If a target is not
+    // specified, then `target` defaults to `direct_download`.
+    Target      *DynamoDBGrrTarget      `json:"target"`
+}
+
 // RestoreAwsEbsVolumeV1Request represents a custom type struct
 type RestoreAwsEbsVolumeV1Request struct {
     // The EBS volume backup to be restored.
     Source *EBSRestoreSourceV1 `json:"source"`
     // The configuration of the EBS volume to be restored.
     Target *EBSRestoreTargetV1 `json:"target"`
+}
+
+// RestoreAwsEbsVolumeV2Request represents a custom type struct
+type RestoreAwsEbsVolumeV2Request struct {
+    // The EBS volume backup to be restored.
+    Source *EBSRestoreSource `json:"source"`
+    // The configuration of the EBS volume to be restored.
+    Target *EBSRestoreTarget `json:"target"`
+}
+
+// RestoreAwsEc2InstanceV1Request represents a custom type struct
+type RestoreAwsEc2InstanceV1Request struct {
+    // The EC2 instance backup to be restored.
+    Source *EC2RestoreSource `json:"source"`
+    // The target configuration per EC2 restore type. Only one of these fields should be set.
+    Target *EC2RestoreTarget `json:"target"`
+}
+
+// RestoreAwsRdsResourceV1Request represents a custom type struct
+type RestoreAwsRdsResourceV1Request struct {
+    // The RDS resource backup or snapshot to be restored.  Only one of these fields should be set.
+    Source *RdsResourceRestoreSource `json:"source"`
+    // The configuration of the RDS resource to be restored.
+    Target *RdsResourceRestoreTarget `json:"target"`
+}
+
+// RestoreRdsRecordV1Request represents a custom type struct
+type RestoreRdsRecordV1Request struct {
+    // The RDS database backup to be queried.
+    Source *GrrSource `json:"source"`
+    // The query to perform on the source RDS database.
+    Target *GrrTarget `json:"target"`
 }
 
 // RestoreFilesV1Request represents a custom type struct
@@ -808,6 +870,26 @@ type RestoreFilesV1Request struct {
     // the restored file using a downloadable link they receive by email. If a target is not
     // specified, then `target` defaults to `direct_download`.
     Target *FileRestoreTarget `json:"target"`
+}
+
+// DownloadSharedFileV1Request represents a custom type struct
+type DownloadSharedFileV1Request struct {
+    // The download link that was sent to you by email. To get the download link,
+    // open the email message, click "Download File" to launch the Clumio "Access
+    // Requested File" page, and copy the URL.
+    EmailLink *string `json:"email_link"`
+    // The passcode used to access the restored file. Obtain the passcode from the
+    // user who generated the restored file.
+    Passcode  *string `json:"passcode"`
+}
+
+// ShareRestoredFileV1Request represents a custom type struct
+type ShareRestoredFileV1Request struct {
+    // The email address of the user who will receive the download link to the restored
+    // file.
+    EmailAddress *string `json:"email_address"`
+    // The optional message sent as part of the email.
+    Message      *string `json:"message"`
 }
 
 // RestoreMssqlDatabaseV1Request represents a custom type struct

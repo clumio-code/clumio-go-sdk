@@ -14,6 +14,7 @@ type BackupAwsEbsVolumesV1Client interface {
     ListBackupAwsEbsVolumes(
         limit *int64, 
         start *string, 
+        sort *string, 
         filter *string)(
         *models.ListEBSBackupsResponseV1,  *apiutils.APIError)
     

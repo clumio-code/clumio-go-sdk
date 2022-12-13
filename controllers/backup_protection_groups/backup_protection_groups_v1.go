@@ -21,6 +21,7 @@ type BackupProtectionGroupsV1 struct {
 func (b *BackupProtectionGroupsV1) ListBackupProtectionGroups(
     limit *int64, 
     start *string, 
+    sort *string, 
     filter *string)(
     *models.ListProtectionGroupBackupsResponse, *apiutils.APIError) {
 
@@ -38,6 +39,9 @@ func (b *BackupProtectionGroupsV1) ListBackupProtectionGroups(
     if start == nil {
         start = &defaultString
     }
+    if sort == nil {
+        sort = &defaultString
+    }
     if filter == nil {
         filter = &defaultString
     }
@@ -45,6 +49,7 @@ func (b *BackupProtectionGroupsV1) ListBackupProtectionGroups(
     queryParams := map[string]string{
         "limit": fmt.Sprintf("%v", *limit),
         "start": *start,
+        "sort": *sort,
         "filter": *filter,
     }
 
@@ -65,6 +70,7 @@ func (b *BackupProtectionGroupsV1) ListBackupProtectionGroups(
 func (b *BackupProtectionGroupsV1) ListBackupProtectionGroupS3Assets(
     limit *int64, 
     start *string, 
+    sort *string, 
     filter *string)(
     *models.ListProtectionGroupS3AssetBackupsResponse, *apiutils.APIError) {
 
@@ -82,6 +88,9 @@ func (b *BackupProtectionGroupsV1) ListBackupProtectionGroupS3Assets(
     if start == nil {
         start = &defaultString
     }
+    if sort == nil {
+        sort = &defaultString
+    }
     if filter == nil {
         filter = &defaultString
     }
@@ -89,6 +98,7 @@ func (b *BackupProtectionGroupsV1) ListBackupProtectionGroupS3Assets(
     queryParams := map[string]string{
         "limit": fmt.Sprintf("%v", *limit),
         "start": *start,
+        "sort": *sort,
         "filter": *filter,
     }
 

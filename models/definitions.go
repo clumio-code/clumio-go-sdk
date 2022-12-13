@@ -259,42 +259,66 @@ type AlertListLinks struct {
 type AlertParentEntity struct {
     // A system-generated ID assigned to this entity.
     Id         *string `json:"id"`
-    // The following table describes the entity types that Clumio supports.
     // 
-    // +--------------------------------+---------------------------------------------+
-    // |          Entity Type           |                   Details                   |
-    // +================================+=============================================+
-    // | vmware_vcenter                 | VMware vCenter.                             |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_vm                      | VMware virtual machine.                     |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_vm_folder               | VMware VM folder.                           |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_datacenter              | VMware data center.                         |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_datacenter_folder       | VMware data center folder.                  |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_tag                     | VMware tag.                                 |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_category                | VMware tag category.                        |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_compute_resource        | VMware compute resource.                    |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_compute_resource_folder | VMware compute resource folder.             |
-    // +--------------------------------+---------------------------------------------+
-    // | aws_ebs_volume                 | AWS EBS volume.                             |
-    // +--------------------------------+---------------------------------------------+
-    // | aws_connection                 | AWS connection mediated by a CloudFormation |
-    // |                                | stack.                                      |
-    // +--------------------------------+---------------------------------------------+
-    // | aws_environment                | AWS environment specified by an             |
-    // |                                | account/region pair.                        |
-    // +--------------------------------+---------------------------------------------+
-    // | aws_tag                        | AWS tag.                                    |
-    // +--------------------------------+---------------------------------------------+
-    // | aws_cmk                        | AWS Customer Master Key used to encrypt     |
-    // |                                | data.                                       |
-    // +--------------------------------+---------------------------------------------+
+    // Entity Type
+    // Details
+    // 
+    // 
+    // vmware_vcenter
+    // VMware vCenter.
+    // 
+    // 
+    // vmware_vm
+    // VMware virtual machine.
+    // 
+    // 
+    // vmware_vm_folder
+    // VMware VM folder.
+    // 
+    // 
+    // vmware_datacenter
+    // VMware data center.
+    // 
+    // 
+    // vmware_datacenter_folder
+    // VMware data center folder.
+    // 
+    // 
+    // vmware_tag
+    // VMware tag.
+    // 
+    // 
+    // vmware_category
+    // VMware tag category.
+    // 
+    // 
+    // vmware_compute_resource
+    // VMware compute resource.
+    // 
+    // 
+    // vmware_compute_resource_folder
+    // VMware compute resource folder.
+    // 
+    // 
+    // aws_ebs_volume
+    // AWS EBS volume.
+    // 
+    // 
+    // aws_connection
+    // AWS connection mediated by a CloudFormation stack.
+    // 
+    // 
+    // aws_environment
+    // AWS environment specified by an account/region pair.
+    // 
+    // 
+    // aws_tag
+    // AWS tag.
+    // 
+    // 
+    // aws_cmk
+    // AWS Customer Master Key used to encrypt data.
+    // 
     // 
     ClumioType *string `json:"type"`
     // A system-generated value assigned to the entity. For example, if the primary entity type is "vmware_vm" for a virtual machine, then the value is the name of the VM.
@@ -306,42 +330,66 @@ type AlertParentEntity struct {
 type AlertPrimaryEntity struct {
     // A system-generated ID assigned to this entity.
     Id         *string `json:"id"`
-    // The following table describes the entity types that Clumio supports.
     // 
-    // +--------------------------------+---------------------------------------------+
-    // |          Entity Type           |                   Details                   |
-    // +================================+=============================================+
-    // | vmware_vcenter                 | VMware vCenter.                             |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_vm                      | VMware virtual machine.                     |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_vm_folder               | VMware VM folder.                           |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_datacenter              | VMware data center.                         |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_datacenter_folder       | VMware data center folder.                  |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_tag                     | VMware tag.                                 |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_category                | VMware tag category.                        |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_compute_resource        | VMware compute resource.                    |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_compute_resource_folder | VMware compute resource folder.             |
-    // +--------------------------------+---------------------------------------------+
-    // | aws_ebs_volume                 | AWS EBS volume.                             |
-    // +--------------------------------+---------------------------------------------+
-    // | aws_connection                 | AWS connection mediated by a CloudFormation |
-    // |                                | stack.                                      |
-    // +--------------------------------+---------------------------------------------+
-    // | aws_environment                | AWS environment specified by an             |
-    // |                                | account/region pair.                        |
-    // +--------------------------------+---------------------------------------------+
-    // | aws_tag                        | AWS tag.                                    |
-    // +--------------------------------+---------------------------------------------+
-    // | aws_cmk                        | AWS Customer Master Key used to encrypt     |
-    // |                                | data.                                       |
-    // +--------------------------------+---------------------------------------------+
+    // Entity Type
+    // Details
+    // 
+    // 
+    // vmware_vcenter
+    // VMware vCenter.
+    // 
+    // 
+    // vmware_vm
+    // VMware virtual machine.
+    // 
+    // 
+    // vmware_vm_folder
+    // VMware VM folder.
+    // 
+    // 
+    // vmware_datacenter
+    // VMware data center.
+    // 
+    // 
+    // vmware_datacenter_folder
+    // VMware data center folder.
+    // 
+    // 
+    // vmware_tag
+    // VMware tag.
+    // 
+    // 
+    // vmware_category
+    // VMware tag category.
+    // 
+    // 
+    // vmware_compute_resource
+    // VMware compute resource.
+    // 
+    // 
+    // vmware_compute_resource_folder
+    // VMware compute resource folder.
+    // 
+    // 
+    // aws_ebs_volume
+    // AWS EBS volume.
+    // 
+    // 
+    // aws_connection
+    // AWS connection mediated by a CloudFormation stack.
+    // 
+    // 
+    // aws_environment
+    // AWS environment specified by an account/region pair.
+    // 
+    // 
+    // aws_tag
+    // AWS tag.
+    // 
+    // 
+    // aws_cmk
+    // AWS Customer Master Key used to encrypt data.
+    // 
     // 
     ClumioType *string `json:"type"`
     // A system-generated value assigned to the entity. For example, if the primary entity type is "vmware_vm" for a virtual machine, then the value is the name of the VM.
@@ -540,42 +588,66 @@ type AuditTrails struct {
 type AuditParentEntity struct {
     // A system-generated ID assigned to this entity.
     Id         *string `json:"id"`
-    // The following table describes the entity types that Clumio supports.
     // 
-    // +--------------------------------+---------------------------------------------+
-    // |          Entity Type           |                   Details                   |
-    // +================================+=============================================+
-    // | vmware_vcenter                 | VMware vCenter.                             |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_vm                      | VMware virtual machine.                     |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_vm_folder               | VMware VM folder.                           |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_datacenter              | VMware data center.                         |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_datacenter_folder       | VMware data center folder.                  |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_tag                     | VMware tag.                                 |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_category                | VMware tag category.                        |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_compute_resource        | VMware compute resource.                    |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_compute_resource_folder | VMware compute resource folder.             |
-    // +--------------------------------+---------------------------------------------+
-    // | aws_ebs_volume                 | AWS EBS volume.                             |
-    // +--------------------------------+---------------------------------------------+
-    // | aws_connection                 | AWS connection mediated by a CloudFormation |
-    // |                                | stack.                                      |
-    // +--------------------------------+---------------------------------------------+
-    // | aws_environment                | AWS environment specified by an             |
-    // |                                | account/region pair.                        |
-    // +--------------------------------+---------------------------------------------+
-    // | aws_tag                        | AWS tag.                                    |
-    // +--------------------------------+---------------------------------------------+
-    // | aws_cmk                        | AWS Customer Master Key used to encrypt     |
-    // |                                | data.                                       |
-    // +--------------------------------+---------------------------------------------+
+    // Entity Type
+    // Details
+    // 
+    // 
+    // vmware_vcenter
+    // VMware vCenter.
+    // 
+    // 
+    // vmware_vm
+    // VMware virtual machine.
+    // 
+    // 
+    // vmware_vm_folder
+    // VMware VM folder.
+    // 
+    // 
+    // vmware_datacenter
+    // VMware data center.
+    // 
+    // 
+    // vmware_datacenter_folder
+    // VMware data center folder.
+    // 
+    // 
+    // vmware_tag
+    // VMware tag.
+    // 
+    // 
+    // vmware_category
+    // VMware tag category.
+    // 
+    // 
+    // vmware_compute_resource
+    // VMware compute resource.
+    // 
+    // 
+    // vmware_compute_resource_folder
+    // VMware compute resource folder.
+    // 
+    // 
+    // aws_ebs_volume
+    // AWS EBS volume.
+    // 
+    // 
+    // aws_connection
+    // AWS connection mediated by a CloudFormation stack.
+    // 
+    // 
+    // aws_environment
+    // AWS environment specified by an account/region pair.
+    // 
+    // 
+    // aws_tag
+    // AWS tag.
+    // 
+    // 
+    // aws_cmk
+    // AWS Customer Master Key used to encrypt data.
+    // 
     // 
     ClumioType *string `json:"type"`
     // A system-generated value assigned to the entity. For example, if the primary entity type is "vmware_vm" for a virtual machine, then the value is the name of the VM.
@@ -589,42 +661,66 @@ type AuditParentEntity struct {
 type AuditPrimaryEntity struct {
     // A system-generated ID assigned to this entity.
     Id         *string `json:"id"`
-    // The following table describes the entity types that Clumio supports.
     // 
-    // +--------------------------------+---------------------------------------------+
-    // |          Entity Type           |                   Details                   |
-    // +================================+=============================================+
-    // | vmware_vcenter                 | VMware vCenter.                             |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_vm                      | VMware virtual machine.                     |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_vm_folder               | VMware VM folder.                           |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_datacenter              | VMware data center.                         |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_datacenter_folder       | VMware data center folder.                  |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_tag                     | VMware tag.                                 |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_category                | VMware tag category.                        |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_compute_resource        | VMware compute resource.                    |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_compute_resource_folder | VMware compute resource folder.             |
-    // +--------------------------------+---------------------------------------------+
-    // | aws_ebs_volume                 | AWS EBS volume.                             |
-    // +--------------------------------+---------------------------------------------+
-    // | aws_connection                 | AWS connection mediated by a CloudFormation |
-    // |                                | stack.                                      |
-    // +--------------------------------+---------------------------------------------+
-    // | aws_environment                | AWS environment specified by an             |
-    // |                                | account/region pair.                        |
-    // +--------------------------------+---------------------------------------------+
-    // | aws_tag                        | AWS tag.                                    |
-    // +--------------------------------+---------------------------------------------+
-    // | aws_cmk                        | AWS Customer Master Key used to encrypt     |
-    // |                                | data.                                       |
-    // +--------------------------------+---------------------------------------------+
+    // Entity Type
+    // Details
+    // 
+    // 
+    // vmware_vcenter
+    // VMware vCenter.
+    // 
+    // 
+    // vmware_vm
+    // VMware virtual machine.
+    // 
+    // 
+    // vmware_vm_folder
+    // VMware VM folder.
+    // 
+    // 
+    // vmware_datacenter
+    // VMware data center.
+    // 
+    // 
+    // vmware_datacenter_folder
+    // VMware data center folder.
+    // 
+    // 
+    // vmware_tag
+    // VMware tag.
+    // 
+    // 
+    // vmware_category
+    // VMware tag category.
+    // 
+    // 
+    // vmware_compute_resource
+    // VMware compute resource.
+    // 
+    // 
+    // vmware_compute_resource_folder
+    // VMware compute resource folder.
+    // 
+    // 
+    // aws_ebs_volume
+    // AWS EBS volume.
+    // 
+    // 
+    // aws_connection
+    // AWS connection mediated by a CloudFormation stack.
+    // 
+    // 
+    // aws_environment
+    // AWS environment specified by an account/region pair.
+    // 
+    // 
+    // aws_tag
+    // AWS tag.
+    // 
+    // 
+    // aws_cmk
+    // AWS Customer Master Key used to encrypt data.
+    // 
     // 
     ClumioType *string `json:"type"`
     // A system-generated value assigned to the entity. For example, if the primary entity type is "vmware_vm" for a virtual machine, then the value is the name of the VM.
@@ -779,7 +875,6 @@ type AwsDsGroupingCriteria struct {
     // organizational unit uses this data group.
     // To edit this data group, all organizational units using it must be deleted.
     IsEditable *bool   `json:"is_editable"`
-    // The entity type used to group organizational units for AWS resources.
     // 
     // +-----------------+-------------------------+
     // |   Entity Type   |         Details         |
@@ -893,7 +988,7 @@ type BackupSLA struct {
 }
 
 // BackupWindow represents a custom type struct.
-// The start and end times for the customized backup window.
+// The start and end times of the customized backup window. Use of `backup_window` is deprecated, use `backup_window_tz` instead.
 type BackupWindow struct {
     // The time when the backup window closes. Specify the end time in the format `hh:mm`, where `hh` represents the hour of the day and `mm` represents the minute of the day, based on a 24 hour clock. Leave empty if you do not want to specify an end time. If the backup window closes while a backup is in progress, the entire backup process is aborted. Clumio will perform the next backup when the backup window re-opens.
     EndTime   *string `json:"end_time"`
@@ -925,6 +1020,12 @@ type Bucket struct {
     EventBridgeEnabled       *bool                                         `json:"event_bridge_enabled"`
     // The Clumio-assigned ID of the bucket.
     Id                       *string                                       `json:"id"`
+    // The Encryption enablement state for the S3 bucket.
+    IsEncryptionEnabled      *bool                                         `json:"is_encryption_enabled"`
+    // The Replication enablement state for the S3 bucket.
+    IsReplicationEnabled     *bool                                         `json:"is_replication_enabled"`
+    // The Versioning enablement state for the S3 bucket.
+    IsVersioningEnabled      *bool                                         `json:"is_versioning_enabled"`
     // The AWS-assigned name of the bucket.
     Name                     *string                                       `json:"name"`
     // Number of objects in bucket.
@@ -1140,42 +1241,66 @@ type ConsolidatedAlertListLinks struct {
 type ConsolidatedAlertParentEntity struct {
     // A system-generated ID assigned to this entity.
     Id         *string `json:"id"`
-    // The following table describes the entity types that Clumio supports.
     // 
-    // +--------------------------------+---------------------------------------------+
-    // |          Entity Type           |                   Details                   |
-    // +================================+=============================================+
-    // | vmware_vcenter                 | VMware vCenter.                             |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_vm                      | VMware virtual machine.                     |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_vm_folder               | VMware VM folder.                           |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_datacenter              | VMware data center.                         |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_datacenter_folder       | VMware data center folder.                  |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_tag                     | VMware tag.                                 |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_category                | VMware tag category.                        |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_compute_resource        | VMware compute resource.                    |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_compute_resource_folder | VMware compute resource folder.             |
-    // +--------------------------------+---------------------------------------------+
-    // | aws_ebs_volume                 | AWS EBS volume.                             |
-    // +--------------------------------+---------------------------------------------+
-    // | aws_connection                 | AWS connection mediated by a CloudFormation |
-    // |                                | stack.                                      |
-    // +--------------------------------+---------------------------------------------+
-    // | aws_environment                | AWS environment specified by an             |
-    // |                                | account/region pair.                        |
-    // +--------------------------------+---------------------------------------------+
-    // | aws_tag                        | AWS tag.                                    |
-    // +--------------------------------+---------------------------------------------+
-    // | aws_cmk                        | AWS Customer Master Key used to encrypt     |
-    // |                                | data.                                       |
-    // +--------------------------------+---------------------------------------------+
+    // Entity Type
+    // Details
+    // 
+    // 
+    // vmware_vcenter
+    // VMware vCenter.
+    // 
+    // 
+    // vmware_vm
+    // VMware virtual machine.
+    // 
+    // 
+    // vmware_vm_folder
+    // VMware VM folder.
+    // 
+    // 
+    // vmware_datacenter
+    // VMware data center.
+    // 
+    // 
+    // vmware_datacenter_folder
+    // VMware data center folder.
+    // 
+    // 
+    // vmware_tag
+    // VMware tag.
+    // 
+    // 
+    // vmware_category
+    // VMware tag category.
+    // 
+    // 
+    // vmware_compute_resource
+    // VMware compute resource.
+    // 
+    // 
+    // vmware_compute_resource_folder
+    // VMware compute resource folder.
+    // 
+    // 
+    // aws_ebs_volume
+    // AWS EBS volume.
+    // 
+    // 
+    // aws_connection
+    // AWS connection mediated by a CloudFormation stack.
+    // 
+    // 
+    // aws_environment
+    // AWS environment specified by an account/region pair.
+    // 
+    // 
+    // aws_tag
+    // AWS tag.
+    // 
+    // 
+    // aws_cmk
+    // AWS Customer Master Key used to encrypt data.
+    // 
     // 
     ClumioType *string `json:"type"`
     // A system-generated value assigned to the entity. For example, if the primary entity type is "vmware_vm" for a virtual machine, then the value is the name of the VM.
@@ -1195,6 +1320,24 @@ type ConsolidatedConfig struct {
     InstalledTemplateVersion *string       `json:"installed_template_version"`
     // TODO: Add struct field description
     Rds                      *RdsAssetInfo `json:"rds"`
+}
+
+// CreateRdsDatabaseRestoreResponseLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type CreateRdsDatabaseRestoreResponseLinks struct {
+    // The HATEOAS link to this resource.
+    Self     *HateoasSelfLink     `json:"_self"`
+    // A HATEOAS link to the task associated with this resource.
+    ReadTask *ReadTaskHateoasLink `json:"read-task"`
+}
+
+// CreateRestoreRecordResponseLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type CreateRestoreRecordResponseLinks struct {
+    // The HATEOAS link to this resource.
+    Self     *HateoasSelfLink     `json:"_self"`
+    // A HATEOAS link to the task associated with this resource.
+    ReadTask *ReadTaskHateoasLink `json:"read-task"`
 }
 
 // DataAccessObject represents a custom type struct.
@@ -1334,7 +1477,8 @@ type Directory struct {
     Size              *uint64         `json:"size"`
 }
 
-// DirectoryBrowseEmbedded represents a custom type struct
+// DirectoryBrowseEmbedded represents a custom type struct.
+// Embedded responses related to the resource.
 type DirectoryBrowseEmbedded struct {
     // TODO: Add struct field description
     Items []*Directory `json:"items"`
@@ -1390,6 +1534,408 @@ type DiscoverTemplateInfoV2 struct {
     AssetTypesEnabled        []*string `json:"asset_types_enabled"`
     // The latest available version for the template.
     AvailableTemplateVersion *string   `json:"available_template_version"`
+}
+
+// DownloadSharedFileLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type DownloadSharedFileLinks struct {
+    // The HATEOAS link to this resource.
+    Self *HateoasSelfLink `json:"_self"`
+}
+
+// DynamoDBGRRAttributeFilter represents a custom type struct
+type DynamoDBGRRAttributeFilter struct {
+    // Filter condition on the DynamoDB attribute.
+    // 
+    // +----------------------+-------------------------------------------------------+
+    // |      Condition       |                         Usage                         |
+    // +======================+=======================================================+
+    // | EqualTo              | Compares the filter attribute to be equal to the      |
+    // |                      | operand value.                                        |
+    // |                      | It expects only one operand value. Supported types    |
+    // |                      | are: String, Number, Binary and Boolean.              |
+    // |                      |                                                       |
+    // +----------------------+-------------------------------------------------------+
+    // | NotEqualTo           | Compares the filter attribute to not be equal to the  |
+    // |                      | operand value.                                        |
+    // |                      | It expects only one operand value. Supported types    |
+    // |                      | are: String, Number, Binary and Boolean.              |
+    // |                      |                                                       |
+    // +----------------------+-------------------------------------------------------+
+    // | LessThanOrEqualTo    | Compares the filter attribute to be less than or      |
+    // |                      | equal to the operand value.                           |
+    // |                      | It expects only one operand value. Supported types    |
+    // |                      | are: String, Number and Binary.                       |
+    // |                      |                                                       |
+    // +----------------------+-------------------------------------------------------+
+    // | LessThan             | Compares the filter attribute to be less than the     |
+    // |                      | operand value.                                        |
+    // |                      | It expects only one operand value. Supported types    |
+    // |                      | are: String, Number and Binary.                       |
+    // |                      |                                                       |
+    // +----------------------+-------------------------------------------------------+
+    // | GreaterThanOrEqualTo | Compares the filter attribute to be greater than or   |
+    // |                      | equal to the operand value.                           |
+    // |                      | It expects only one operand value. Supported types    |
+    // |                      | are: String, Number and Binary.                       |
+    // |                      |                                                       |
+    // +----------------------+-------------------------------------------------------+
+    // | GreaterThan          | Compares the filter attribute to be greater than the  |
+    // |                      | operand value.                                        |
+    // |                      | It expects only one operand value. Supported types    |
+    // |                      | are: String, Number and Binary.                       |
+    // |                      |                                                       |
+    // +----------------------+-------------------------------------------------------+
+    // | Between              | Compares the filter attribute to be between the       |
+    // |                      | operand values.                                       |
+    // |                      | It expects two operand values. Supported types are:   |
+    // |                      | String, Number and Binary.                            |
+    // |                      |                                                       |
+    // +----------------------+-------------------------------------------------------+
+    // | Exists               | Checks the filter attribute to exist.                 |
+    // |                      | It does not expect any operand value. Supported types |
+    // |                      | are: String, Number, Binary, Boolean and Null.        |
+    // |                      |                                                       |
+    // +----------------------+-------------------------------------------------------+
+    // | NotExists            | Checks the filter attribute to not exist.             |
+    // |                      | It does not expect any operand value. Supported types |
+    // |                      | are: String, Number, Binary, Boolean and Null.        |
+    // |                      |                                                       |
+    // +----------------------+-------------------------------------------------------+
+    // | Contains             | Checks the filter attribute to contain the operand    |
+    // |                      | value.                                                |
+    // |                      | It expects only one operand value. Supported types    |
+    // |                      | are: String and Binary.                               |
+    // |                      |                                                       |
+    // +----------------------+-------------------------------------------------------+
+    // | NotContains          | Checks the filter attribute to not contain the        |
+    // |                      | operand value.                                        |
+    // |                      | It expects only one operand value. Supported types    |
+    // |                      | are: String and Binary.                               |
+    // |                      |                                                       |
+    // +----------------------+-------------------------------------------------------+
+    // | BeginsWith           | Checks the filter attribute to begin with the operand |
+    // |                      | value.                                                |
+    // |                      | It expects only one operand value. Supported types    |
+    // |                      | are: String and Binary.                               |
+    // |                      |                                                       |
+    // +----------------------+-------------------------------------------------------+
+    // 
+    Condition  *string   `json:"condition"`
+    // DynamoDB attribute name.
+    Name       *string   `json:"name"`
+    // Data-type of the DynamoDB attribute.
+    // 
+    // +----------------+
+    // | Allowed values |
+    // +================+
+    // | String         |
+    // +----------------+
+    // | Number         |
+    // +----------------+
+    // | Binary         |
+    // +----------------+
+    // | Boolean        |
+    // +----------------+
+    // | Null           |
+    // +----------------+
+    // 
+    ClumioType *string   `json:"type"`
+    // Values for the attribute filter.
+    Values     []*string `json:"values"`
+}
+
+// DynamoDBGRRQueryFilter represents a custom type struct.
+// Filters based on which DynamoDB backup records are filtered in the query.
+type DynamoDBGRRQueryFilter struct {
+    // TODO: Add struct field description
+    AttributeFilters []*DynamoDBGRRAttributeFilter `json:"attribute_filters"`
+    // Partition Key value of the DynamoDB table.
+    PartitionKey     *string                       `json:"partition_key"`
+    // Sort Key filter of the DynamoDB table.
+    SortKeyFilter    *DynamoDBGRRSortKeyFilter     `json:"sort_key_filter"`
+}
+
+// DynamoDBGRRSortKeyFilter represents a custom type struct.
+// Sort Key filter of the DynamoDB table.
+type DynamoDBGRRSortKeyFilter struct {
+    // Filter condition on the DynamoDB sort key.
+    // 
+    // +----------------------+-------------------------------------------------------+
+    // |      Condition       |                         Usage                         |
+    // +======================+=======================================================+
+    // | EqualTo              | Compares the filter attribute to be equal to the      |
+    // |                      | operand value.                                        |
+    // |                      | It expects only one operand value. Supported types    |
+    // |                      | are: String, Number and Binary.                       |
+    // |                      |                                                       |
+    // +----------------------+-------------------------------------------------------+
+    // | NotEqualTo           | Compares the filter attribute to not be equal to the  |
+    // |                      | operand value.                                        |
+    // |                      | It expects only one operand value. Supported types    |
+    // |                      | are: String, Number and Binary.                       |
+    // |                      |                                                       |
+    // +----------------------+-------------------------------------------------------+
+    // | LessThanOrEqualTo    | Compares the filter attribute to be less than or      |
+    // |                      | equal to the operand value.                           |
+    // |                      | It expects only one operand value. Supported types    |
+    // |                      | are: String, Number and Binary.                       |
+    // |                      |                                                       |
+    // +----------------------+-------------------------------------------------------+
+    // | LessThan             | Compares the filter attribute to be less than the     |
+    // |                      | operand value.                                        |
+    // |                      | It expects only one operand value. Supported types    |
+    // |                      | are: String, Number and Binary.                       |
+    // |                      |                                                       |
+    // +----------------------+-------------------------------------------------------+
+    // | GreaterThanOrEqualTo | Compares the filter attribute to be greater than or   |
+    // |                      | equal to the operand value.                           |
+    // |                      | It expects only one operand value. Supported types    |
+    // |                      | are: String, Number and Binary.                       |
+    // |                      |                                                       |
+    // +----------------------+-------------------------------------------------------+
+    // | GreaterThan          | Compares the filter attribute to be greater than the  |
+    // |                      | operand value.                                        |
+    // |                      | It expects only one operand value. Supported types    |
+    // |                      | are: String, Number and Binary.                       |
+    // |                      |                                                       |
+    // +----------------------+-------------------------------------------------------+
+    // | Between              | Compares the filter attribute to be between the       |
+    // |                      | operand values.                                       |
+    // |                      | It expects two operand values. Supported types are:   |
+    // |                      | String, Number and Binary.                            |
+    // |                      |                                                       |
+    // +----------------------+-------------------------------------------------------+
+    // | Exists               | Checks the filter attribute to exist.                 |
+    // |                      | It does not expect any operand value. Supported types |
+    // |                      | are: String, Number and Binary.                       |
+    // |                      |                                                       |
+    // +----------------------+-------------------------------------------------------+
+    // | NotExists            | Checks the filter attribute to not exist.             |
+    // |                      | It does not expect any operand value. Supported types |
+    // |                      | are: String, Number and Binary.                       |
+    // |                      |                                                       |
+    // +----------------------+-------------------------------------------------------+
+    // | Contains             | Checks the filter attribute to contain the operand    |
+    // |                      | value.                                                |
+    // |                      | It expects only one operand value. Supported types    |
+    // |                      | are: String and Binary.                               |
+    // |                      |                                                       |
+    // +----------------------+-------------------------------------------------------+
+    // | NotContains          | Checks the filter attribute to not contain the        |
+    // |                      | operand value.                                        |
+    // |                      | It expects only one operand value. Supported types    |
+    // |                      | are: String and Binary.                               |
+    // |                      |                                                       |
+    // +----------------------+-------------------------------------------------------+
+    // | BeginsWith           | Checks the filter attribute to begin with the operand |
+    // |                      | value.                                                |
+    // |                      | It expects only one operand value. Supported types    |
+    // |                      | are: String and Binary.                               |
+    // |                      |                                                       |
+    // +----------------------+-------------------------------------------------------+
+    // 
+    Condition *string   `json:"condition"`
+    // Values for the attribute filter.
+    Values    []*string `json:"values"`
+}
+
+// DynamoDBGrrSource represents a custom type struct.
+// The parameters for initiating a DynamoDB table backup query from a backup.
+type DynamoDBGrrSource struct {
+    // Performs the operation on a DynamoDB table within the specified backup.
+    // Use the [GET /backups/aws/dynamodb-tables](#operation/list-backup-aws-dynamodb-tables)
+    // endpoint to fetch valid values.
+    BackupId *string `json:"backup_id"`
+}
+
+// DynamoDBGrrTarget represents a custom type struct.
+// The destination information for the operation, representing the access option
+// for the query results. Users can access the query results by direct download or by
+// email. The direct download (`direct_download`) option allows users to directly download
+// the restored file from the Clumio UI. The email (`email`) option allows users to access
+// the restored file using a downloadable link they receive by email. If a target is not
+// specified, then `target` defaults to `direct_download`.
+type DynamoDBGrrTarget struct {
+    // Specifies the Clumio UI as the restore target for direct download. Optionally set
+    // `direct_download: {}`. If a target is not specified, then `target` defaults to
+    // `direct_download`.
+    DirectDownload interface{}                      `json:"direct_download"`
+    // Specifies a download link (accessible via emails) as the restore target. If not
+    // specified, `target` defaults to `direct_download`.
+    Email          *EmailRecipientsDataAccessOption `json:"email"`
+    // Determines whether the query is preview only. If `true`, a preview of the
+    // query results will be provided in the response immediately.
+    // If `false` or omitted, a task will be queued to make results
+    // of the query available for asynchronous download.
+    Preview        *bool                            `json:"preview"`
+}
+
+// DynamoDBQueryPreviewResult represents a custom type struct.
+// If preview was not set to true in the request, then the result of the query will be
+// available for download asynchronously and this field has a value of `null`.
+type DynamoDBQueryPreviewResult struct {
+    // The columns of the previewed query result.
+    Attributes []*string   `json:"attributes"`
+    // The rows of the previewed query result.
+    Items      []*[]string `json:"items"`
+}
+
+// DynamoDBRestoreSourceBackupOptions represents a custom type struct.
+// The parameters for initiating a DynamoDB table restore from a backup.
+type DynamoDBRestoreSourceBackupOptions struct {
+    // The Clumio-assigned ID of the DynamoDB table backup to be restored. Use the
+    // [GET /backups/aws/dynamodb-tables](#operation/list-backup-aws-dynamodb-tables)
+    // endpoint to fetch valid values.
+    BackupId *string `json:"backup_id"`
+}
+
+// DynamoDBRestoreSourcePitrOptions represents a custom type struct.
+// The parameters for initiating a DynamoDB table point-in-time restore.
+// Only one of `timestamp` or `use_latest_restorable_time` should be set.
+type DynamoDBRestoreSourcePitrOptions struct {
+    // The Clumio-assigned ID of the DynamoDB table to be restored.
+    // Use the [GET /datasources/aws/dynamodb-tables](#operation/list-aws-dynamodb-tables)
+    // endpoint to fetch valid values.
+    TableId                 *string `json:"table_id"`
+    // A point in time to be restored in RFC-3339 format.
+    Timestamp               *string `json:"timestamp"`
+    // Restore the table to the latest possible time.
+    UseLatestRestorableTime *bool   `json:"use_latest_restorable_time"`
+}
+
+// DynamoDBTableBackupLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type DynamoDBTableBackupLinks struct {
+    // The HATEOAS link to this resource.
+    Self                      *HateoasSelfLink `json:"_self"`
+    // A resource-specific HATEOAS link.
+    RestoreAwsDynamodbRecords *HateoasLink     `json:"restore-aws-dynamodb-records"`
+    // A resource-specific HATEOAS link.
+    RestoreAwsDynamodbTable   *HateoasLink     `json:"restore-aws-dynamodb-table"`
+}
+
+// DynamoDBTableBackupListEmbedded represents a custom type struct.
+// Embedded responses related to the resource.
+type DynamoDBTableBackupListEmbedded struct {
+    // TODO: Add struct field description
+    Items []*DynamoDBTableBackupWithETag `json:"items"`
+}
+
+// DynamoDBTableBackupListLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type DynamoDBTableBackupListLinks struct {
+    // The HATEOAS link to the first page of results.
+    First *HateoasFirstLink `json:"_first"`
+    // The HATEOAS link to the last page of results.
+    Last  *HateoasLastLink  `json:"_last"`
+    // The HATEOAS link to the next page of results.
+    Next  *HateoasNextLink  `json:"_next"`
+    // The HATEOAS link to the previous page of results.
+    Prev  *HateoasPrevLink  `json:"_prev"`
+    // The HATEOAS link to this resource.
+    Self  *HateoasSelfLink  `json:"_self"`
+}
+
+// DynamoDBTableBackupWithETag represents a custom type struct
+type DynamoDBTableBackupWithETag struct {
+    // The ETag value.
+    Etag                   *string                   `json:"_etag"`
+    // URLs to pages related to the resource.
+    Links                  *DynamoDBTableBackupLinks `json:"_links"`
+    // The AWS-assigned ID of the account associated with this database at the time of backup.
+    AccountNativeId        *string                   `json:"account_native_id"`
+    // The AWS region associated with this environment.
+    AwsRegion              *string                   `json:"aws_region"`
+    // The billing mode of the DynamoDB table. Possible values are PROVISIONED or PAY_PER_REQUEST.
+    // For [POST /restores/aws/dynamodb](#operation/restore-aws-dynamodb-table), this is defaulted to the
+    // configuration of source table if both 'billing_mode' and 'provisioned_throughput' are empty or `null`.
+    BillingMode            *string                   `json:"billing_mode"`
+    // The timestamp of when this backup expires. Represented in RFC-3339 format.
+    ExpirationTimestamp    *string                   `json:"expiration_timestamp"`
+    // Represents the properties of a global secondary index.
+    GlobalSecondaryIndexes []*GlobalSecondaryIndex   `json:"global_secondary_indexes"`
+    // Describes the version of global tables in use, if the table is replicated across AWS Regions. If the table
+    // is not a global table, then this field has a value of `null`. Possible values are 2017.11.29 or 2019.11.21.
+    // For [POST /restores/aws/dynamodb](#operation/restore-aws-dynamodb-table), the version is defaulted to 2019.11.21.
+    GlobalTableVersion     *string                   `json:"global_table_version"`
+    // The Clumio-assigned ID of the backup.
+    Id                     *string                   `json:"id"`
+    // The number of items in DynamoDB table backup.
+    ItemCount              *int64                    `json:"item_count"`
+    // Represents the properties of a local secondary index.
+    LocalSecondaryIndexes  []*LocalSecondaryIndex    `json:"local_secondary_indexes"`
+    // Represents the provisioned throughput settings for a DynamoDB table.
+    ProvisionedThroughput  *ProvisionedThroughput    `json:"provisioned_throughput"`
+    // Contains the details of the replica.
+    Replicas               []*ReplicaDescription     `json:"replicas"`
+    // The size of the DynamoDB table backup in bytes.
+    Size                   *int64                    `json:"size"`
+    // Represents the server-side encryption settings for a table.
+    SseSpecification       *SSESpecification         `json:"sse_specification"`
+    // The timestamp of when this backup started. Represented in RFC-3339 format.
+    StartTimestamp         *string                   `json:"start_timestamp"`
+    // The table class of the DynamoDB table. Possible values are STANDARD or STANDARD_INFREQUENT_ACCESS.
+    // For [POST /restores/aws/dynamodb](#operation/restore-aws-dynamodb-table), this is defaulted to the
+    // STANDARD storage class if empty.
+    TableClass             *string                   `json:"table_class"`
+    // The Clumio-assigned ID of the DynamoDB table.
+    TableId                *string                   `json:"table_id"`
+    // The name of the DynamoDB table.
+    TableName              *string                   `json:"table_name"`
+    // A tag created through AWS Console which can be applied to EBS volumes.
+    Tags                   []*AwsTagCommonModel      `json:"tags"`
+    // The type of backup. Possible values include `clumio_backup` and `aws_snapshot`.
+    ClumioType             *string                   `json:"type"`
+}
+
+// DynamoDBTableRestoreSource represents a custom type struct.
+// The DynamoDB table restore backup or point-in-time restore options. Only one of these fields should be set.
+type DynamoDBTableRestoreSource struct {
+    // The parameters for initiating a DynamoDB table point-in-time restore.
+    // Only one of `timestamp` or `use_latest_restorable_time` should be set.
+    ContinuousBackup  *DynamoDBRestoreSourcePitrOptions   `json:"continuous_backup"`
+    // The parameters for initiating a DynamoDB table restore from a backup.
+    SecurevaultBackup *DynamoDBRestoreSourceBackupOptions `json:"securevault_backup"`
+}
+
+// DynamoDBTableRestoreTarget represents a custom type struct.
+// The configuration of the restored DynamoDB table.
+// For restore from snapshot, use the DynamoDB table configurations present at time of snapshot obtained from
+// [GET /backups/aws/dynamodb-tables/{backup_id}](#operation/read-backup-aws-dynamodb-table) and for restoring point-in-time,
+// use the current configuration of the table from [GET /datasources/aws/dynamodb-tables/{table_id}](#operation/read-aws-dynamodb-table).
+// The table properties are set to empty or to their default values if they are specified as `null`.
+type DynamoDBTableRestoreTarget struct {
+    // The billing mode of the DynamoDB table. Possible values are PROVISIONED or PAY_PER_REQUEST.
+    // For [POST /restores/aws/dynamodb](#operation/restore-aws-dynamodb-table), this is defaulted to the
+    // configuration of source table if both 'billing_mode' and 'provisioned_throughput' are empty or `null`.
+    BillingMode            *string                 `json:"billing_mode"`
+    // The Clumio-assigned ID of the AWS environment to be used as the restore destination.
+    // Use the [GET /datasources/aws/environments](#operation/list-aws-environments) endpoint
+    // to fetch valid values.
+    EnvironmentId          *string                 `json:"environment_id"`
+    // Represents the properties of a global secondary index.
+    GlobalSecondaryIndexes []*GlobalSecondaryIndex `json:"global_secondary_indexes"`
+    // Describes the version of global tables in use, if the table is replicated across AWS Regions. If the table
+    // is not a global table, then this field has a value of `null`. Possible values are 2017.11.29 or 2019.11.21.
+    // For [POST /restores/aws/dynamodb](#operation/restore-aws-dynamodb-table), the version is defaulted to 2019.11.21.
+    GlobalTableVersion     *string                 `json:"global_table_version"`
+    // Represents the properties of a local secondary index.
+    LocalSecondaryIndexes  []*LocalSecondaryIndex  `json:"local_secondary_indexes"`
+    // Represents the provisioned throughput settings for a DynamoDB table.
+    ProvisionedThroughput  *ProvisionedThroughput  `json:"provisioned_throughput"`
+    // Contains the details of the replica.
+    Replicas               []*ReplicaDescription   `json:"replicas"`
+    // Represents the server-side encryption settings for a table.
+    SseSpecification       *SSESpecification       `json:"sse_specification"`
+    // The table class of the DynamoDB table. Possible values are STANDARD or STANDARD_INFREQUENT_ACCESS.
+    // For [POST /restores/aws/dynamodb](#operation/restore-aws-dynamodb-table), this is defaulted to the
+    // STANDARD storage class if empty.
+    TableClass             *string                 `json:"table_class"`
+    // The name of the new table to which the backup must be restored.
+    TableName              *string                 `json:"table_name"`
+    // A tag created through AWS Console which can be applied to EBS volumes.
+    Tags                   []*AwsTagCommonModel    `json:"tags"`
 }
 
 // EBS represents a custom type struct
@@ -1466,7 +2012,7 @@ type EBS struct {
 }
 
 // EBSBackupAdvancedSetting represents a custom type struct.
-// Backup tier to store the backup in. Valid values are: `` for standard, `lite`
+// Backup tier to store the backup in. Valid values are: (empty) equivalent to standard, `standard`, and `lite`.
 type EBSBackupAdvancedSetting struct {
     // TODO: Add struct field description
     BackupTier *string `json:"backup_tier"`
@@ -1538,11 +2084,38 @@ type EBSBackupV1 struct {
     VolumeNativeId       *string              `json:"volume_native_id"`
 }
 
+// EBSRestoreSource represents a custom type struct.
+// The EBS volume backup to be restored.
+type EBSRestoreSource struct {
+    // The Clumio-assigned ID of the EBS volume backup to be restored. Use the [GET /backups/aws/ebs-volumes](#operation/list-aws-ebs-volumes) endpoint to fetch valid values.
+    BackupId *string `json:"backup_id"`
+}
+
 // EBSRestoreSourceV1 represents a custom type struct.
 // The EBS volume backup to be restored.
 type EBSRestoreSourceV1 struct {
     // The Clumio-assigned ID of the EBS volume backup to be restored. Use the [GET /backups/aws/ebs-volumes](#operation/list-aws-ebs-volumes) endpoint to fetch valid values.
     BackupId *string `json:"backup_id"`
+}
+
+// EBSRestoreTarget represents a custom type struct.
+// The configuration of the EBS volume to be restored.
+type EBSRestoreTarget struct {
+    // The availability zone into which the EBS volume is restored. For example, `us-west-2a`.
+    // Use the [GET /datasources/aws/environments](#operation/list-aws-environments) endpoint to fetch valid values.
+    AwsAz          *string              `json:"aws_az"`
+    // The Clumio-assigned ID of the AWS environment to be used as the restore destination. Use the [GET /datasources/aws/environments](#operation/list-aws-environments) endpoint to fetch valid values.
+    EnvironmentId  *string              `json:"environment_id"`
+    // Iops of the volume to be restored.
+    // Iops field is only applicable if volume_type is gp3, io1, io2.
+    Iops           *int64               `json:"iops"`
+    // The KMS encryption key ID used to encrypt the EBS volume data. The KMS encryption key ID is stored in the AWS cloud as part of your AWS account.
+    KmsKeyNativeId *string              `json:"kms_key_native_id"`
+    // A tag created through AWS Console which can be applied to EBS volumes.
+    Tags           []*AwsTagCommonModel `json:"tags"`
+    // Type of the volume to restore as.
+    // Allowed Values: gp2, gp3, io1, io2, sc1, st1, standard.
+    ClumioType     *string              `json:"type"`
 }
 
 // EBSRestoreTargetV1 represents a custom type struct.
@@ -1559,11 +2132,137 @@ type EBSRestoreTargetV1 struct {
     Tags           []*AwsTagCommonModel `json:"tags"`
 }
 
+// EC2AMIRestoreTarget represents a custom type struct.
+// The configuration for the restore to AMI.
+type EC2AMIRestoreTarget struct {
+    // The description for the AMI.
+    Description            *string                            `json:"description"`
+    // TODO: Add struct field description
+    EbsBlockDeviceMappings []*EC2RestoreEbsBlockDeviceMapping `json:"ebs_block_device_mappings"`
+    // The Clumio-assigned ID of the AWS environment to be used as the restore destination.
+    // Use the [GET /datasources/aws/environments](#operation/list-aws-environments) endpoint
+    // to fetch valid values.
+    EnvironmentId          *string                            `json:"environment_id"`
+    // The name for the AMI.
+    Name                   *string                            `json:"name"`
+    // A tag created through AWS Console which can be applied to EBS volumes.
+    Tags                   []*AwsTagCommonModel               `json:"tags"`
+}
+
 // EC2BackupAdvancedSetting represents a custom type struct.
-// Backup tier to store the backup in. Valid values are: `` for standard, `lite`
+// Backup tier to store the backup in. Valid values are: (empty) equivalent to standard, `standard`, and `lite`.
 type EC2BackupAdvancedSetting struct {
     // TODO: Add struct field description
     BackupTier *string `json:"backup_tier"`
+}
+
+// EC2InstanceRestoreTarget represents a custom type struct.
+// The configuration of an EC2 instance to be restored.
+type EC2InstanceRestoreTarget struct {
+    // The AWS-assigned ID of the Amazon Machine Image (AMI) used to launch the EC2 instance.
+    AmiNativeId            *string                            `json:"ami_native_id"`
+    // The availability zone for the instance. This is determined by the subnet chosen to
+    // restore the EC2 instance into.
+    AwsAz                  *string                            `json:"aws_az"`
+    // TODO: Add struct field description
+    EbsBlockDeviceMappings []*EC2RestoreEbsBlockDeviceMapping `json:"ebs_block_device_mappings"`
+    // The Clumio-assigned ID of the AWS environment to be used as the restore destination.
+    // Use the [GET /datasources/aws/environments](#operation/list-aws-environments) endpoint
+    // to fetch valid values.
+    EnvironmentId          *string                            `json:"environment_id"`
+    // The name of IAM instance profile to launch the instance with.
+    IamInstanceProfileName *string                            `json:"iam_instance_profile_name"`
+    // The name of SSH KeyPair to be used.
+    KeyPairName            *string                            `json:"key_pair_name"`
+    // TODO: Add struct field description
+    NetworkInterfaces      []*EC2RestoreNetworkInterface      `json:"network_interfaces"`
+    // Whether or not to power the instance on at the end of restore. If this is set
+    // to true, the instance state will be 'running.' If it is set to false, the state
+    // will be 'stopped.'
+    ShouldPowerOn          *bool                              `json:"should_power_on"`
+    // The AWS-assigned ID of the subnet to launch the instance into.
+    SubnetNativeId         *string                            `json:"subnet_native_id"`
+    // A tag created through AWS Console which can be applied to EBS volumes.
+    Tags                   []*AwsTagCommonModel               `json:"tags"`
+    // The AWS-assigned ID of the vpc to launch the instance into.
+    VpcNativeId            *string                            `json:"vpc_native_id"`
+}
+
+// EC2RestoreEbsBlockDeviceMapping represents a custom type struct
+type EC2RestoreEbsBlockDeviceMapping struct {
+    // The AWS-assigned ID for a customer managed KMS key under which the
+    // EBS volume is encrypted.
+    KmsKeyNativeId *string              `json:"kms_key_native_id"`
+    // The device name where the EBS volume is attached to the instance, needed by
+    // instance_restore_target and ami_restore_target restore type and by volumes_restore_target
+    // when target_instance_native_id is provided.
+    Name           *string              `json:"name"`
+    // A tag created through AWS Console which can be applied to EBS volumes.
+    Tags           []*AwsTagCommonModel `json:"tags"`
+    // The AWS-assigned ID of the backed-up volume.
+    VolumeNativeId *string              `json:"volume_native_id"`
+}
+
+// EC2RestoreNetworkInterface represents a custom type struct
+type EC2RestoreNetworkInterface struct {
+    // The position of the network interface in the attachment order. A primary
+    // network interface has a device index of 0.
+    DeviceIndex              *int64    `json:"device_index"`
+    // The AWS-assigned ID of the existing network interface to attach to the
+    // restored instance. If one wishes to restore this network interface from the backup,
+    // then this field should be set to `null`.
+    NetworkInterfaceNativeId *string   `json:"network_interface_native_id"`
+    // Whether or not a default network interface should be restored. It will not have any of
+    // the same configurations as the backup network interface.
+    RestoreDefault           *bool     `json:"restore_default"`
+    // Whether or not the network interface should be restored the backup network interface.
+    // It will be configured with the same configurations as the backup network interface.
+    RestoreFromBackup        *bool     `json:"restore_from_backup"`
+    // The AWS-assigned IDs for the security groups to associate with this network interface.
+    // If one wishes to attach an existing network interface, then this field should be
+    // set to `null`.
+    SecurityGroupNativeIds   []*string `json:"security_group_native_ids"`
+    // The AWS-assigned ID of the subnet associated with the network interface.
+    // If one wishes to attach an existing network interface, then this field should be
+    // set to `null`.
+    SubnetNativeId           *string   `json:"subnet_native_id"`
+}
+
+// EC2RestoreSource represents a custom type struct.
+// The EC2 instance backup to be restored.
+type EC2RestoreSource struct {
+    // The Clumio-assigned ID of the EC2 instance backup to be restored. Use the
+    // [GET /backups/aws/ec2-instances](#operation/list-aws-ec2-instances)
+    // endpoint to fetch valid values.
+    BackupId *string `json:"backup_id"`
+}
+
+// EC2RestoreTarget represents a custom type struct.
+// The target configuration per EC2 restore type. Only one of these fields should be set.
+type EC2RestoreTarget struct {
+    // The configuration for the restore to AMI.
+    AmiRestoreTarget      *EC2AMIRestoreTarget      `json:"ami_restore_target"`
+    // The configuration of an EC2 instance to be restored.
+    InstanceRestoreTarget *EC2InstanceRestoreTarget `json:"instance_restore_target"`
+    // The target configuration for the volumes to be restored.
+    VolumesRestoreTarget  *EC2VolumesRestoreTarget  `json:"volumes_restore_target"`
+}
+
+// EC2VolumesRestoreTarget represents a custom type struct.
+// The target configuration for the volumes to be restored.
+type EC2VolumesRestoreTarget struct {
+    // The availability zone for restoring the volumes unattached. Either this or
+    // target_instance_native_id needs to be specified.
+    AwsAz                  *string                            `json:"aws_az"`
+    // TODO: Add struct field description
+    EbsBlockDeviceMappings []*EC2RestoreEbsBlockDeviceMapping `json:"ebs_block_device_mappings"`
+    // The Clumio-assigned ID of the AWS environment to be used as the restore destination.
+    // Use the [GET /datasources/aws/environments](#operation/list-aws-environments) endpoint
+    // to fetch valid values.
+    EnvironmentId          *string                            `json:"environment_id"`
+    // The aws native ID of the EC2 instance to be used to attach the restored volumes.
+    // If not present, then aws_az need to be specified.
+    TargetInstanceNativeId *string                            `json:"target_instance_native_id"`
 }
 
 // EbsAssetInfo represents a custom type struct
@@ -1645,6 +2344,16 @@ type EmailDownloadDataAccessOption struct {
     EmailAddress *string `json:"email_address"`
     // The optional message sent as part of the email.
     Message      *string `json:"message"`
+}
+
+// EmailRecipientsDataAccessOption represents a custom type struct.
+// Specifies a download link (accessible via emails) as the restore target. If not
+// specified, `target` defaults to `direct_download`.
+type EmailRecipientsDataAccessOption struct {
+    // The optional message sent as part of the email.
+    Message         *string   `json:"message"`
+    // The recipient email addresses who will receive the download link to the restored records.
+    RecipientEmails []*string `json:"recipient_emails"`
 }
 
 // EntityGroupAssignmetUpdates represents a custom type struct.
@@ -1953,6 +2662,54 @@ type GeneralSettingsLinks struct {
     UpdateGeneralSettings *HateoasLink     `json:"update-general-settings"`
 }
 
+// GenerateRestoredFilePasscodeLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type GenerateRestoredFilePasscodeLinks struct {
+    // The HATEOAS link to this resource.
+    Self *HateoasSelfLink `json:"_self"`
+}
+
+// GlobalSecondaryIndex represents a custom type struct.
+// Represents the properties of a global secondary index.
+type GlobalSecondaryIndex struct {
+    // The name of the global secondary index.
+    IndexName             *string                `json:"index_name"`
+    // Represents a single element of a key schema. A key schema specifies the attributes that make up the primary key
+    // of a table, or the key attributes of an index.
+    KeySchema             []*KeySchemaElement    `json:"key_schema"`
+    // Represents attributes that are copied (projected) from the table into an index. These are in addition to the
+    // primary key attributes and index key attributes, which are automatically projected.
+    Projection            *Projection            `json:"projection"`
+    // Represents the provisioned throughput settings for a DynamoDB table.
+    ProvisionedThroughput *ProvisionedThroughput `json:"provisioned_throughput"`
+}
+
+// GrrSource represents a custom type struct.
+// The RDS database backup to be queried.
+type GrrSource struct {
+    // Performs the operation on a database within the specified backup.
+    // Use the [GET /backups/aws/rds-resources](#operation/list-backup-aws-rds-resources)
+    // endpoint to fetch valid values.
+    BackupId     *string `json:"backup_id"`
+    // Performs the operation on the database with the specified name.
+    // Use the [GET /backups/aws/rds-resources](#operation/list-backup-aws-rds-resource-databases)
+    // endpoint to fetch valid values.
+    DatabaseName *string `json:"database_name"`
+}
+
+// GrrTarget represents a custom type struct.
+// The query to perform on the source RDS database.
+type GrrTarget struct {
+    // Determines whether the query is preview only. If `true`, a preview of the
+    // query results will be provided in the response immediately.
+    // If `false` or omitted, a task will be queued to make the result
+    // of the query available for asynchronous download.
+    Preview        *bool   `json:"preview"`
+    // The SQL statement that is to be executed on the target database.
+    // For example, "SELECT * FROM employee WHERE id > 100"
+    QueryStatement *string `json:"query_statement"`
+}
+
 // HateoasCommonLinks represents a custom type struct
 type HateoasCommonLinks struct {
     // The HATEOAS link to this resource.
@@ -2142,6 +2899,17 @@ type InheritedFrom struct {
     Objecttype *string `json:"objectType"`
 }
 
+// KeySchemaElement represents a custom type struct.
+// Represents a single element of a key schema. A key schema specifies the attributes that make up the primary key
+// of a table, or the key attributes of an index.
+type KeySchemaElement struct {
+    // The name of a key attribute.
+    AttributeName *string `json:"attribute_name"`
+    // The role that this key attribute will assume.
+    // Possible values include: `HASH` - partition key and `RANGE` - sort key.
+    KeyType       *string `json:"key_type"`
+}
+
 // ListFileVersionsHateoasLink represents a custom type struct.
 // A HATEOAS link to the file versions associated with this resource.
 type ListFileVersionsHateoasLink struct {
@@ -2160,6 +2928,19 @@ type ListFileVersionsHateoasLinks struct {
     ListFileVersions *ListFileVersionsHateoasLink `json:"list-file-versions"`
 }
 
+// LocalSecondaryIndex represents a custom type struct.
+// Represents the properties of a local secondary index.
+type LocalSecondaryIndex struct {
+    // The name of the local secondary index
+    IndexName  *string             `json:"index_name"`
+    // Represents a single element of a key schema. A key schema specifies the attributes that make up the primary key
+    // of a table, or the key attributes of an index.
+    KeySchema  []*KeySchemaElement `json:"key_schema"`
+    // Represents attributes that are copied (projected) from the table into an index. These are in addition to the
+    // primary key attributes and index key attributes, which are automatically projected.
+    Projection *Projection         `json:"projection"`
+}
+
 // M365GroupingCriteria represents a custom type struct.
 // The entity type used to group organizational units for Microsoft 365 resources.
 type M365GroupingCriteria struct {
@@ -2167,7 +2948,6 @@ type M365GroupingCriteria struct {
     // organizational unit uses this data group.
     // To edit this data group, all organizational units using it must be deleted.
     IsEditable *bool   `json:"is_editable"`
-    // The entity type used to group organizational units for Microsoft 365 resources.
     // 
     // +---------------------+------------------------+
     // |     Entity Type     |        Details         |
@@ -2245,7 +3025,7 @@ type ManagementGroupListLinks struct {
 // MoveHostsLinks represents a custom type struct.
 // URLs to pages related to the resource.
 type MoveHostsLinks struct {
-    // Embedded responses related to the resource.
+    // URLs to pages related to the resource.
     Links *ReadTaskHateoasLinks `json:"_links"`
     // The HATEOAS link to this resource.
     Self  *HateoasSelfLink      `json:"_self"`
@@ -2354,6 +3134,10 @@ type MssqlDatabase struct {
     // 
     // for a complete list of compliance statuses.
     ComplianceStatus                        *string                `json:"compliance_status"`
+    // The Clumio-assigned ID of the failover cluster.
+    FailoverClusterId                       *string                `json:"failover_cluster_id"`
+    // The Microsoft SQL assigned name of the Failover Cluster
+    FailoverClusterName                     *string                `json:"failover_cluster_name"`
     // The Clumio-assigned ID of the group to which the standalone database belongs, in case of an
     // availability group database it will be empty.
     GroupId                                 *string                `json:"group_id"`
@@ -2569,6 +3353,8 @@ type MssqlHost struct {
     Id                             *string            `json:"id"`
     // The number of instances present in the host.
     InstanceCount                  *int64             `json:"instance_count"`
+    // IsPartOfFCI is a boolean field representing if the Host is part of Failover Cluster
+    IsPartOfFci                    *bool              `json:"is_part_of_fci"`
     // The Clumio-assigned ID of the organizational unit associated with the host.
     OrganizationalUnitId           *string            `json:"organizational_unit_id"`
     // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
@@ -2796,12 +3582,21 @@ type ObjectFilter struct {
     PrefixFilters     []*PrefixFilter `json:"prefix_filters"`
     // Storage class to include in the backup. If not specified, then all objects across all storage
     // classes will be backed up. Valid values are: `S3 Standard`, `S3 Standard-IA`,
-    // `S3 Intelligent-Tiering`, `S3 One Zone-IA`, `S3 Glacier` and `S3 Glacier Deep Archive`.
+    // `S3 Intelligent-Tiering`, and `S3 One Zone-IA`.
     StorageClasses    []*string       `json:"storage_classes"`
 }
 
+// OnDemandDynamoDBBackupLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type OnDemandDynamoDBBackupLinks struct {
+    // The HATEOAS link to this resource.
+    Self     *HateoasSelfLink     `json:"_self"`
+    // A HATEOAS link to the task associated with this resource.
+    ReadTask *ReadTaskHateoasLink `json:"read-task"`
+}
+
 // OnDemandSetting represents a custom type struct.
-// Settings for requesting on-demand backup directly
+// Settings for requesting on-demand backup directly.
 type OnDemandSetting struct {
     // Additional operation-specific policy settings. For operation types which do not support additional settings, this field is `null`.
     AdvancedSettings  *PolicyAdvancedSettings  `json:"advanced_settings"`
@@ -2936,18 +3731,16 @@ type PermissionModel struct {
 type Policy struct {
     // If the `embed` query parameter is set, displays the responses of the related resource,
     // as defined by the embeddable link specified.
-    Embedded                      *PolicyEmbedded    `json:"_embedded"`
+    Embedded             *PolicyEmbedded    `json:"_embedded"`
     // URLs to pages related to the resource.
-    Links                         *PolicyLinks       `json:"_links"`
+    Links                *PolicyLinks       `json:"_links"`
     // The status of the policy.
     // Refer to the Policy Activation Status table for a complete list of policy statuses.
-    ActivationStatus              *string            `json:"activation_status"`
-    // The Clumio-assigned IDs of the organizational units to whom the policy has been assigned.
-    AssignedOrganizationalUnitIds []*string          `json:"assigned_organizational_unit_ids"`
+    ActivationStatus     *string            `json:"activation_status"`
     // The created time of the policy in unix time.
-    CreatedTime                   *int64             `json:"created_time"`
+    CreatedTime          *int64             `json:"created_time"`
     // The Clumio-assigned ID of the policy.
-    Id                            *string            `json:"id"`
+    Id                   *string            `json:"id"`
     // The following table describes the possible lock statuses of a policy.
     // 
     // +----------+-------------------------------------------------------------------+
@@ -2962,25 +3755,25 @@ type Policy struct {
     // |          | will be rejected.                                                 |
     // +----------+-------------------------------------------------------------------+
     // 
-    LockStatus                    *string            `json:"lock_status"`
+    LockStatus           *string            `json:"lock_status"`
     // The user-provided name of the policy.
-    Name                          *string            `json:"name"`
+    Name                 *string            `json:"name"`
     // TODO: Add struct field description
-    Operations                    []*PolicyOperation `json:"operations"`
+    Operations           []*PolicyOperation `json:"operations"`
     // The Clumio-assigned ID of the organizational unit associated with the policy.
-    OrganizationalUnitId          *string            `json:"organizational_unit_id"`
+    OrganizationalUnitId *string            `json:"organizational_unit_id"`
     // The timezone for the policy.
-    Timezone                      *string            `json:"timezone"`
+    Timezone             *string            `json:"timezone"`
     // The updated time of the policy in unix time.
-    UpdatedTime                   *int64             `json:"updated_time"`
+    UpdatedTime          *int64             `json:"updated_time"`
 }
 
 // PolicyAdvancedSettings represents a custom type struct.
 // Additional operation-specific policy settings. For operation types which do not support additional settings, this field is `null`.
 type PolicyAdvancedSettings struct {
-    // Backup tier to store the backup in. Valid values are: `` for standard, `lite`
+    // Backup tier to store the backup in. Valid values are: (empty) equivalent to standard, `standard`, and `lite`.
     AwsEbsVolumeBackup     *EBSBackupAdvancedSetting             `json:"aws_ebs_volume_backup"`
-    // Backup tier to store the backup in. Valid values are: `` for standard, `lite`
+    // Backup tier to store the backup in. Valid values are: (empty) equivalent to standard, `standard`, and `lite`.
     AwsEc2InstanceBackup   *EC2BackupAdvancedSetting             `json:"aws_ec2_instance_backup"`
     // Additional policy configuration settings for the `mssql_database_backup` operation. If this operation is not of type `mssql_database_backup`, then this field is omitted from the response.
     Ec2MssqlDatabaseBackup *MSSQLDatabaseBackupAdvancedSetting   `json:"ec2_mssql_database_backup"`
@@ -3050,9 +3843,9 @@ type PolicyOperation struct {
     ActionSetting     *string                 `json:"action_setting"`
     // Additional operation-specific policy settings. For operation types which do not support additional settings, this field is `null`.
     AdvancedSettings  *PolicyAdvancedSettings `json:"advanced_settings"`
-    // The start and end times for the customized backup window.
+    // The start and end times of the customized backup window. Use of `backup_window` is deprecated, use `backup_window_tz` instead.
     BackupWindow      *BackupWindow           `json:"backup_window"`
-    // The start and end times for the customized backup window.
+    // The start and end times of the customized backup window. Use of `backup_window` is deprecated, use `backup_window_tz` instead.
     BackupWindowTz    *BackupWindow           `json:"backup_window_tz"`
     // The next start time of this operation in unix time.
     NextStartTime     *int64                  `json:"next_start_time"`
@@ -3066,6 +3859,27 @@ type PolicyOperation struct {
     ClumioType        *string                 `json:"type"`
 }
 
+// PolicyOperationInput represents a custom type struct
+type PolicyOperationInput struct {
+    // Determines whether the protection policy should take action now or during the specified backup window.
+    // If set to `immediate`, Clumio starts the backup process right away. If set to `window`, Clumio starts the backup process when the backup window (`backup_window`) opens.
+    // If set to `window` and `operation in ("aws_rds_resource_aws_snapshot", "mssql_log_backup", "ec2_mssql_log_backup")`,
+    // the backup window will not be determined by Clumio's backup window.
+    ActionSetting    *string                 `json:"action_setting"`
+    // Additional operation-specific policy settings. For operation types which do not support additional settings, this field is `null`.
+    AdvancedSettings *PolicyAdvancedSettings `json:"advanced_settings"`
+    // The start and end times of the customized backup window. Use of `backup_window` is deprecated, use `backup_window_tz` instead.
+    BackupWindow     *BackupWindow           `json:"backup_window"`
+    // The start and end times of the customized backup window. Use of `backup_window` is deprecated, use `backup_window_tz` instead.
+    BackupWindowTz   *BackupWindow           `json:"backup_window_tz"`
+    // backup_sla captures the SLA parameters
+    // backup_sla captures the SLA parameters
+    Slas             []*BackupSLA            `json:"slas"`
+    // The operation to be performed for this SLA set. Each SLA set corresponds to one and only one operation.
+    // Refer to the Policy Operation table for a complete list of policy operations.
+    ClumioType       *string                 `json:"type"`
+}
+
 // PrefixFilter represents a custom type struct.
 // PrefixFilter
 type PrefixFilter struct {
@@ -3073,6 +3887,18 @@ type PrefixFilter struct {
     ExcludedSubPrefixes []*string `json:"excluded_sub_prefixes"`
     // Prefix to include.
     Prefix              *string   `json:"prefix"`
+}
+
+// Projection represents a custom type struct.
+// Represents attributes that are copied (projected) from the table into an index. These are in addition to the
+// primary key attributes and index key attributes, which are automatically projected.
+type Projection struct {
+    // Represents the non-key attribute names which will be projected into the index.
+    // For [POST /restores/aws/dynamodb](#operation/restore-aws-dynamodb-table), this must be empty if
+    // 'projection_type' is ALL or KEYS_ONLY, and non-empty if 'projection_type' is INCLUDE.
+    NonKeyAttributes []*string `json:"non_key_attributes"`
+    // The set of attributes that are projected into the index. Valid Values: ALL, KEYS_ONLY, INCLUDE.
+    ProjectionType   *string   `json:"projection_type"`
 }
 
 // ProtectConfig represents a custom type struct.
@@ -3455,7 +4281,7 @@ type ProtectionGroupListLinks struct {
 type ProtectionGroupRestoreSource struct {
     // The Clumio-assigned ID of the protection group backup to be restored. Use the
     // [GET /backups/protection-groups](#operation/list-backup-protection-groups)
-    // endpoint to fetch valid values.
+    // endpoint to fetch valid values. 
     BackupId                  *string              `json:"backup_id"`
     // Search for or restore only objects that pass the source object filter.
     ObjectFilters             *SourceObjectFilters `json:"object_filters"`
@@ -3472,22 +4298,27 @@ type ProtectionGroupRestoreTarget struct {
     // The Clumio-assigned ID of the bucket to which the backup must be restored.
     // Use the [GET /datasources/aws/s3-buckets](#operation/list-aws-s3-buckets) endpoint
     // to fetch valid values.
-    BucketId      *string              `json:"bucket_id"`
+    BucketId                    *string              `json:"bucket_id"`
     // The Clumio-assigned ID of the AWS environment to be used as the restore destination.
     // Use the [GET /datasources/aws/s3-buckets/{bucket_id}](#operation/read-aws-s3-bucket) endpoint
     // to fetch the environment ID for a bucket.
-    EnvironmentId *string              `json:"environment_id"`
+    EnvironmentId               *string              `json:"environment_id"`
     // If overwrite is set to true, we will overwrite an object if it exists. If it's set to false,
-    // then we will fail the restore if an object already exists. The default value is false.
-    Overwrite     *bool                `json:"overwrite"`
+    // then we will fail the restore if an object already exists.
+    Overwrite                   *bool                `json:"overwrite"`
     // Prefix to restore the objects under. If more than one bucket is restored, the
     // bucket name will be appended to the prefix.
-    Prefix        *string              `json:"prefix"`
+    Prefix                      *string              `json:"prefix"`
+    // Whether to restore objects with their original storage class or not. 
+    // If it is `true`, `storage_class` must be empty.
+    // Otherwise, `storage_class` must be given.
+    RestoreOriginalStorageClass *bool                `json:"restore_original_storage_class"`
     // Storage class for restored objects. Valid values are: `S3 Standard`, `S3 Standard-IA`,
-    // `S3 Intelligent-Tiering` and `S3 One Zone-IA`.
-    StorageClass  *string              `json:"storage_class"`
+    // `S3 Intelligent-Tiering` and `S3 One Zone-IA`. 
+    // Note that this must be given unless `restore_original_storage_class` is `true`.
+    StorageClass                *string              `json:"storage_class"`
     // A tag created through AWS Console which can be applied to EBS volumes.
-    Tags          []*AwsTagCommonModel `json:"tags"`
+    Tags                        []*AwsTagCommonModel `json:"tags"`
 }
 
 // ProtectionGroupS3AssetBackup represents a custom type struct
@@ -3558,7 +4389,7 @@ type ProtectionGroupS3AssetBackupListLinks struct {
 type ProtectionGroupS3AssetRestoreSource struct {
     // The Clumio-assigned ID of the protection group S3 asset backup to be restored. Use the
     // [GET /backups/protection-groups/s3-assets](#operation/list-backup-protection-group-s3-assets)
-    // endpoint to fetch valid values.
+    // endpoint to fetch valid values. 
     BackupId      *string              `json:"backup_id"`
     // Search for or restore only objects that pass the source object filter.
     ObjectFilters *SourceObjectFilters `json:"object_filters"`
@@ -3649,6 +4480,42 @@ type ProtectionInfoWithRule struct {
     PolicyId             *string `json:"policy_id"`
 }
 
+// ProvisionedThroughput represents a custom type struct.
+// Represents the provisioned throughput settings for a DynamoDB table.
+type ProvisionedThroughput struct {
+    // The maximum number of strongly consistent reads consumed per second.
+    ReadCapacityUnits  *int64 `json:"read_capacity_units"`
+    // The maximum number of writes consumed per second.
+    WriteCapacityUnits *int64 `json:"write_capacity_units"`
+}
+
+// ProvisionedThroughputOverride represents a custom type struct.
+// Replica-specific provisioned throughput settings. If not specified, uses the source table's provisioned throughput settings.
+type ProvisionedThroughputOverride struct {
+    // The maximum number of strongly consistent reads consumed per second.
+    ReadCapacityUnits *int64 `json:"read_capacity_units"`
+}
+
+// RDSDatabaseTableColumn represents a custom type struct.
+// RDSDatabaseTableColumn denotes the model for rds database column
+type RDSDatabaseTableColumn struct {
+    // The name of the column.
+    Name       *string `json:"name"`
+    // The Hive data type of the column. Possible values include `int`, `bigint`, `string`, and `boolean`.
+    ClumioType *string `json:"type"`
+}
+
+// RDSLogicalPreviewQueryResult represents a custom type struct.
+// The preview of the query result, if `preview:true` in the request.
+// If preview was not set to true in the request, then the result of the query will be
+// available for download asynchronously.
+type RDSLogicalPreviewQueryResult struct {
+    // RDSDatabaseTableColumn denotes the model for rds database column
+    Columns []*RDSDatabaseTableColumn `json:"columns"`
+    // The rows of the previewed query result.
+    Rows    []*[]string               `json:"rows"`
+}
+
 // RPOBackupSLAParam represents a custom type struct.
 // The minimum frequency between backups for this SLA. Also known as the recovery point objective (RPO) interval.
 // For example, to configure the minimum frequency between backups to be every 2 days, set `unit="days"` and `value=2`.
@@ -3664,6 +4531,61 @@ type RPOBackupSLAParam struct {
 type RdsAssetInfo struct {
     // The current version of the feature.
     InstalledTemplateVersion *string `json:"installed_template_version"`
+}
+
+// RdsResourceRestoreSource represents a custom type struct.
+// The RDS resource backup or snapshot to be restored.  Only one of these fields should be set.
+type RdsResourceRestoreSource struct {
+    // The parameters for initiating an RDS restore from a backup.
+    Backup   *RdsResourceRestoreSourceAirGapOptions `json:"backup"`
+    // The parameters for initiating an RDS restore from a snapshot.
+    Snapshot *RdsResourceRestoreSourcePitrOptions   `json:"snapshot"`
+}
+
+// RdsResourceRestoreSourceAirGapOptions represents a custom type struct.
+// The parameters for initiating an RDS restore from a backup.
+type RdsResourceRestoreSourceAirGapOptions struct {
+    // The Clumio-assigned ID of the RDS backup to be restored.
+    // Use the [GET /backups/aws/rds-resources](#operation/list-backup-aws-rds-resources)
+    // endpoint to fetch valid values.
+    BackupId *string `json:"backup_id"`
+}
+
+// RdsResourceRestoreSourcePitrOptions represents a custom type struct.
+// The parameters for initiating an RDS restore from a snapshot.
+type RdsResourceRestoreSourcePitrOptions struct {
+    // The Clumio-assigned ID of the RDS resource to be restored.
+    // Use the [GET /datasources/aws/rds-resources](#operation/list-aws-rds-resources)
+    // endpoint to fetch valid values.
+    ResourceId *string `json:"resource_id"`
+    // A point in time to be restored in RFC-3339 format.
+    Timestamp  *string `json:"timestamp"`
+}
+
+// RdsResourceRestoreTarget represents a custom type struct.
+// The configuration of the RDS resource to be restored.
+type RdsResourceRestoreTarget struct {
+    // The Clumio-assigned ID of the AWS environment to be used as the restore destination.
+    // Use the [GET /datasources/aws/environments](#operation/list-aws-environments) endpoint to fetch valid values.
+    EnvironmentId          *string              `json:"environment_id"`
+    // The instance class of the RDS resources to be created. Possible values include `db.r5.2xlarge` and `db.t2.small`.
+    InstanceClass          *string              `json:"instance_class"`
+    // Designates whether the restored RDS resource also has a public IP address in addition to the private IP address.
+    IsPubliclyAccessible   *bool                `json:"is_publicly_accessible"`
+    // The AWS-assigned ID of the KMS encryption key used to encrypt data in this RDS resource.
+    KmsKeyNativeId         *string              `json:"kms_key_native_id"`
+    // The name given to the restored RDS resource.
+    // The name must follow AWS RDS naming conventions:
+    // https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Limits.html#RDS_Limits.Constraints
+    Name                   *string              `json:"name"`
+    // Option group name to be added to the restored RDS resource
+    OptionGroupName        *string              `json:"option_group_name"`
+    // The AWS-assigned IDs of the security groups to be associated with the restored RDS resource.
+    SecurityGroupNativeIds []*string            `json:"security_group_native_ids"`
+    // The AWS-assigned name of the subnet group to be associated with the restored RDS resource.
+    SubnetGroupName        *string              `json:"subnet_group_name"`
+    // A tag created through AWS Console which can be applied to EBS volumes.
+    Tags                   []*AwsTagCommonModel `json:"tags"`
 }
 
 // RdsTemplateInfo represents a custom type struct
@@ -3683,9 +4605,27 @@ type ReadPolicyDefinitionHateoasLink struct {
     ClumioType *string `json:"type"`
 }
 
+// ReadTaskHateoasLink represents a custom type struct.
+// A HATEOAS link to the task associated with this resource.
+type ReadTaskHateoasLink struct {
+    // The URI for the referenced operation.
+    Href       *string `json:"href"`
+    // Determines whether the "href" link is a URI template. If set to `true`, the "href" link is a URI template.
+    Templated  *bool   `json:"templated"`
+    // The HTTP method to be used with the "href" link for the referenced operation.
+    ClumioType *string `json:"type"`
+}
+
 // ReadTaskHateoasLinks represents a custom type struct.
-// Embedded responses related to the resource.
+// URLs to pages related to the resource.
 type ReadTaskHateoasLinks struct {
+    // A HATEOAS link to the task associated with this resource.
+    ReadTask *ReadTaskHateoasLink `json:"read-task"`
+}
+
+// ReadTaskHateoasOuterEmbedded represents a custom type struct.
+// Embedded responses related to the resource.
+type ReadTaskHateoasOuterEmbedded struct {
     // Embeds the associated task of a resource in the response if requested using the `embed` query parameter.
     ReadTask interface{} `json:"read-task"`
 }
@@ -3706,6 +4646,28 @@ type ReadVCenterObjectProtectionStatsHateoasLink struct {
 type ReadVMwareVCenterProtectionStatsLinks struct {
     // The HATEOAS link to this resource.
     Self *HateoasSelfLink `json:"_self"`
+}
+
+// ReplicaDescription represents a custom type struct.
+// Contains the details of the replica.
+type ReplicaDescription struct {
+    // Represents the properties of a replica global secondary index.
+    GlobalSecondaryIndexes        []*ReplicaGlobalSecondaryIndexDescription `json:"global_secondary_indexes"`
+    // The AWS KMS key of the replica that will be used for AWS KMS encryption.
+    KmsMasterKeyId                *string                                   `json:"kms_master_key_id"`
+    // Replica-specific provisioned throughput settings. If not specified, uses the source table's provisioned throughput settings.
+    ProvisionedThroughputOverride *ProvisionedThroughputOverride            `json:"provisioned_throughput_override"`
+    // The name of the Region.
+    RegionName                    *string                                   `json:"region_name"`
+}
+
+// ReplicaGlobalSecondaryIndexDescription represents a custom type struct.
+// Represents the properties of a replica global secondary index.
+type ReplicaGlobalSecondaryIndexDescription struct {
+    // The name of the global secondary index.
+    IndexName                     *string                        `json:"index_name"`
+    // Replica-specific provisioned throughput settings. If not specified, uses the source table's provisioned throughput settings.
+    ProvisionedThroughputOverride *ProvisionedThroughputOverride `json:"provisioned_throughput_override"`
 }
 
 // ReportDownload represents a custom type struct
@@ -3816,46 +4778,140 @@ type ResourcePoolWithETag struct {
 type RestEntity struct {
     // A system-generated ID assigned to this entity.
     Id         *string `json:"id"`
-    // The following table describes the entity types that Clumio supports.
     // 
-    // +--------------------------------+---------------------------------------------+
-    // |          Entity Type           |                   Details                   |
-    // +================================+=============================================+
-    // | vmware_vcenter                 | VMware vCenter.                             |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_vm                      | VMware virtual machine.                     |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_vm_folder               | VMware VM folder.                           |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_datacenter              | VMware data center.                         |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_datacenter_folder       | VMware data center folder.                  |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_tag                     | VMware tag.                                 |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_category                | VMware tag category.                        |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_compute_resource        | VMware compute resource.                    |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_compute_resource_folder | VMware compute resource folder.             |
-    // +--------------------------------+---------------------------------------------+
-    // | aws_ebs_volume                 | AWS EBS volume.                             |
-    // +--------------------------------+---------------------------------------------+
-    // | aws_connection                 | AWS connection mediated by a CloudFormation |
-    // |                                | stack.                                      |
-    // +--------------------------------+---------------------------------------------+
-    // | aws_environment                | AWS environment specified by an             |
-    // |                                | account/region pair.                        |
-    // +--------------------------------+---------------------------------------------+
-    // | aws_tag                        | AWS tag.                                    |
-    // +--------------------------------+---------------------------------------------+
-    // | aws_cmk                        | AWS Customer Master Key used to encrypt     |
-    // |                                | data.                                       |
-    // +--------------------------------+---------------------------------------------+
+    // Entity Type
+    // Details
+    // 
+    // 
+    // vmware_vcenter
+    // VMware vCenter.
+    // 
+    // 
+    // vmware_vm
+    // VMware virtual machine.
+    // 
+    // 
+    // vmware_vm_folder
+    // VMware VM folder.
+    // 
+    // 
+    // vmware_datacenter
+    // VMware data center.
+    // 
+    // 
+    // vmware_datacenter_folder
+    // VMware data center folder.
+    // 
+    // 
+    // vmware_tag
+    // VMware tag.
+    // 
+    // 
+    // vmware_category
+    // VMware tag category.
+    // 
+    // 
+    // vmware_compute_resource
+    // VMware compute resource.
+    // 
+    // 
+    // vmware_compute_resource_folder
+    // VMware compute resource folder.
+    // 
+    // 
+    // aws_ebs_volume
+    // AWS EBS volume.
+    // 
+    // 
+    // aws_connection
+    // AWS connection mediated by a CloudFormation stack.
+    // 
+    // 
+    // aws_environment
+    // AWS environment specified by an account/region pair.
+    // 
+    // 
+    // aws_tag
+    // AWS tag.
+    // 
+    // 
+    // aws_cmk
+    // AWS Customer Master Key used to encrypt data.
+    // 
     // 
     ClumioType *string `json:"type"`
     // A system-generated value assigned to the entity. For example, if the primary entity type is "vmware_vm" for a virtual machine, then the value is the name of the VM.
     Value      *string `json:"value"`
+}
+
+// RestoreDynamoDBTableLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type RestoreDynamoDBTableLinks struct {
+    // The HATEOAS link to this resource.
+    Self     *HateoasSelfLink     `json:"_self"`
+    // A HATEOAS link to the task associated with this resource.
+    ReadTask *ReadTaskHateoasLink `json:"read-task"`
+}
+
+// RestoreEBSLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type RestoreEBSLinks struct {
+    // The HATEOAS link to this resource.
+    Self     *HateoasSelfLink     `json:"_self"`
+    // A HATEOAS link to the task associated with this resource.
+    ReadTask *ReadTaskHateoasLink `json:"read-task"`
+}
+
+// RestoreEC2Links represents a custom type struct.
+// URLs to pages related to the resource.
+type RestoreEC2Links struct {
+    // The HATEOAS link to this resource.
+    Self     *HateoasSelfLink     `json:"_self"`
+    // A HATEOAS link to the task associated with this resource.
+    ReadTask *ReadTaskHateoasLink `json:"read-task"`
+}
+
+// RestoreFileLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type RestoreFileLinks struct {
+    // The HATEOAS link to this resource.
+    Self     *HateoasSelfLink     `json:"_self"`
+    // A HATEOAS link to the task associated with this resource.
+    ReadTask *ReadTaskHateoasLink `json:"read-task"`
+}
+
+// RestoreProtectionGroupLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type RestoreProtectionGroupLinks struct {
+    // The HATEOAS link to this resource.
+    Self     *HateoasSelfLink     `json:"_self"`
+    // A HATEOAS link to the task associated with this resource.
+    ReadTask *ReadTaskHateoasLink `json:"read-task"`
+}
+
+// RestoreProtectionGroupS3AssetLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type RestoreProtectionGroupS3AssetLinks struct {
+    // The HATEOAS link to this resource.
+    Self     *HateoasSelfLink     `json:"_self"`
+    // A HATEOAS link to the task associated with this resource.
+    ReadTask *ReadTaskHateoasLink `json:"read-task"`
+}
+
+// RestoreRecordsLinksAsync represents a custom type struct.
+// URLs to pages related to the resource.
+type RestoreRecordsLinksAsync struct {
+    // The HATEOAS link to this resource.
+    Self     *HateoasSelfLink     `json:"_self"`
+    // A HATEOAS link to the task associated with this resource.
+    ReadTask *ReadTaskHateoasLink `json:"read-task"`
+}
+
+// RestoreRecordsLinksSync represents a custom type struct.
+// URLs to pages related to the resource.
+type RestoreRecordsLinksSync struct {
+    // The HATEOAS link to this resource.
+    Self *HateoasSelfLink `json:"_self"`
 }
 
 // RestoredFileInfo represents a custom type struct
@@ -3891,6 +4947,65 @@ type RestoredFilesListEmbedded struct {
 // RestoredFilesListLinks represents a custom type struct.
 // URLs to pages related to the resource.
 type RestoredFilesListLinks struct {
+    // The HATEOAS link to the first page of results.
+    First *HateoasFirstLink `json:"_first"`
+    // The HATEOAS link to the last page of results.
+    Last  *HateoasLastLink  `json:"_last"`
+    // The HATEOAS link to the next page of results.
+    Next  *HateoasNextLink  `json:"_next"`
+    // The HATEOAS link to the previous page of results.
+    Prev  *HateoasPrevLink  `json:"_prev"`
+    // The HATEOAS link to this resource.
+    Self  *HateoasSelfLink  `json:"_self"`
+}
+
+// RestoredRecord represents a custom type struct
+type RestoredRecord struct {
+    // URLs to pages related to the resource.
+    Links               *RestoredRecordLinks `json:"_links"`
+    // The AWS-assigned ID of the account with this record.
+    AccountNativeId     *string              `json:"account_native_id"`
+    // The AWS region associated with this record. For example, `us-west-2`.
+    AwsRegion           *string              `json:"aws_region"`
+    // The Clumio-assigned ID of the backup associated with this record.
+    BackupId            *string              `json:"backup_id"`
+    // The AWS-assigned name of the database associated with this record.
+    DatabaseName        *string              `json:"database_name"`
+    // The download link of the query result.
+    DownloadLink        *string              `json:"download_link"`
+    // The timestamp of when the record will expire. Represented in RFC-3339 format.
+    ExpirationTimestamp *string              `json:"expiration_timestamp"`
+    // The Clumio-assigned ID of the restored record.
+    Id                  *string              `json:"id"`
+    // The SQL query statement which produced this record.
+    QueryStatement      *string              `json:"query_statement"`
+    // The Clumio-assigned ID of the RDS resource associated with this record.
+    ResourceId          *string              `json:"resource_id"`
+    // The number of rows produced by the query.
+    RowCount            *int64               `json:"row_count"`
+    // The timestamp of when the query was executed. Represented in RFC-3339 format.
+    StartTimestamp      *string              `json:"start_timestamp"`
+    // The Clumio-assigned ID of the task which generated the restored record.
+    TaskId              *string              `json:"task_id"`
+}
+
+// RestoredRecordLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type RestoredRecordLinks struct {
+    // The HATEOAS link to this resource.
+    Self *HateoasSelfLink `json:"_self"`
+}
+
+// RestoredRecordListEmbedded represents a custom type struct.
+// Embedded responses related to the resource.
+type RestoredRecordListEmbedded struct {
+    // TODO: Add struct field description
+    Items []*RestoredRecord `json:"items"`
+}
+
+// RestoredRecordListLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type RestoredRecordListLinks struct {
     // The HATEOAS link to the first page of results.
     First *HateoasFirstLink `json:"_first"`
     // The HATEOAS link to the last page of results.
@@ -4487,8 +5602,33 @@ type S3VersioningOutput struct {
     Status    *string `json:"status"`
 }
 
+// SSESpecification represents a custom type struct.
+// Represents the server-side encryption settings for a table.
+type SSESpecification struct {
+    // The server-side encryption KMS key type.
+    // This field will only be populated for [GET /datasources/aws/dynamodb-tables/{table_id}](#operation/read-aws-dynamodb-table)
+    // and [GET /backups/aws/dynamodb-tables/{backup_id}](#operation/read-backup-aws-dynamodb-table).
+    // For [POST /restores/aws/dynamodb](#operation/restore-aws-dynamodb-table), `kms_master_key_id` must be specified
+    // in case of CUSTOMER_MANAGED. Possible values include: DEFAULT, AWS_MANAGED, CUSTOMER_MANAGED.
+    KmsKeyType     *string `json:"kms_key_type"`
+    // The AWS KMS customer master key (CMK) ARN that is used to encrypt the table.
+    // If this field is `null`, server-side encryption is the default encryption (AWS owned CMK).
+    // Otherwise, an AWS-managed or customer-managed CMK exists having these values.
+    // For [POST /restores/aws/dynamodb](#operation/restore-aws-dynamodb-table), use key ID, Amazon Resource
+    // Name (ARN), alias name or alias ARN to specify a key to be used for encrypting the restored table.
+    // In case of default encryption (AWS owned CMK), specify this as `null`.
+    KmsMasterKeyId *string `json:"kms_master_key_id"`
+}
+
 // SetBucketPropertiesResponseLinks represents a custom type struct
 type SetBucketPropertiesResponseLinks struct {
+    // The HATEOAS link to this resource.
+    Self *HateoasSelfLink `json:"_self"`
+}
+
+// ShareFileRestoreEmailLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type ShareFileRestoreEmailLinks struct {
     // The HATEOAS link to this resource.
     Self *HateoasSelfLink `json:"_self"`
 }
@@ -4506,7 +5646,7 @@ type SingleErrorResponse struct {
 type SourceObjectFilters struct {
     // Filter for objects with this etag.
     Etag               *string   `json:"etag"`
-    // If set to true, filter for latest versions only. Otherwise all versions will
+    // If set to true, filter for latest versions only. Otherwise, all versions will
     // be returned.
     LatestVersionOnly  *bool     `json:"latest_version_only"`
     // Filter for objects with at most this size in bytes.
@@ -4811,42 +5951,66 @@ type TaskListLinks struct {
 type TaskParentEntity struct {
     // A system-generated ID assigned to this entity.
     Id         *string `json:"id"`
-    // The following table describes the entity types that Clumio supports.
     // 
-    // +--------------------------------+---------------------------------------------+
-    // |          Entity Type           |                   Details                   |
-    // +================================+=============================================+
-    // | vmware_vcenter                 | VMware vCenter.                             |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_vm                      | VMware virtual machine.                     |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_vm_folder               | VMware VM folder.                           |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_datacenter              | VMware data center.                         |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_datacenter_folder       | VMware data center folder.                  |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_tag                     | VMware tag.                                 |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_category                | VMware tag category.                        |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_compute_resource        | VMware compute resource.                    |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_compute_resource_folder | VMware compute resource folder.             |
-    // +--------------------------------+---------------------------------------------+
-    // | aws_ebs_volume                 | AWS EBS volume.                             |
-    // +--------------------------------+---------------------------------------------+
-    // | aws_connection                 | AWS connection mediated by a CloudFormation |
-    // |                                | stack.                                      |
-    // +--------------------------------+---------------------------------------------+
-    // | aws_environment                | AWS environment specified by an             |
-    // |                                | account/region pair.                        |
-    // +--------------------------------+---------------------------------------------+
-    // | aws_tag                        | AWS tag.                                    |
-    // +--------------------------------+---------------------------------------------+
-    // | aws_cmk                        | AWS Customer Master Key used to encrypt     |
-    // |                                | data.                                       |
-    // +--------------------------------+---------------------------------------------+
+    // Entity Type
+    // Details
+    // 
+    // 
+    // vmware_vcenter
+    // VMware vCenter.
+    // 
+    // 
+    // vmware_vm
+    // VMware virtual machine.
+    // 
+    // 
+    // vmware_vm_folder
+    // VMware VM folder.
+    // 
+    // 
+    // vmware_datacenter
+    // VMware data center.
+    // 
+    // 
+    // vmware_datacenter_folder
+    // VMware data center folder.
+    // 
+    // 
+    // vmware_tag
+    // VMware tag.
+    // 
+    // 
+    // vmware_category
+    // VMware tag category.
+    // 
+    // 
+    // vmware_compute_resource
+    // VMware compute resource.
+    // 
+    // 
+    // vmware_compute_resource_folder
+    // VMware compute resource folder.
+    // 
+    // 
+    // aws_ebs_volume
+    // AWS EBS volume.
+    // 
+    // 
+    // aws_connection
+    // AWS connection mediated by a CloudFormation stack.
+    // 
+    // 
+    // aws_environment
+    // AWS environment specified by an account/region pair.
+    // 
+    // 
+    // aws_tag
+    // AWS tag.
+    // 
+    // 
+    // aws_cmk
+    // AWS Customer Master Key used to encrypt data.
+    // 
     // 
     ClumioType *string `json:"type"`
     // A system-generated value assigned to the entity. For example, if the primary entity type is "vmware_vm" for a virtual machine, then the value is the name of the VM.
@@ -4858,42 +6022,66 @@ type TaskParentEntity struct {
 type TaskPrimaryEntity struct {
     // A system-generated ID assigned to this entity.
     Id         *string `json:"id"`
-    // The following table describes the entity types that Clumio supports.
     // 
-    // +--------------------------------+---------------------------------------------+
-    // |          Entity Type           |                   Details                   |
-    // +================================+=============================================+
-    // | vmware_vcenter                 | VMware vCenter.                             |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_vm                      | VMware virtual machine.                     |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_vm_folder               | VMware VM folder.                           |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_datacenter              | VMware data center.                         |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_datacenter_folder       | VMware data center folder.                  |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_tag                     | VMware tag.                                 |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_category                | VMware tag category.                        |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_compute_resource        | VMware compute resource.                    |
-    // +--------------------------------+---------------------------------------------+
-    // | vmware_compute_resource_folder | VMware compute resource folder.             |
-    // +--------------------------------+---------------------------------------------+
-    // | aws_ebs_volume                 | AWS EBS volume.                             |
-    // +--------------------------------+---------------------------------------------+
-    // | aws_connection                 | AWS connection mediated by a CloudFormation |
-    // |                                | stack.                                      |
-    // +--------------------------------+---------------------------------------------+
-    // | aws_environment                | AWS environment specified by an             |
-    // |                                | account/region pair.                        |
-    // +--------------------------------+---------------------------------------------+
-    // | aws_tag                        | AWS tag.                                    |
-    // +--------------------------------+---------------------------------------------+
-    // | aws_cmk                        | AWS Customer Master Key used to encrypt     |
-    // |                                | data.                                       |
-    // +--------------------------------+---------------------------------------------+
+    // Entity Type
+    // Details
+    // 
+    // 
+    // vmware_vcenter
+    // VMware vCenter.
+    // 
+    // 
+    // vmware_vm
+    // VMware virtual machine.
+    // 
+    // 
+    // vmware_vm_folder
+    // VMware VM folder.
+    // 
+    // 
+    // vmware_datacenter
+    // VMware data center.
+    // 
+    // 
+    // vmware_datacenter_folder
+    // VMware data center folder.
+    // 
+    // 
+    // vmware_tag
+    // VMware tag.
+    // 
+    // 
+    // vmware_category
+    // VMware tag category.
+    // 
+    // 
+    // vmware_compute_resource
+    // VMware compute resource.
+    // 
+    // 
+    // vmware_compute_resource_folder
+    // VMware compute resource folder.
+    // 
+    // 
+    // aws_ebs_volume
+    // AWS EBS volume.
+    // 
+    // 
+    // aws_connection
+    // AWS connection mediated by a CloudFormation stack.
+    // 
+    // 
+    // aws_environment
+    // AWS environment specified by an account/region pair.
+    // 
+    // 
+    // aws_tag
+    // AWS tag.
+    // 
+    // 
+    // aws_cmk
+    // AWS Customer Master Key used to encrypt data.
+    // 
     // 
     ClumioType *string `json:"type"`
     // A system-generated value assigned to the entity. For example, if the primary entity type is "vmware_vm" for a virtual machine, then the value is the name of the VM.
@@ -5453,7 +6641,6 @@ type VMwareDsGroupingCriteria struct {
     // organizational unit uses this data group.
     // To edit this data group, all organizational units using it must be deleted.
     IsEditable *bool   `json:"is_editable"`
-    // The entity type used to group organizational units for VMware resources.
     // 
     // +--------------------------------+---------------------------------+
     // |         vmware_vcenter         |         VMware vCenter.         |

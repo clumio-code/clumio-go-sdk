@@ -1,7 +1,7 @@
 // Copyright (c) 2021 Clumio All Rights Reserved
 
-// Package backupawsebsvolumes contains methods related to BackupAwsEbsVolumes
-package backupawsebsvolumes
+// Package backupawsdynamodbtables contains methods related to BackupAwsDynamodbTables
+package backupawsdynamodbtables
 
 import (
     "encoding/json"
@@ -13,24 +13,24 @@ import (
     "github.com/clumio-code/clumio-go-sdk/models"
 )
 
-// BackupAwsEbsVolumesV1 represents a custom type struct
-type BackupAwsEbsVolumesV1 struct {
+// BackupAwsDynamodbTablesV1 represents a custom type struct
+type BackupAwsDynamodbTablesV1 struct {
     config config.Config
 }
 
-// ListBackupAwsEbsVolumes Returns a list of EBS volumes that have been backed up by Clumio. EBS volume backups can be restored through the [POST /restores/aws/ebs-volumes](#operation/restore-aws-ebs-volume) endpoint.
-func (b *BackupAwsEbsVolumesV1) ListBackupAwsEbsVolumes(
+// ListBackupAwsDynamodbTables Retrieves a list of DynamoDB table backups.
+func (b *BackupAwsDynamodbTablesV1) ListBackupAwsDynamodbTables(
     limit *int64, 
     start *string, 
     sort *string, 
     filter *string)(
-    *models.ListEBSBackupsResponseV1, *apiutils.APIError) {
+    *models.ListDynamoDBTableBackupsResponse, *apiutils.APIError) {
 
-    queryBuilder := b.config.BaseUrl + "/backups/aws/ebs-volumes"
+    queryBuilder := b.config.BaseUrl + "/backups/aws/dynamodb-tables"
 
     
-    header := "application/api.clumio.backup-aws-ebs-volumes=v1+json"
-    var result *models.ListEBSBackupsResponseV1
+    header := "application/api.clumio.backup-aws-dynamodb-tables=v1+json"
+    var result *models.ListDynamoDBTableBackupsResponse
     defaultInt64 := int64(0)
     defaultString := "" 
     
@@ -67,12 +67,13 @@ func (b *BackupAwsEbsVolumesV1) ListBackupAwsEbsVolumes(
 }
 
 
-// CreateBackupAwsEbsVolume Performs an on-demand backup for the specified EBS volume.
-func (b *BackupAwsEbsVolumesV1) CreateBackupAwsEbsVolume(
-    body models.CreateBackupAwsEbsVolumeV1Request)(
-    interface{}, *apiutils.APIError) {
+// CreateBackupAwsDynamodbTable Performs an on-demand backup for the specified DynamoDB table.
+func (b *BackupAwsDynamodbTablesV1) CreateBackupAwsDynamodbTable(
+    embed *string, 
+    body models.CreateBackupAwsDynamodbTableV1Request)(
+    *models.OnDemandDynamoDBBackupResponse, *apiutils.APIError) {
 
-    queryBuilder := b.config.BaseUrl + "/backups/aws/ebs-volumes"
+    queryBuilder := b.config.BaseUrl + "/backups/aws/dynamodb-tables"
 
     bytes, err := json.Marshal(body)
     if err != nil {
@@ -83,12 +84,22 @@ func (b *BackupAwsEbsVolumesV1) CreateBackupAwsEbsVolume(
         }
     }
     payload := string(bytes)
-    header := "application/api.clumio.backup-aws-ebs-volumes=v1+json"
-    var result interface{}
+    header := "application/api.clumio.backup-aws-dynamodb-tables=v1+json"
+    var result *models.OnDemandDynamoDBBackupResponse
+    defaultString := "" 
+    
+    if embed == nil {
+        embed = &defaultString
+    }
+    
+    queryParams := map[string]string{
+        "embed": *embed,
+    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: b.config,
         RequestUrl: queryBuilder,
+        QueryParams: queryParams,
         AcceptHeader: header,
         Body: payload,
         Result: &result,
@@ -99,12 +110,12 @@ func (b *BackupAwsEbsVolumesV1) CreateBackupAwsEbsVolume(
 }
 
 
-// ReadBackupAwsEbsVolume Returns a representation of the specified EBS volume backup.
-func (b *BackupAwsEbsVolumesV1) ReadBackupAwsEbsVolume(
+// ReadBackupAwsDynamodbTable Returns a representation of the specified DynamoDB table backup.
+func (b *BackupAwsDynamodbTablesV1) ReadBackupAwsDynamodbTable(
     backupId string)(
-    *models.ReadEBSBackupResponseV1, *apiutils.APIError) {
+    *models.ReadDynamoDBTableBackupResponse, *apiutils.APIError) {
 
-    pathURL := "/backups/aws/ebs-volumes/{backup_id}"
+    pathURL := "/backups/aws/dynamodb-tables/{backup_id}"
     //process optional template parameters
     pathParams := map[string]string{
         "backup_id": backupId,
@@ -112,8 +123,8 @@ func (b *BackupAwsEbsVolumesV1) ReadBackupAwsEbsVolume(
     queryBuilder := b.config.BaseUrl + pathURL
 
     
-    header := "application/api.clumio.backup-aws-ebs-volumes=v1+json"
-    var result *models.ReadEBSBackupResponseV1
+    header := "application/api.clumio.backup-aws-dynamodb-tables=v1+json"
+    var result *models.ReadDynamoDBTableBackupResponse
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: b.config,
