@@ -1,3 +1,5 @@
+## 0.5.0
+New APIs added for backups and restores for EBS, EC2, RDS, EC2MSSQL data sources.
 ## 0.4.0
 New API added for S3 and changes to Report and Auto User Provisioning APIs.
 ## 0.3.0

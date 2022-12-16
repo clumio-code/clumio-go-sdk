@@ -230,9 +230,9 @@ type CreateHostECCredentialsResponse struct {
 // CreateMssqlDatabaseRestoreResponse represents a custom type struct for Success
 type CreateMssqlDatabaseRestoreResponse struct {
     // Embedded responses related to the resource.
-    Embedded *ReadTaskHateoasLinks `json:"_embedded"`
-    // Embedded responses related to the resource.
-    Links    *ReadTaskHateoasLinks `json:"_links"`
+    Embedded *ReadTaskHateoasOuterEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links    *ReadTaskHateoasLinks         `json:"_links"`
 }
 
 // CreateOrganizationalUnitResponse represents a custom type struct for Success
@@ -268,18 +268,16 @@ type CreateOrganizationalUnitResponse struct {
 type CreatePolicyResponse struct {
     // If the `embed` query parameter is set, displays the responses of the related resource,
     // as defined by the embeddable link specified.
-    Embedded                      *PolicyEmbedded    `json:"_embedded"`
+    Embedded             *PolicyEmbedded    `json:"_embedded"`
     // URLs to pages related to the resource.
-    Links                         *PolicyLinks       `json:"_links"`
+    Links                *PolicyLinks       `json:"_links"`
     // The status of the policy.
     // Refer to the Policy Activation Status table for a complete list of policy statuses.
-    ActivationStatus              *string            `json:"activation_status"`
-    // The Clumio-assigned IDs of the organizational units to whom the policy has been assigned.
-    AssignedOrganizationalUnitIds []*string          `json:"assigned_organizational_unit_ids"`
+    ActivationStatus     *string            `json:"activation_status"`
     // The created time of the policy in unix time.
-    CreatedTime                   *int64             `json:"created_time"`
+    CreatedTime          *int64             `json:"created_time"`
     // The Clumio-assigned ID of the policy.
-    Id                            *string            `json:"id"`
+    Id                   *string            `json:"id"`
     // The following table describes the possible lock statuses of a policy.
     // 
     // +----------+-------------------------------------------------------------------+
@@ -294,17 +292,17 @@ type CreatePolicyResponse struct {
     // |          | will be rejected.                                                 |
     // +----------+-------------------------------------------------------------------+
     // 
-    LockStatus                    *string            `json:"lock_status"`
+    LockStatus           *string            `json:"lock_status"`
     // The user-provided name of the policy.
-    Name                          *string            `json:"name"`
+    Name                 *string            `json:"name"`
     // TODO: Add struct field description
-    Operations                    []*PolicyOperation `json:"operations"`
+    Operations           []*PolicyOperation `json:"operations"`
     // The Clumio-assigned ID of the organizational unit associated with the policy.
-    OrganizationalUnitId          *string            `json:"organizational_unit_id"`
+    OrganizationalUnitId *string            `json:"organizational_unit_id"`
     // The timezone for the policy.
-    Timezone                      *string            `json:"timezone"`
+    Timezone             *string            `json:"timezone"`
     // The updated time of the policy in unix time.
-    UpdatedTime                   *int64             `json:"updated_time"`
+    UpdatedTime          *int64             `json:"updated_time"`
 }
 
 // CreateProtectionGroupResponse represents a custom type struct for Success
@@ -362,6 +360,17 @@ type CreateProtectionGroupResponse struct {
     Version                       *int64                       `json:"version"`
 }
 
+// CreateRdsResourceRestoreResponse represents a custom type struct for Success
+type CreateRdsResourceRestoreResponse struct {
+    // Embedded responses related to the resource.
+    Embedded *ReadTaskHateoasOuterEmbedded          `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links    *CreateRdsDatabaseRestoreResponseLinks `json:"_links"`
+    // The Clumio-assigned ID of the task created by this restore request.
+    // The progress of the task can be monitored using the `GET /tasks/{task_id}` endpoint.
+    TaskId   *string                                `json:"task_id"`
+}
+
 // CreateReportDownloadResponse represents a custom type struct for Success
 type CreateReportDownloadResponse struct {
     // The Clumio-assigned ID of the task created by the request.
@@ -372,7 +381,7 @@ type CreateReportDownloadResponse struct {
 
 // CreateRuleResponse represents a custom type struct for Success
 type CreateRuleResponse struct {
-    // Embedded responses related to the resource.
+    // URLs to pages related to the resource.
     Links     *ReadTaskHateoasLinks `json:"_links"`
     // The Clumio-assigned ID of the preview generated by this request. Only valid if
     // `execution_type` is set to `dryrun`.
@@ -511,11 +520,11 @@ type DeleteBucketFromProtectionGroupResponse struct {
 // DeleteHcmHostResponse represents a custom type struct for Success
 type DeleteHcmHostResponse struct {
     // Embedded responses related to the resource.
-    Embedded *ReadTaskHateoasLinks `json:"_embedded"`
-    // Embedded responses related to the resource.
-    Links    *ReadTaskHateoasLinks `json:"_links"`
+    Embedded *ReadTaskHateoasOuterEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links    *ReadTaskHateoasLinks         `json:"_links"`
     // TaskID for DeleteHostsReq
-    TaskId   *string               `json:"task_id"`
+    TaskId   *string                       `json:"task_id"`
 }
 
 // DeleteOrganizationalUnitResponse represents a custom type struct.
@@ -523,7 +532,7 @@ type DeleteHcmHostResponse struct {
 type DeleteOrganizationalUnitResponse struct {
     // Embedded responses related to the resource.
     Embedded *EntityGroupEmbedded  `json:"_embedded"`
-    // Embedded responses related to the resource.
+    // URLs to pages related to the resource.
     Links    *ReadTaskHateoasLinks `json:"_links"`
 }
 
@@ -535,13 +544,22 @@ type DeletePolicyResponse struct {
 
 // DeleteRuleResponse represents a custom type struct for Success
 type DeleteRuleResponse struct {
-    // Embedded responses related to the resource.
+    // URLs to pages related to the resource.
     Links     *ReadTaskHateoasLinks `json:"_links"`
     // The Clumio-assigned ID of the preview generated by this request. Only valid if
     // `execution_type` is set to `dryrun`.
     PreviewId *string               `json:"preview_id"`
     // The Clumio-assigned ID of the task generated by this request.
     TaskId    *string               `json:"task_id"`
+}
+
+// DownloadSharedFileResponse represents a custom type struct for Success
+type DownloadSharedFileResponse struct {
+    // URLs to pages related to the resource.
+    Links       *DownloadSharedFileLinks `json:"_links"`
+    // A download link that lets you directly download the file. The link expires
+    // 24 hours after file restore.
+    DownloadUrl *string                  `json:"download_url"`
 }
 
 // EditProfileResponse represents a custom type struct for Success
@@ -613,6 +631,15 @@ type FileSearchResponse struct {
     Limit        *int64                  `json:"limit"`
     // The page token used to get this response.
     Start        *string                 `json:"start"`
+}
+
+// GenerateRestoredFilePasscodeResponse represents a custom type struct for Success
+type GenerateRestoredFilePasscodeResponse struct {
+    // URLs to pages related to the resource.
+    Links    *GenerateRestoredFilePasscodeLinks `json:"_links"`
+    // The new passcode that has been generated for the restored file. Send the
+    // passcode to the email recipient, who must use it to access the restored file.
+    Passcode *string                            `json:"passcode"`
 }
 
 // ListAWSConnectionsResponse represents a custom type struct for Success
@@ -805,6 +832,27 @@ type ListDatacentersResponse struct {
     TotalCount      *int64                  `json:"total_count"`
     // The total number of pages of results.
     TotalPagesCount *int64                  `json:"total_pages_count"`
+}
+
+// ListDynamoDBTableBackupsResponse represents a custom type struct for Success
+type ListDynamoDBTableBackupsResponse struct {
+    // Embedded responses related to the resource.
+    Embedded        *DynamoDBTableBackupListEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links           *DynamoDBTableBackupListLinks    `json:"_links"`
+    // The number of items listed on the current page.
+    CurrentCount    *int64                           `json:"current_count"`
+    // The filter used in the request. The filter includes both manually-specified and system-generated filters.
+    FilterApplied   *string                          `json:"filter_applied"`
+    // The maximum number of items displayed per page in the response.
+    Limit           *int64                           `json:"limit"`
+    // The page number used to get this response.
+    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
+    Start           *string                          `json:"start"`
+    // The total number of items, summed across all pages.
+    TotalCount      *int64                           `json:"total_count"`
+    // The total number of pages of results.
+    TotalPagesCount *int64                           `json:"total_pages_count"`
 }
 
 // ListEBSBackupsResponseV1 represents a custom type struct for Success
@@ -1222,6 +1270,25 @@ type ListResourcePoolsResponse struct {
     TotalPagesCount *int64                    `json:"total_pages_count"`
 }
 
+// ListRestoredRecordsResponse represents a custom type struct for Success
+type ListRestoredRecordsResponse struct {
+    // Embedded responses related to the resource.
+    Embedded        *RestoredRecordListEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links           *RestoredRecordListLinks    `json:"_links"`
+    // The number of items listed on the current page.
+    CurrentCount    *int64                      `json:"current_count"`
+    // The maximum number of items displayed per page in the response.
+    Limit           *int64                      `json:"limit"`
+    // The page number used to get this response.
+    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
+    Start           *string                     `json:"start"`
+    // The total number of items, summed across all pages.
+    TotalCount      *int64                      `json:"total_count"`
+    // The total number of pages of results.
+    TotalPagesCount *int64                      `json:"total_pages_count"`
+}
+
 // ListRolesResponse represents a custom type struct for Success
 type ListRolesResponse struct {
     // Embedded responses related to the resource.
@@ -1476,19 +1543,31 @@ type ListWalletsResponse struct {
 // MoveHcmHostsResponse represents a custom type struct for Success
 type MoveHcmHostsResponse struct {
     // Embedded responses related to the resource.
-    Embedded *ReadTaskHateoasLinks `json:"_embedded"`
+    Embedded *ReadTaskHateoasOuterEmbedded `json:"_embedded"`
     // URLs to pages related to the resource.
-    Links    *MoveHostsLinks       `json:"_links"`
+    Links    *MoveHostsLinks               `json:"_links"`
     // TaskID for MoveHostsReq
-    TaskId   *string               `json:"task_id"`
+    TaskId   *string                       `json:"task_id"`
+}
+
+// OnDemandDynamoDBBackupResponse represents a custom type struct for Success
+type OnDemandDynamoDBBackupResponse struct {
+    // Embedded responses related to the resource.
+    Embedded *ReadTaskHateoasOuterEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links    *OnDemandDynamoDBBackupLinks  `json:"_links"`
+    // The Clumio-assigned ID of the task created for DynamoDB backup.
+    // The progress of the task can be monitored using the
+    // `GET /tasks/{task_id}` endpoint.
+    TaskId   *string                       `json:"task_id"`
 }
 
 // OnDemandMssqlBackupResponse represents a custom type struct for Success
 type OnDemandMssqlBackupResponse struct {
     // Embedded responses related to the resource.
-    Embedded *ReadTaskHateoasLinks `json:"_embedded"`
-    // Embedded responses related to the resource.
-    Links    *ReadTaskHateoasLinks `json:"_links"`
+    Embedded *ReadTaskHateoasOuterEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links    *ReadTaskHateoasLinks         `json:"_links"`
 }
 
 // PatchGeneralSettingsResponseV2 represents a custom type struct for Success
@@ -1824,6 +1903,12 @@ type ReadBucketResponse struct {
     EventBridgeEnabled       *bool                                         `json:"event_bridge_enabled"`
     // The Clumio-assigned ID of the bucket.
     Id                       *string                                       `json:"id"`
+    // The Encryption enablement state for the S3 bucket.
+    IsEncryptionEnabled      *bool                                         `json:"is_encryption_enabled"`
+    // The Replication enablement state for the S3 bucket.
+    IsReplicationEnabled     *bool                                         `json:"is_replication_enabled"`
+    // The Versioning enablement state for the S3 bucket.
+    IsVersioningEnabled      *bool                                         `json:"is_versioning_enabled"`
     // The AWS-assigned name of the bucket.
     Name                     *string                                       `json:"name"`
     // Number of objects in bucket.
@@ -1941,7 +2026,7 @@ type ReadDatacenterResponse struct {
 
 // ReadDirectoryResponse represents a custom type struct for Success
 type ReadDirectoryResponse struct {
-    // TODO: Add struct field description
+    // Embedded responses related to the resource.
     Embedded     *DirectoryBrowseEmbedded `json:"_embedded"`
     // URLs to pages related to the resource.
     Links        *DirectoryBrowseLinks    `json:"_links"`
@@ -1951,6 +2036,58 @@ type ReadDirectoryResponse struct {
     Limit        *int64                   `json:"limit"`
     // The page token used to get this response.
     Start        *string                  `json:"start"`
+}
+
+// ReadDynamoDBTableBackupResponse represents a custom type struct for Success
+type ReadDynamoDBTableBackupResponse struct {
+    // The ETag value.
+    Etag                   *string                   `json:"_etag"`
+    // URLs to pages related to the resource.
+    Links                  *DynamoDBTableBackupLinks `json:"_links"`
+    // The AWS-assigned ID of the account associated with this database at the time of backup.
+    AccountNativeId        *string                   `json:"account_native_id"`
+    // The AWS region associated with this environment.
+    AwsRegion              *string                   `json:"aws_region"`
+    // The billing mode of the DynamoDB table. Possible values are PROVISIONED or PAY_PER_REQUEST.
+    // For [POST /restores/aws/dynamodb](#operation/restore-aws-dynamodb-table), this is defaulted to the
+    // configuration of source table if both 'billing_mode' and 'provisioned_throughput' are empty or `null`.
+    BillingMode            *string                   `json:"billing_mode"`
+    // The timestamp of when this backup expires. Represented in RFC-3339 format.
+    ExpirationTimestamp    *string                   `json:"expiration_timestamp"`
+    // Represents the properties of a global secondary index.
+    GlobalSecondaryIndexes []*GlobalSecondaryIndex   `json:"global_secondary_indexes"`
+    // Describes the version of global tables in use, if the table is replicated across AWS Regions. If the table
+    // is not a global table, then this field has a value of `null`. Possible values are 2017.11.29 or 2019.11.21.
+    // For [POST /restores/aws/dynamodb](#operation/restore-aws-dynamodb-table), the version is defaulted to 2019.11.21.
+    GlobalTableVersion     *string                   `json:"global_table_version"`
+    // The Clumio-assigned ID of the backup.
+    Id                     *string                   `json:"id"`
+    // The number of items in DynamoDB table backup.
+    ItemCount              *int64                    `json:"item_count"`
+    // Represents the properties of a local secondary index.
+    LocalSecondaryIndexes  []*LocalSecondaryIndex    `json:"local_secondary_indexes"`
+    // Represents the provisioned throughput settings for a DynamoDB table.
+    ProvisionedThroughput  *ProvisionedThroughput    `json:"provisioned_throughput"`
+    // Contains the details of the replica.
+    Replicas               []*ReplicaDescription     `json:"replicas"`
+    // The size of the DynamoDB table backup in bytes.
+    Size                   *int64                    `json:"size"`
+    // Represents the server-side encryption settings for a table.
+    SseSpecification       *SSESpecification         `json:"sse_specification"`
+    // The timestamp of when this backup started. Represented in RFC-3339 format.
+    StartTimestamp         *string                   `json:"start_timestamp"`
+    // The table class of the DynamoDB table. Possible values are STANDARD or STANDARD_INFREQUENT_ACCESS.
+    // For [POST /restores/aws/dynamodb](#operation/restore-aws-dynamodb-table), this is defaulted to the
+    // STANDARD storage class if empty.
+    TableClass             *string                   `json:"table_class"`
+    // The Clumio-assigned ID of the DynamoDB table.
+    TableId                *string                   `json:"table_id"`
+    // The name of the DynamoDB table.
+    TableName              *string                   `json:"table_name"`
+    // A tag created through AWS Console which can be applied to EBS volumes.
+    Tags                   []*AwsTagCommonModel      `json:"tags"`
+    // The type of backup. Possible values include `clumio_backup` and `aws_snapshot`.
+    ClumioType             *string                   `json:"type"`
 }
 
 // ReadEBSBackupResponseV1 represents a custom type struct for Success
@@ -2320,6 +2457,10 @@ type ReadMssqlDatabaseResponse struct {
     // 
     // for a complete list of compliance statuses.
     ComplianceStatus                        *string                `json:"compliance_status"`
+    // The Clumio-assigned ID of the failover cluster.
+    FailoverClusterId                       *string                `json:"failover_cluster_id"`
+    // The Microsoft SQL assigned name of the Failover Cluster
+    FailoverClusterName                     *string                `json:"failover_cluster_name"`
     // The Clumio-assigned ID of the group to which the standalone database belongs, in case of an
     // availability group database it will be empty.
     GroupId                                 *string                `json:"group_id"`
@@ -2386,6 +2527,8 @@ type ReadMssqlHostResponse struct {
     Id                             *string            `json:"id"`
     // The number of instances present in the host.
     InstanceCount                  *int64             `json:"instance_count"`
+    // IsPartOfFCI is a boolean field representing if the Host is part of Failover Cluster
+    IsPartOfFci                    *bool              `json:"is_part_of_fci"`
     // The Clumio-assigned ID of the organizational unit associated with the host.
     OrganizationalUnitId           *string            `json:"organizational_unit_id"`
     // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
@@ -2463,18 +2606,16 @@ type ReadOrganizationalUnitResponse struct {
 type ReadPolicyResponse struct {
     // If the `embed` query parameter is set, displays the responses of the related resource,
     // as defined by the embeddable link specified.
-    Embedded                      *PolicyEmbedded    `json:"_embedded"`
+    Embedded             *PolicyEmbedded    `json:"_embedded"`
     // URLs to pages related to the resource.
-    Links                         *PolicyLinks       `json:"_links"`
+    Links                *PolicyLinks       `json:"_links"`
     // The status of the policy.
     // Refer to the Policy Activation Status table for a complete list of policy statuses.
-    ActivationStatus              *string            `json:"activation_status"`
-    // The Clumio-assigned IDs of the organizational units to whom the policy has been assigned.
-    AssignedOrganizationalUnitIds []*string          `json:"assigned_organizational_unit_ids"`
+    ActivationStatus     *string            `json:"activation_status"`
     // The created time of the policy in unix time.
-    CreatedTime                   *int64             `json:"created_time"`
+    CreatedTime          *int64             `json:"created_time"`
     // The Clumio-assigned ID of the policy.
-    Id                            *string            `json:"id"`
+    Id                   *string            `json:"id"`
     // The following table describes the possible lock statuses of a policy.
     // 
     // +----------+-------------------------------------------------------------------+
@@ -2489,17 +2630,17 @@ type ReadPolicyResponse struct {
     // |          | will be rejected.                                                 |
     // +----------+-------------------------------------------------------------------+
     // 
-    LockStatus                    *string            `json:"lock_status"`
+    LockStatus           *string            `json:"lock_status"`
     // The user-provided name of the policy.
-    Name                          *string            `json:"name"`
+    Name                 *string            `json:"name"`
     // TODO: Add struct field description
-    Operations                    []*PolicyOperation `json:"operations"`
+    Operations           []*PolicyOperation `json:"operations"`
     // The Clumio-assigned ID of the organizational unit associated with the policy.
-    OrganizationalUnitId          *string            `json:"organizational_unit_id"`
+    OrganizationalUnitId *string            `json:"organizational_unit_id"`
     // The timezone for the policy.
-    Timezone                      *string            `json:"timezone"`
+    Timezone             *string            `json:"timezone"`
     // The updated time of the policy in unix time.
-    UpdatedTime                   *int64             `json:"updated_time"`
+    UpdatedTime          *int64             `json:"updated_time"`
 }
 
 // ReadProtectionGroupBackupResponse represents a custom type struct for Success
@@ -3367,44 +3508,148 @@ type RefreshWalletResponse struct {
     Token              *string                `json:"token"`
 }
 
+// RestoreDynamoDBTableResponse represents a custom type struct for Success
+type RestoreDynamoDBTableResponse struct {
+    // Embedded responses related to the resource.
+    Embedded *ReadTaskHateoasOuterEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links    *RestoreDynamoDBTableLinks    `json:"_links"`
+    // The Clumio-assigned ID of the task created by this restore request.
+    // The progress of the task can be monitored using the
+    // `GET /tasks/{task_id}` endpoint.
+    TaskId   *string                       `json:"task_id"`
+}
+
+// RestoreEBSResponse represents a custom type struct for Success
+type RestoreEBSResponse struct {
+    // Embedded responses related to the resource.
+    Embedded *ReadTaskHateoasOuterEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links    *RestoreEBSLinks              `json:"_links"`
+    // The Clumio-assigned ID of the task created by this restore request.
+    // The progress of the task can be monitored using the
+    // `GET /tasks/{task_id}` endpoint.
+    TaskId   *string                       `json:"task_id"`
+}
+
+// RestoreEC2Response represents a custom type struct for Success
+type RestoreEC2Response struct {
+    // Embedded responses related to the resource.
+    Embedded *ReadTaskHateoasOuterEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links    *RestoreEC2Links              `json:"_links"`
+    // The Clumio-assigned ID of the task created by this restore request.
+    // The progress of the task can be monitored using the
+    // `GET /tasks/{task_id}` endpoint.
+    TaskId   *string                       `json:"task_id"`
+}
+
 // RestoreFileResponse represents a custom type struct for Success
 type RestoreFileResponse struct {
     // Embedded responses related to the resource.
-    Embedded *ReadTaskHateoasLinks `json:"_embedded"`
-    // Embedded responses related to the resource.
-    Links    *ReadTaskHateoasLinks `json:"_links"`
+    Embedded *ReadTaskHateoasOuterEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links    *RestoreFileLinks             `json:"_links"`
     // The Clumio-assigned ID of the restored file.
-    Id       *string               `json:"id"`
-    // passcode that the end-user must use to access the restored
+    Id       *string                       `json:"id"`
+    // The passcode that the end-user must use to access the restored
     // file, in the case the restored file was emailed to the end-user as part
     // of transparent data access.
-    Passcode *string               `json:"passcode"`
+    Passcode *string                       `json:"passcode"`
+    // The Clumio-assigned ID of the task created by this restore request.
+    // The progress of the task can be monitored using the
+    // `GET /tasks/{task_id}` endpoint.
+    TaskId   *string                       `json:"task_id"`
 }
 
 // RestoreProtectionGroupResponse represents a custom type struct for Success
 type RestoreProtectionGroupResponse struct {
     // Embedded responses related to the resource.
-    Embedded *ReadTaskHateoasLinks `json:"_embedded"`
-    // Embedded responses related to the resource.
-    Links    *ReadTaskHateoasLinks `json:"_links"`
+    Embedded *ReadTaskHateoasOuterEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links    *RestoreProtectionGroupLinks  `json:"_links"`
+    // The Clumio-assigned ID of the task created by this restore request.
+    // The progress of the task can be monitored using the
+    // `GET /tasks/{task_id}` endpoint.
+    TaskId   *string                       `json:"task_id"`
 }
 
 // RestoreProtectionGroupS3AssetResponse represents a custom type struct for Success
 type RestoreProtectionGroupS3AssetResponse struct {
     // Embedded responses related to the resource.
-    Embedded *ReadTaskHateoasLinks `json:"_embedded"`
+    Embedded *ReadTaskHateoasOuterEmbedded       `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links    *RestoreProtectionGroupS3AssetLinks `json:"_links"`
+    // The Clumio-assigned ID of the task created by this restore request.
+    // The progress of the task can be monitored using the
+    // `GET /tasks/{task_id}` endpoint.
+    TaskId   *string                             `json:"task_id"`
+}
+
+// RestoreRecordPreviewResponse represents a custom type struct.
+// Preview Success
+type RestoreRecordPreviewResponse struct {
+    // TODO: Add struct field description
+    Links         *HateoasCommonLinks           `json:"_links"`
+    // The preview of the query result, if `preview:true` in the request.
+    // If preview was not set to true in the request, then the result of the query will be
+    // available for download asynchronously.
+    PreviewResult *RDSLogicalPreviewQueryResult `json:"preview_result"`
+}
+
+// RestoreRecordResponse represents a custom type struct for Success
+type RestoreRecordResponse struct {
     // Embedded responses related to the resource.
-    Links    *ReadTaskHateoasLinks `json:"_links"`
+    Embedded *ReadTaskHateoasOuterEmbedded     `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links    *CreateRestoreRecordResponseLinks `json:"_links"`
+    // The Clumio-assigned ID of the task generated by this request.
+    // The requested records will be available for asynchronous download when the Task completes.
+    // Use the [GET /restores/aws/rds-resources/records](#operation/list-rds-restored-records)
+    // endpoint to list the records available for download. 
+    // If `"preview":true` was set in the request, then a preview of the result
+    // will be given instead of a Task ID.
+    TaskId   *string                           `json:"task_id"`
+}
+
+// RestoreRecordsResponseAsync represents a custom type struct.
+// Records restore request accepted
+type RestoreRecordsResponseAsync struct {
+    // Embedded responses related to the resource.
+    Embedded *ReadTaskHateoasOuterEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links    *RestoreRecordsLinksAsync     `json:"_links"`
+    // passcode that the end-user must use to access the restored
+    // file, in case when restored file was emailed to the end-user as part
+    // of transparent data access.
+    Passcode *string                       `json:"passcode"`
+    // The Clumio-assigned ID of the task generated by this request.
+    // The requested records will be available for asynchronous download when the Task completes.
+    // Use the [GET /restores/aws/dynamodb-tables/records](#operation/list-restored-records-aws-dynamodb-table)
+    // endpoint to list the records available for download. 
+    // If `"preview":true` was set in the request, then a preview of the result
+    // will be given instead of a Task ID, and this field will be omitted.
+    TaskId   *string                       `json:"task_id"`
+}
+
+// RestoreRecordsResponseSync represents a custom type struct.
+// Records preview success
+type RestoreRecordsResponseSync struct {
+    // URLs to pages related to the resource.
+    Links         *RestoreRecordsLinksSync    `json:"_links"`
+    // If preview was not set to true in the request, then the result of the query will be
+    // available for download asynchronously and this field has a value of `null`.
+    PreviewResult *DynamoDBQueryPreviewResult `json:"preview_result"`
 }
 
 // RestoreVMwareVMResponse represents a custom type struct for Success
 type RestoreVMwareVMResponse struct {
     // Embedded responses related to the resource.
-    Embedded *ReadTaskHateoasLinks `json:"_embedded"`
-    // Embedded responses related to the resource.
-    Links    *ReadTaskHateoasLinks `json:"_links"`
+    Embedded *ReadTaskHateoasOuterEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links    *ReadTaskHateoasLinks         `json:"_links"`
     // The Clumio-assigned ID of the task created by this restore request. The progress of the task can be monitored using the `GET /tasks/{task_id}` endpoint.
-    TaskId   *string               `json:"task_id"`
+    TaskId   *string                       `json:"task_id"`
 }
 
 // RestoredFilesResponse represents a custom type struct for Success
@@ -3428,7 +3673,7 @@ type RestoredFilesResponse struct {
 
 // SetAssignmentsResponse represents a custom type struct for Success
 type SetAssignmentsResponse struct {
-    // Embedded responses related to the resource.
+    // URLs to pages related to the resource.
     Links  *ReadTaskHateoasLinks `json:"_links"`
     // The Clumio-assigned ID of the task generated by this request.
     TaskId *string               `json:"task_id"`
@@ -3439,6 +3684,12 @@ type SetAssignmentsResponse struct {
 type SetBucketPropertiesResponse struct {
     // TODO: Add struct field description
     Links *SetBucketPropertiesResponseLinks `json:"_links"`
+}
+
+// ShareFileRestoreEmailResponse represents a custom type struct for Success
+type ShareFileRestoreEmailResponse struct {
+    // URLs to pages related to the resource.
+    Links *ShareFileRestoreEmailLinks `json:"_links"`
 }
 
 // UpdateAWSConnectionResponse represents a custom type struct for Success
@@ -3680,18 +3931,16 @@ type UpdateManagementGroupResponse struct {
 type UpdatePolicyResponse struct {
     // If the `embed` query parameter is set, displays the responses of the related resource,
     // as defined by the embeddable link specified.
-    Embedded                      *PolicyEmbedded    `json:"_embedded"`
+    Embedded             *PolicyEmbedded    `json:"_embedded"`
     // URLs to pages related to the resource.
-    Links                         *PolicyLinks       `json:"_links"`
+    Links                *PolicyLinks       `json:"_links"`
     // The status of the policy.
     // Refer to the Policy Activation Status table for a complete list of policy statuses.
-    ActivationStatus              *string            `json:"activation_status"`
-    // The Clumio-assigned IDs of the organizational units to whom the policy has been assigned.
-    AssignedOrganizationalUnitIds []*string          `json:"assigned_organizational_unit_ids"`
+    ActivationStatus     *string            `json:"activation_status"`
     // The created time of the policy in unix time.
-    CreatedTime                   *int64             `json:"created_time"`
+    CreatedTime          *int64             `json:"created_time"`
     // The Clumio-assigned ID of the policy.
-    Id                            *string            `json:"id"`
+    Id                   *string            `json:"id"`
     // The following table describes the possible lock statuses of a policy.
     // 
     // +----------+-------------------------------------------------------------------+
@@ -3706,19 +3955,19 @@ type UpdatePolicyResponse struct {
     // |          | will be rejected.                                                 |
     // +----------+-------------------------------------------------------------------+
     // 
-    LockStatus                    *string            `json:"lock_status"`
+    LockStatus           *string            `json:"lock_status"`
     // The user-provided name of the policy.
-    Name                          *string            `json:"name"`
+    Name                 *string            `json:"name"`
     // TODO: Add struct field description
-    Operations                    []*PolicyOperation `json:"operations"`
+    Operations           []*PolicyOperation `json:"operations"`
     // The Clumio-assigned ID of the organizational unit associated with the policy.
-    OrganizationalUnitId          *string            `json:"organizational_unit_id"`
+    OrganizationalUnitId *string            `json:"organizational_unit_id"`
     // The Clumio-assigned ID of the task generated by this request.
-    TaskId                        *string            `json:"task_id"`
+    TaskId               *string            `json:"task_id"`
     // The timezone for the policy.
-    Timezone                      *string            `json:"timezone"`
+    Timezone             *string            `json:"timezone"`
     // The updated time of the policy in unix time.
-    UpdatedTime                   *int64             `json:"updated_time"`
+    UpdatedTime          *int64             `json:"updated_time"`
 }
 
 // UpdateProtectionGroupResponse represents a custom type struct for Success
@@ -3778,7 +4027,7 @@ type UpdateProtectionGroupResponse struct {
 
 // UpdateRuleResponse represents a custom type struct for Success
 type UpdateRuleResponse struct {
-    // Embedded responses related to the resource.
+    // URLs to pages related to the resource.
     Links     *ReadTaskHateoasLinks `json:"_links"`
     // The Clumio-assigned ID of the preview generated by this request. Only valid if
     // `execution_type` is set to `dryrun`.

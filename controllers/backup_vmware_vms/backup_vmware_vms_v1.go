@@ -22,6 +22,7 @@ type BackupVmwareVmsV1 struct {
 func (b *BackupVmwareVmsV1) ListBackupVmwareVms(
     limit *int64, 
     start *string, 
+    sort *string, 
     filter *string)(
     *models.ListVMBackupsResponse, *apiutils.APIError) {
 
@@ -39,6 +40,9 @@ func (b *BackupVmwareVmsV1) ListBackupVmwareVms(
     if start == nil {
         start = &defaultString
     }
+    if sort == nil {
+        sort = &defaultString
+    }
     if filter == nil {
         filter = &defaultString
     }
@@ -46,6 +50,7 @@ func (b *BackupVmwareVmsV1) ListBackupVmwareVms(
     queryParams := map[string]string{
         "limit": fmt.Sprintf("%v", *limit),
         "start": *start,
+        "sort": *sort,
         "filter": *filter,
     }
 

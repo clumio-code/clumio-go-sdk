@@ -14,6 +14,7 @@ type BackupMssqlDatabasesV1Client interface {
     ListBackupMssqlDatabases(
         limit *int64, 
         start *string, 
+        sort *string, 
         filter *string, 
         embed *string)(
         *models.ListMssqlDatabaseBackupsResponse,  *apiutils.APIError)

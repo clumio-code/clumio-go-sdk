@@ -14,6 +14,7 @@ type BackupProtectionGroupsV1Client interface {
     ListBackupProtectionGroups(
         limit *int64, 
         start *string, 
+        sort *string, 
         filter *string)(
         *models.ListProtectionGroupBackupsResponse,  *apiutils.APIError)
     
@@ -21,6 +22,7 @@ type BackupProtectionGroupsV1Client interface {
     ListBackupProtectionGroupS3Assets(
         limit *int64, 
         start *string, 
+        sort *string, 
         filter *string)(
         *models.ListProtectionGroupS3AssetBackupsResponse,  *apiutils.APIError)
     

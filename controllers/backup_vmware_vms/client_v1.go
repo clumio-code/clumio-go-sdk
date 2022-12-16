@@ -14,6 +14,7 @@ type BackupVmwareVmsV1Client interface {
     ListBackupVmwareVms(
         limit *int64, 
         start *string, 
+        sort *string, 
         filter *string)(
         *models.ListVMBackupsResponse,  *apiutils.APIError)
     
