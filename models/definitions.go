@@ -1026,6 +1026,8 @@ type Bucket struct {
     IsReplicationEnabled     *bool                                         `json:"is_replication_enabled"`
     // The Versioning enablement state for the S3 bucket.
     IsVersioningEnabled      *bool                                         `json:"is_versioning_enabled"`
+    // Time of the last backup in RFC-3339 format.
+    LastBackupTimestamp      *string                                       `json:"last_backup_timestamp"`
     // The AWS-assigned name of the bucket.
     Name                     *string                                       `json:"name"`
     // Number of objects in bucket.
@@ -3138,6 +3140,9 @@ type MssqlDatabase struct {
     FailoverClusterId                       *string                `json:"failover_cluster_id"`
     // The Microsoft SQL assigned name of the Failover Cluster
     FailoverClusterName                     *string                `json:"failover_cluster_name"`
+    // Failovercluster Protection Status is used to indicate the fci protection status associated with the
+    // fci database
+    FailoverClusterProtectionStatus         *string                `json:"failover_cluster_protection_status"`
     // The Clumio-assigned ID of the group to which the standalone database belongs, in case of an
     // availability group database it will be empty.
     GroupId                                 *string                `json:"group_id"`
@@ -3572,6 +3577,45 @@ type OUGroupingCriteria struct {
     Vmware       *VMwareDsGroupingCriteria `json:"vmware"`
 }
 
+// OULinks represents a custom type struct.
+// URLs to pages related to the resource.
+type OULinks struct {
+    // The HATEOAS link to this resource.
+    Self                     *HateoasSelfLink `json:"_self"`
+    // A resource-specific HATEOAS link.
+    DeleteOrganizationalUnit *HateoasLink     `json:"delete-organizational-unit"`
+    // A resource-specific HATEOAS link.
+    PatchOrganizationalUnit  *HateoasLink     `json:"patch-organizational-unit"`
+}
+
+// Object represents a custom type struct.
+// Object defines one object to restore
+type Object struct {
+    // Bucket the object belongs to
+    Bucket           *string `json:"bucket"`
+    // Etag of the contents of the object.
+    Etag             *string `json:"etag"`
+    // Last time the object was backed up as an RFC3339 string.
+    LastBackupTime   *string `json:"last_backup_time"`
+    // Last modified time of the object as an RFC3339 string.
+    LastModifiedTime *string `json:"last_modified_time"`
+    // Object key
+    ObjectKey        *string `json:"object_key"`
+    // region of the backup object
+    Region           *string `json:"region"`
+    // Encrypted metadata for the object to be restored 
+    // You can get `restore_cookie` via
+    // [POST /restores/protection-groups/{protection_group_id}/previews](#operation/preview-protection-group)
+    RestoreCookie    *string `json:"restore_cookie"`
+    // Size in Bytes
+    SizeInBytes      *int64  `json:"size_in_bytes"`
+    // Storage class. Valid values are: `S3 Standard`, `S3 Standard-IA`, `S3 Intelligent-Tiering`,
+    // and `S3 One Zone-IA`.
+    StorageClass     *string `json:"storage_class"`
+    // Version ID
+    VersionId        *string `json:"version_id"`
+}
+
 // ObjectFilter represents a custom type struct.
 // ObjectFilter
 // defines which objects will be backed up.
@@ -3617,6 +3661,15 @@ type OrganizationalUnitLinks struct {
     PatchOrganizationalUnit  *HateoasLink     `json:"patch-organizational-unit"`
     // A resource-specific HATEOAS link.
     ReadTask                 *HateoasLink     `json:"read-task"`
+}
+
+// OrganizationalUnitLinksForDelete represents a custom type struct.
+// URLs to pages related to the resource.
+type OrganizationalUnitLinksForDelete struct {
+    // The HATEOAS link to this resource.
+    Self     *HateoasSelfLink `json:"_self"`
+    // A resource-specific HATEOAS link.
+    ReadTask *HateoasLink     `json:"read-task"`
 }
 
 // OrganizationalUnitListEmbedded represents a custom type struct.
@@ -3685,6 +3738,10 @@ type OrganizationalUnitWithETag struct {
     // The parent organizational unit contains the entities in this organizational unit and can update this organizational unit.
     // If this organizational unit is the global organizational unit, then this field has a value of `null`.
     ParentId                  *string                  `json:"parent_id"`
+    // The Clumio-assigned ID of the task associated with this organizational unit.
+    // The progress of the task can be monitored using the
+    // [GET /tasks/{task_id}](#operation/read-task) endpoint.
+    TaskId                    *string                  `json:"task_id"`
     // Number of users to whom this organizational unit or any of its descendants have been assigned.
     UserCount                 *int64                   `json:"user_count"`
     // Users IDs to whom the organizational unit has been assigned.
@@ -3887,6 +3944,52 @@ type PrefixFilter struct {
     ExcludedSubPrefixes []*string `json:"excluded_sub_prefixes"`
     // Prefix to include.
     Prefix              *string   `json:"prefix"`
+}
+
+// PreviewDetailsProtectionGroupLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type PreviewDetailsProtectionGroupLinks struct {
+    // The HATEOAS link to this resource.
+    Self *HateoasSelfLink `json:"_self"`
+}
+
+// PreviewProtectionGroupAsyncLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type PreviewProtectionGroupAsyncLinks struct {
+    // The HATEOAS link to this resource.
+    Self     *HateoasSelfLink     `json:"_self"`
+    // A HATEOAS link to the task associated with this resource.
+    ReadTask *ReadTaskHateoasLink `json:"read-task"`
+}
+
+// PreviewProtectionGroupS3AssetAsyncLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type PreviewProtectionGroupS3AssetAsyncLinks struct {
+    // The HATEOAS link to this resource.
+    Self     *HateoasSelfLink     `json:"_self"`
+    // A HATEOAS link to the task associated with this resource.
+    ReadTask *ReadTaskHateoasLink `json:"read-task"`
+}
+
+// PreviewProtectionGroupS3AssetDetailsLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type PreviewProtectionGroupS3AssetDetailsLinks struct {
+    // The HATEOAS link to this resource.
+    Self *HateoasSelfLink `json:"_self"`
+}
+
+// PreviewProtectionGroupS3AssetSyncLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type PreviewProtectionGroupS3AssetSyncLinks struct {
+    // The HATEOAS link to this resource.
+    Self *HateoasSelfLink `json:"_self"`
+}
+
+// PreviewProtectionGroupSyncLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type PreviewProtectionGroupSyncLinks struct {
+    // The HATEOAS link to this resource.
+    Self *HateoasSelfLink `json:"_self"`
 }
 
 // Projection represents a custom type struct.
@@ -4282,14 +4385,37 @@ type ProtectionGroupRestoreSource struct {
     // The Clumio-assigned ID of the protection group backup to be restored. Use the
     // [GET /backups/protection-groups](#operation/list-backup-protection-groups)
     // endpoint to fetch valid values. 
-    BackupId                  *string              `json:"backup_id"`
+    // Note that only one of `backup_id` or `pitr` must be given.
+    BackupId                  *string                                  `json:"backup_id"`
     // Search for or restore only objects that pass the source object filter.
-    ObjectFilters             *SourceObjectFilters `json:"object_filters"`
+    ObjectFilters             *SourceObjectFilters                     `json:"object_filters"`
+    // The parameters for initiating a point in time restore.
+    // Note that only one of `backup_id` or `pitr` must be given.
+    Pitr                      *ProtectionGroupRestoreSourcePitrOptions `json:"pitr"`
     // A list of Clumio-assigned IDs of protection group S3 assets, representing the
     // buckets within the protection group to restore from. Use the
     // [GET /datasources/protection-groups/s3-assets](#operation/list-protection-group-s3-assets)
     // endpoint to fetch valid values.
-    ProtectionGroupS3AssetIds []*string            `json:"protection_group_s3_asset_ids"`
+    ProtectionGroupS3AssetIds []*string                                `json:"protection_group_s3_asset_ids"`
+}
+
+// ProtectionGroupRestoreSourcePitrOptions represents a custom type struct.
+// The parameters for initiating a point in time restore.<br>
+// Note that only one of `backup_id` or `pitr` must be given.
+type ProtectionGroupRestoreSourcePitrOptions struct {
+    // Clumio-assigned ID of protection group, representing the
+    // protection group to restore from. Use the
+    // [GET /datasources/protection-groups](#operation/list-protection-group)
+    // endpoint to fetch valid values.
+    ProtectionGroupId     *string `json:"protection_group_id"`
+    // The end timestamp to be restored in RFC-3339 format.
+    // Clumio restores last objects modified before the given time. 
+    // If `restore_end_timestamp` is given without `restore_start_timestamp`,
+    // it is the same as point in time restore.
+    RestoreEndTimestamp   *string `json:"restore_end_timestamp"`
+    // The start timestamp to be restored in RFC-3339 format.
+    // Clumio restores objects modified since the given time.
+    RestoreStartTimestamp *string `json:"restore_start_timestamp"`
 }
 
 // ProtectionGroupRestoreTarget represents a custom type struct.
@@ -4390,9 +4516,32 @@ type ProtectionGroupS3AssetRestoreSource struct {
     // The Clumio-assigned ID of the protection group S3 asset backup to be restored. Use the
     // [GET /backups/protection-groups/s3-assets](#operation/list-backup-protection-group-s3-assets)
     // endpoint to fetch valid values. 
-    BackupId      *string              `json:"backup_id"`
+    // Note that only one of `backup_id` or `pitr` must be given.
+    BackupId      *string                                         `json:"backup_id"`
     // Search for or restore only objects that pass the source object filter.
-    ObjectFilters *SourceObjectFilters `json:"object_filters"`
+    ObjectFilters *SourceObjectFilters                            `json:"object_filters"`
+    // The parameters for initiating a point in time restore.
+    // Note that only one of `backup_id` or `pitr` must be given.
+    Pitr          *ProtectionGroupS3AssetRestoreSourcePitrOptions `json:"pitr"`
+}
+
+// ProtectionGroupS3AssetRestoreSourcePitrOptions represents a custom type struct.
+// The parameters for initiating a point in time restore.<br>
+// Note that only one of `backup_id` or `pitr` must be given.
+type ProtectionGroupS3AssetRestoreSourcePitrOptions struct {
+    // Clumio-assigned ID of protection group S3 asset, representing the
+    // bucket within the protection group to restore from. Use the
+    // [GET /datasources/protection-groups/s3-assets](#operation/list-protection-group-s3-assets)
+    // endpoint to fetch valid values.
+    ProtectionGroupS3AssetId *string `json:"protection_group_s3_asset_id"`
+    // The ending time to be restored in RFC-3339 format.
+    // We will restore last objects modified before the given time. 
+    // If `restore_end_timestamp` is given without `restore_start_timestamp`,
+    // it is the same as point in time restore.
+    RestoreEndTimestamp      *string `json:"restore_end_timestamp"`
+    // The starting time to be restored in RFC-3339 format.
+    // We will restore objects modified since the given time.
+    RestoreStartTimestamp    *string `json:"restore_start_timestamp"`
 }
 
 // ProtectionGroupVersionLinks represents a custom type struct.
@@ -4521,7 +4670,7 @@ type RDSLogicalPreviewQueryResult struct {
 // For example, to configure the minimum frequency between backups to be every 2 days, set `unit="days"` and `value=2`.
 // To configure the SLA for on-demand backups, set `unit="on_demand"` and leave the `value` field empty.
 type RPOBackupSLAParam struct {
-    // The measurement unit of the SLA parameter. Values include `hours`, `days`, `months`, and `years`.
+    // The measurement unit of the SLA parameter.
     Unit  *string `json:"unit"`
     // The measurement value of the SLA parameter.
     Value *int64  `json:"value"`
@@ -4880,6 +5029,15 @@ type RestoreFileLinks struct {
     ReadTask *ReadTaskHateoasLink `json:"read-task"`
 }
 
+// RestoreObjectsLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type RestoreObjectsLinks struct {
+    // The HATEOAS link to this resource.
+    Self     *HateoasSelfLink     `json:"_self"`
+    // A HATEOAS link to the task associated with this resource.
+    ReadTask *ReadTaskHateoasLink `json:"read-task"`
+}
+
 // RestoreProtectionGroupLinks represents a custom type struct.
 // URLs to pages related to the resource.
 type RestoreProtectionGroupLinks struct {
@@ -5021,7 +5179,7 @@ type RestoredRecordListLinks struct {
 // RetentionBackupSLAParam represents a custom type struct.
 // The retention time for this SLA. For example, to retain the backup for 1 month, set `unit="months"` and `value=1`.
 type RetentionBackupSLAParam struct {
-    // The measurement unit of the SLA parameter. Values include `hours`, `days`, `months`, and `years`.
+    // The measurement unit of the SLA parameter.
     Unit  *string `json:"unit"`
     // The measurement value of the SLA parameter.
     Value *int64  `json:"value"`
@@ -6121,6 +6279,8 @@ type UnprotectEntitiesHateoasLink struct {
 
 // UpdateEntities represents a custom type struct.
 // Updates to the entities in the organizational unit.
+// Adding or removing entities from the OU is an asynchronous operation.
+// The response has a task ID which can be used to track the progress of the operation.
 type UpdateEntities struct {
     // entityModel denotes the entityModel
     Add    []*EntityModel `json:"add"`
@@ -6131,9 +6291,9 @@ type UpdateEntities struct {
 // UpdateUserAssignments represents a custom type struct.
 // Updates to the user assignments.
 type UpdateUserAssignments struct {
-    // List of user ids to assign this organizational unit.
+    // List of user IDs to assign this organizational unit.
     Add    []*string `json:"add"`
-    // List of user ids to un-assign this organizational unit.
+    // List of user IDs to un-assign this organizational unit.
     Remove []*string `json:"remove"`
 }
 

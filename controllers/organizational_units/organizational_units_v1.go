@@ -62,11 +62,13 @@ func (o *OrganizationalUnitsV1) ListOrganizationalUnits(
 }
 
 
-// CreateOrganizationalUnit Create a new organizational unit.
+// CreateOrganizationalUnit Create a new organizational unit. Adding entities to the OU is an asynchronous operation and has a task associated.
+//  When the request has entities to be added, the response has a task ID which can be used to
+//  track the progress of the operation.
 func (o *OrganizationalUnitsV1) CreateOrganizationalUnit(
     embed *string, 
     body *models.CreateOrganizationalUnitV1Request)(
-    *models.CreateOrganizationalUnitResponse, *apiutils.APIError) {
+    *models.CreateOrganizationalUnitNoTaskResponse, *apiutils.APIError) {
 
     queryBuilder := o.config.BaseUrl + "/organizational-units"
 
@@ -80,7 +82,7 @@ func (o *OrganizationalUnitsV1) CreateOrganizationalUnit(
     }
     payload := string(bytes)
     header := "application/api.clumio.organizational-units=v1+json"
-    var result *models.CreateOrganizationalUnitResponse
+    var result *models.CreateOrganizationalUnitNoTaskResponse
     defaultString := "" 
     
     if embed == nil {
@@ -107,7 +109,8 @@ func (o *OrganizationalUnitsV1) CreateOrganizationalUnit(
 
 // ReadOrganizationalUnit Returns a representation of the specified organizational unit.
 func (o *OrganizationalUnitsV1) ReadOrganizationalUnit(
-    id string)(
+    id string, 
+    embed *string)(
     *models.ReadOrganizationalUnitResponse, *apiutils.APIError) {
 
     pathURL := "/organizational-units/{id}"
@@ -120,10 +123,20 @@ func (o *OrganizationalUnitsV1) ReadOrganizationalUnit(
     
     header := "application/api.clumio.organizational-units=v1+json"
     var result *models.ReadOrganizationalUnitResponse
+    defaultString := "" 
+    
+    if embed == nil {
+        embed = &defaultString
+    }
+    
+    queryParams := map[string]string{
+        "embed": *embed,
+    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: o.config,
         RequestUrl: queryBuilder,
+        QueryParams: queryParams,
         PathParams: pathParams,
         AcceptHeader: header,
         Result: &result,
@@ -175,12 +188,15 @@ func (o *OrganizationalUnitsV1) DeleteOrganizationalUnit(
 
 
 // PatchOrganizationalUnit Patch the specified organizational unit.
-//  The complete updated attribute(s) of the organizational unit has to be provided in the request.
+//  The complete updated attribute(s) of the organizational unit have to be provided in the request.
+//  Adding or removing entities from the OU is an asynchronous operation and has a task associated.
+//  When the request has entities to be added or removed, the response has a task ID
+//  which can be used to track the progress of the operation.
 func (o *OrganizationalUnitsV1) PatchOrganizationalUnit(
     id string, 
     embed *string, 
     body *models.PatchOrganizationalUnitV1Request)(
-    *models.PatchOrganizationalUnitResponse, *apiutils.APIError) {
+    *models.PatchOrganizationalUnitNoTaskResponse, *apiutils.APIError) {
 
     pathURL := "/organizational-units/{id}"
     //process optional template parameters
@@ -199,7 +215,7 @@ func (o *OrganizationalUnitsV1) PatchOrganizationalUnit(
     }
     payload := string(bytes)
     header := "application/api.clumio.organizational-units=v1+json"
-    var result *models.PatchOrganizationalUnitResponse
+    var result *models.PatchOrganizationalUnitNoTaskResponse
     defaultString := "" 
     
     if embed == nil {

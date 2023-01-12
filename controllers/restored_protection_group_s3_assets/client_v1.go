@@ -16,6 +16,18 @@ type RestoredProtectionGroupS3AssetsV1Client interface {
         body models.RestoreProtectionGroupS3AssetV1Request)(
         *models.RestoreProtectionGroupS3AssetResponse,  *apiutils.APIError)
     
+    // PreviewProtectionGroupS3Asset Preview a protection group S3 asset restore
+    PreviewProtectionGroupS3Asset(
+        protectionGroupS3AssetId string, 
+        body models.PreviewProtectionGroupS3AssetV1Request)(
+        *models.PreviewProtectionGroupS3AssetSyncResponse,  *apiutils.APIError)
+    
+    // PreviewDetailsProtectionGroupS3Asset Details for protection group S3 asset restore preview
+    PreviewDetailsProtectionGroupS3Asset(
+        protectionGroupS3AssetId string, 
+        previewId string)(
+        *models.PreviewProtectionGroupS3AssetDetailsResponse,  *apiutils.APIError)
+    
 }
 
 // NewRestoredProtectionGroupS3AssetsV1 returns RestoredProtectionGroupS3AssetsV1Client

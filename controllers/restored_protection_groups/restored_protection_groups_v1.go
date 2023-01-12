@@ -59,3 +59,123 @@ func (r *RestoredProtectionGroupsV1) RestoreProtectionGroup(
 
     return result, apiErr
 }
+
+
+// PreviewProtectionGroup Preview a protection group restore.
+func (r *RestoredProtectionGroupsV1) PreviewProtectionGroup(
+    protectionGroupId string, 
+    body models.PreviewProtectionGroupV1Request)(
+    *models.PreviewProtectionGroupSyncResponse, *apiutils.APIError) {
+
+    pathURL := "/restores/protection-groups/{protection_group_id}/previews"
+    //process optional template parameters
+    pathParams := map[string]string{
+        "protection_group_id": protectionGroupId,
+    }
+    queryBuilder := r.config.BaseUrl + pathURL
+
+    bytes, err := json.Marshal(body)
+    if err != nil {
+        return nil, &apiutils.APIError{
+            ResponseCode: 500,
+            Reason:       fmt.Sprintf("Failed to Marshal Request Body %v", body),
+            Response:     []byte(fmt.Sprintf("%v", err)),
+        }
+    }
+    payload := string(bytes)
+    header := "application/api.clumio.restored-protection-groups=v1+json"
+    var result *models.PreviewProtectionGroupSyncResponse
+
+    apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
+        Config: r.config,
+        RequestUrl: queryBuilder,
+        PathParams: pathParams,
+        AcceptHeader: header,
+        Body: payload,
+        Result: &result,
+        RequestType: common.Post,
+    })
+
+    return result, apiErr
+}
+
+
+// PreviewDetailsProtectionGroup Details for protection group bucket restore preview
+func (r *RestoredProtectionGroupsV1) PreviewDetailsProtectionGroup(
+    protectionGroupId string, 
+    previewId string)(
+    *models.PreviewDetailsProtectionGroupResponse, *apiutils.APIError) {
+
+    pathURL := "/restores/protection-groups/{protection_group_id}/previews/{preview_id}"
+    //process optional template parameters
+    pathParams := map[string]string{
+        "protection_group_id": protectionGroupId,
+        "preview_id": previewId,
+    }
+    queryBuilder := r.config.BaseUrl + pathURL
+
+    
+    header := "application/api.clumio.restored-protection-groups=v1+json"
+    var result *models.PreviewDetailsProtectionGroupResponse
+
+    apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
+        Config: r.config,
+        RequestUrl: queryBuilder,
+        PathParams: pathParams,
+        AcceptHeader: header,
+        Result: &result,
+        RequestType: common.Get,
+    })
+
+    return result, apiErr
+}
+
+
+// RestoreProtectionGroupS3Objects Restores the specified list of S3 objects to the specified target destination.
+func (r *RestoredProtectionGroupsV1) RestoreProtectionGroupS3Objects(
+    protectionGroupId string, 
+    embed *string, 
+    body models.RestoreProtectionGroupS3ObjectsV1Request)(
+    *models.RestoreObjectsResponse, *apiutils.APIError) {
+
+    pathURL := "/restores/protection-groups/{protection_group_id}/s3-objects"
+    //process optional template parameters
+    pathParams := map[string]string{
+        "protection_group_id": protectionGroupId,
+    }
+    queryBuilder := r.config.BaseUrl + pathURL
+
+    bytes, err := json.Marshal(body)
+    if err != nil {
+        return nil, &apiutils.APIError{
+            ResponseCode: 500,
+            Reason:       fmt.Sprintf("Failed to Marshal Request Body %v", body),
+            Response:     []byte(fmt.Sprintf("%v", err)),
+        }
+    }
+    payload := string(bytes)
+    header := "application/api.clumio.restored-protection-groups=v1+json"
+    var result *models.RestoreObjectsResponse
+    defaultString := "" 
+    
+    if embed == nil {
+        embed = &defaultString
+    }
+    
+    queryParams := map[string]string{
+        "embed": *embed,
+    }
+
+    apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
+        Config: r.config,
+        RequestUrl: queryBuilder,
+        QueryParams: queryParams,
+        PathParams: pathParams,
+        AcceptHeader: header,
+        Body: payload,
+        Result: &result,
+        RequestType: common.Post,
+    })
+
+    return result, apiErr
+}

@@ -59,3 +59,73 @@ func (r *RestoredProtectionGroupS3AssetsV1) RestoreProtectionGroupS3Asset(
 
     return result, apiErr
 }
+
+
+// PreviewProtectionGroupS3Asset Preview a protection group S3 asset restore
+func (r *RestoredProtectionGroupS3AssetsV1) PreviewProtectionGroupS3Asset(
+    protectionGroupS3AssetId string, 
+    body models.PreviewProtectionGroupS3AssetV1Request)(
+    *models.PreviewProtectionGroupS3AssetSyncResponse, *apiutils.APIError) {
+
+    pathURL := "/restores/protection-groups/s3-assets/{protection_group_s3_asset_id}/previews"
+    //process optional template parameters
+    pathParams := map[string]string{
+        "protection_group_s3_asset_id": protectionGroupS3AssetId,
+    }
+    queryBuilder := r.config.BaseUrl + pathURL
+
+    bytes, err := json.Marshal(body)
+    if err != nil {
+        return nil, &apiutils.APIError{
+            ResponseCode: 500,
+            Reason:       fmt.Sprintf("Failed to Marshal Request Body %v", body),
+            Response:     []byte(fmt.Sprintf("%v", err)),
+        }
+    }
+    payload := string(bytes)
+    header := "application/api.clumio.restored-protection-group-s3-assets=v1+json"
+    var result *models.PreviewProtectionGroupS3AssetSyncResponse
+
+    apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
+        Config: r.config,
+        RequestUrl: queryBuilder,
+        PathParams: pathParams,
+        AcceptHeader: header,
+        Body: payload,
+        Result: &result,
+        RequestType: common.Post,
+    })
+
+    return result, apiErr
+}
+
+
+// PreviewDetailsProtectionGroupS3Asset Details for protection group S3 asset restore preview
+func (r *RestoredProtectionGroupS3AssetsV1) PreviewDetailsProtectionGroupS3Asset(
+    protectionGroupS3AssetId string, 
+    previewId string)(
+    *models.PreviewProtectionGroupS3AssetDetailsResponse, *apiutils.APIError) {
+
+    pathURL := "/restores/protection-groups/s3-assets/{protection_group_s3_asset_id}/previews/{preview_id}"
+    //process optional template parameters
+    pathParams := map[string]string{
+        "protection_group_s3_asset_id": protectionGroupS3AssetId,
+        "preview_id": previewId,
+    }
+    queryBuilder := r.config.BaseUrl + pathURL
+
+    
+    header := "application/api.clumio.restored-protection-group-s3-assets=v1+json"
+    var result *models.PreviewProtectionGroupS3AssetDetailsResponse
+
+    apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
+        Config: r.config,
+        RequestUrl: queryBuilder,
+        PathParams: pathParams,
+        AcceptHeader: header,
+        Result: &result,
+        RequestType: common.Get,
+    })
+
+    return result, apiErr
+}

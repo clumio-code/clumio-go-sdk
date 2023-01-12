@@ -235,7 +235,35 @@ type CreateMssqlDatabaseRestoreResponse struct {
     Links    *ReadTaskHateoasLinks         `json:"_links"`
 }
 
-// CreateOrganizationalUnitResponse represents a custom type struct for Success
+// CreateOrganizationalUnitNoTaskResponse represents a custom type struct for Success
+type CreateOrganizationalUnitNoTaskResponse struct {
+    // URLs to pages related to the resource.
+    Links                     *OULinks  `json:"_links"`
+    // Number of immediate children of the organizational unit.
+    ChildrenCount             *int64    `json:"children_count"`
+    // Datasource types configured in this organizational unit. Possible values include `aws`, `microsoft365`, `vmware`, or `mssql`.
+    ConfiguredDatasourceTypes []*string `json:"configured_datasource_types"`
+    // List of all recursive descendant organizational units of this OU.
+    DescendantIds             []*string `json:"descendant_ids"`
+    // A description of the organizational unit.
+    Description               *string   `json:"description"`
+    // The Clumio assigned ID of the organizational unit.
+    Id                        *string   `json:"id"`
+    // Unique name assigned to the organizational unit.
+    Name                      *string   `json:"name"`
+    // The Clumio assigned ID of the parent organizational unit.
+    // The parent organizational unit contains the entities in this organizational unit and can update this organizational unit.
+    // If this organizational unit is the global organizational unit, then this field has a value of `null`.
+    ParentId                  *string   `json:"parent_id"`
+    // Number of users to whom this organizational unit or any of its descendants have been assigned.
+    UserCount                 *int64    `json:"user_count"`
+    // Users IDs to whom the organizational unit has been assigned.
+    // This attribute will be available when reading a single OU and not when listing OUs.
+    Users                     []*string `json:"users"`
+}
+
+// CreateOrganizationalUnitResponse represents a custom type struct.
+// Accepted
 type CreateOrganizationalUnitResponse struct {
     // Embedded responses related to the resource.
     Embedded                  *EntityGroupEmbedded     `json:"_embedded"`
@@ -257,6 +285,10 @@ type CreateOrganizationalUnitResponse struct {
     // The parent organizational unit contains the entities in this organizational unit and can update this organizational unit.
     // If this organizational unit is the global organizational unit, then this field has a value of `null`.
     ParentId                  *string                  `json:"parent_id"`
+    // The Clumio-assigned ID of the task associated with this organizational unit.
+    // The progress of the task can be monitored using the
+    // [GET /tasks/{task_id}](#operation/read-task) endpoint.
+    TaskId                    *string                  `json:"task_id"`
     // Number of users to whom this organizational unit or any of its descendants have been assigned.
     UserCount                 *int64                   `json:"user_count"`
     // Users IDs to whom the organizational unit has been assigned.
@@ -531,9 +563,13 @@ type DeleteHcmHostResponse struct {
 // Accepted
 type DeleteOrganizationalUnitResponse struct {
     // Embedded responses related to the resource.
-    Embedded *EntityGroupEmbedded  `json:"_embedded"`
+    Embedded *EntityGroupEmbedded              `json:"_embedded"`
     // URLs to pages related to the resource.
-    Links    *ReadTaskHateoasLinks `json:"_links"`
+    Links    *OrganizationalUnitLinksForDelete `json:"_links"`
+    // The Clumio-assigned ID of the task associated with this organizational unit.
+    // The progress of the task can be monitored using the
+    // [GET /tasks/{task_id}](#operation/read-task) endpoint.
+    TaskId   *string                           `json:"task_id"`
 }
 
 // DeletePolicyResponse represents a custom type struct for Success
@@ -1575,14 +1611,14 @@ type PatchGeneralSettingsResponseV2 struct {
     // URLs to pages related to the resource.
     Links                        *GeneralSettingsLinks `json:"_links"`
     // The length of time before a user is logged out of the Clumio system due to inactivity. Measured in seconds.
-    // The valid range is between `600` seconds (10 minutes) and `3600` seconds (60 minutes).
-    // If not configured, the value defaults to `900` seconds (15 minutes).
+    // The valid range is between 600 seconds (10 minutes) and 3600 seconds (60 minutes).
+    // If not configured, the value defaults to 900 seconds (15 minutes).
     AutoLogoutDuration           *int64                `json:"auto_logout_duration"`
     // The designated range of IP addresses that are allowed to access the Clumio REST API.
     // API requests that originate from outside this list will be blocked.
     // The IP address of the server from which this request is being made must be in this list; otherwise, the request will fail.
     // Set the parameter to individual IP addresses and/or a range of IP addresses in CIDR notation.
-    // For example, `["193.168.1.0/24", "193.172.1.1"]`.
+    // For example, ["193.168.1.0/24", "193.172.1.1"].
     // If not configured, the value defaults to ["0.0.0.0/0"] meaning all addresses will be allowed.
     IpAllowlist                  []*string             `json:"ip_allowlist"`
     // The grouping criteria for each datasource type.
@@ -1590,9 +1626,36 @@ type PatchGeneralSettingsResponseV2 struct {
     // organizational units configured.
     OrganizationalUnitDataGroups *OUGroupingCriteria   `json:"organizational_unit_data_groups"`
     // The length of time a user password is valid before it must be changed. Measured in seconds.
-    // The valid range is between `2592000` seconds (30 days) and `15552000` seconds (180 days).
-    // If not configured, the value defaults to `7776000` seconds (90 days).
+    // The valid range is between 2592000 seconds (30 days) and 15552000 seconds (180 days).
+    // If not configured, the value defaults to 7776000 seconds (90 days).
     PasswordExpirationDuration   *int64                `json:"password_expiration_duration"`
+}
+
+// PatchOrganizationalUnitNoTaskResponse represents a custom type struct for Success
+type PatchOrganizationalUnitNoTaskResponse struct {
+    // URLs to pages related to the resource.
+    Links                     *OULinks  `json:"_links"`
+    // Number of immediate children of the organizational unit.
+    ChildrenCount             *int64    `json:"children_count"`
+    // Datasource types configured in this organizational unit. Possible values include `aws`, `microsoft365`, `vmware`, or `mssql`.
+    ConfiguredDatasourceTypes []*string `json:"configured_datasource_types"`
+    // List of all recursive descendant organizational units of this OU.
+    DescendantIds             []*string `json:"descendant_ids"`
+    // A description of the organizational unit.
+    Description               *string   `json:"description"`
+    // The Clumio assigned ID of the organizational unit.
+    Id                        *string   `json:"id"`
+    // Unique name assigned to the organizational unit.
+    Name                      *string   `json:"name"`
+    // The Clumio assigned ID of the parent organizational unit.
+    // The parent organizational unit contains the entities in this organizational unit and can update this organizational unit.
+    // If this organizational unit is the global organizational unit, then this field has a value of `null`.
+    ParentId                  *string   `json:"parent_id"`
+    // Number of users to whom this organizational unit or any of its descendants have been assigned.
+    UserCount                 *int64    `json:"user_count"`
+    // Users IDs to whom the organizational unit has been assigned.
+    // This attribute will be available when reading a single OU and not when listing OUs.
+    Users                     []*string `json:"users"`
 }
 
 // PatchOrganizationalUnitResponse represents a custom type struct.
@@ -1618,11 +1681,82 @@ type PatchOrganizationalUnitResponse struct {
     // The parent organizational unit contains the entities in this organizational unit and can update this organizational unit.
     // If this organizational unit is the global organizational unit, then this field has a value of `null`.
     ParentId                  *string                  `json:"parent_id"`
+    // The Clumio-assigned ID of the task associated with this organizational unit.
+    // The progress of the task can be monitored using the
+    // [GET /tasks/{task_id}](#operation/read-task) endpoint.
+    TaskId                    *string                  `json:"task_id"`
     // Number of users to whom this organizational unit or any of its descendants have been assigned.
     UserCount                 *int64                   `json:"user_count"`
     // Users IDs to whom the organizational unit has been assigned.
     // This attribute will be available when reading a single OU and not when listing OUs.
     Users                     []*string                `json:"users"`
+}
+
+// PreviewDetailsProtectionGroupResponse represents a custom type struct for Success
+type PreviewDetailsProtectionGroupResponse struct {
+    // The ETag value.
+    Etag    *string                             `json:"_etag"`
+    // URLs to pages related to the resource.
+    Links   *PreviewDetailsProtectionGroupLinks `json:"_links"`
+    // Object defines one object to restore
+    Objects []*Object                           `json:"objects"`
+}
+
+// PreviewProtectionGroupAsyncResponse represents a custom type struct.
+// Success (Async)
+type PreviewProtectionGroupAsyncResponse struct {
+    // URLs to pages related to the resource.
+    Links     *PreviewProtectionGroupAsyncLinks `json:"_links"`
+    // The identifier for the requested preview which is used to fetch results of the preview. 
+    // Note that this field is given only for async request.
+    PreviewId *string                           `json:"preview_id"`
+    // The Clumio-assigned ID of the task created by this restore request.
+    // The progress of the task can be monitored using the
+    // `GET /tasks/{task_id}` endpoint.
+    // Note that this field is given only for async request.
+    TaskId    *string                           `json:"task_id"`
+}
+
+// PreviewProtectionGroupS3AssetAsyncResponse represents a custom type struct.
+// Success (Async)
+type PreviewProtectionGroupS3AssetAsyncResponse struct {
+    // URLs to pages related to the resource.
+    Links     *PreviewProtectionGroupS3AssetAsyncLinks `json:"_links"`
+    // The identifier for the requested preview which is used to fetch results of the preview.
+    PreviewId *string                                  `json:"preview_id"`
+    // The Clumio-assigned ID of the task created by this restore request.
+    // The progress of the task can be monitored using the
+    // `GET /tasks/{task_id}` endpoint.
+    // Note that this field is given only for async request.
+    TaskId    *string                                  `json:"task_id"`
+}
+
+// PreviewProtectionGroupS3AssetDetailsResponse represents a custom type struct for Success
+type PreviewProtectionGroupS3AssetDetailsResponse struct {
+    // The ETag value.
+    Etag    *string                                    `json:"_etag"`
+    // URLs to pages related to the resource.
+    Links   *PreviewProtectionGroupS3AssetDetailsLinks `json:"_links"`
+    // Object defines one object to restore
+    Objects []*Object                                  `json:"objects"`
+}
+
+// PreviewProtectionGroupS3AssetSyncResponse represents a custom type struct.
+// Success (Sync)
+type PreviewProtectionGroupS3AssetSyncResponse struct {
+    // URLs to pages related to the resource.
+    Links   *PreviewProtectionGroupS3AssetSyncLinks `json:"_links"`
+    // Object defines one object to restore
+    Objects []*Object                               `json:"objects"`
+}
+
+// PreviewProtectionGroupSyncResponse represents a custom type struct.
+// Success (Sync)
+type PreviewProtectionGroupSyncResponse struct {
+    // URLs to pages related to the resource.
+    Links   *PreviewProtectionGroupSyncLinks `json:"_links"`
+    // Object defines one object to restore
+    Objects []*Object                        `json:"objects"`
 }
 
 // ReadAWSConnectionResponse represents a custom type struct for Success
@@ -1909,6 +2043,8 @@ type ReadBucketResponse struct {
     IsReplicationEnabled     *bool                                         `json:"is_replication_enabled"`
     // The Versioning enablement state for the S3 bucket.
     IsVersioningEnabled      *bool                                         `json:"is_versioning_enabled"`
+    // Time of the last backup in RFC-3339 format.
+    LastBackupTimestamp      *string                                       `json:"last_backup_timestamp"`
     // The AWS-assigned name of the bucket.
     Name                     *string                                       `json:"name"`
     // Number of objects in bucket.
@@ -2292,14 +2428,14 @@ type ReadGeneralSettingsResponseV2 struct {
     // URLs to pages related to the resource.
     Links                        *GeneralSettingsLinks `json:"_links"`
     // The length of time before a user is logged out of the Clumio system due to inactivity. Measured in seconds.
-    // The valid range is between `600` seconds (10 minutes) and `3600` seconds (60 minutes).
-    // If not configured, the value defaults to `900` seconds (15 minutes).
+    // The valid range is between 600 seconds (10 minutes) and 3600 seconds (60 minutes).
+    // If not configured, the value defaults to 900 seconds (15 minutes).
     AutoLogoutDuration           *int64                `json:"auto_logout_duration"`
     // The designated range of IP addresses that are allowed to access the Clumio REST API.
     // API requests that originate from outside this list will be blocked.
     // The IP address of the server from which this request is being made must be in this list; otherwise, the request will fail.
     // Set the parameter to individual IP addresses and/or a range of IP addresses in CIDR notation.
-    // For example, `["193.168.1.0/24", "193.172.1.1"]`.
+    // For example, ["193.168.1.0/24", "193.172.1.1"].
     // If not configured, the value defaults to ["0.0.0.0/0"] meaning all addresses will be allowed.
     IpAllowlist                  []*string             `json:"ip_allowlist"`
     // The grouping criteria for each datasource type.
@@ -2307,8 +2443,8 @@ type ReadGeneralSettingsResponseV2 struct {
     // organizational units configured.
     OrganizationalUnitDataGroups *OUGroupingCriteria   `json:"organizational_unit_data_groups"`
     // The length of time a user password is valid before it must be changed. Measured in seconds.
-    // The valid range is between `2592000` seconds (30 days) and `15552000` seconds (180 days).
-    // If not configured, the value defaults to `7776000` seconds (90 days).
+    // The valid range is between 2592000 seconds (30 days) and 15552000 seconds (180 days).
+    // If not configured, the value defaults to 7776000 seconds (90 days).
     PasswordExpirationDuration   *int64                `json:"password_expiration_duration"`
 }
 
@@ -2461,6 +2597,9 @@ type ReadMssqlDatabaseResponse struct {
     FailoverClusterId                       *string                `json:"failover_cluster_id"`
     // The Microsoft SQL assigned name of the Failover Cluster
     FailoverClusterName                     *string                `json:"failover_cluster_name"`
+    // Failovercluster Protection Status is used to indicate the fci protection status associated with the
+    // fci database
+    FailoverClusterProtectionStatus         *string                `json:"failover_cluster_protection_status"`
     // The Clumio-assigned ID of the group to which the standalone database belongs, in case of an
     // availability group database it will be empty.
     GroupId                                 *string                `json:"group_id"`
@@ -2595,6 +2734,10 @@ type ReadOrganizationalUnitResponse struct {
     // The parent organizational unit contains the entities in this organizational unit and can update this organizational unit.
     // If this organizational unit is the global organizational unit, then this field has a value of `null`.
     ParentId                  *string                  `json:"parent_id"`
+    // The Clumio-assigned ID of the task associated with this organizational unit.
+    // The progress of the task can be monitored using the
+    // [GET /tasks/{task_id}](#operation/read-task) endpoint.
+    TaskId                    *string                  `json:"task_id"`
     // Number of users to whom this organizational unit or any of its descendants have been assigned.
     UserCount                 *int64                   `json:"user_count"`
     // Users IDs to whom the organizational unit has been assigned.
@@ -3556,6 +3699,18 @@ type RestoreFileResponse struct {
     // file, in the case the restored file was emailed to the end-user as part
     // of transparent data access.
     Passcode *string                       `json:"passcode"`
+    // The Clumio-assigned ID of the task created by this restore request.
+    // The progress of the task can be monitored using the
+    // `GET /tasks/{task_id}` endpoint.
+    TaskId   *string                       `json:"task_id"`
+}
+
+// RestoreObjectsResponse represents a custom type struct for Success
+type RestoreObjectsResponse struct {
+    // Embedded responses related to the resource.
+    Embedded *ReadTaskHateoasOuterEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links    *RestoreObjectsLinks          `json:"_links"`
     // The Clumio-assigned ID of the task created by this restore request.
     // The progress of the task can be monitored using the
     // `GET /tasks/{task_id}` endpoint.

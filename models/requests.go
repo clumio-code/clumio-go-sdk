@@ -207,8 +207,9 @@ type CreateOrganizationalUnitV1Request struct {
     // Unique name assigned to the organizational unit.
     Name        *string        `json:"name"`
     // The Clumio-assigned ID of the parent organizational unit under which the new organizational unit is to be created.
+    // If absent, the new organizational unit is created under the current organizational unit.
     ParentId    *string        `json:"parent_id"`
-    // List of user ids to assign this organizational unit.
+    // List of user IDs to assign this organizational unit.
     Users       []*string      `json:"users"`
 }
 
@@ -217,6 +218,8 @@ type PatchOrganizationalUnitV1Request struct {
     // A description of the organizational unit.
     Description *string                `json:"description"`
     // Updates to the entities in the organizational unit.
+    // Adding or removing entities from the OU is an asynchronous operation.
+    // The response has a task ID which can be used to track the progress of the operation.
     Entities    *UpdateEntities        `json:"entities"`
     // Unique name assigned to the organizational unit.
     Name        *string                `json:"name"`
@@ -917,6 +920,61 @@ type RestoreProtectionGroupS3AssetV1Request struct {
     Target *ProtectionGroupRestoreTarget        `json:"target"`
 }
 
+// PreviewProtectionGroupS3AssetV1Request represents a custom type struct
+type PreviewProtectionGroupS3AssetV1Request struct {
+    // Backup ID.
+    BackupId           *string              `json:"backup_id"`
+    // Response type to be sync
+    IsSyncPreview      *bool                `json:"is_sync_preview"`
+    // Search for or restore only objects that pass the source object filter.
+    ObjectFilters      *SourceObjectFilters `json:"object_filters"`
+    // The end timestamp of the period within which objects are to be restored, in RFC-3339
+    // format. Clumio searches for objects modified before the given time. If `pitr_end_timestamp`
+    // is empty, Clumio searches for objects modified up to the current time of the restore request.
+    //  If `pitr_end_timestamp` is given without `pitr_start_timestamp`,
+    // it is the same as point in time preview.
+    PitrEndTimestamp   *string              `json:"pitr_end_timestamp"`
+    // The start timestamp of the period within which objects are to be restored, in RFC-3339
+    // format. Clumio searches for objects modified since the given time. If `pitr_start_timestamp`
+    // is empty, Clumio searches for objects from the beginning of the first backup.
+    PitrStartTimestamp *string              `json:"pitr_start_timestamp"`
+}
+
+// PreviewProtectionGroupV1Request represents a custom type struct
+type PreviewProtectionGroupV1Request struct {
+    // The Clumio-assigned ID of the protection group backup to be restored. Use the
+    // [GET /backups/protection-groups](#operation/list-backup-protection-groups)
+    // endpoint to fetch valid values.
+    BackupId                  *string              `json:"backup_id"`
+    // Whether to wait for the preview task.
+    IsSyncPreview             *bool                `json:"is_sync_preview"`
+    // Search for or restore only objects that pass the source object filter.
+    ObjectFilters             *SourceObjectFilters `json:"object_filters"`
+    // The end timestamp of the period within which objects are to be restored, in RFC-3339
+    // format. Clumio searches for objects modified before the given time. If `pitr_end_timestamp`
+    // is empty, Clumio searches for objects modified up to the current time of the restore request.
+    //  If `pitr_end_timestamp` is given without `pitr_start_timestamp`,
+    // it is the same as point in time preview.
+    PitrEndTimestamp          *string              `json:"pitr_end_timestamp"`
+    // The start timestamp of the period within which objects are to be restored, in RFC-3339
+    // format. Clumio searches for objects modified since the given time. If `pitr_start_timestamp`
+    // is empty, Clumio searches for objects from the beginning of the first backup.
+    PitrStartTimestamp        *string              `json:"pitr_start_timestamp"`
+    // A list of Clumio-assigned IDs of protection group S3 assets, representing the
+    // buckets within the protection group to restore from. Use the
+    // [GET /datasources/protection-groups/s3-assets](#operation/list-protection-group-s3-assets)
+    // endpoint to fetch valid values.
+    ProtectionGroupS3AssetIds []*string            `json:"protection_group_s3_asset_ids"`
+}
+
+// RestoreProtectionGroupS3ObjectsV1Request represents a custom type struct
+type RestoreProtectionGroupS3ObjectsV1Request struct {
+    // Object defines one object to restore
+    Source []*Object                     `json:"source"`
+    // The destination where the protection group will be restored.
+    Target *ProtectionGroupRestoreTarget `json:"target"`
+}
+
 // RestoreVmwareVmV1Request represents a custom type struct
 type RestoreVmwareVmV1Request struct {
     // Additional VM restore options.
@@ -1060,14 +1118,14 @@ type UpdateAutoUserProvisioningRuleV1Request struct {
 // UpdateGeneralSettingsV2Request represents a custom type struct
 type UpdateGeneralSettingsV2Request struct {
     // The length of time before a user is logged out of the Clumio system due to inactivity. Measured in seconds.
-    // The valid range is between `600` seconds (10 minutes) and `3600` seconds (60 minutes).
-    // If not configured, the value defaults to `900` seconds (15 minutes).
+    // The valid range is between 600 seconds (10 minutes) and 3600 seconds (60 minutes).
+    // If not configured, the value defaults to 900 seconds (15 minutes).
     AutoLogoutDuration           *int64              `json:"auto_logout_duration"`
     // The designated range of IP addresses that are allowed to access the Clumio REST API.
     // API requests that originate from outside this list will be blocked.
     // The IP address of the server from which this request is being made must be in this list; otherwise, the request will fail.
     // Set the parameter to individual IP addresses and/or a range of IP addresses in CIDR notation.
-    // For example, `["193.168.1.0/24", "193.172.1.1"]`.
+    // For example, ["193.168.1.0/24", "193.172.1.1"].
     // If not configured, the value defaults to ["0.0.0.0/0"] meaning all addresses will be allowed.
     IpAllowlist                  []*string           `json:"ip_allowlist"`
     // The grouping criteria for each datasource type.
@@ -1075,8 +1133,8 @@ type UpdateGeneralSettingsV2Request struct {
     // organizational units configured.
     OrganizationalUnitDataGroups *OUGroupingCriteria `json:"organizational_unit_data_groups"`
     // The length of time a user password is valid before it must be changed. Measured in seconds.
-    // The valid range is between `2592000` seconds (30 days) and `15552000` seconds (180 days).
-    // If not configured, the value defaults to `7776000` seconds (90 days).
+    // The valid range is between 2592000 seconds (30 days) and 15552000 seconds (180 days).
+    // If not configured, the value defaults to 7776000 seconds (90 days).
     PasswordExpirationDuration   *int64              `json:"password_expiration_duration"`
 }
 
