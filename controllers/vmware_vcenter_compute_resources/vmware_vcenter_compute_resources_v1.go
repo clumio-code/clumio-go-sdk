@@ -47,7 +47,7 @@ func (v *VmwareVcenterComputeResourcesV1) ListVmwareVcenterComputeResources(
 
     
     header := "application/api.clumio.vmware-vcenter-compute-resources=v1+json"
-    var result *models.ListComputeResourcesResponse
+    result := &models.ListComputeResourcesResponse{}
     defaultInt64 := int64(0)
     defaultString := "" 
     
@@ -77,7 +77,7 @@ func (v *VmwareVcenterComputeResourcesV1) ListVmwareVcenterComputeResources(
         QueryParams: queryParams,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -102,7 +102,7 @@ func (v *VmwareVcenterComputeResourcesV1) ReadVmwareVcenterComputeResource(
 
     
     header := "application/api.clumio.vmware-vcenter-compute-resources=v1+json"
-    var result *models.ReadComputeResourceResponse
+    result := &models.ReadComputeResourceResponse{}
     defaultString := "" 
     
     if embed == nil {
@@ -119,7 +119,7 @@ func (v *VmwareVcenterComputeResourcesV1) ReadVmwareVcenterComputeResource(
         QueryParams: queryParams,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 

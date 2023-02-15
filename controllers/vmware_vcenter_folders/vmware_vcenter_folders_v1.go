@@ -50,7 +50,7 @@ func (v *VmwareVcenterFoldersV1) ListVmwareVcenterFolders(
 
     
     header := "application/api.clumio.vmware-vcenter-folders=v1+json"
-    var result *models.ListFoldersResponse
+    result := &models.ListFoldersResponse{}
     defaultInt64 := int64(0)
     defaultString := "" 
     
@@ -80,7 +80,7 @@ func (v *VmwareVcenterFoldersV1) ListVmwareVcenterFolders(
         QueryParams: queryParams,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -105,7 +105,7 @@ func (v *VmwareVcenterFoldersV1) ReadVmwareVcenterFolder(
 
     
     header := "application/api.clumio.vmware-vcenter-folders=v1+json"
-    var result *models.ReadFolderResponse
+    result := &models.ReadFolderResponse{}
     defaultString := "" 
     
     if embed == nil {
@@ -122,7 +122,7 @@ func (v *VmwareVcenterFoldersV1) ReadVmwareVcenterFolder(
         QueryParams: queryParams,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 

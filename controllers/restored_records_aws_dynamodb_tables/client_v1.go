@@ -14,7 +14,7 @@ type RestoredRecordsAwsDynamodbTablesV1Client interface {
     RestoreRecordsAwsDynamodbTable(
         embed *string, 
         body *models.RestoreRecordsAwsDynamodbTableV1Request)(
-        *models.RestoreRecordsResponseSync,  *apiutils.APIError)
+        *models.RestoreRecordsAwsDynamodbTableResponseWrapper,  *apiutils.APIError)
     
 }
 

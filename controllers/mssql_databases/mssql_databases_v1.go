@@ -29,7 +29,7 @@ func (m *MssqlDatabasesV1) ListMssqlDatabases(
 
     
     header := "application/api.clumio.mssql-databases=v1+json"
-    var result *models.ListMssqlDatabasesResponse
+    result := &models.ListMssqlDatabasesResponse{}
     defaultInt64 := int64(0)
     defaultString := "" 
     
@@ -58,7 +58,7 @@ func (m *MssqlDatabasesV1) ListMssqlDatabases(
         RequestUrl: queryBuilder,
         QueryParams: queryParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -80,14 +80,14 @@ func (m *MssqlDatabasesV1) ReadMssqlDatabases(
 
     
     header := "application/api.clumio.mssql-databases=v1+json"
-    var result *models.ReadMssqlDatabaseResponse
+    result := &models.ReadMssqlDatabaseResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: m.config,
         RequestUrl: queryBuilder,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -112,7 +112,7 @@ func (m *MssqlDatabasesV1) ListMssqlDatabasePitrIntervals(
 
     
     header := "application/api.clumio.mssql-databases=v1+json"
-    var result *models.ListMssqlDatabasePitrIntervalsResponse
+    result := &models.ListMssqlDatabasePitrIntervalsResponse{}
     defaultInt64 := int64(0)
     defaultString := "" 
     
@@ -138,7 +138,7 @@ func (m *MssqlDatabasesV1) ListMssqlDatabasePitrIntervals(
         QueryParams: queryParams,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 

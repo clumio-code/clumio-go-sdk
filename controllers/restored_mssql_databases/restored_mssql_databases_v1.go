@@ -36,7 +36,7 @@ func (r *RestoredMssqlDatabasesV1) RestoreMssqlDatabase(
     }
     payload := string(bytes)
     header := "application/api.clumio.restored-mssql-databases=v1+json"
-    var result *models.CreateMssqlDatabaseRestoreResponse
+    result := &models.CreateMssqlDatabaseRestoreResponse{}
     defaultString := "" 
     
     if embed == nil {
@@ -53,7 +53,7 @@ func (r *RestoredMssqlDatabasesV1) RestoreMssqlDatabase(
         QueryParams: queryParams,
         AcceptHeader: header,
         Body: payload,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Post,
     })
 

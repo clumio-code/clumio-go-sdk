@@ -15,22 +15,22 @@ type UsersV1Client interface {
         limit *int64, 
         start *string, 
         filter *string)(
-        *models.ListUsersResponse,  *apiutils.APIError)
+        *models.ListUsersResponseV1,  *apiutils.APIError)
     
     // CreateUser Creates a new user. Specify the user's full name and email address to generate an email message that is sent to the user with an invitation to activate their Clumio account.
     CreateUser(
         body *models.CreateUserV1Request)(
-        *models.CreateUserResponse,  *apiutils.APIError)
+        *models.CreateUserResponseV1,  *apiutils.APIError)
     
     // UpdateUserProfile Manages the current user's profile, such as changing the user's full name.
     UpdateUserProfile(
         body *models.UpdateUserProfileV1Request)(
-        *models.EditProfileResponse,  *apiutils.APIError)
+        *models.EditProfileResponseV1,  *apiutils.APIError)
     
     // ReadUser Returns a representation of the specified Clumio user.
     ReadUser(
         userId int64)(
-        *models.ReadUserResponse,  *apiutils.APIError)
+        *models.ReadUserResponseV1,  *apiutils.APIError)
     
     // DeleteUser Deletes an existing user from Clumio, revoking the user's access to Clumio. A deleted user cannot be recovered.
     DeleteUser(
@@ -42,7 +42,7 @@ type UsersV1Client interface {
     UpdateUser(
         userId int64, 
         body *models.UpdateUserV1Request)(
-        *models.UpdateUserResponse,  *apiutils.APIError)
+        *models.UpdateUserResponseV1,  *apiutils.APIError)
     
     // ChangePassword Change the password of the specified user. Users can change their own passwords.
     ChangePassword(

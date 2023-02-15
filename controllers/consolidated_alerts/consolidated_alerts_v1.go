@@ -29,7 +29,7 @@ func (c *ConsolidatedAlertsV1) ListConsolidatedAlerts(
 
     
     header := "application/api.clumio.consolidated-alerts=v1+json"
-    var result *models.ListConsolidatedAlertsResponse
+    result := &models.ListConsolidatedAlertsResponse{}
     defaultInt64 := int64(0)
     defaultString := "" 
     
@@ -54,7 +54,7 @@ func (c *ConsolidatedAlertsV1) ListConsolidatedAlerts(
         RequestUrl: queryBuilder,
         QueryParams: queryParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -76,14 +76,14 @@ func (c *ConsolidatedAlertsV1) ReadConsolidatedAlert(
 
     
     header := "application/api.clumio.consolidated-alerts=v1+json"
-    var result *models.ReadConsolidatedAlertResponse
+    result := &models.ReadConsolidatedAlertResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: c.config,
         RequestUrl: queryBuilder,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -114,7 +114,7 @@ func (c *ConsolidatedAlertsV1) UpdateConsolidatedAlert(
     }
     payload := string(bytes)
     header := "application/api.clumio.consolidated-alerts=v1+json"
-    var result *models.UpdateConsolidatedAlertResponse
+    result := &models.UpdateConsolidatedAlertResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: c.config,
@@ -122,7 +122,7 @@ func (c *ConsolidatedAlertsV1) UpdateConsolidatedAlert(
         PathParams: pathParams,
         AcceptHeader: header,
         Body: payload,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Patch,
     })
 

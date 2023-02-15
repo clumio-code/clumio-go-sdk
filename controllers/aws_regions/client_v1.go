@@ -13,8 +13,7 @@ type AwsRegionsV1Client interface {
     // ListConnectionAwsRegions Returns a list of valid regions for creating AWS connections
     ListConnectionAwsRegions(
         limit *int64, 
-        start *string, 
-        filter *string)(
+        start *string)(
         *models.ListAWSRegionsResponse,  *apiutils.APIError)
     
 }

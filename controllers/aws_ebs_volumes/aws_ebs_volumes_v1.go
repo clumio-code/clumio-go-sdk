@@ -29,7 +29,7 @@ func (a *AwsEbsVolumesV1) ListAwsEbsVolumes(
 
     
     header := "application/api.clumio.aws-ebs-volumes=v1+json"
-    var result *models.ListEbsVolumesResponse
+    result := &models.ListEbsVolumesResponse{}
     defaultInt64 := int64(0)
     defaultString := "" 
     
@@ -58,7 +58,7 @@ func (a *AwsEbsVolumesV1) ListAwsEbsVolumes(
         RequestUrl: queryBuilder,
         QueryParams: queryParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -81,7 +81,7 @@ func (a *AwsEbsVolumesV1) ReadAwsEbsVolume(
 
     
     header := "application/api.clumio.aws-ebs-volumes=v1+json"
-    var result *models.ReadEbsVolumeResponse
+    result := &models.ReadEbsVolumeResponse{}
     defaultString := "" 
     
     if embed == nil {
@@ -98,7 +98,7 @@ func (a *AwsEbsVolumesV1) ReadAwsEbsVolume(
         QueryParams: queryParams,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 

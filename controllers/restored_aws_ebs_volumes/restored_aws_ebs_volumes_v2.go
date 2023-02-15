@@ -36,7 +36,7 @@ func (r *RestoredAwsEbsVolumesV2) RestoreAwsEbsVolume(
     }
     payload := string(bytes)
     header := "application/api.clumio.restored-aws-ebs-volumes=v2+json"
-    var result *models.RestoreEBSResponse
+    result := &models.RestoreEBSResponse{}
     defaultString := "" 
     
     if embed == nil {
@@ -53,7 +53,7 @@ func (r *RestoredAwsEbsVolumesV2) RestoreAwsEbsVolume(
         QueryParams: queryParams,
         AcceptHeader: header,
         Body: payload,
-        Result: &result,
+        Result202: &result,
         RequestType: common.Post,
     })
 

@@ -36,7 +36,7 @@ func (r *RestoredAwsEc2InstancesV1) RestoreAwsEc2Instance(
     }
     payload := string(bytes)
     header := "application/api.clumio.restored-aws-ec2-instances=v1+json"
-    var result *models.RestoreEC2Response
+    result := &models.RestoreEC2Response{}
     defaultString := "" 
     
     if embed == nil {
@@ -53,7 +53,7 @@ func (r *RestoredAwsEc2InstancesV1) RestoreAwsEc2Instance(
         QueryParams: queryParams,
         AcceptHeader: header,
         Body: payload,
-        Result: &result,
+        Result202: &result,
         RequestType: common.Post,
     })
 

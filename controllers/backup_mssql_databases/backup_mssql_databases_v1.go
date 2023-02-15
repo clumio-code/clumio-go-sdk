@@ -31,7 +31,7 @@ func (b *BackupMssqlDatabasesV1) ListBackupMssqlDatabases(
 
     
     header := "application/api.clumio.backup-mssql-databases=v1+json"
-    var result *models.ListMssqlDatabaseBackupsResponse
+    result := &models.ListMssqlDatabaseBackupsResponse{}
     defaultInt64 := int64(0)
     defaultString := "" 
     
@@ -64,7 +64,7 @@ func (b *BackupMssqlDatabasesV1) ListBackupMssqlDatabases(
         RequestUrl: queryBuilder,
         QueryParams: queryParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -90,7 +90,7 @@ func (b *BackupMssqlDatabasesV1) CreateBackupMssqlDatabase(
     }
     payload := string(bytes)
     header := "application/api.clumio.backup-mssql-databases=v1+json"
-    var result *models.OnDemandMssqlBackupResponse
+    result := &models.OnDemandMssqlBackupResponse{}
     defaultString := "" 
     
     if embed == nil {
@@ -107,7 +107,7 @@ func (b *BackupMssqlDatabasesV1) CreateBackupMssqlDatabase(
         QueryParams: queryParams,
         AcceptHeader: header,
         Body: payload,
-        Result: &result,
+        Result202: &result,
         RequestType: common.Post,
     })
 
@@ -129,14 +129,14 @@ func (b *BackupMssqlDatabasesV1) ReadBackupMssqlDatabase(
 
     
     header := "application/api.clumio.backup-mssql-databases=v1+json"
-    var result *models.ReadMssqlDatabaseBackupResponse
+    result := &models.ReadMssqlDatabaseBackupResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: b.config,
         RequestUrl: queryBuilder,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 

@@ -30,7 +30,7 @@ func (b *BackupAwsDynamodbTablesV1) ListBackupAwsDynamodbTables(
 
     
     header := "application/api.clumio.backup-aws-dynamodb-tables=v1+json"
-    var result *models.ListDynamoDBTableBackupsResponse
+    result := &models.ListDynamoDBTableBackupsResponse{}
     defaultInt64 := int64(0)
     defaultString := "" 
     
@@ -59,7 +59,7 @@ func (b *BackupAwsDynamodbTablesV1) ListBackupAwsDynamodbTables(
         RequestUrl: queryBuilder,
         QueryParams: queryParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -85,7 +85,7 @@ func (b *BackupAwsDynamodbTablesV1) CreateBackupAwsDynamodbTable(
     }
     payload := string(bytes)
     header := "application/api.clumio.backup-aws-dynamodb-tables=v1+json"
-    var result *models.OnDemandDynamoDBBackupResponse
+    result := &models.OnDemandDynamoDBBackupResponse{}
     defaultString := "" 
     
     if embed == nil {
@@ -102,7 +102,7 @@ func (b *BackupAwsDynamodbTablesV1) CreateBackupAwsDynamodbTable(
         QueryParams: queryParams,
         AcceptHeader: header,
         Body: payload,
-        Result: &result,
+        Result202: &result,
         RequestType: common.Post,
     })
 
@@ -124,14 +124,14 @@ func (b *BackupAwsDynamodbTablesV1) ReadBackupAwsDynamodbTable(
 
     
     header := "application/api.clumio.backup-aws-dynamodb-tables=v1+json"
-    var result *models.ReadDynamoDBTableBackupResponse
+    result := &models.ReadDynamoDBTableBackupResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: b.config,
         RequestUrl: queryBuilder,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 

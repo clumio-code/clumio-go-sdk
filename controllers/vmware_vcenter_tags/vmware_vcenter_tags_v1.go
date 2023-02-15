@@ -35,7 +35,7 @@ func (v *VmwareVcenterTagsV1) ListVmwareVcenterTags(
 
     
     header := "application/api.clumio.vmware-vcenter-tags=v1+json"
-    var result *models.ListTagsResponse
+    result := &models.ListTagsResponse{}
     defaultInt64 := int64(0)
     defaultString := "" 
     
@@ -65,7 +65,7 @@ func (v *VmwareVcenterTagsV1) ListVmwareVcenterTags(
         QueryParams: queryParams,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -90,7 +90,7 @@ func (v *VmwareVcenterTagsV1) ReadVmwareVcenterTag(
 
     
     header := "application/api.clumio.vmware-vcenter-tags=v1+json"
-    var result *models.ReadTagResponse
+    result := &models.ReadTagResponse{}
     defaultString := "" 
     
     if embed == nil {
@@ -107,7 +107,7 @@ func (v *VmwareVcenterTagsV1) ReadVmwareVcenterTag(
         QueryParams: queryParams,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 

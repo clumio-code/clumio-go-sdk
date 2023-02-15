@@ -22,7 +22,7 @@ type RestoredRecordsAwsDynamodbTablesV1 struct {
 func (r *RestoredRecordsAwsDynamodbTablesV1) RestoreRecordsAwsDynamodbTable(
     embed *string, 
     body *models.RestoreRecordsAwsDynamodbTableV1Request)(
-    *models.RestoreRecordsResponseSync, *apiutils.APIError) {
+    *models.RestoreRecordsAwsDynamodbTableResponseWrapper, *apiutils.APIError) {
 
     queryBuilder := r.config.BaseUrl + "/restores/aws/dynamodb-tables/records"
 
@@ -36,7 +36,7 @@ func (r *RestoredRecordsAwsDynamodbTablesV1) RestoreRecordsAwsDynamodbTable(
     }
     payload := string(bytes)
     header := "application/api.clumio.restored-records-aws-dynamodb-tables=v1+json"
-    var result *models.RestoreRecordsResponseSync
+    result := &models.RestoreRecordsAwsDynamodbTableResponseWrapper{}
     defaultString := "" 
     
     if embed == nil {
@@ -53,9 +53,15 @@ func (r *RestoredRecordsAwsDynamodbTablesV1) RestoreRecordsAwsDynamodbTable(
         QueryParams: queryParams,
         AcceptHeader: header,
         Body: payload,
-        Result: &result,
+        Result200: &result.Http200,
+        Result202: &result.Http202,
         RequestType: common.Post,
     })
+    if result.Http200 != nil {
+        result.StatusCode = 200
+    } else if result.Http202 != nil {
+        result.StatusCode = 202
+    } 
 
     return result, apiErr
 }

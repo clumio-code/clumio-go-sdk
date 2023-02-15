@@ -28,7 +28,7 @@ func (a *AuditTrailsV1) ListAuditTrails(
 
     
     header := "application/api.clumio.audit-trails=v1+json"
-    var result *models.ListAuditTrailsResponse
+    result := &models.ListAuditTrailsResponse{}
     defaultInt64 := int64(0)
     defaultString := "" 
     
@@ -53,7 +53,7 @@ func (a *AuditTrailsV1) ListAuditTrails(
         RequestUrl: queryBuilder,
         QueryParams: queryParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 

@@ -29,7 +29,7 @@ func (a *AwsRdsResourceRestoredRecordsV1) ListRdsRestoredRecords(
 
     
     header := "application/api.clumio.aws-rds-resource-restored-records=v1+json"
-    var result *models.ListRestoredRecordsResponse
+    result := &models.ListRestoredRecordsResponse{}
     defaultInt64 := int64(0)
     defaultString := "" 
     
@@ -54,7 +54,7 @@ func (a *AwsRdsResourceRestoredRecordsV1) ListRdsRestoredRecords(
         RequestUrl: queryBuilder,
         QueryParams: queryParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -66,7 +66,7 @@ func (a *AwsRdsResourceRestoredRecordsV1) ListRdsRestoredRecords(
 func (a *AwsRdsResourceRestoredRecordsV1) RestoreRdsRecord(
     embed *string, 
     body *models.RestoreRdsRecordV1Request)(
-    *models.RestoreRecordPreviewResponse, *apiutils.APIError) {
+    *models.RestoreRdsRecordResponseWrapper, *apiutils.APIError) {
 
     queryBuilder := a.config.BaseUrl + "/restores/aws/rds-resources/records"
 
@@ -80,7 +80,7 @@ func (a *AwsRdsResourceRestoredRecordsV1) RestoreRdsRecord(
     }
     payload := string(bytes)
     header := "application/api.clumio.aws-rds-resource-restored-records=v1+json"
-    var result *models.RestoreRecordPreviewResponse
+    result := &models.RestoreRdsRecordResponseWrapper{}
     defaultString := "" 
     
     if embed == nil {
@@ -97,9 +97,15 @@ func (a *AwsRdsResourceRestoredRecordsV1) RestoreRdsRecord(
         QueryParams: queryParams,
         AcceptHeader: header,
         Body: payload,
-        Result: &result,
+        Result200: &result.Http200,
+        Result202: &result.Http202,
         RequestType: common.Post,
     })
+    if result.Http200 != nil {
+        result.StatusCode = 200
+    } else if result.Http202 != nil {
+        result.StatusCode = 202
+    } 
 
     return result, apiErr
 }

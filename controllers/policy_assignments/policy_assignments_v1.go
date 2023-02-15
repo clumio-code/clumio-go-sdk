@@ -37,14 +37,14 @@ func (p *PolicyAssignmentsV1) SetPolicyAssignments(
     }
     payload := string(bytes)
     header := "application/api.clumio.policy-assignments=v1+json"
-    var result *models.SetAssignmentsResponse
+    result := &models.SetAssignmentsResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: p.config,
         RequestUrl: queryBuilder,
         AcceptHeader: header,
         Body: payload,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Post,
     })
 

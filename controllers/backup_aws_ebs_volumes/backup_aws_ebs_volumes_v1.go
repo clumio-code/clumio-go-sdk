@@ -30,7 +30,7 @@ func (b *BackupAwsEbsVolumesV1) ListBackupAwsEbsVolumes(
 
     
     header := "application/api.clumio.backup-aws-ebs-volumes=v1+json"
-    var result *models.ListEBSBackupsResponseV1
+    result := &models.ListEBSBackupsResponseV1{}
     defaultInt64 := int64(0)
     defaultString := "" 
     
@@ -59,7 +59,7 @@ func (b *BackupAwsEbsVolumesV1) ListBackupAwsEbsVolumes(
         RequestUrl: queryBuilder,
         QueryParams: queryParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -91,7 +91,7 @@ func (b *BackupAwsEbsVolumesV1) CreateBackupAwsEbsVolume(
         RequestUrl: queryBuilder,
         AcceptHeader: header,
         Body: payload,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Post,
     })
 
@@ -113,14 +113,14 @@ func (b *BackupAwsEbsVolumesV1) ReadBackupAwsEbsVolume(
 
     
     header := "application/api.clumio.backup-aws-ebs-volumes=v1+json"
-    var result *models.ReadEBSBackupResponseV1
+    result := &models.ReadEBSBackupResponseV1{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: b.config,
         RequestUrl: queryBuilder,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 

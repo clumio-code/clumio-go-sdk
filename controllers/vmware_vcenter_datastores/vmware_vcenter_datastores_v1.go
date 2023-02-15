@@ -44,7 +44,7 @@ func (v *VmwareVcenterDatastoresV1) ListVmwareVcenterDatastores(
 
     
     header := "application/api.clumio.vmware-vcenter-datastores=v1+json"
-    var result *models.ListVMwareDatastoresResponse
+    result := &models.ListVMwareDatastoresResponse{}
     defaultInt64 := int64(0)
     defaultString := "" 
     
@@ -70,7 +70,7 @@ func (v *VmwareVcenterDatastoresV1) ListVmwareVcenterDatastores(
         QueryParams: queryParams,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -94,14 +94,14 @@ func (v *VmwareVcenterDatastoresV1) ReadVmwareVcenterDatastore(
 
     
     header := "application/api.clumio.vmware-vcenter-datastores=v1+json"
-    var result *models.ReadVMwareDatastoreResponse
+    result := &models.ReadVMwareDatastoreResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: v.config,
         RequestUrl: queryBuilder,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 

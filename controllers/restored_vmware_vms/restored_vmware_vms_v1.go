@@ -35,14 +35,14 @@ func (r *RestoredVmwareVmsV1) RestoreVmwareVm(
     }
     payload := string(bytes)
     header := "application/api.clumio.restored-vmware-vms=v1+json"
-    var result *models.RestoreVMwareVMResponse
+    result := &models.RestoreVMwareVMResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: r.config,
         RequestUrl: queryBuilder,
         AcceptHeader: header,
         Body: payload,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Post,
     })
 

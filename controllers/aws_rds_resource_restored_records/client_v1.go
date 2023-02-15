@@ -21,7 +21,7 @@ type AwsRdsResourceRestoredRecordsV1Client interface {
     RestoreRdsRecord(
         embed *string, 
         body *models.RestoreRdsRecordV1Request)(
-        *models.RestoreRecordPreviewResponse,  *apiutils.APIError)
+        *models.RestoreRdsRecordResponseWrapper,  *apiutils.APIError)
     
 }
 

@@ -30,7 +30,7 @@ func (b *BackupVmwareVmsV1) ListBackupVmwareVms(
 
     
     header := "application/api.clumio.backup-vmware-vms=v1+json"
-    var result *models.ListVMBackupsResponse
+    result := &models.ListVMBackupsResponse{}
     defaultInt64 := int64(0)
     defaultString := "" 
     
@@ -59,7 +59,7 @@ func (b *BackupVmwareVmsV1) ListBackupVmwareVms(
         RequestUrl: queryBuilder,
         QueryParams: queryParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -70,7 +70,7 @@ func (b *BackupVmwareVmsV1) ListBackupVmwareVms(
 // CreateBackupVmwareVm Performs an on-demand backup for the specified VM.
 func (b *BackupVmwareVmsV1) CreateBackupVmwareVm(
     body models.CreateBackupVmwareVmV1Request)(
-    interface{}, *apiutils.APIError) {
+    *models.OnDemandVMBackupResponse, *apiutils.APIError) {
 
     queryBuilder := b.config.BaseUrl + "/backups/vmware/vms"
 
@@ -84,14 +84,14 @@ func (b *BackupVmwareVmsV1) CreateBackupVmwareVm(
     }
     payload := string(bytes)
     header := "application/api.clumio.backup-vmware-vms=v1+json"
-    var result interface{}
+    result := &models.OnDemandVMBackupResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: b.config,
         RequestUrl: queryBuilder,
         AcceptHeader: header,
         Body: payload,
-        Result: &result,
+        Result202: &result,
         RequestType: common.Post,
     })
 
@@ -113,14 +113,14 @@ func (b *BackupVmwareVmsV1) ReadBackupVmwareVm(
 
     
     header := "application/api.clumio.backup-vmware-vms=v1+json"
-    var result *models.ReadVMBackupResponse
+    result := &models.ReadVMBackupResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: b.config,
         RequestUrl: queryBuilder,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 

@@ -29,7 +29,7 @@ func (a *AwsConnectionsV1) ListAwsConnections(
 
     
     header := "application/api.clumio.aws-connections=v1+json"
-    var result *models.ListAWSConnectionsResponse
+    result := &models.ListAWSConnectionsResponse{}
     defaultInt64 := int64(0)
     defaultString := "" 
     
@@ -54,7 +54,7 @@ func (a *AwsConnectionsV1) ListAwsConnections(
         RequestUrl: queryBuilder,
         QueryParams: queryParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -79,14 +79,14 @@ func (a *AwsConnectionsV1) CreateAwsConnection(
     }
     payload := string(bytes)
     header := "application/api.clumio.aws-connections=v1+json"
-    var result *models.CreateAWSConnectionResponse
+    result := &models.CreateAWSConnectionResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: a.config,
         RequestUrl: queryBuilder,
         AcceptHeader: header,
         Body: payload,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Post,
     })
 
@@ -108,14 +108,14 @@ func (a *AwsConnectionsV1) ReadAwsConnection(
 
     
     header := "application/api.clumio.aws-connections=v1+json"
-    var result *models.ReadAWSConnectionResponse
+    result := &models.ReadAWSConnectionResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: a.config,
         RequestUrl: queryBuilder,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -144,7 +144,7 @@ func (a *AwsConnectionsV1) DeleteAwsConnection(
         RequestUrl: queryBuilder,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Delete,
     })
 
@@ -175,7 +175,7 @@ func (a *AwsConnectionsV1) UpdateAwsConnection(
     }
     payload := string(bytes)
     header := "application/api.clumio.aws-connections=v1+json"
-    var result *models.UpdateAWSConnectionResponse
+    result := &models.UpdateAWSConnectionResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: a.config,
@@ -183,7 +183,7 @@ func (a *AwsConnectionsV1) UpdateAwsConnection(
         PathParams: pathParams,
         AcceptHeader: header,
         Body: payload,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Patch,
     })
 

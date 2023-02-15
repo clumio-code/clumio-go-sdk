@@ -28,7 +28,7 @@ func (m *ManagementGroupsV1) ListManagementGroups(
 
     
     header := "application/api.clumio.management-groups=v1+json"
-    var result *models.ListManagementGroupsResponse
+    result := &models.ListManagementGroupsResponse{}
     defaultInt64 := int64(0)
     defaultString := "" 
     
@@ -49,7 +49,7 @@ func (m *ManagementGroupsV1) ListManagementGroups(
         RequestUrl: queryBuilder,
         QueryParams: queryParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -74,14 +74,14 @@ func (m *ManagementGroupsV1) ReadManagementGroup(
 
     
     header := "application/api.clumio.management-groups=v1+json"
-    var result *models.ReadManagementGroupResponse
+    result := &models.ReadManagementGroupResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: m.config,
         RequestUrl: queryBuilder,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -112,7 +112,7 @@ func (m *ManagementGroupsV1) UpdateManagementGroup(
     }
     payload := string(bytes)
     header := "application/api.clumio.management-groups=v1+json"
-    var result *models.UpdateManagementGroupResponse
+    result := &models.UpdateManagementGroupResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: m.config,
@@ -120,7 +120,7 @@ func (m *ManagementGroupsV1) UpdateManagementGroup(
         PathParams: pathParams,
         AcceptHeader: header,
         Body: payload,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Put,
     })
 

@@ -28,7 +28,7 @@ func (b *BackupsFilesV1) ListFiles(
 
     
     header := "application/api.clumio.backups-files=v1+json"
-    var result *models.FileSearchResponse
+    result := &models.FileSearchResponse{}
     defaultInt64 := int64(0)
     defaultString := "" 
     
@@ -50,7 +50,7 @@ func (b *BackupsFilesV1) ListFiles(
         RequestUrl: queryBuilder,
         QueryParams: queryParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -74,7 +74,7 @@ func (b *BackupsFilesV1) ListFileVersions(
 
     
     header := "application/api.clumio.backups-files=v1+json"
-    var result *models.FileListResponse
+    result := &models.FileListResponse{}
     defaultInt64 := int64(0)
     defaultString := "" 
     
@@ -96,7 +96,7 @@ func (b *BackupsFilesV1) ListFileVersions(
         QueryParams: queryParams,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 

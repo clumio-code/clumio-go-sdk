@@ -20,15 +20,14 @@ type AwsRegionsV1 struct {
 // ListConnectionAwsRegions Returns a list of valid regions for creating AWS connections
 func (a *AwsRegionsV1) ListConnectionAwsRegions(
     limit *int64, 
-    start *string, 
-    filter *string)(
+    start *string)(
     *models.ListAWSRegionsResponse, *apiutils.APIError) {
 
     queryBuilder := a.config.BaseUrl + "/connections/aws/regions"
 
     
     header := "application/api.clumio.aws-regions=v1+json"
-    var result *models.ListAWSRegionsResponse
+    result := &models.ListAWSRegionsResponse{}
     defaultInt64 := int64(0)
     defaultString := "" 
     
@@ -38,14 +37,10 @@ func (a *AwsRegionsV1) ListConnectionAwsRegions(
     if start == nil {
         start = &defaultString
     }
-    if filter == nil {
-        filter = &defaultString
-    }
     
     queryParams := map[string]string{
         "limit": fmt.Sprintf("%v", *limit),
         "start": *start,
-        "filter": *filter,
     }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
@@ -53,7 +48,7 @@ func (a *AwsRegionsV1) ListConnectionAwsRegions(
         RequestUrl: queryBuilder,
         QueryParams: queryParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 

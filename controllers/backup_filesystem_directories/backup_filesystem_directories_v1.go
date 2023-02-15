@@ -37,7 +37,7 @@ func (b *BackupFilesystemDirectoriesV1) ReadBackupFilesystemDirectory(
 
     
     header := "application/api.clumio.backup-filesystem-directories=v1+json"
-    var result *models.ReadDirectoryResponse
+    result := &models.ReadDirectoryResponse{}
     defaultInt64 := int64(0)
     defaultString := "" 
     
@@ -59,7 +59,7 @@ func (b *BackupFilesystemDirectoriesV1) ReadBackupFilesystemDirectory(
         QueryParams: queryParams,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 

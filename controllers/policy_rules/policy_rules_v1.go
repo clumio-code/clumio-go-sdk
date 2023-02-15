@@ -31,7 +31,7 @@ func (p *PolicyRulesV1) ListPolicyRules(
 
     
     header := "application/api.clumio.policy-rules=v1+json"
-    var result *models.ListRulesResponse
+    result := &models.ListRulesResponse{}
     defaultInt64 := int64(0)
     defaultString := "" 
     
@@ -64,7 +64,7 @@ func (p *PolicyRulesV1) ListPolicyRules(
         RequestUrl: queryBuilder,
         QueryParams: queryParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -91,14 +91,14 @@ func (p *PolicyRulesV1) CreatePolicyRule(
     }
     payload := string(bytes)
     header := "application/api.clumio.policy-rules=v1+json"
-    var result *models.CreateRuleResponse
+    result := &models.CreateRuleResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: p.config,
         RequestUrl: queryBuilder,
         AcceptHeader: header,
         Body: payload,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Post,
     })
 
@@ -120,14 +120,14 @@ func (p *PolicyRulesV1) ReadPolicyRule(
 
     
     header := "application/api.clumio.policy-rules=v1+json"
-    var result *models.ReadRuleResponse
+    result := &models.ReadRuleResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: p.config,
         RequestUrl: queryBuilder,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -158,7 +158,7 @@ func (p *PolicyRulesV1) UpdatePolicyRule(
     }
     payload := string(bytes)
     header := "application/api.clumio.policy-rules=v1+json"
-    var result *models.UpdateRuleResponse
+    result := &models.UpdateRuleResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: p.config,
@@ -166,7 +166,7 @@ func (p *PolicyRulesV1) UpdatePolicyRule(
         PathParams: pathParams,
         AcceptHeader: header,
         Body: payload,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Put,
     })
 
@@ -188,14 +188,14 @@ func (p *PolicyRulesV1) DeletePolicyRule(
 
     
     header := "application/api.clumio.policy-rules=v1+json"
-    var result *models.DeleteRuleResponse
+    result := &models.DeleteRuleResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: p.config,
         RequestUrl: queryBuilder,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Delete,
     })
 

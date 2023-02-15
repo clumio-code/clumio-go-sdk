@@ -1,3 +1,5 @@
+## 0.6.0
+New APIs added for Dynamodb, EC2, RDS, S3 and EC2MSSQL data sources.
 ## 0.5.0
 New APIs added for backups and restores for EBS, EC2, RDS, EC2MSSQL data sources.
 ## 0.4.0

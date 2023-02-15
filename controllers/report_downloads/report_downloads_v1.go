@@ -29,7 +29,7 @@ func (r *ReportDownloadsV1) ListReportDownloads(
 
     
     header := "application/api.clumio.report-downloads=v1+json"
-    var result *models.ListReportDownloadsResponse
+    result := &models.ListReportDownloadsResponse{}
     defaultInt64 := int64(0)
     defaultString := "" 
     
@@ -54,7 +54,7 @@ func (r *ReportDownloadsV1) ListReportDownloads(
         RequestUrl: queryBuilder,
         QueryParams: queryParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -79,14 +79,14 @@ func (r *ReportDownloadsV1) CreateReportDownload(
     }
     payload := string(bytes)
     header := "application/api.clumio.report-downloads=v1+json"
-    var result *models.CreateReportDownloadResponse
+    result := &models.CreateReportDownloadResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: r.config,
         RequestUrl: queryBuilder,
         AcceptHeader: header,
         Body: payload,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Post,
     })
 

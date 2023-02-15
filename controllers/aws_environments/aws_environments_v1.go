@@ -29,7 +29,7 @@ func (a *AwsEnvironmentsV1) ListAwsEnvironments(
 
     
     header := "application/api.clumio.aws-environments=v1+json"
-    var result *models.ListAWSEnvironmentsResponse
+    result := &models.ListAWSEnvironmentsResponse{}
     defaultInt64 := int64(0)
     defaultString := "" 
     
@@ -58,7 +58,7 @@ func (a *AwsEnvironmentsV1) ListAwsEnvironments(
         RequestUrl: queryBuilder,
         QueryParams: queryParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -81,7 +81,7 @@ func (a *AwsEnvironmentsV1) ReadAwsEnvironment(
 
     
     header := "application/api.clumio.aws-environments=v1+json"
-    var result *models.ReadAWSEnvironmentResponse
+    result := &models.ReadAWSEnvironmentResponse{}
     defaultString := "" 
     
     if embed == nil {
@@ -98,7 +98,7 @@ func (a *AwsEnvironmentsV1) ReadAwsEnvironment(
         QueryParams: queryParams,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 

@@ -26,13 +26,13 @@ func (a *AutoUserProvisioningSettingsV1) ReadAutoUserProvisioningSetting()(
 
     
     header := "application/api.clumio.auto-user-provisioning-settings=v1+json"
-    var result *models.ReadAutoUserProvisioningSettingResponse
+    result := &models.ReadAutoUserProvisioningSettingResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: a.config,
         RequestUrl: queryBuilder,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -57,14 +57,14 @@ func (a *AutoUserProvisioningSettingsV1) UpdateAutoUserProvisioningSetting(
     }
     payload := string(bytes)
     header := "application/api.clumio.auto-user-provisioning-settings=v1+json"
-    var result *models.UpdateAutoUserProvisioningSettingResponse
+    result := &models.UpdateAutoUserProvisioningSettingResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: a.config,
         RequestUrl: queryBuilder,
         AcceptHeader: header,
         Body: payload,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Put,
     })
 

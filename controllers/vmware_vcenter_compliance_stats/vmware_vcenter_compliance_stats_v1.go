@@ -29,14 +29,14 @@ func (v *VmwareVcenterComplianceStatsV1) ReadVmwareVcenterComplianceStats(
 
     
     header := "application/api.clumio.vmware-vcenter-compliance-stats=v1+json"
-    var result *models.ReadVMwareVCenterProtectionStatsResponse
+    result := &models.ReadVMwareVCenterProtectionStatsResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: v.config,
         RequestUrl: queryBuilder,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 

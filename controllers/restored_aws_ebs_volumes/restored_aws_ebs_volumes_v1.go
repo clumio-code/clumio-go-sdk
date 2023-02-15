@@ -42,7 +42,7 @@ func (r *RestoredAwsEbsVolumesV1) RestoreAwsEbsVolume(
         RequestUrl: queryBuilder,
         AcceptHeader: header,
         Body: payload,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Post,
     })
 

@@ -25,13 +25,13 @@ func (r *RolesV1) ListRoles()(
 
     
     header := "application/api.clumio.roles=v1+json"
-    var result *models.ListRolesResponse
+    result := &models.ListRolesResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: r.config,
         RequestUrl: queryBuilder,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -53,14 +53,14 @@ func (r *RolesV1) ReadRole(
 
     
     header := "application/api.clumio.roles=v1+json"
-    var result *models.ReadRoleResponse
+    result := &models.ReadRoleResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: r.config,
         RequestUrl: queryBuilder,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 

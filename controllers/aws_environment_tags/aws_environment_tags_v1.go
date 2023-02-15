@@ -38,7 +38,7 @@ func (a *AwsEnvironmentTagsV1) ListAwsEnvironmentTags(
 
     
     header := "application/api.clumio.aws-environment-tags=v1+json"
-    var result *models.ListAwsTagsResponse
+    result := &models.ListAwsTagsResponse{}
     defaultInt64 := int64(0)
     defaultString := "" 
     
@@ -80,7 +80,7 @@ func (a *AwsEnvironmentTagsV1) ListAwsEnvironmentTags(
         QueryParams: queryParams,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -105,7 +105,7 @@ func (a *AwsEnvironmentTagsV1) ReadAwsEnvironmentTag(
 
     
     header := "application/api.clumio.aws-environment-tags=v1+json"
-    var result *models.ReadAwsTagResponse
+    result := &models.ReadAwsTagResponse{}
     defaultString := "" 
     
     if embed == nil {
@@ -122,7 +122,7 @@ func (a *AwsEnvironmentTagsV1) ReadAwsEnvironmentTag(
         QueryParams: queryParams,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -146,14 +146,14 @@ func (a *AwsEnvironmentTagsV1) ReadAwsEnvironmentTagEbsVolumesComplianceStats(
 
     
     header := "application/api.clumio.aws-environment-tags=v1+json"
-    var result *models.ReadEbsTagComplianceStatsResponse
+    result := &models.ReadEbsTagComplianceStatsResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: a.config,
         RequestUrl: queryBuilder,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
