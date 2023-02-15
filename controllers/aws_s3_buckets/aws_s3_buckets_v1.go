@@ -29,7 +29,7 @@ func (a *AwsS3BucketsV1) ListAwsS3Buckets(
 
     
     header := "application/api.clumio.aws-s3-buckets=v1+json"
-    var result *models.ListBucketsResponse
+    result := &models.ListBucketsResponse{}
     defaultInt64 := int64(0)
     defaultString := "" 
     
@@ -54,7 +54,7 @@ func (a *AwsS3BucketsV1) ListAwsS3Buckets(
         RequestUrl: queryBuilder,
         QueryParams: queryParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -76,14 +76,14 @@ func (a *AwsS3BucketsV1) ReadAwsS3Bucket(
 
     
     header := "application/api.clumio.aws-s3-buckets=v1+json"
-    var result *models.ReadBucketResponse
+    result := &models.ReadBucketResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: a.config,
         RequestUrl: queryBuilder,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -115,7 +115,7 @@ func (a *AwsS3BucketsV1) SetBucketProperties(
     }
     payload := string(bytes)
     header := "application/api.clumio.aws-s3-buckets=v1+json"
-    var result *models.SetBucketPropertiesResponse
+    result := &models.SetBucketPropertiesResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: a.config,
@@ -123,7 +123,7 @@ func (a *AwsS3BucketsV1) SetBucketProperties(
         PathParams: pathParams,
         AcceptHeader: header,
         Body: payload,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Patch,
     })
 

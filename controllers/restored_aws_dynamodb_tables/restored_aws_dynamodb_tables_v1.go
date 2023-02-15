@@ -36,7 +36,7 @@ func (r *RestoredAwsDynamodbTablesV1) RestoreAwsDynamodbTable(
     }
     payload := string(bytes)
     header := "application/api.clumio.restored-aws-dynamodb-tables=v1+json"
-    var result *models.RestoreDynamoDBTableResponse
+    result := &models.RestoreDynamoDBTableResponse{}
     defaultString := "" 
     
     if embed == nil {
@@ -53,7 +53,7 @@ func (r *RestoredAwsDynamodbTablesV1) RestoreAwsDynamodbTable(
         QueryParams: queryParams,
         AcceptHeader: header,
         Body: payload,
-        Result: &result,
+        Result202: &result,
         RequestType: common.Post,
     })
 

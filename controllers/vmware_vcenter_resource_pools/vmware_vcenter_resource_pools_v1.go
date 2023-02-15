@@ -34,7 +34,7 @@ func (v *VmwareVcenterResourcePoolsV1) ListVmwareVcenterResourcePools(
 
     
     header := "application/api.clumio.vmware-vcenter-resource-pools=v1+json"
-    var result *models.ListResourcePoolsResponse
+    result := &models.ListResourcePoolsResponse{}
     defaultInt64 := int64(0)
     defaultString := "" 
     
@@ -60,7 +60,7 @@ func (v *VmwareVcenterResourcePoolsV1) ListVmwareVcenterResourcePools(
         QueryParams: queryParams,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -84,14 +84,14 @@ func (v *VmwareVcenterResourcePoolsV1) ReadVmwareVcenterResourcePool(
 
     
     header := "application/api.clumio.vmware-vcenter-resource-pools=v1+json"
-    var result *models.ReadResourcePoolResponse
+    result := &models.ReadResourcePoolResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: v.config,
         RequestUrl: queryBuilder,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 

@@ -93,7 +93,7 @@ func (p *PolicyDefinitionsV1) ListPolicyDefinitions(
 
     
     header := "application/api.clumio.policy-definitions=v1+json"
-    var result *models.ListPoliciesResponse
+    result := &models.ListPoliciesResponse{}
     defaultString := "" 
     
     if filter == nil {
@@ -113,7 +113,7 @@ func (p *PolicyDefinitionsV1) ListPolicyDefinitions(
         RequestUrl: queryBuilder,
         QueryParams: queryParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -138,14 +138,14 @@ func (p *PolicyDefinitionsV1) CreatePolicyDefinition(
     }
     payload := string(bytes)
     header := "application/api.clumio.policy-definitions=v1+json"
-    var result *models.CreatePolicyResponse
+    result := &models.CreatePolicyResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: p.config,
         RequestUrl: queryBuilder,
         AcceptHeader: header,
         Body: payload,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Post,
     })
 
@@ -168,7 +168,7 @@ func (p *PolicyDefinitionsV1) ReadPolicyDefinition(
 
     
     header := "application/api.clumio.policy-definitions=v1+json"
-    var result *models.ReadPolicyResponse
+    result := &models.ReadPolicyResponse{}
     defaultString := "" 
     
     if embed == nil {
@@ -185,7 +185,7 @@ func (p *PolicyDefinitionsV1) ReadPolicyDefinition(
         QueryParams: queryParams,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -217,7 +217,7 @@ func (p *PolicyDefinitionsV1) UpdatePolicyDefinition(
     }
     payload := string(bytes)
     header := "application/api.clumio.policy-definitions=v1+json"
-    var result *models.UpdatePolicyResponse
+    result := &models.UpdatePolicyResponse{}
     defaultString := "" 
     
     if embed == nil {
@@ -235,7 +235,7 @@ func (p *PolicyDefinitionsV1) UpdatePolicyDefinition(
         PathParams: pathParams,
         AcceptHeader: header,
         Body: payload,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Put,
     })
 
@@ -257,14 +257,14 @@ func (p *PolicyDefinitionsV1) DeletePolicyDefinition(
 
     
     header := "application/api.clumio.policy-definitions=v1+json"
-    var result *models.DeletePolicyResponse
+    result := &models.DeletePolicyResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: p.config,
         RequestUrl: queryBuilder,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Delete,
     })
 

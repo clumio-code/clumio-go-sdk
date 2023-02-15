@@ -29,7 +29,7 @@ func (r *RestoredFilesV1) ListRestoredFiles(
 
     
     header := "application/api.clumio.restored-files=v1+json"
-    var result *models.RestoredFilesResponse
+    result := &models.RestoredFilesResponse{}
     defaultInt64 := int64(0)
     defaultString := "" 
     
@@ -51,7 +51,7 @@ func (r *RestoredFilesV1) ListRestoredFiles(
         RequestUrl: queryBuilder,
         QueryParams: queryParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -77,7 +77,7 @@ func (r *RestoredFilesV1) RestoreFiles(
     }
     payload := string(bytes)
     header := "application/api.clumio.restored-files=v1+json"
-    var result *models.RestoreFileResponse
+    result := &models.RestoreFileResponse{}
     defaultString := "" 
     
     if embed == nil {
@@ -94,7 +94,7 @@ func (r *RestoredFilesV1) RestoreFiles(
         QueryParams: queryParams,
         AcceptHeader: header,
         Body: payload,
-        Result: &result,
+        Result202: &result,
         RequestType: common.Post,
     })
 
@@ -119,14 +119,14 @@ func (r *RestoredFilesV1) DownloadSharedFile(
     }
     payload := string(bytes)
     header := "application/api.clumio.restored-files=v1+json"
-    var result *models.DownloadSharedFileResponse
+    result := &models.DownloadSharedFileResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: r.config,
         RequestUrl: queryBuilder,
         AcceptHeader: header,
         Body: payload,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Post,
     })
 
@@ -151,14 +151,14 @@ func (r *RestoredFilesV1) GenerateRestoredFilePasscode(
 
     
     header := "application/api.clumio.restored-files=v1+json"
-    var result *models.GenerateRestoredFilePasscodeResponse
+    result := &models.GenerateRestoredFilePasscodeResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: r.config,
         RequestUrl: queryBuilder,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Post,
     })
 
@@ -195,7 +195,7 @@ func (r *RestoredFilesV1) ShareRestoredFile(
     }
     payload := string(bytes)
     header := "application/api.clumio.restored-files=v1+json"
-    var result *models.ShareFileRestoreEmailResponse
+    result := &models.ShareFileRestoreEmailResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: r.config,
@@ -203,7 +203,7 @@ func (r *RestoredFilesV1) ShareRestoredFile(
         PathParams: pathParams,
         AcceptHeader: header,
         Body: payload,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Post,
     })
 

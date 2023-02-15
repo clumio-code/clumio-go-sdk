@@ -42,7 +42,7 @@ func (p *PostProcessAwsConnectionV1) PostProcessAwsConnection(
         RequestUrl: queryBuilder,
         AcceptHeader: header,
         Body: payload,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Post,
     })
 

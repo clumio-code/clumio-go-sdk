@@ -17,15 +17,18 @@ type OrganizationalUnitsV1Client interface {
         filter *string)(
         *models.ListOrganizationalUnitsResponse,  *apiutils.APIError)
     
-    // CreateOrganizationalUnit Create a new organizational unit.
+    // CreateOrganizationalUnit Create a new organizational unit. Adding entities to the OU is an asynchronous operation and has a task associated.
+    //  When the request has entities to be added, the response has a task ID which can be used to
+    //  track the progress of the operation.
     CreateOrganizationalUnit(
         embed *string, 
         body *models.CreateOrganizationalUnitV1Request)(
-        *models.CreateOrganizationalUnitResponse,  *apiutils.APIError)
+        *models.CreateOrganizationalUnitResponseWrapper,  *apiutils.APIError)
     
     // ReadOrganizationalUnit Returns a representation of the specified organizational unit.
     ReadOrganizationalUnit(
-        id string)(
+        id string, 
+        embed *string)(
         *models.ReadOrganizationalUnitResponse,  *apiutils.APIError)
     
     // DeleteOrganizationalUnit Delete the specified organizational unit.
@@ -35,12 +38,15 @@ type OrganizationalUnitsV1Client interface {
         *models.DeleteOrganizationalUnitResponse,  *apiutils.APIError)
     
     // PatchOrganizationalUnit Patch the specified organizational unit.
-    //  The complete updated attribute(s) of the organizational unit has to be provided in the request.
+    //  The complete updated attribute(s) of the organizational unit have to be provided in the request.
+    //  Adding or removing entities from the OU is an asynchronous operation and has a task associated.
+    //  When the request has entities to be added or removed, the response has a task ID
+    //  which can be used to track the progress of the operation.
     PatchOrganizationalUnit(
         id string, 
         embed *string, 
         body *models.PatchOrganizationalUnitV1Request)(
-        *models.PatchOrganizationalUnitResponse,  *apiutils.APIError)
+        *models.PatchOrganizationalUnitResponseWrapper,  *apiutils.APIError)
     
 }
 

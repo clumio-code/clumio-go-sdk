@@ -4,7 +4,6 @@
 package managementsubgroups
 
 import (
-    "encoding/json"
     "fmt"
 
     "github.com/clumio-code/clumio-go-sdk/api_utils"
@@ -34,7 +33,7 @@ func (m *ManagementSubgroupsV1) ListManagementSubgroups(
 
     
     header := "application/api.clumio.management-subgroups=v1+json"
-    var result *models.ListSubgroupsResponse
+    result := &models.ListSubgroupsResponse{}
     defaultInt64 := int64(0)
     defaultString := "" 
     
@@ -56,7 +55,7 @@ func (m *ManagementSubgroupsV1) ListManagementSubgroups(
         QueryParams: queryParams,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -82,56 +81,15 @@ func (m *ManagementSubgroupsV1) ReadManagementSubgroup(
 
     
     header := "application/api.clumio.management-subgroups=v1+json"
-    var result *models.ReadSubgroupResponse
+    result := &models.ReadSubgroupResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: m.config,
         RequestUrl: queryBuilder,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
-    })
-
-    return result, apiErr
-}
-
-
-// UpdateManagementSubgroup Update the specified subgroup.
-func (m *ManagementSubgroupsV1) UpdateManagementSubgroup(
-    subgroupId string, 
-    groupId string, 
-    body *models.UpdateManagementSubgroupV1Request)(
-    *models.UpdateSubgroupResponse, *apiutils.APIError) {
-
-    pathURL := "/management-groups/{group_id}/subgroups/{subgroup_id}"
-    //process optional template parameters
-    pathParams := map[string]string{
-        "subgroup_id": subgroupId,
-        "group_id": groupId,
-    }
-    queryBuilder := m.config.BaseUrl + pathURL
-
-    bytes, err := json.Marshal(body)
-    if err != nil {
-        return nil, &apiutils.APIError{
-            ResponseCode: 500,
-            Reason:       fmt.Sprintf("Failed to Marshal Request Body %v", body),
-            Response:     []byte(fmt.Sprintf("%v", err)),
-        }
-    }
-    payload := string(bytes)
-    header := "application/api.clumio.management-subgroups=v1+json"
-    var result *models.UpdateSubgroupResponse
-
-    apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
-        Config: m.config,
-        RequestUrl: queryBuilder,
-        PathParams: pathParams,
-        AcceptHeader: header,
-        Body: payload,
-        Result: &result,
-        RequestType: common.Put,
     })
 
     return result, apiErr

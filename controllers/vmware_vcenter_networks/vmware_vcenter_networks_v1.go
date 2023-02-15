@@ -34,7 +34,7 @@ func (v *VmwareVcenterNetworksV1) ListVmwareVcenterNetworks(
 
     
     header := "application/api.clumio.vmware-vcenter-networks=v1+json"
-    var result *models.ListVMwareVCenterNetworksResponse
+    result := &models.ListVMwareVCenterNetworksResponse{}
     defaultInt64 := int64(0)
     defaultString := "" 
     
@@ -60,7 +60,7 @@ func (v *VmwareVcenterNetworksV1) ListVmwareVcenterNetworks(
         QueryParams: queryParams,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -84,14 +84,14 @@ func (v *VmwareVcenterNetworksV1) ReadVmwareVcenterNetwork(
 
     
     header := "application/api.clumio.vmware-vcenter-networks=v1+json"
-    var result *models.ReadVMwareVCenterNetworkResponse
+    result := &models.ReadVMwareVCenterNetworkResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: v.config,
         RequestUrl: queryBuilder,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 

@@ -23,13 +23,13 @@ func (u *UsersV1) ListUsers(
     limit *int64, 
     start *string, 
     filter *string)(
-    *models.ListUsersResponse, *apiutils.APIError) {
+    *models.ListUsersResponseV1, *apiutils.APIError) {
 
     queryBuilder := u.config.BaseUrl + "/users"
 
     
     header := "application/api.clumio.users=v1+json"
-    var result *models.ListUsersResponse
+    result := &models.ListUsersResponseV1{}
     defaultInt64 := int64(0)
     defaultString := "" 
     
@@ -54,7 +54,7 @@ func (u *UsersV1) ListUsers(
         RequestUrl: queryBuilder,
         QueryParams: queryParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -65,7 +65,7 @@ func (u *UsersV1) ListUsers(
 // CreateUser Creates a new user. Specify the user's full name and email address to generate an email message that is sent to the user with an invitation to activate their Clumio account.
 func (u *UsersV1) CreateUser(
     body *models.CreateUserV1Request)(
-    *models.CreateUserResponse, *apiutils.APIError) {
+    *models.CreateUserResponseV1, *apiutils.APIError) {
 
     queryBuilder := u.config.BaseUrl + "/users"
 
@@ -79,14 +79,14 @@ func (u *UsersV1) CreateUser(
     }
     payload := string(bytes)
     header := "application/api.clumio.users=v1+json"
-    var result *models.CreateUserResponse
+    result := &models.CreateUserResponseV1{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: u.config,
         RequestUrl: queryBuilder,
         AcceptHeader: header,
         Body: payload,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Post,
     })
 
@@ -97,7 +97,7 @@ func (u *UsersV1) CreateUser(
 // UpdateUserProfile Manages the current user's profile, such as changing the user's full name.
 func (u *UsersV1) UpdateUserProfile(
     body *models.UpdateUserProfileV1Request)(
-    *models.EditProfileResponse, *apiutils.APIError) {
+    *models.EditProfileResponseV1, *apiutils.APIError) {
 
     queryBuilder := u.config.BaseUrl + "/users/my-profile"
 
@@ -111,14 +111,14 @@ func (u *UsersV1) UpdateUserProfile(
     }
     payload := string(bytes)
     header := "application/api.clumio.users=v1+json"
-    var result *models.EditProfileResponse
+    result := &models.EditProfileResponseV1{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: u.config,
         RequestUrl: queryBuilder,
         AcceptHeader: header,
         Body: payload,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Patch,
     })
 
@@ -129,7 +129,7 @@ func (u *UsersV1) UpdateUserProfile(
 // ReadUser Returns a representation of the specified Clumio user.
 func (u *UsersV1) ReadUser(
     userId int64)(
-    *models.ReadUserResponse, *apiutils.APIError) {
+    *models.ReadUserResponseV1, *apiutils.APIError) {
 
     pathURL := "/users/{user_id}"
     //process optional template parameters
@@ -140,14 +140,14 @@ func (u *UsersV1) ReadUser(
 
     
     header := "application/api.clumio.users=v1+json"
-    var result *models.ReadUserResponse
+    result := &models.ReadUserResponseV1{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: u.config,
         RequestUrl: queryBuilder,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -176,7 +176,7 @@ func (u *UsersV1) DeleteUser(
         RequestUrl: queryBuilder,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Delete,
     })
 
@@ -189,7 +189,7 @@ func (u *UsersV1) DeleteUser(
 func (u *UsersV1) UpdateUser(
     userId int64, 
     body *models.UpdateUserV1Request)(
-    *models.UpdateUserResponse, *apiutils.APIError) {
+    *models.UpdateUserResponseV1, *apiutils.APIError) {
 
     pathURL := "/users/{user_id}"
     //process optional template parameters
@@ -208,7 +208,7 @@ func (u *UsersV1) UpdateUser(
     }
     payload := string(bytes)
     header := "application/api.clumio.users=v1+json"
-    var result *models.UpdateUserResponse
+    result := &models.UpdateUserResponseV1{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: u.config,
@@ -216,7 +216,7 @@ func (u *UsersV1) UpdateUser(
         PathParams: pathParams,
         AcceptHeader: header,
         Body: payload,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Patch,
     })
 
@@ -255,7 +255,7 @@ func (u *UsersV1) ChangePassword(
         PathParams: pathParams,
         AcceptHeader: header,
         Body: payload,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Put,
     })
 

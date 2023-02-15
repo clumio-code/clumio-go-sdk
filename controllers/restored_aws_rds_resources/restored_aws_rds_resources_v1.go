@@ -36,7 +36,7 @@ func (r *RestoredAwsRdsResourcesV1) RestoreAwsRdsResource(
     }
     payload := string(bytes)
     header := "application/api.clumio.restored-aws-rds-resources=v1+json"
-    var result *models.CreateRdsResourceRestoreResponse
+    result := &models.CreateRdsResourceRestoreResponse{}
     defaultString := "" 
     
     if embed == nil {
@@ -53,7 +53,7 @@ func (r *RestoredAwsRdsResourcesV1) RestoreAwsRdsResource(
         QueryParams: queryParams,
         AcceptHeader: header,
         Body: payload,
-        Result: &result,
+        Result202: &result,
         RequestType: common.Post,
     })
 

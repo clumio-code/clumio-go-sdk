@@ -3,6 +3,7 @@
 package common
 
 import (
+	"encoding/json"
 	"fmt"
 
 	apiutils "github.com/clumio-code/clumio-go-sdk/api_utils"
@@ -11,7 +12,7 @@ import (
 )
 
 const (
-	sdkVersion = "v0.5.0"
+	sdkVersion = "v0.6.0"
 
 	AcceptHeader         = "Accept"
 	OrgUnitContextHeader = "x-clumio-organizationalunit-context"
@@ -37,7 +38,9 @@ type InvokeAPIRequest struct {
 	QueryParams   map[string]string
 	RequestType   string
 	RequestUrl    string
-	Result        interface{}
+	Result200     interface{}
+	Result201     interface{}
+	Result202     interface{}
 }
 
 // InvokeAPI invokes the REST API and returns an error if it fails.
@@ -48,8 +51,7 @@ func InvokeAPI(request *InvokeAPIRequest) *apiutils.APIError {
 		SetHeader(OrgUnitContextHeader, request.Config.OrganizationalUnitContext).
 		SetHeader(ApiClientHeader, "clumio-go-sdk").
 		SetHeader(SDKVersionHeader, fmt.Sprintf("clumio-go-sdk:%v", sdkVersion)).
-		SetAuthToken(request.Config.Token).
-		SetResult(request.Result)
+		SetAuthToken(request.Config.Token)
 
 	if request.Config.CustomHeaders != nil {
 		for headerKey, headerValue := range request.Config.CustomHeaders {
@@ -82,6 +84,21 @@ func InvokeAPI(request *InvokeAPIRequest) *apiutils.APIError {
 		response, err = req.Patch(request.RequestUrl)
 	case Delete:
 		response, err = req.Delete(request.RequestUrl)
+	}
+	if err != nil {
+		return &apiutils.APIError{
+			ResponseCode: 500,
+			Reason:       InternalServerError,
+			Response:     []byte(fmt.Sprintf("%v", err)),
+		}
+	}
+
+	if response.StatusCode() == 200 {
+		err = json.Unmarshal(response.Body(), request.Result200)
+	} else if response.StatusCode() == 201 {
+		err = json.Unmarshal(response.Body(), request.Result201)
+	} else if response.StatusCode() == 202 {
+		err = json.Unmarshal(response.Body(), request.Result202)
 	}
 
 	if err != nil {

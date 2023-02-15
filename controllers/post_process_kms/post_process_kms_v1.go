@@ -42,7 +42,7 @@ func (p *PostProcessKmsV1) PostProcessKms(
         RequestUrl: queryBuilder,
         AcceptHeader: header,
         Body: payload,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Post,
     })
 

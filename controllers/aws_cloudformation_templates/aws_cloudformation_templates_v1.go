@@ -28,13 +28,13 @@ func (a *AwsCloudformationTemplatesV1) ReadAwsConnectionTemplates()(
 
     
     header := "application/api.clumio.aws-cloudformation-templates=v1+json"
-    var result *models.ReadAWSTemplatesResponse
+    result := &models.ReadAWSTemplatesResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: a.config,
         RequestUrl: queryBuilder,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -60,14 +60,14 @@ func (a *AwsCloudformationTemplatesV1) CreateAwsConnectionTemplate(
     }
     payload := string(bytes)
     header := "application/api.clumio.aws-cloudformation-templates=v1+json"
-    var result *models.CreateAWSTemplateResponse
+    result := &models.CreateAWSTemplateResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: a.config,
         RequestUrl: queryBuilder,
         AcceptHeader: header,
         Body: payload,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Post,
     })
 

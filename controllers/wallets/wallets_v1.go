@@ -28,7 +28,7 @@ func (w *WalletsV1) ListWallets(
 
     
     header := "application/api.clumio.wallets=v1+json"
-    var result *models.ListWalletsResponse
+    result := &models.ListWalletsResponse{}
     defaultInt64 := int64(0)
     defaultString := "" 
     
@@ -49,7 +49,7 @@ func (w *WalletsV1) ListWallets(
         RequestUrl: queryBuilder,
         QueryParams: queryParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -74,14 +74,14 @@ func (w *WalletsV1) CreateWallet(
     }
     payload := string(bytes)
     header := "application/api.clumio.wallets=v1+json"
-    var result *models.CreateWalletResponse
+    result := &models.CreateWalletResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: w.config,
         RequestUrl: queryBuilder,
         AcceptHeader: header,
         Body: payload,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Post,
     })
 
@@ -103,14 +103,14 @@ func (w *WalletsV1) ReadWallet(
 
     
     header := "application/api.clumio.wallets=v1+json"
-    var result *models.ReadWalletResponse
+    result := &models.ReadWalletResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: w.config,
         RequestUrl: queryBuilder,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -139,7 +139,7 @@ func (w *WalletsV1) DeleteWallet(
         RequestUrl: queryBuilder,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Delete,
     })
 
@@ -161,14 +161,14 @@ func (w *WalletsV1) RefreshWallet(
 
     
     header := "application/api.clumio.wallets=v1+json"
-    var result *models.RefreshWalletResponse
+    result := &models.RefreshWalletResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: w.config,
         RequestUrl: queryBuilder,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Post,
     })
 

@@ -28,7 +28,7 @@ func (v *VmwareVcentersV1) ListVmwareVcenters(
 
     
     header := "application/api.clumio.vmware-vcenters=v1+json"
-    var result *models.ListVcentersResponse
+    result := &models.ListVcentersResponse{}
     defaultInt64 := int64(0)
     defaultString := "" 
     
@@ -53,7 +53,7 @@ func (v *VmwareVcentersV1) ListVmwareVcenters(
         RequestUrl: queryBuilder,
         QueryParams: queryParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -76,7 +76,7 @@ func (v *VmwareVcentersV1) ReadVmwareVcenter(
 
     
     header := "application/api.clumio.vmware-vcenters=v1+json"
-    var result *models.ReadVcenterResponse
+    result := &models.ReadVcenterResponse{}
     defaultString := "" 
     
     if embed == nil {
@@ -93,7 +93,7 @@ func (v *VmwareVcentersV1) ReadVmwareVcenter(
         QueryParams: queryParams,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 

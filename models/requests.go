@@ -44,6 +44,16 @@ type CreateBackupAwsEbsVolumeV1Request struct {
     VolumeId *string          `json:"volume_id"`
 }
 
+// CreateBackupEc2MssqlDatabaseV1Request represents a custom type struct
+type CreateBackupEc2MssqlDatabaseV1Request struct {
+    // Performs the operation on the MSSQL asset with the specified Clumio-assigned ID.
+    AssetId    *string          `json:"asset_id"`
+    // Settings for requesting on-demand backup directly.
+    Settings   *OnDemandSetting `json:"settings"`
+    // The type of the backup.
+    ClumioType *string          `json:"type"`
+}
+
 // CreateBackupMssqlDatabaseV1Request represents a custom type struct
 type CreateBackupMssqlDatabaseV1Request struct {
     // Performs the operation on the Mssql asset with the specified Clumio-assigned ID.
@@ -64,8 +74,7 @@ type CreateBackupVmwareVmV1Request struct {
     VmId      *string          `json:"vm_id"`
 }
 
-// CreateAwsConnectionV1Request represents a custom type struct.
-// The body of the request.
+// CreateAwsConnectionV1Request represents a custom type struct
 type CreateAwsConnectionV1Request struct {
     // The AWS-assigned ID of the account associated with the connection.
     AccountNativeId          *string   `json:"account_native_id"`
@@ -79,9 +88,8 @@ type CreateAwsConnectionV1Request struct {
     // user. For more information about organizational units, refer to the
     // Organizational-Units documentation.
     OrganizationalUnitId     *string   `json:"organizational_unit_id"`
-    // The asset types enabled for protect. This is only populated if "protect"
-    // is enabled. Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
-    // EBS and RDS are mandatory datasources. (Deprecated)
+    // The asset types enabled for protect.
+    // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
     ProtectAssetTypesEnabled []*string `json:"protect_asset_types_enabled"`
     // The services to be enabled for this configuration. Valid values are
     // ["discover"], ["discover", "protect"]. This is only set when the
@@ -91,8 +99,7 @@ type CreateAwsConnectionV1Request struct {
     ServicesEnabled          []*string `json:"services_enabled"`
 }
 
-// CreateAwsConnectionTemplateV1Request represents a custom type struct.
-// The body of the request.
+// CreateAwsConnectionTemplateV1Request represents a custom type struct
 type CreateAwsConnectionTemplateV1Request struct {
     // TODO: Add struct field description
     Protect *ProtectTemplateConfig `json:"protect"`
@@ -123,11 +130,10 @@ type PostProcessAwsConnectionV1Request struct {
     Token            *string            `json:"token"`
 }
 
-// CreateConnectionTemplateV1Request represents a custom type struct.
-// The body of the request.
+// CreateConnectionTemplateV1Request represents a custom type struct
 type CreateConnectionTemplateV1Request struct {
     // The asset types for which the template is to be generated. Possible
-    // asset types are ["EBS", "RDS", "DynamoDB", "EC2MSSQL"].
+    // asset types are ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
     AssetTypesEnabled []*string `json:"asset_types_enabled"`
 }
 
@@ -192,12 +198,6 @@ type UpdateManagementGroupV1Request struct {
     Name                  *string `json:"name"`
 }
 
-// UpdateManagementSubgroupV1Request represents a custom type struct
-type UpdateManagementSubgroupV1Request struct {
-    // The name of the management subgroup.
-    Name *string `json:"name"`
-}
-
 // CreateOrganizationalUnitV1Request represents a custom type struct
 type CreateOrganizationalUnitV1Request struct {
     // A description of the organizational unit.
@@ -207,8 +207,9 @@ type CreateOrganizationalUnitV1Request struct {
     // Unique name assigned to the organizational unit.
     Name        *string        `json:"name"`
     // The Clumio-assigned ID of the parent organizational unit under which the new organizational unit is to be created.
+    // If absent, the new organizational unit is created under the current organizational unit.
     ParentId    *string        `json:"parent_id"`
-    // List of user ids to assign this organizational unit.
+    // List of user IDs to assign this organizational unit.
     Users       []*string      `json:"users"`
 }
 
@@ -217,6 +218,8 @@ type PatchOrganizationalUnitV1Request struct {
     // A description of the organizational unit.
     Description *string                `json:"description"`
     // Updates to the entities in the organizational unit.
+    // Adding or removing entities from the OU is an asynchronous operation.
+    // The response has a task ID which can be used to track the progress of the operation.
     Entities    *UpdateEntities        `json:"entities"`
     // Unique name assigned to the organizational unit.
     Name        *string                `json:"name"`
@@ -843,6 +846,15 @@ type RestoreAwsEc2InstanceV1Request struct {
     Target *EC2RestoreTarget `json:"target"`
 }
 
+// RestoreEc2MssqlDatabaseV1Request represents a custom type struct
+type RestoreEc2MssqlDatabaseV1Request struct {
+    // The EC2 MSSQL database backup to be restored. Only one of `backup` or `pitr`
+    // should be set.
+    Source *EC2MSSQLRestoreSource `json:"source"`
+    // The configuration of the EC2 MSSQL database to which the data has to be restored.
+    Target *EC2MSSQLRestoreTarget `json:"target"`
+}
+
 // RestoreAwsRdsResourceV1Request represents a custom type struct
 type RestoreAwsRdsResourceV1Request struct {
     // The RDS resource backup or snapshot to be restored.  Only one of these fields should be set.
@@ -915,6 +927,61 @@ type RestoreProtectionGroupS3AssetV1Request struct {
     Source *ProtectionGroupS3AssetRestoreSource `json:"source"`
     // The destination where the protection group will be restored.
     Target *ProtectionGroupRestoreTarget        `json:"target"`
+}
+
+// PreviewProtectionGroupS3AssetV1Request represents a custom type struct
+type PreviewProtectionGroupS3AssetV1Request struct {
+    // Backup ID.
+    BackupId           *string              `json:"backup_id"`
+    // Response type to be sync
+    IsSyncPreview      *bool                `json:"is_sync_preview"`
+    // Search for or restore only objects that pass the source object filter.
+    ObjectFilters      *SourceObjectFilters `json:"object_filters"`
+    // The end timestamp of the period within which objects are to be restored, in RFC-3339
+    // format. Clumio searches for objects modified before the given time. If `pitr_end_timestamp`
+    // is empty, Clumio searches for objects modified up to the current time of the restore request.
+    //  If `pitr_end_timestamp` is given without `pitr_start_timestamp`,
+    // it is the same as point in time preview.
+    PitrEndTimestamp   *string              `json:"pitr_end_timestamp"`
+    // The start timestamp of the period within which objects are to be restored, in RFC-3339
+    // format. Clumio searches for objects modified since the given time. If `pitr_start_timestamp`
+    // is empty, Clumio searches for objects from the beginning of the first backup.
+    PitrStartTimestamp *string              `json:"pitr_start_timestamp"`
+}
+
+// PreviewProtectionGroupV1Request represents a custom type struct
+type PreviewProtectionGroupV1Request struct {
+    // The Clumio-assigned ID of the protection group backup to be restored. Use the
+    // [GET /backups/protection-groups](#operation/list-backup-protection-groups)
+    // endpoint to fetch valid values.
+    BackupId                  *string              `json:"backup_id"`
+    // Whether to wait for the preview task.
+    IsSyncPreview             *bool                `json:"is_sync_preview"`
+    // Search for or restore only objects that pass the source object filter.
+    ObjectFilters             *SourceObjectFilters `json:"object_filters"`
+    // The end timestamp of the period within which objects are to be restored, in RFC-3339
+    // format. Clumio searches for objects modified before the given time. If `pitr_end_timestamp`
+    // is empty, Clumio searches for objects modified up to the current time of the restore request.
+    //  If `pitr_end_timestamp` is given without `pitr_start_timestamp`,
+    // it is the same as point in time preview.
+    PitrEndTimestamp          *string              `json:"pitr_end_timestamp"`
+    // The start timestamp of the period within which objects are to be restored, in RFC-3339
+    // format. Clumio searches for objects modified since the given time. If `pitr_start_timestamp`
+    // is empty, Clumio searches for objects from the beginning of the first backup.
+    PitrStartTimestamp        *string              `json:"pitr_start_timestamp"`
+    // A list of Clumio-assigned IDs of protection group S3 assets, representing the
+    // buckets within the protection group to restore from. Use the
+    // [GET /datasources/protection-groups/s3-assets](#operation/list-protection-group-s3-assets)
+    // endpoint to fetch valid values.
+    ProtectionGroupS3AssetIds []*string            `json:"protection_group_s3_asset_ids"`
+}
+
+// RestoreProtectionGroupS3ObjectsV1Request represents a custom type struct
+type RestoreProtectionGroupS3ObjectsV1Request struct {
+    // Object defines one object to restore
+    Source []*Object                     `json:"source"`
+    // The destination where the protection group will be restored.
+    Target *ProtectionGroupRestoreTarget `json:"target"`
 }
 
 // RestoreVmwareVmV1Request represents a custom type struct
@@ -1060,14 +1127,14 @@ type UpdateAutoUserProvisioningRuleV1Request struct {
 // UpdateGeneralSettingsV2Request represents a custom type struct
 type UpdateGeneralSettingsV2Request struct {
     // The length of time before a user is logged out of the Clumio system due to inactivity. Measured in seconds.
-    // The valid range is between `600` seconds (10 minutes) and `3600` seconds (60 minutes).
-    // If not configured, the value defaults to `900` seconds (15 minutes).
+    // The valid range is between 600 seconds (10 minutes) and 3600 seconds (60 minutes).
+    // If not configured, the value defaults to 900 seconds (15 minutes).
     AutoLogoutDuration           *int64              `json:"auto_logout_duration"`
     // The designated range of IP addresses that are allowed to access the Clumio REST API.
     // API requests that originate from outside this list will be blocked.
     // The IP address of the server from which this request is being made must be in this list; otherwise, the request will fail.
     // Set the parameter to individual IP addresses and/or a range of IP addresses in CIDR notation.
-    // For example, `["193.168.1.0/24", "193.172.1.1"]`.
+    // For example, ["193.168.1.0/24", "193.172.1.1"].
     // If not configured, the value defaults to ["0.0.0.0/0"] meaning all addresses will be allowed.
     IpAllowlist                  []*string           `json:"ip_allowlist"`
     // The grouping criteria for each datasource type.
@@ -1075,8 +1142,8 @@ type UpdateGeneralSettingsV2Request struct {
     // organizational units configured.
     OrganizationalUnitDataGroups *OUGroupingCriteria `json:"organizational_unit_data_groups"`
     // The length of time a user password is valid before it must be changed. Measured in seconds.
-    // The valid range is between `2592000` seconds (30 days) and `15552000` seconds (180 days).
-    // If not configured, the value defaults to `7776000` seconds (90 days).
+    // The valid range is between 2592000 seconds (30 days) and 15552000 seconds (180 days).
+    // If not configured, the value defaults to 7776000 seconds (90 days).
     PasswordExpirationDuration   *int64              `json:"password_expiration_duration"`
 }
 
@@ -1125,16 +1192,16 @@ type UpdateUserProfileV1Request struct {
 type UpdateUserV1Request struct {
     // Updates the role assigned to the user.
     // The available roles can be retrieved via the [GET /roles](#operation/list-roles) API.
-    AssignedRole                        *string                      `json:"assigned_role"`
+    AssignedRole                        *string                         `json:"assigned_role"`
     // The full name of the user that is to replace the existing full name.
     // For example, enter the user's first name and last name.
-    FullName                            *string                      `json:"full_name"`
+    FullName                            *string                         `json:"full_name"`
     // If `true`, enables a user who has been disabled from Clumio,
     // returning the user to its previous "Activated" or "Invited" status. If `false`, disables a user from Clumio.
     // The user will not be able log in to Clumio until another Clumio user re-enables the account.
-    IsEnabled                           *bool                        `json:"is_enabled"`
+    IsEnabled                           *bool                           `json:"is_enabled"`
     // Updates to the organizational unit assignments.
-    OrganizationalUnitAssignmentUpdates *EntityGroupAssignmetUpdates `json:"organizational_unit_assignment_updates"`
+    OrganizationalUnitAssignmentUpdates *EntityGroupAssignmentUpdatesV1 `json:"organizational_unit_assignment_updates"`
 }
 
 // ChangePasswordV1Request represents a custom type struct

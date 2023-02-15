@@ -29,7 +29,7 @@ func (b *BackupProtectionGroupsV1) ListBackupProtectionGroups(
 
     
     header := "application/api.clumio.backup-protection-groups=v1+json"
-    var result *models.ListProtectionGroupBackupsResponse
+    result := &models.ListProtectionGroupBackupsResponse{}
     defaultInt64 := int64(0)
     defaultString := "" 
     
@@ -58,7 +58,7 @@ func (b *BackupProtectionGroupsV1) ListBackupProtectionGroups(
         RequestUrl: queryBuilder,
         QueryParams: queryParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -78,7 +78,7 @@ func (b *BackupProtectionGroupsV1) ListBackupProtectionGroupS3Assets(
 
     
     header := "application/api.clumio.backup-protection-groups=v1+json"
-    var result *models.ListProtectionGroupS3AssetBackupsResponse
+    result := &models.ListProtectionGroupS3AssetBackupsResponse{}
     defaultInt64 := int64(0)
     defaultString := "" 
     
@@ -107,7 +107,7 @@ func (b *BackupProtectionGroupsV1) ListBackupProtectionGroupS3Assets(
         RequestUrl: queryBuilder,
         QueryParams: queryParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -129,14 +129,14 @@ func (b *BackupProtectionGroupsV1) ReadBackupProtectionGroupS3Asset(
 
     
     header := "application/api.clumio.backup-protection-groups=v1+json"
-    var result *models.ReadProtectionGroupS3AssetBackupResponse
+    result := &models.ReadProtectionGroupS3AssetBackupResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: b.config,
         RequestUrl: queryBuilder,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -158,14 +158,14 @@ func (b *BackupProtectionGroupsV1) ReadBackupProtectionGroup(
 
     
     header := "application/api.clumio.backup-protection-groups=v1+json"
-    var result *models.ReadProtectionGroupBackupResponse
+    result := &models.ReadProtectionGroupBackupResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: b.config,
         RequestUrl: queryBuilder,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 

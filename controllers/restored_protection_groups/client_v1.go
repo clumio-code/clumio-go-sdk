@@ -16,6 +16,25 @@ type RestoredProtectionGroupsV1Client interface {
         body models.RestoreProtectionGroupV1Request)(
         *models.RestoreProtectionGroupResponse,  *apiutils.APIError)
     
+    // PreviewProtectionGroup Preview a protection group restore.
+    PreviewProtectionGroup(
+        protectionGroupId string, 
+        body models.PreviewProtectionGroupV1Request)(
+        *models.PreviewProtectionGroupResponseWrapper,  *apiutils.APIError)
+    
+    // PreviewDetailsProtectionGroup Details for protection group bucket restore preview
+    PreviewDetailsProtectionGroup(
+        protectionGroupId string, 
+        previewId string)(
+        *models.PreviewDetailsProtectionGroupResponse,  *apiutils.APIError)
+    
+    // RestoreProtectionGroupS3Objects Restores the specified list of S3 objects to the specified target destination.
+    RestoreProtectionGroupS3Objects(
+        protectionGroupId string, 
+        embed *string, 
+        body models.RestoreProtectionGroupS3ObjectsV1Request)(
+        *models.RestoreObjectsResponse,  *apiutils.APIError)
+    
 }
 
 // NewRestoredProtectionGroupsV1 returns RestoredProtectionGroupsV1Client

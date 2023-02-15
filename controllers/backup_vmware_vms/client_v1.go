@@ -21,7 +21,7 @@ type BackupVmwareVmsV1Client interface {
     // CreateBackupVmwareVm Performs an on-demand backup for the specified VM.
     CreateBackupVmwareVm(
         body models.CreateBackupVmwareVmV1Request)(
-        interface{},  *apiutils.APIError)
+        *models.OnDemandVMBackupResponse,  *apiutils.APIError)
     
     // ReadBackupVmwareVm Returns a representation of the specified VM backup.
     ReadBackupVmwareVm(

@@ -29,7 +29,7 @@ func (a *AutoUserProvisioningRulesV1) ListAutoUserProvisioningRules(
 
     
     header := "application/api.clumio.auto-user-provisioning-rules=v1+json"
-    var result *models.ListAutoUserProvisioningRulesResponse
+    result := &models.ListAutoUserProvisioningRulesResponse{}
     defaultInt64 := int64(0)
     defaultString := "" 
     
@@ -54,7 +54,7 @@ func (a *AutoUserProvisioningRulesV1) ListAutoUserProvisioningRules(
         RequestUrl: queryBuilder,
         QueryParams: queryParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -80,14 +80,14 @@ func (a *AutoUserProvisioningRulesV1) CreateAutoUserProvisioningRule(
     }
     payload := string(bytes)
     header := "application/api.clumio.auto-user-provisioning-rules=v1+json"
-    var result *models.CreateAutoUserProvisioningRuleResponse
+    result := &models.CreateAutoUserProvisioningRuleResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: a.config,
         RequestUrl: queryBuilder,
         AcceptHeader: header,
         Body: payload,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Post,
     })
 
@@ -109,14 +109,14 @@ func (a *AutoUserProvisioningRulesV1) ReadAutoUserProvisioningRule(
 
     
     header := "application/api.clumio.auto-user-provisioning-rules=v1+json"
-    var result *models.ReadAutoUserProvisioningRuleResponse
+    result := &models.ReadAutoUserProvisioningRuleResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: a.config,
         RequestUrl: queryBuilder,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -147,7 +147,7 @@ func (a *AutoUserProvisioningRulesV1) UpdateAutoUserProvisioningRule(
     }
     payload := string(bytes)
     header := "application/api.clumio.auto-user-provisioning-rules=v1+json"
-    var result *models.UpdateAutoUserProvisioningRuleResponse
+    result := &models.UpdateAutoUserProvisioningRuleResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: a.config,
@@ -155,7 +155,7 @@ func (a *AutoUserProvisioningRulesV1) UpdateAutoUserProvisioningRule(
         PathParams: pathParams,
         AcceptHeader: header,
         Body: payload,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Put,
     })
 
@@ -184,7 +184,7 @@ func (a *AutoUserProvisioningRulesV1) DeleteAutoUserProvisioningRule(
         RequestUrl: queryBuilder,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Delete,
     })
 

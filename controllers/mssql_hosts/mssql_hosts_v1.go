@@ -30,7 +30,7 @@ func (m *MssqlHostsV1) ListMssqlHostConnections(
 
     
     header := "application/api.clumio.mssql-hosts=v1+json"
-    var result *models.ListHcmHostsResponse
+    result := &models.ListHcmHostsResponse{}
     defaultInt64 := int64(0)
     defaultString := "" 
     
@@ -59,7 +59,7 @@ func (m *MssqlHostsV1) ListMssqlHostConnections(
         RequestUrl: queryBuilder,
         QueryParams: queryParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -84,14 +84,14 @@ func (m *MssqlHostsV1) CreateMssqlHostConnections(
     }
     payload := string(bytes)
     header := "application/api.clumio.mssql-hosts=v1+json"
-    var result *models.CreateHcmHostResponse
+    result := &models.CreateHcmHostResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: m.config,
         RequestUrl: queryBuilder,
         AcceptHeader: header,
         Body: payload,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Post,
     })
 
@@ -117,7 +117,7 @@ func (m *MssqlHostsV1) DeleteMssqlHostConnections(
     }
     payload := string(bytes)
     header := "application/api.clumio.mssql-hosts=v1+json"
-    var result *models.DeleteHcmHostResponse
+    result := &models.DeleteHcmHostResponse{}
     defaultString := "" 
     
     if embed == nil {
@@ -134,7 +134,7 @@ func (m *MssqlHostsV1) DeleteMssqlHostConnections(
         QueryParams: queryParams,
         AcceptHeader: header,
         Body: payload,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Delete,
     })
 
@@ -160,7 +160,7 @@ func (m *MssqlHostsV1) MoveMssqlHostConnections(
     }
     payload := string(bytes)
     header := "application/api.clumio.mssql-hosts=v1+json"
-    var result *models.MoveHcmHostsResponse
+    result := &models.MoveHcmHostsResponse{}
     defaultString := "" 
     
     if embed == nil {
@@ -177,7 +177,7 @@ func (m *MssqlHostsV1) MoveMssqlHostConnections(
         QueryParams: queryParams,
         AcceptHeader: header,
         Body: payload,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Patch,
     })
 
@@ -202,14 +202,14 @@ func (m *MssqlHostsV1) CreateMssqlHostConnectionCredentials(
     }
     payload := string(bytes)
     header := "application/api.clumio.mssql-hosts=v1+json"
-    var result *models.CreateHostECCredentialsResponse
+    result := &models.CreateHostECCredentialsResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: m.config,
         RequestUrl: queryBuilder,
         AcceptHeader: header,
         Body: payload,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Post,
     })
 
@@ -231,14 +231,14 @@ func (m *MssqlHostsV1) ReadMssqlHostConnections(
 
     
     header := "application/api.clumio.mssql-hosts=v1+json"
-    var result *models.ReadHcmHostResponse
+    result := &models.ReadHcmHostResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: m.config,
         RequestUrl: queryBuilder,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -258,7 +258,7 @@ func (m *MssqlHostsV1) ListMssqlHosts(
 
     
     header := "application/api.clumio.mssql-hosts=v1+json"
-    var result *models.ListMssqlHostsResponse
+    result := &models.ListMssqlHostsResponse{}
     defaultInt64 := int64(0)
     defaultString := "" 
     
@@ -287,7 +287,7 @@ func (m *MssqlHostsV1) ListMssqlHosts(
         RequestUrl: queryBuilder,
         QueryParams: queryParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -309,14 +309,14 @@ func (m *MssqlHostsV1) ReadMssqlHosts(
 
     
     header := "application/api.clumio.mssql-hosts=v1+json"
-    var result *models.ReadMssqlHostResponse
+    result := &models.ReadMssqlHostResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: m.config,
         RequestUrl: queryBuilder,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 

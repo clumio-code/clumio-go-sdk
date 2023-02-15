@@ -27,13 +27,13 @@ func (a *AwsTemplatesV1) ReadConnectionTemplates()(
 
     
     header := "application/api.clumio.aws-templates=v1+json"
-    var result *models.ReadAWSTemplatesV2Response
+    result := &models.ReadAWSTemplatesV2Response{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: a.config,
         RequestUrl: queryBuilder,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -59,14 +59,14 @@ func (a *AwsTemplatesV1) CreateConnectionTemplate(
     }
     payload := string(bytes)
     header := "application/api.clumio.aws-templates=v1+json"
-    var result *models.CreateAWSTemplateV2Response
+    result := &models.CreateAWSTemplateV2Response{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: a.config,
         RequestUrl: queryBuilder,
         AcceptHeader: header,
         Body: payload,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Post,
     })
 

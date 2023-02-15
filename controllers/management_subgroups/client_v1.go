@@ -25,13 +25,6 @@ type ManagementSubgroupsV1Client interface {
         groupId string)(
         *models.ReadSubgroupResponse,  *apiutils.APIError)
     
-    // UpdateManagementSubgroup Update the specified subgroup.
-    UpdateManagementSubgroup(
-        subgroupId string, 
-        groupId string, 
-        body *models.UpdateManagementSubgroupV1Request)(
-        *models.UpdateSubgroupResponse,  *apiutils.APIError)
-    
 }
 
 // NewManagementSubgroupsV1 returns ManagementSubgroupsV1Client

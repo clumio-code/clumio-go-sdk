@@ -58,7 +58,7 @@ func (i *IndividualAlertsV1) ListIndividualAlerts(
 
     
     header := "application/api.clumio.individual-alerts=v1+json"
-    var result *models.ListAlertsResponse
+    result := &models.ListAlertsResponse{}
     defaultInt64 := int64(0)
     defaultString := "" 
     
@@ -91,7 +91,7 @@ func (i *IndividualAlertsV1) ListIndividualAlerts(
         RequestUrl: queryBuilder,
         QueryParams: queryParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -114,7 +114,7 @@ func (i *IndividualAlertsV1) ReadIndividualAlert(
 
     
     header := "application/api.clumio.individual-alerts=v1+json"
-    var result *models.ReadAlertResponse
+    result := &models.ReadAlertResponse{}
     defaultString := "" 
     
     if embed == nil {
@@ -131,7 +131,7 @@ func (i *IndividualAlertsV1) ReadIndividualAlert(
         QueryParams: queryParams,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Get,
     })
 
@@ -163,7 +163,7 @@ func (i *IndividualAlertsV1) UpdateIndividualAlert(
     }
     payload := string(bytes)
     header := "application/api.clumio.individual-alerts=v1+json"
-    var result *models.UpdateAlertResponse
+    result := &models.UpdateAlertResponse{}
     defaultString := "" 
     
     if embed == nil {
@@ -181,7 +181,7 @@ func (i *IndividualAlertsV1) UpdateIndividualAlert(
         PathParams: pathParams,
         AcceptHeader: header,
         Body: payload,
-        Result: &result,
+        Result200: &result,
         RequestType: common.Patch,
     })
 
