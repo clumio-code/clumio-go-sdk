@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	sdkVersion = "v0.6.0"
+	sdkVersion = "v0.7.0"
 
 	AcceptHeader         = "Accept"
 	OrgUnitContextHeader = "x-clumio-organizationalunit-context"
@@ -86,19 +86,52 @@ func InvokeAPI(request *InvokeAPIRequest) *apiutils.APIError {
 		response, err = req.Delete(request.RequestUrl)
 	}
 	if err != nil {
+		// Use default error code of 500
+		responseCode := 500
+		if response != nil {
+			responseCode = response.StatusCode()
+		}
 		return &apiutils.APIError{
-			ResponseCode: 500,
+			ResponseCode: responseCode,
 			Reason:       InternalServerError,
 			Response:     []byte(fmt.Sprintf("%v", err)),
 		}
 	}
 
 	if response.StatusCode() == 200 {
-		err = json.Unmarshal(response.Body(), request.Result200)
+		if request.Result200 != nil {
+			err = json.Unmarshal(response.Body(), request.Result200)
+		} else if request.Result201 != nil {
+			err = json.Unmarshal(response.Body(), request.Result201)
+		} else if request.Result202 != nil {
+			err = json.Unmarshal(response.Body(), request.Result202)
+		}
 	} else if response.StatusCode() == 201 {
-		err = json.Unmarshal(response.Body(), request.Result201)
+		if request.Result201 != nil {
+			err = json.Unmarshal(response.Body(), request.Result201)
+		} else if request.Result200 != nil {
+			err = json.Unmarshal(response.Body(), request.Result200)
+		} else {
+			return &apiutils.APIError{
+				ResponseCode: 500,
+				Reason:       InternalServerError,
+				Response:     []byte(fmt.Sprintf("Response mismatch for 201 status code, " +
+					"both result 200 and 201 are null.")),
+			}
+		}
 	} else if response.StatusCode() == 202 {
-		err = json.Unmarshal(response.Body(), request.Result202)
+		if request.Result202 != nil {
+			err = json.Unmarshal(response.Body(), request.Result202)
+		} else if request.Result200 != nil {
+			err = json.Unmarshal(response.Body(), request.Result200)
+		} else {
+			return &apiutils.APIError{
+				ResponseCode: 500,
+				Reason:	      InternalServerError,
+				Response:     []byte(fmt.Sprintf("Response mismatch for 202 status code, " +
+					"both result 200 and 202 are null.")),
+			}
+		}
 	}
 
 	if err != nil {

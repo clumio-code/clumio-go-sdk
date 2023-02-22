@@ -235,7 +235,7 @@ func (p *PolicyDefinitionsV1) UpdatePolicyDefinition(
         PathParams: pathParams,
         AcceptHeader: header,
         Body: payload,
-        Result200: &result,
+        Result202: &result,
         RequestType: common.Put,
     })
 
@@ -264,7 +264,7 @@ func (p *PolicyDefinitionsV1) DeletePolicyDefinition(
         RequestUrl: queryBuilder,
         PathParams: pathParams,
         AcceptHeader: header,
-        Result200: &result,
+        Result202: &result,
         RequestType: common.Delete,
     })
 

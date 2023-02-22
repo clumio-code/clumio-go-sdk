@@ -1,3 +1,5 @@
+## 0.7.0
+Updates to Policy and OrganizationalUnit APIs.
 ## 0.6.0
 New APIs added for Dynamodb, EC2, RDS, S3 and EC2MSSQL data sources.
 ## 0.5.0
