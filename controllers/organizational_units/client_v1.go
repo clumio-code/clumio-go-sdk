@@ -15,7 +15,7 @@ type OrganizationalUnitsV1Client interface {
         limit *int64, 
         start *string, 
         filter *string)(
-        *models.ListOrganizationalUnitsResponse,  *apiutils.APIError)
+        *models.ListOrganizationalUnitsResponseV1,  *apiutils.APIError)
     
     // CreateOrganizationalUnit Create a new organizational unit. Adding entities to the OU is an asynchronous operation and has a task associated.
     //  When the request has entities to be added, the response has a task ID which can be used to
@@ -23,13 +23,13 @@ type OrganizationalUnitsV1Client interface {
     CreateOrganizationalUnit(
         embed *string, 
         body *models.CreateOrganizationalUnitV1Request)(
-        *models.CreateOrganizationalUnitResponseWrapper,  *apiutils.APIError)
+        *models.CreateOrganizationalUnitV1ResponseWrapper,  *apiutils.APIError)
     
     // ReadOrganizationalUnit Returns a representation of the specified organizational unit.
     ReadOrganizationalUnit(
         id string, 
         embed *string)(
-        *models.ReadOrganizationalUnitResponse,  *apiutils.APIError)
+        *models.ReadOrganizationalUnitResponseV1,  *apiutils.APIError)
     
     // DeleteOrganizationalUnit Delete the specified organizational unit.
     DeleteOrganizationalUnit(
@@ -46,7 +46,7 @@ type OrganizationalUnitsV1Client interface {
         id string, 
         embed *string, 
         body *models.PatchOrganizationalUnitV1Request)(
-        *models.PatchOrganizationalUnitResponseWrapper,  *apiutils.APIError)
+        *models.PatchOrganizationalUnitV1ResponseWrapper,  *apiutils.APIError)
     
 }
 

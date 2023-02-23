@@ -408,7 +408,8 @@ type AssignPolicyAction struct {
     PolicyId *string `json:"policy_id"`
 }
 
-// AssignmentEntity represents a custom type struct
+// AssignmentEntity represents a custom type struct.
+// An entity being assigned or unassigned a policy.
 type AssignmentEntity struct {
     // A system-generated ID assigned of an entity being assigned or unassigned to a policy.
     Id         *string `json:"id"`
@@ -441,7 +442,7 @@ type AssignmentInputModel struct {
     // The action to be executed by this request.
     // Possible values include "assign" and "unassign".
     Action   *string           `json:"action"`
-    // TODO: Add struct field description
+    // An entity being assigned or unassigned a policy.
     Entity   *AssignmentEntity `json:"entity"`
     // The Clumio-assigned ID of the policy to be applied to the requested entities.
     // If `action: assign`, then this parameter is required.
@@ -463,53 +464,71 @@ type AttributeDefinition struct {
 type AuditTrails struct {
     // The action performed by the user.
     // 
-    // +------------------+-----------------------------------------------------------+
-    // |      Action      |                          Details                          |
-    // +==================+===========================================================+
-    // | create           | Creating or adding new entities like new policy,          |
-    // |                  | configuration, user, etc                                  |
-    // +------------------+-----------------------------------------------------------+
-    // | update           | Updating an existing entity like policy, settings,        |
-    // |                  | passwords, etc                                            |
-    // +------------------+-----------------------------------------------------------+
-    // | delete           | Delete an existing entity like policy, settings, users,   |
-    // |                  | etc                                                       |
-    // +------------------+-----------------------------------------------------------+
-    // | enable           | Enabling a feature like single sign on or multi factor    |
-    // |                  | authentication settings                                   |
-    // +------------------+-----------------------------------------------------------+
-    // | disable          | Disabling features like single sign on or multi factor    |
-    // |                  | authentication settings                                   |
-    // +------------------+-----------------------------------------------------------+
-    // | browse           | Browsing through entities in the system like mailboxes or |
-    // |                  | backups, etc                                              |
-    // +------------------+-----------------------------------------------------------+
-    // | search           | Searching through entities in the system like mailboxes   |
-    // |                  | or backups, etc                                           |
-    // +------------------+-----------------------------------------------------------+
-    // | login            | User logs in or tries to login                            |
-    // +------------------+-----------------------------------------------------------+
-    // | logout           | User explicitly logged out.                               |
-    // +------------------+-----------------------------------------------------------+
-    // | register         | When new registrations happen like new                    |
-    // |                  | datasource registration or user registering for MFA       |
-    // +------------------+-----------------------------------------------------------+
-    // | unregister       | When unregistering like unregistering                     |
-    // |                  | datasource or user unregistering MFA                      |
-    // +------------------+-----------------------------------------------------------+
-    // | apply            | Apply policy to protect entities, tags, etc               |
-    // +------------------+-----------------------------------------------------------+
-    // | remove           | Remove protection for entities, tags, etc                 |
-    // +------------------+-----------------------------------------------------------+
-    // | invite           | Inviting a user                                           |
-    // +------------------+-----------------------------------------------------------+
-    // | suspend          | Suspend an existing user                                  |
-    // +------------------+-----------------------------------------------------------+
-    // | full_restore     | Full restore of the VM, volume, mailbox, database or      |
-    // |                  | other entities                                            |
-    // +------------------+-----------------------------------------------------------+
-    // | granular_restore | Restoring individual files, mails or records              |
-    // +------------------+-----------------------------------------------------------+
+    // +-------------------------+----------------------------------------------------+
+    // |         Action          |                      Details                       |
+    // +=========================+====================================================+
+    // | create                  | Creating or adding new entities like new policy,   |
+    // |                         | configuration, user, etc                           |
+    // +-------------------------+----------------------------------------------------+
+    // | update                  | Updating an existing entity like policy, settings, |
+    // |                         | passwords, etc                                     |
+    // +-------------------------+----------------------------------------------------+
+    // | delete                  | Delete an existing entity like policy, settings,   |
+    // |                         | users, etc                                         |
+    // +-------------------------+----------------------------------------------------+
+    // | enable                  | Enabling a feature like single sign on or multi    |
+    // |                         | factor authentication settings                     |
+    // +-------------------------+----------------------------------------------------+
+    // | disable                 | Disabling features like single sign on or multi    |
+    // |                         | factor authentication settings                     |
+    // +-------------------------+----------------------------------------------------+
+    // | browse                  | Browsing through entities in the system like       |
+    // |                         | mailboxes or backups, etc                          |
+    // +-------------------------+----------------------------------------------------+
+    // | search                  | Searching through entities in the system like      |
+    // |                         | mailboxes or backups, etc                          |
+    // +-------------------------+----------------------------------------------------+
+    // | login                   | User logs in or tries to login                     |
+    // +-------------------------+----------------------------------------------------+
+    // | logout                  | User explicitly logged out.                        |
+    // +-------------------------+----------------------------------------------------+
+    // | register                | When new registrations happen like new             |
+    // |                         | datasource registration or user registering for    |
+    // |                         | MFA                                                |
+    // +-------------------------+----------------------------------------------------+
+    // | unregister              | When unregistering like unregistering              |
+    // |                         | datasource or user unregistering MFA               |
+    // +-------------------------+----------------------------------------------------+
+    // | apply                   | Apply policy to protect entities, tags, etc        |
+    // +-------------------------+----------------------------------------------------+
+    // | remove                  | Remove protection for entities, tags, etc          |
+    // +-------------------------+----------------------------------------------------+
+    // | invite                  | Inviting a user                                    |
+    // +-------------------------+----------------------------------------------------+
+    // | suspend                 | Suspend an existing user                           |
+    // +-------------------------+----------------------------------------------------+
+    // | full_restore            | Full restore of the VM, volume, mailbox, database  |
+    // |                         | or other entities                                  |
+    // +-------------------------+----------------------------------------------------+
+    // | granular_retrieval      | Restoring individual files, mails or records       |
+    // +-------------------------+----------------------------------------------------+
+    // | redirected              | When cross region restore occurs.                  |
+    // +-------------------------+----------------------------------------------------+
+    // | unapply                 | Assets removed from a rule.                        |
+    // +-------------------------+----------------------------------------------------+
+    // | batch_activate          | Activate multiple policies.                        |
+    // +-------------------------+----------------------------------------------------+
+    // | batch_deactivate        | Deactivate multiple policies.                      |
+    // +-------------------------+----------------------------------------------------+
+    // | grant_email_access      | Grant email access for a file level object. This   |
+    // |                         | is mutually exclusive with grant_download_access   |
+    // +-------------------------+----------------------------------------------------+
+    // | download                | File was download.                                 |
+    // +-------------------------+----------------------------------------------------+
+    // | validate_tda_passcode   | Validate passcode that is entered for a download.  |
+    // +-------------------------+----------------------------------------------------+
+    // | regenerate_tda_passcode | Regenerate a new passcode used for download.       |
+    // +-------------------------+----------------------------------------------------+
     // 
     Action          *string             `json:"action"`
     // The category of the auditable action performed by the user.
@@ -555,8 +574,11 @@ type AuditTrails struct {
     // +-------------------------+----------------------------------------------------+
     // | partner_ecosystem       | Changes to partner ecosystem                       |
     // +-------------------------+----------------------------------------------------+
-    // | ecosystem_changes       | Changes in the ecosystem like adding or remvoings  |
+    // | ecosystem_changes       | Changes in the ecosystem like adding or removing   |
     // |                         | VMs                                                |
+    // +-------------------------+----------------------------------------------------+
+    // | organizational_unit     | Changes in the Organizational Unit/Entity group    |
+    // |                         | such as creation, deletion, patch.                 |
     // +-------------------------+----------------------------------------------------+
     // 
     Category        *string             `json:"category"`
@@ -1002,52 +1024,54 @@ type BackupWindow struct {
 // Bucket represents a custom type struct
 type Bucket struct {
     // Embedded responses related to the resource.
-    Embedded                 interface{}                                   `json:"_embedded"`
+    Embedded                      interface{}                                   `json:"_embedded"`
     // URLs to pages related to the resource.
-    Links                    *BucketLinks                                  `json:"_links"`
+    Links                         *BucketLinks                                  `json:"_links"`
     // The AWS-assigned ID of the account associated with the S3 bucket.
-    AccountNativeId          *string                                       `json:"account_native_id"`
+    AccountNativeId               *string                                       `json:"account_native_id"`
     // The AWS region associated with the S3 bucket.
-    AwsRegion                *string                                       `json:"aws_region"`
+    AwsRegion                     *string                                       `json:"aws_region"`
     // The total size breakdown of S3 buckets in bytes per storage class. This parameter aggregates relevant fields from cloudwatch_metrics > size_bytes_per_storage_class
-    BucketSizeBytesBreakdown *S3BucketsInventorySummaryBucketSizeBreakdown `json:"bucket_size_bytes_breakdown"`
+    BucketSizeBytesBreakdown      *S3BucketsInventorySummaryBucketSizeBreakdown `json:"bucket_size_bytes_breakdown"`
     // The Cloudwatch metrics of the bucket.
-    CloudwatchMetrics        *S3CloudwatchMetrics                          `json:"cloudwatch_metrics"`
+    CloudwatchMetrics             *S3CloudwatchMetrics                          `json:"cloudwatch_metrics"`
     // The timestamp of when the bucket was created. Represented in RFC-3339 format.
-    CreationTimestamp        *string                                       `json:"creation_timestamp"`
+    CreationTimestamp             *string                                       `json:"creation_timestamp"`
     // The AWS encryption output of the bucket.
-    EncryptionSetting        *S3EncryptionOutput                           `json:"encryption_setting"`
+    EncryptionSetting             *S3EncryptionOutput                           `json:"encryption_setting"`
     // The Clumio-assigned ID of the AWS environment associated with the S3 bucket.
-    EnvironmentId            *string                                       `json:"environment_id"`
+    EnvironmentId                 *string                                       `json:"environment_id"`
     // The EventBridge enablement state for the S3 bucket.
-    EventBridgeEnabled       *bool                                         `json:"event_bridge_enabled"`
+    EventBridgeEnabled            *bool                                         `json:"event_bridge_enabled"`
     // The Clumio-assigned ID of the bucket.
-    Id                       *string                                       `json:"id"`
+    Id                            *string                                       `json:"id"`
     // The Encryption enablement state for the S3 bucket.
-    IsEncryptionEnabled      *bool                                         `json:"is_encryption_enabled"`
+    IsEncryptionEnabled           *bool                                         `json:"is_encryption_enabled"`
     // The Replication enablement state for the S3 bucket.
-    IsReplicationEnabled     *bool                                         `json:"is_replication_enabled"`
+    IsReplicationEnabled          *bool                                         `json:"is_replication_enabled"`
     // The Versioning enablement state for the S3 bucket.
-    IsVersioningEnabled      *bool                                         `json:"is_versioning_enabled"`
+    IsVersioningEnabled           *bool                                         `json:"is_versioning_enabled"`
     // Time of the last backup in RFC-3339 format.
-    LastBackupTimestamp      *string                                       `json:"last_backup_timestamp"`
+    LastBackupTimestamp           *string                                       `json:"last_backup_timestamp"`
+    // Time of the last continuous backup in RFC-3339 format.
+    LastContinuousBackupTimestamp *string                                       `json:"last_continuous_backup_timestamp"`
     // The AWS-assigned name of the bucket.
-    Name                     *string                                       `json:"name"`
+    Name                          *string                                       `json:"name"`
     // Number of objects in bucket.
-    ObjectCount              *int64                                        `json:"object_count"`
+    ObjectCount                   *int64                                        `json:"object_count"`
     // The Clumio-assigned ID of the organizational unit associated with the S3 bucket.
-    OrganizationalUnitId     *string                                       `json:"organizational_unit_id"`
+    OrganizationalUnitId          *string                                       `json:"organizational_unit_id"`
     // Protection group count reflects how many protection groups are linked to this
     // bucket.
-    ProtectionGroupCount     *int64                                        `json:"protection_group_count"`
+    ProtectionGroupCount          *int64                                        `json:"protection_group_count"`
     // The AWS replication output of the bucket.
-    ReplicationSetting       *S3ReplicationOutput                          `json:"replication_setting"`
+    ReplicationSetting            *S3ReplicationOutput                          `json:"replication_setting"`
     // Size of bucket in bytes.
-    SizeBytes                *int64                                        `json:"size_bytes"`
+    SizeBytes                     *int64                                        `json:"size_bytes"`
     // A tag created through AWS console which can be applied to EBS volumes.
-    Tags                     []*AwsTagModel                                `json:"tags"`
+    Tags                          []*AwsTagModel                                `json:"tags"`
     // The AWS versioning output of the bucket.
-    VersioningSetting        *S3VersioningOutput                           `json:"versioning_setting"`
+    VersioningSetting             *S3VersioningOutput                           `json:"versioning_setting"`
 }
 
 // BucketLinks represents a custom type struct.
@@ -1380,6 +1404,15 @@ type CreateRestoreRecordResponseLinks struct {
     ReadTask *ReadTaskHateoasLink `json:"read-task"`
 }
 
+// CreateRuleResponseLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type CreateRuleResponseLinks struct {
+    // The HATEOAS link to this resource.
+    Self     *HateoasSelfLink     `json:"_self"`
+    // A HATEOAS link to the task associated with this resource.
+    ReadTask *ReadTaskHateoasLink `json:"read-task"`
+}
+
 // DataAccessObject represents a custom type struct.
 // Specifies information about the data-access method for accessing the restored
 // file.
@@ -1486,6 +1519,24 @@ type DatacenterWithETag struct {
     RootComputeResourceFolder *VMwareRootComputeResourceFolderIDModel `json:"root_compute_resource_folder"`
     // The hidden root virtual machine folder of the data center.
     RootVmFolder              *VMwareRootVMFolderIDModel              `json:"root_vm_folder"`
+}
+
+// DeletePolicyResponseLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type DeletePolicyResponseLinks struct {
+    // The HATEOAS link to this resource.
+    Self     *HateoasSelfLink     `json:"_self"`
+    // A HATEOAS link to the task associated with this resource.
+    ReadTask *ReadTaskHateoasLink `json:"read-task"`
+}
+
+// DeleteRuleResponseLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type DeleteRuleResponseLinks struct {
+    // The HATEOAS link to this resource.
+    Self     *HateoasSelfLink     `json:"_self"`
+    // A HATEOAS link to the task associated with this resource.
+    ReadTask *ReadTaskHateoasLink `json:"read-task"`
 }
 
 // DirectDownloadDataAccessObject represents a custom type struct.
@@ -4223,11 +4274,11 @@ type OrganizationalUnitLinksForDelete struct {
     ReadTask *HateoasLink     `json:"read-task"`
 }
 
-// OrganizationalUnitListEmbedded represents a custom type struct.
+// OrganizationalUnitListEmbeddedV1 represents a custom type struct.
 // Embedded responses related to the resource.
-type OrganizationalUnitListEmbedded struct {
-    // OrganizationalUnitWithETag to support etag string to be calculated
-    Items []*OrganizationalUnitWithETag `json:"items"`
+type OrganizationalUnitListEmbeddedV1 struct {
+    // OrganizationalUnitWithETagV1 to support etag string to be calculated
+    Items []*OrganizationalUnitWithETagV1 `json:"items"`
 }
 
 // OrganizationalUnitListLinks represents a custom type struct.
@@ -4264,9 +4315,9 @@ type OrganizationalUnitPrimaryEntity struct {
     ClumioType *string `json:"type"`
 }
 
-// OrganizationalUnitWithETag represents a custom type struct.
-// OrganizationalUnitWithETag to support etag string to be calculated
-type OrganizationalUnitWithETag struct {
+// OrganizationalUnitWithETagV1 represents a custom type struct.
+// OrganizationalUnitWithETagV1 to support etag string to be calculated
+type OrganizationalUnitWithETagV1 struct {
     // Embedded responses related to the resource.
     Embedded                  *EntityGroupEmbedded     `json:"_embedded"`
     // ETag value
@@ -4409,17 +4460,11 @@ type PolicyEmbedded struct {
 // URLs to pages related to the resource.
 type PolicyLinks struct {
     // The HATEOAS link to this resource.
-    Self                                   *HateoasSelfLink            `json:"_self"`
+    Self                   *HateoasSelfLink `json:"_self"`
     // A resource-specific HATEOAS link.
-    DeletePolicyDefinition                 *HateoasLink                `json:"delete-policy-definition"`
-    // A HATEOAS link to protect the entities.
-    ProtectEntities                        *ProtectEntitiesHateoasLink `json:"protect-entities"`
+    DeletePolicyDefinition *HateoasLink     `json:"delete-policy-definition"`
     // A resource-specific HATEOAS link.
-    ReadPolicyAwsEbsVolumesComplianceStats *HateoasLink                `json:"read-policy-aws-ebs-volumes-compliance-stats"`
-    // A resource-specific HATEOAS link.
-    ReadPolicyVmwareVmsComplianceStats     *HateoasLink                `json:"read-policy-vmware-vms-compliance-stats"`
-    // A resource-specific HATEOAS link.
-    UpdatePolicyDefinition                 *HateoasLink                `json:"update-policy-definition"`
+    UpdatePolicyDefinition *HateoasLink     `json:"update-policy-definition"`
 }
 
 // PolicyListEmbedded represents a custom type struct.
@@ -4445,8 +4490,8 @@ type PolicyListLinks struct {
 // PolicyOperation represents a custom type struct
 type PolicyOperation struct {
     // Determines whether the protection policy should take action now or during the specified backup window.
-    // If set to `immediate`, Clumio starts the backup process right away. If set to `window`, Clumio starts the backup process when the backup window (`backup_window`) opens.
-    // If set to `window` and `operation in ("aws_rds_resource_aws_snapshot", "mssql_log_backup", "ec2_mssql_log_backup")`,
+    // If set to `immediate`, Clumio starts the backup process right away. If set to `backup_window_tz`, Clumio starts the backup process when the backup window (`backup_window_tz`) opens.
+    // If set to `backup_window_tz` and `operation in ("aws_rds_resource_aws_snapshot", "mssql_log_backup", "ec2_mssql_log_backup")`,
     // the backup window will not be determined by Clumio's backup window.
     ActionSetting     *string                 `json:"action_setting"`
     // Additional operation-specific policy settings. For operation types which do not support additional settings, this field is `null`.
@@ -4470,8 +4515,8 @@ type PolicyOperation struct {
 // PolicyOperationInput represents a custom type struct
 type PolicyOperationInput struct {
     // Determines whether the protection policy should take action now or during the specified backup window.
-    // If set to `immediate`, Clumio starts the backup process right away. If set to `window`, Clumio starts the backup process when the backup window (`backup_window`) opens.
-    // If set to `window` and `operation in ("aws_rds_resource_aws_snapshot", "mssql_log_backup", "ec2_mssql_log_backup")`,
+    // If set to `immediate`, Clumio starts the backup process right away. If set to `backup_window_tz`, Clumio starts the backup process when the backup window (`backup_window_tz`) opens.
+    // If set to `backup_window_tz` and `operation in ("aws_rds_resource_aws_snapshot", "mssql_log_backup", "ec2_mssql_log_backup")`,
     // the backup window will not be determined by Clumio's backup window.
     ActionSetting    *string                 `json:"action_setting"`
     // Additional operation-specific policy settings. For operation types which do not support additional settings, this field is `null`.
@@ -5298,10 +5343,12 @@ type RDSLogicalPreviewQueryResult struct {
 // For example, to configure the minimum frequency between backups to be every 2 days, set `unit="days"` and `value=2`.
 // To configure the SLA for on-demand backups, set `unit="on_demand"` and leave the `value` field empty.
 type RPOBackupSLAParam struct {
+    // The weekday in decimal of the Weekly SLA parameter. Valid values are integers from 0 to 6, incidates Sunday, Monday, ..., Saturday. For example, to configure backup on every Monday, set `unit="weekly"`, `value=1`, and `offsets={1}`.
+    Offsets []*int64 `json:"offsets"`
     // The measurement unit of the SLA parameter.
-    Unit  *string `json:"unit"`
+    Unit    *string  `json:"unit"`
     // The measurement value of the SLA parameter.
-    Value *int64  `json:"value"`
+    Value   *int64   `json:"value"`
 }
 
 // RdsAssetInfo represents a custom type struct
@@ -6651,6 +6698,15 @@ type SSESpecification struct {
     KmsMasterKeyId *string `json:"kms_master_key_id"`
 }
 
+// SetAssignmentsResponseLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type SetAssignmentsResponseLinks struct {
+    // The HATEOAS link to this resource.
+    Self     *HateoasSelfLink     `json:"_self"`
+    // A HATEOAS link to the task associated with this resource.
+    ReadTask *ReadTaskHateoasLink `json:"read-task"`
+}
+
 // SetBucketPropertiesResponseLinks represents a custom type struct.
 // URLs to pages related to the resource.
 type SetBucketPropertiesResponseLinks struct {
@@ -7176,6 +7232,24 @@ type UpdateEntities struct {
     Add    []*EntityModel `json:"add"`
     // entityModel denotes the entityModel
     Remove []*EntityModel `json:"remove"`
+}
+
+// UpdatePolicyResponseLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type UpdatePolicyResponseLinks struct {
+    // The HATEOAS link to this resource.
+    Self     *HateoasSelfLink     `json:"_self"`
+    // A HATEOAS link to the task associated with this resource.
+    ReadTask *ReadTaskHateoasLink `json:"read-task"`
+}
+
+// UpdateRuleResponseLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type UpdateRuleResponseLinks struct {
+    // The HATEOAS link to this resource.
+    Self     *HateoasSelfLink     `json:"_self"`
+    // A HATEOAS link to the task associated with this resource.
+    ReadTask *ReadTaskHateoasLink `json:"read-task"`
 }
 
 // UpdateUserAssignments represents a custom type struct.

@@ -23,13 +23,13 @@ func (o *OrganizationalUnitsV1) ListOrganizationalUnits(
     limit *int64, 
     start *string, 
     filter *string)(
-    *models.ListOrganizationalUnitsResponse, *apiutils.APIError) {
+    *models.ListOrganizationalUnitsResponseV1, *apiutils.APIError) {
 
     queryBuilder := o.config.BaseUrl + "/organizational-units"
 
     
     header := "application/api.clumio.organizational-units=v1+json"
-    result := &models.ListOrganizationalUnitsResponse{}
+    result := &models.ListOrganizationalUnitsResponseV1{}
     defaultInt64 := int64(0)
     defaultString := "" 
     
@@ -68,7 +68,7 @@ func (o *OrganizationalUnitsV1) ListOrganizationalUnits(
 func (o *OrganizationalUnitsV1) CreateOrganizationalUnit(
     embed *string, 
     body *models.CreateOrganizationalUnitV1Request)(
-    *models.CreateOrganizationalUnitResponseWrapper, *apiutils.APIError) {
+    *models.CreateOrganizationalUnitV1ResponseWrapper, *apiutils.APIError) {
 
     queryBuilder := o.config.BaseUrl + "/organizational-units"
 
@@ -82,7 +82,7 @@ func (o *OrganizationalUnitsV1) CreateOrganizationalUnit(
     }
     payload := string(bytes)
     header := "application/api.clumio.organizational-units=v1+json"
-    result := &models.CreateOrganizationalUnitResponseWrapper{}
+    result := &models.CreateOrganizationalUnitV1ResponseWrapper{}
     defaultString := "" 
     
     if embed == nil {
@@ -117,7 +117,7 @@ func (o *OrganizationalUnitsV1) CreateOrganizationalUnit(
 func (o *OrganizationalUnitsV1) ReadOrganizationalUnit(
     id string, 
     embed *string)(
-    *models.ReadOrganizationalUnitResponse, *apiutils.APIError) {
+    *models.ReadOrganizationalUnitResponseV1, *apiutils.APIError) {
 
     pathURL := "/organizational-units/{id}"
     //process optional template parameters
@@ -128,7 +128,7 @@ func (o *OrganizationalUnitsV1) ReadOrganizationalUnit(
 
     
     header := "application/api.clumio.organizational-units=v1+json"
-    result := &models.ReadOrganizationalUnitResponse{}
+    result := &models.ReadOrganizationalUnitResponseV1{}
     defaultString := "" 
     
     if embed == nil {
@@ -202,7 +202,7 @@ func (o *OrganizationalUnitsV1) PatchOrganizationalUnit(
     id string, 
     embed *string, 
     body *models.PatchOrganizationalUnitV1Request)(
-    *models.PatchOrganizationalUnitResponseWrapper, *apiutils.APIError) {
+    *models.PatchOrganizationalUnitV1ResponseWrapper, *apiutils.APIError) {
 
     pathURL := "/organizational-units/{id}"
     //process optional template parameters
@@ -221,7 +221,7 @@ func (o *OrganizationalUnitsV1) PatchOrganizationalUnit(
     }
     payload := string(bytes)
     header := "application/api.clumio.organizational-units=v1+json"
-    result := &models.PatchOrganizationalUnitResponseWrapper{}
+    result := &models.PatchOrganizationalUnitV1ResponseWrapper{}
     defaultString := "" 
     
     if embed == nil {

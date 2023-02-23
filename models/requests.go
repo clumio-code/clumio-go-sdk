@@ -147,7 +147,7 @@ type UpdateAwsConnectionV1Request struct {
 type CreateMssqlHostConnectionsV1Request struct {
     // The fully-qualified domain names or IP addresses of hosts to be connected.
     Endpoints            []*string `json:"endpoints"`
-    // Performs the operation on a host within the specified management group.
+    // TODO: Add struct field description
     GroupId              *string   `json:"group_id"`
     // The Clumio-assigned ID of the organizational unit associated with the Host.
     OrganizationalUnitId *string   `json:"organizational_unit_id"`
