@@ -44,6 +44,17 @@ type CreateBackupAwsEbsVolumeV1Request struct {
     VolumeId *string          `json:"volume_id"`
 }
 
+// CreateBackupAwsEbsVolumeV2Request represents a custom type struct
+type CreateBackupAwsEbsVolumeV2Request struct {
+    // Settings for requesting on-demand backup directly.
+    Settings   *OnDemandSetting `json:"settings"`
+    // The type of the backup. Possible values - `clumio_backup`, `aws_snapshot`. The
+    // type will be assumed as `clumio_backup` if the field is left empty.
+    ClumioType *string          `json:"type"`
+    // Performs the operation on the EBS volume with the specified Clumio-assigned ID.
+    VolumeId   *string          `json:"volume_id"`
+}
+
 // CreateBackupEc2MssqlDatabaseV1Request represents a custom type struct
 type CreateBackupEc2MssqlDatabaseV1Request struct {
     // Performs the operation on the MSSQL asset with the specified Clumio-assigned ID.
@@ -159,7 +170,7 @@ type CreateMssqlHostConnectionsV1Request struct {
 type DeleteMssqlHostConnectionsV1Request struct {
     // The endpoints of hosts to be deleted.
     Endpoints  []*string `json:"endpoints"`
-    // Performs the operation on a host within the specified management group.
+    // TODO: Add struct field description
     GroupId    *string   `json:"group_id"`
     // Performs the operation on a host within the specified management subgroup.
     SubgroupId *string   `json:"subgroup_id"`
@@ -198,6 +209,21 @@ type UpdateManagementGroupV1Request struct {
     Name                  *string `json:"name"`
 }
 
+// CreateOrganizationalUnitV2Request represents a custom type struct
+type CreateOrganizationalUnitV2Request struct {
+    // A description of the organizational unit.
+    Description *string         `json:"description"`
+    // entityModel denotes the entityModel
+    Entities    []*EntityModel  `json:"entities"`
+    // Unique name assigned to the organizational unit.
+    Name        *string         `json:"name"`
+    // The Clumio-assigned ID of the parent organizational unit under which the new organizational unit is to be created.
+    // If absent, the new organizational unit is created under the current organizational unit.
+    ParentId    *string         `json:"parent_id"`
+    // A user along with a role.
+    Users       []*UserWithRole `json:"users"`
+}
+
 // CreateOrganizationalUnitV1Request represents a custom type struct
 type CreateOrganizationalUnitV1Request struct {
     // A description of the organizational unit.
@@ -211,6 +237,20 @@ type CreateOrganizationalUnitV1Request struct {
     ParentId    *string        `json:"parent_id"`
     // List of user IDs to assign this organizational unit.
     Users       []*string      `json:"users"`
+}
+
+// PatchOrganizationalUnitV2Request represents a custom type struct
+type PatchOrganizationalUnitV2Request struct {
+    // A description of the organizational unit.
+    Description *string                        `json:"description"`
+    // Updates to the entities in the organizational unit.
+    // Adding or removing entities from the OU is an asynchronous operation.
+    // The response has a task ID which can be used to track the progress of the operation.
+    Entities    *UpdateEntities                `json:"entities"`
+    // Unique name assigned to the organizational unit.
+    Name        *string                        `json:"name"`
+    // UpdateUserAssignmentsWithRole denotes the users to be added or removed along with the role.
+    Users       *UpdateUserAssignmentsWithRole `json:"users"`
 }
 
 // PatchOrganizationalUnitV1Request represents a custom type struct
@@ -631,6 +671,27 @@ type CreateReportDownloadV1Request struct {
     // |                   |                  |                   | 0000-0000-        |
     // |                   |                  |                   | 000000000000\"]}} |
     // |                   |                  |                   | "                 |
+    // |                   |                  |                   |                   |
+    // |                   |                  |                   |                   |
+    // +-------------------+------------------+-------------------+-------------------+
+    // | entity_type       | $in              | Consumption       |                   |
+    // |                   |                  |                   | Entity type       |
+    // |                   |                  |                   | filters the       |
+    // |                   |                  |                   | consumption data  |
+    // |                   |                  |                   | generated for the |
+    // |                   |                  |                   | report to the     |
+    // |                   |                  |                   | given entity      |
+    // |                   |                  |                   | types.            |
+    // |                   |                  |                   | If filter is      |
+    // |                   |                  |                   | empty, it shows   |
+    // |                   |                  |                   | consumption       |
+    // |                   |                  |                   | report of the all |
+    // |                   |                  |                   | entity types.     |
+    // |                   |                  |                   |                   |
+    // |                   |                  |                   | filter={"entity_t |
+    // |                   |                  |                   | ype":{"$in":["Loc |
+    // |                   |                  |                   | alProtectionGroup |
+    // |                   |                  |                   | , DynamoDB"]}}    |
     // |                   |                  |                   |                   |
     // |                   |                  |                   |                   |
     // +-------------------+------------------+-------------------+-------------------+
@@ -1155,6 +1216,17 @@ type UpdateTaskV1Request struct {
     Status *string `json:"status"`
 }
 
+// CreateUserV2Request represents a custom type struct
+type CreateUserV2Request struct {
+    // The organizational units assigned to the user, with the specified role.
+    AccessControlConfiguration []*RoleForOrganizationalUnits `json:"access_control_configuration"`
+    // The email address of the user to be added to Clumio.
+    Email                      *string                       `json:"email"`
+    // The full name of the user to be added to Clumio. For example, type the user's first name and last name.
+    // The name displays on the User Management screen and in the body of the email invitation.
+    FullName                   *string                       `json:"full_name"`
+}
+
 // CreateUserV1Request represents a custom type struct
 type CreateUserV1Request struct {
     // The Clumio-assigned ID of the role to assign to the user.
@@ -1164,9 +1236,9 @@ type CreateUserV1Request struct {
     // +-------------+---------------------------+----------------+
     // |   Inviter   |       Assigned OUs        | Resulting Role |
     // +=============+===========================+================+
-    // | Super Admin | Gloabl OU is assigned     | Super Admin    |
+    // | Super Admin | Global OU is assigned     | Super Admin    |
     // +-------------+---------------------------+----------------+
-    // | Super Admin | Gloabl OU is not assigned | OU Admin       |
+    // | Super Admin | Global OU is not assigned | OU Admin       |
     // +-------------+---------------------------+----------------+
     // | OU Admin    | Any                       | OU Admin       |
     // +-------------+---------------------------+----------------+
@@ -1174,11 +1246,28 @@ type CreateUserV1Request struct {
     AssignedRole          *string   `json:"assigned_role"`
     // The email address of the user to be added to Clumio.
     Email                 *string   `json:"email"`
-    // The full name of the user to be added to Clumio. For example, enter the user's first name and last name.
-    // The name appears in the User Management screen and in the body of the email invitation.
+    // The full name of the user to be added to Clumio. For example, type the user's first name and last name.
+    // The name displays on the User Management screen and in the body of the email invitation.
     FullName              *string   `json:"full_name"`
     // The Clumio-assigned IDs of the organizational units to be assigned to the user.
     OrganizationalUnitIds []*string `json:"organizational_unit_ids"`
+}
+
+// ChangePasswordV2Request represents a custom type struct
+type ChangePasswordV2Request struct {
+    // The user's current password.
+    CurrentPassword *string `json:"current_password"`
+    // The new password that is to replace the user's current password. Passwords must be between 14 and 64 characters
+    // and include the following: one uppercase character, one lowercase character, one number, and one special character.
+    // Spaces are not allowed.
+    NewPassword     *string `json:"new_password"`
+}
+
+// UpdateUserProfileV2Request represents a custom type struct
+type UpdateUserProfileV2Request struct {
+    // The full name of the user that is to replace the existing full name.
+    // For example, enter the user's first name and last name.
+    FullName *string `json:"full_name"`
 }
 
 // UpdateUserProfileV1Request represents a custom type struct
@@ -1186,6 +1275,19 @@ type UpdateUserProfileV1Request struct {
     // The full name of the user that is to replace the existing full name.
     // For example, enter the user's first name and last name.
     FullName *string `json:"full_name"`
+}
+
+// UpdateUserV2Request represents a custom type struct
+type UpdateUserV2Request struct {
+    // Updates to the organizational units along with the role assigned to the user.
+    AccessControlConfigurationUpdates *EntityGroupAssignmentUpdates `json:"access_control_configuration_updates"`
+    // The full name of the user that is to replace the existing full name.
+    // For example, enter the user's first name and last name.
+    FullName                          *string                       `json:"full_name"`
+    // If `true`, enables a user who has been disabled from Clumio,
+    // returning the user to its previous "Activated" or "Invited" status. If `false`, disables a user from Clumio.
+    // The user will not be able log in to Clumio until another Clumio user re-enables the account.
+    IsEnabled                         *bool                         `json:"is_enabled"`
 }
 
 // UpdateUserV1Request represents a custom type struct
