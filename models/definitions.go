@@ -165,48 +165,6 @@ type AWSEnvironmentListLinks struct {
     Self  *HateoasSelfLink  `json:"_self"`
 }
 
-// Alert represents a custom type struct
-type Alert struct {
-    // Embedded responses related to the resource.
-    Embedded            *AlertEmbedded          `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links               *AlertLinks             `json:"_links"`
-    // The issue that generated the alert. Each cause belongs to an alert type.
-    Cause               *string                 `json:"cause"`
-    // The timestamp of when the alert was cleared, either automatically by Clumio or manually by a Clumio user.
-    // Represented in RFC-3339 format. If this alert has not been cleared, then this field has a value of `null`.
-    ClearedTimestamp    *string                 `json:"cleared_timestamp"`
-    // The Clumio-assigned ID of the consolidated alert associated with this individual alert. Alerts are consolidated based on matching parent entity, alert type, and alert cause.
-    ConsolidatedAlertId *string                 `json:"consolidated_alert_id"`
-    // Additional information about the alert.
-    Details             *IndividualAlertDetails `json:"details"`
-    // The Clumio-assigned ID of the individual alert.
-    Id                  *string                 `json:"id"`
-    // A record of user-provided information about the alert.
-    Notes               *string                 `json:"notes"`
-    // The parent object of the primary entity associated with or affected by the alert. For example, "aws_environment" is the parent entity of primary entity "aws_ebs_volume".
-    ParentEntity        *AlertParentEntity      `json:"parent_entity"`
-    // The primary object associated with or affected by the alert. Examples of primary entities include "aws_connection", "aws_ebs_volume" and "vmware_vm".
-    PrimaryEntity       *AlertPrimaryEntity     `json:"primary_entity"`
-    // The number of times the alert has recurred for this primary entity.
-    RaisedCount         *uint64                 `json:"raised_count"`
-    // The timestamp of when the alert was raised. Represented in RFC-3339 format.
-    RaisedTimestamp     *string                 `json:"raised_timestamp"`
-    // The alert severity level. Values include "error" and "warning".
-    Severity            *string                 `json:"severity"`
-    // The individual alert status. An individual alert that is in "active" status is one that is still open and has yet to be addressed.
-    // An individual alert that is in "cleared" status is one that has been cleared, either automatically by Clumio or manually by a Clumio user.
-    Status              *string                 `json:"status"`
-    // TODO: Add struct field description
-    Tags                []*RestEntity           `json:"tags"`
-    // The general alert category. Some alert types may be associated with multiple causes.
-    // Refer to the Alert Type table for a complete list of alert types.
-    ClumioType          *string                 `json:"type"`
-    // The timestamp of when the alert was last updated. Represented in RFC-3339 format.
-    // The alert is updated whenever there is a new occurrence of the same alert within the same entity.
-    UpdatedTimestamp    *string                 `json:"updated_timestamp"`
-}
-
 // AlertEmbedded represents a custom type struct.
 // Embedded responses related to the resource.
 type AlertEmbedded struct {
@@ -229,7 +187,7 @@ type AlertLinks struct {
 // Embedded responses related to the resource.
 type AlertListEmbedded struct {
     // TODO: Add struct field description
-    Items []*Alert `json:"items"`
+    Items []*ConsolidatedAlertWithETag `json:"items"`
 }
 
 // AlertListLinks represents a custom type struct.
@@ -252,67 +210,8 @@ type AlertListLinks struct {
 type AlertParentEntity struct {
     // A system-generated ID assigned to this entity.
     Id         *string `json:"id"`
-    // 
-    // Entity Type
-    // Details
-    // 
-    // 
-    // vmware_vcenter
-    // VMware vCenter.
-    // 
-    // 
-    // vmware_vm
-    // VMware virtual machine.
-    // 
-    // 
-    // vmware_vm_folder
-    // VMware VM folder.
-    // 
-    // 
-    // vmware_datacenter
-    // VMware data center.
-    // 
-    // 
-    // vmware_datacenter_folder
-    // VMware data center folder.
-    // 
-    // 
-    // vmware_tag
-    // VMware tag.
-    // 
-    // 
-    // vmware_category
-    // VMware tag category.
-    // 
-    // 
-    // vmware_compute_resource
-    // VMware compute resource.
-    // 
-    // 
-    // vmware_compute_resource_folder
-    // VMware compute resource folder.
-    // 
-    // 
-    // aws_ebs_volume
-    // AWS EBS volume.
-    // 
-    // 
-    // aws_connection
-    // AWS connection mediated by a CloudFormation stack.
-    // 
-    // 
-    // aws_environment
-    // AWS environment specified by an account/region pair.
-    // 
-    // 
-    // aws_tag
-    // AWS tag.
-    // 
-    // 
-    // aws_cmk
-    // AWS Customer Master Key used to encrypt data.
-    // 
-    // 
+    // Type is mostly an asset type or the type of Entity. Some examples are
+    // "restored_file", "vmware_vm",  etc.
     ClumioType *string `json:"type"`
     // A system-generated value assigned to the entity. For example, if the primary entity type is "vmware_vm" for a virtual machine, then the value is the name of the VM.
     Value      *string `json:"value"`
@@ -323,67 +222,8 @@ type AlertParentEntity struct {
 type AlertPrimaryEntity struct {
     // A system-generated ID assigned to this entity.
     Id         *string `json:"id"`
-    // 
-    // Entity Type
-    // Details
-    // 
-    // 
-    // vmware_vcenter
-    // VMware vCenter.
-    // 
-    // 
-    // vmware_vm
-    // VMware virtual machine.
-    // 
-    // 
-    // vmware_vm_folder
-    // VMware VM folder.
-    // 
-    // 
-    // vmware_datacenter
-    // VMware data center.
-    // 
-    // 
-    // vmware_datacenter_folder
-    // VMware data center folder.
-    // 
-    // 
-    // vmware_tag
-    // VMware tag.
-    // 
-    // 
-    // vmware_category
-    // VMware tag category.
-    // 
-    // 
-    // vmware_compute_resource
-    // VMware compute resource.
-    // 
-    // 
-    // vmware_compute_resource_folder
-    // VMware compute resource folder.
-    // 
-    // 
-    // aws_ebs_volume
-    // AWS EBS volume.
-    // 
-    // 
-    // aws_connection
-    // AWS connection mediated by a CloudFormation stack.
-    // 
-    // 
-    // aws_environment
-    // AWS environment specified by an account/region pair.
-    // 
-    // 
-    // aws_tag
-    // AWS tag.
-    // 
-    // 
-    // aws_cmk
-    // AWS Customer Master Key used to encrypt data.
-    // 
-    // 
+    // Type is mostly an asset type or the type of Entity. Some examples are
+    // "restored_file", "vmware_vm",  etc.
     ClumioType *string `json:"type"`
     // A system-generated value assigned to the entity. For example, if the primary entity type is "vmware_vm" for a virtual machine, then the value is the name of the VM.
     Value      *string `json:"value"`
@@ -613,67 +453,8 @@ type AuditTrails struct {
 type AuditParentEntity struct {
     // A system-generated ID assigned to this entity.
     Id         *string `json:"id"`
-    // 
-    // Entity Type
-    // Details
-    // 
-    // 
-    // vmware_vcenter
-    // VMware vCenter.
-    // 
-    // 
-    // vmware_vm
-    // VMware virtual machine.
-    // 
-    // 
-    // vmware_vm_folder
-    // VMware VM folder.
-    // 
-    // 
-    // vmware_datacenter
-    // VMware data center.
-    // 
-    // 
-    // vmware_datacenter_folder
-    // VMware data center folder.
-    // 
-    // 
-    // vmware_tag
-    // VMware tag.
-    // 
-    // 
-    // vmware_category
-    // VMware tag category.
-    // 
-    // 
-    // vmware_compute_resource
-    // VMware compute resource.
-    // 
-    // 
-    // vmware_compute_resource_folder
-    // VMware compute resource folder.
-    // 
-    // 
-    // aws_ebs_volume
-    // AWS EBS volume.
-    // 
-    // 
-    // aws_connection
-    // AWS connection mediated by a CloudFormation stack.
-    // 
-    // 
-    // aws_environment
-    // AWS environment specified by an account/region pair.
-    // 
-    // 
-    // aws_tag
-    // AWS tag.
-    // 
-    // 
-    // aws_cmk
-    // AWS Customer Master Key used to encrypt data.
-    // 
-    // 
+    // Type is mostly an asset type or the type of Entity. Some examples are
+    // "restored_file", "vmware_vm",  etc.
     ClumioType *string `json:"type"`
     // A system-generated value assigned to the entity. For example, if the primary entity type is "vmware_vm" for a virtual machine, then the value is the name of the VM.
     Value      *string `json:"value"`
@@ -686,67 +467,8 @@ type AuditParentEntity struct {
 type AuditPrimaryEntity struct {
     // A system-generated ID assigned to this entity.
     Id         *string `json:"id"`
-    // 
-    // Entity Type
-    // Details
-    // 
-    // 
-    // vmware_vcenter
-    // VMware vCenter.
-    // 
-    // 
-    // vmware_vm
-    // VMware virtual machine.
-    // 
-    // 
-    // vmware_vm_folder
-    // VMware VM folder.
-    // 
-    // 
-    // vmware_datacenter
-    // VMware data center.
-    // 
-    // 
-    // vmware_datacenter_folder
-    // VMware data center folder.
-    // 
-    // 
-    // vmware_tag
-    // VMware tag.
-    // 
-    // 
-    // vmware_category
-    // VMware tag category.
-    // 
-    // 
-    // vmware_compute_resource
-    // VMware compute resource.
-    // 
-    // 
-    // vmware_compute_resource_folder
-    // VMware compute resource folder.
-    // 
-    // 
-    // aws_ebs_volume
-    // AWS EBS volume.
-    // 
-    // 
-    // aws_connection
-    // AWS connection mediated by a CloudFormation stack.
-    // 
-    // 
-    // aws_environment
-    // AWS environment specified by an account/region pair.
-    // 
-    // 
-    // aws_tag
-    // AWS tag.
-    // 
-    // 
-    // aws_cmk
-    // AWS Customer Master Key used to encrypt data.
-    // 
-    // 
+    // Type is mostly an asset type or the type of Entity. Some examples are
+    // "restored_file", "vmware_vm",  etc.
     ClumioType *string `json:"type"`
     // A system-generated value assigned to the entity. For example, if the primary entity type is "vmware_vm" for a virtual machine, then the value is the name of the VM.
     Value      *string `json:"value"`
@@ -1189,8 +911,62 @@ type ConnectionRegionListLinks struct {
     Self  *HateoasSelfLink  `json:"_self"`
 }
 
-// ConsolidatedAlert represents a custom type struct
-type ConsolidatedAlert struct {
+// ConsolidatedAlertDetails represents a custom type struct.
+// Additional information about the consolidated alert.
+type ConsolidatedAlertDetails struct {
+    // A brief description of the condition that caused the alert. Examples include "Size Limit Exceeded" and "Insufficient Cloud Connector Capacity".
+    Cause      *string `json:"cause"`
+    // The general alert category. Examples include "Policy Violated" and "Restore Failed".
+    ClumioType *string `json:"type"`
+}
+
+// ConsolidatedAlertLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type ConsolidatedAlertLinks struct {
+    // The HATEOAS link to this resource.
+    Self                    *HateoasSelfLink `json:"_self"`
+    // A resource-specific HATEOAS link.
+    UpdateConsolidatedAlert *HateoasLink     `json:"update-consolidated-alert"`
+}
+
+// ConsolidatedAlertListEmbedded represents a custom type struct.
+// Embedded responses related to the resource.
+type ConsolidatedAlertListEmbedded struct {
+    // TODO: Add struct field description
+    Items []*ConsolidatedAlertWithETag `json:"items"`
+}
+
+// ConsolidatedAlertListLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type ConsolidatedAlertListLinks struct {
+    // The HATEOAS link to the first page of results.
+    First *HateoasFirstLink `json:"_first"`
+    // The HATEOAS link to the last page of results.
+    Last  *HateoasLastLink  `json:"_last"`
+    // The HATEOAS link to the next page of results.
+    Next  *HateoasNextLink  `json:"_next"`
+    // The HATEOAS link to the previous page of results.
+    Prev  *HateoasPrevLink  `json:"_prev"`
+    // The HATEOAS link to this resource.
+    Self  *HateoasSelfLink  `json:"_self"`
+}
+
+// ConsolidatedAlertParentEntity represents a custom type struct.
+// The entity associated with or affected by the alert.
+type ConsolidatedAlertParentEntity struct {
+    // A system-generated ID assigned to this entity.
+    Id         *string `json:"id"`
+    // Type is mostly an asset type or the type of Entity. Some examples are
+    // "restored_file", "vmware_vm",  etc.
+    ClumioType *string `json:"type"`
+    // A system-generated value assigned to the entity. For example, if the primary entity type is "vmware_vm" for a virtual machine, then the value is the name of the VM.
+    Value      *string `json:"value"`
+}
+
+// ConsolidatedAlertWithETag represents a custom type struct
+type ConsolidatedAlertWithETag struct {
+    // The ETag value.
+    Etag               *string                        `json:"_etag"`
     // URLs to pages related to the resource.
     Links              *ConsolidatedAlertLinks        `json:"_links"`
     // The number of currently active individual alerts associated with the consolidated alert.
@@ -1223,117 +999,6 @@ type ConsolidatedAlert struct {
     // The timestamp of when the consolidated alert was last updated. Represented in RFC-3339 format.
     // Raising a new individual alert will update its associated consolidated alert.
     UpdatedTimestamp   *string                        `json:"updated_timestamp"`
-}
-
-// ConsolidatedAlertDetails represents a custom type struct.
-// Additional information about the consolidated alert.
-type ConsolidatedAlertDetails struct {
-    // A brief description of the condition that caused the alert. Examples include "Size Limit Exceeded" and "Insufficient Cloud Connector Capacity".
-    Cause      *string `json:"cause"`
-    // The general alert category. Examples include "Policy Violated" and "Restore Failed".
-    ClumioType *string `json:"type"`
-}
-
-// ConsolidatedAlertLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type ConsolidatedAlertLinks struct {
-    // The HATEOAS link to this resource.
-    Self                    *HateoasSelfLink `json:"_self"`
-    // A resource-specific HATEOAS link.
-    UpdateConsolidatedAlert *HateoasLink     `json:"update-consolidated-alert"`
-}
-
-// ConsolidatedAlertListEmbedded represents a custom type struct.
-// Embedded responses related to the resource.
-type ConsolidatedAlertListEmbedded struct {
-    // TODO: Add struct field description
-    Items []*ConsolidatedAlert `json:"items"`
-}
-
-// ConsolidatedAlertListLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type ConsolidatedAlertListLinks struct {
-    // The HATEOAS link to the first page of results.
-    First *HateoasFirstLink `json:"_first"`
-    // The HATEOAS link to the last page of results.
-    Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
-    Next  *HateoasNextLink  `json:"_next"`
-    // The HATEOAS link to the previous page of results.
-    Prev  *HateoasPrevLink  `json:"_prev"`
-    // The HATEOAS link to this resource.
-    Self  *HateoasSelfLink  `json:"_self"`
-}
-
-// ConsolidatedAlertParentEntity represents a custom type struct.
-// The entity associated with or affected by the alert.
-type ConsolidatedAlertParentEntity struct {
-    // A system-generated ID assigned to this entity.
-    Id         *string `json:"id"`
-    // 
-    // Entity Type
-    // Details
-    // 
-    // 
-    // vmware_vcenter
-    // VMware vCenter.
-    // 
-    // 
-    // vmware_vm
-    // VMware virtual machine.
-    // 
-    // 
-    // vmware_vm_folder
-    // VMware VM folder.
-    // 
-    // 
-    // vmware_datacenter
-    // VMware data center.
-    // 
-    // 
-    // vmware_datacenter_folder
-    // VMware data center folder.
-    // 
-    // 
-    // vmware_tag
-    // VMware tag.
-    // 
-    // 
-    // vmware_category
-    // VMware tag category.
-    // 
-    // 
-    // vmware_compute_resource
-    // VMware compute resource.
-    // 
-    // 
-    // vmware_compute_resource_folder
-    // VMware compute resource folder.
-    // 
-    // 
-    // aws_ebs_volume
-    // AWS EBS volume.
-    // 
-    // 
-    // aws_connection
-    // AWS connection mediated by a CloudFormation stack.
-    // 
-    // 
-    // aws_environment
-    // AWS environment specified by an account/region pair.
-    // 
-    // 
-    // aws_tag
-    // AWS tag.
-    // 
-    // 
-    // aws_cmk
-    // AWS Customer Master Key used to encrypt data.
-    // 
-    // 
-    ClumioType *string `json:"type"`
-    // A system-generated value assigned to the entity. For example, if the primary entity type is "vmware_vm" for a virtual machine, then the value is the name of the VM.
-    Value      *string `json:"value"`
 }
 
 // ConsolidatedConfig represents a custom type struct.
@@ -2260,11 +1925,68 @@ type EBS struct {
     VolumeNativeId           *string                 `json:"volume_native_id"`
 }
 
+// EBSBackup represents a custom type struct
+type EBSBackup struct {
+    // URLs to pages related to the resource.
+    Links                *EBSBackupLinks      `json:"_links"`
+    // The AWS-assigned ID of the account associated with the backup.
+    AccountNativeId      *string              `json:"account_native_id"`
+    // The availability zone associated with the volume backup. For example, `us-west-2a`.
+    AwsAz                *string              `json:"aws_az"`
+    // The AWS region in which the volume backup resides. For example, `us-west-2`.
+    AwsRegion            *string              `json:"aws_region"`
+    // Backup Tier
+    BackupTier           *string              `json:"backup_tier"`
+    // The reason that browsing is unavailable for the backup. Possible values include "file_limit_exceeded" and
+    // "browsing_unavailable". If browse indexing is successful, then this field has a value of `null`.
+    BrowsingFailedReason *string              `json:"browsing_failed_reason"`
+    // The timestamp of when this backup expires. Represented in RFC-3339 format.
+    ExpirationTimestamp  *string              `json:"expiration_timestamp"`
+    // The Clumio-assigned ID of the volume backup.
+    Id                   *string              `json:"id"`
+    // Iops of the volume.
+    Iops                 *int64               `json:"iops"`
+    // Determines whether browsing is available for the backup. If `true`, then browsing is available for the backup.
+    IsBrowsable          *bool                `json:"is_browsable"`
+    // Determines whether the EBS volume backup is encrypted. If `true`, the volume backup is encrypted.
+    IsEncrypted          *bool                `json:"is_encrypted"`
+    // The AWS-assigned ID of the KMS key encrypting this EBS volume backup. If the volume is not encrypted, this field has a value of `null`.
+    KmsKeyNativeId       *string              `json:"kms_key_native_id"`
+    // The timestamp of when the migration was triggered. This field will be set only for
+    // migration backups. Represented in RFC-3339 format.
+    MigrationTimestamp   *string              `json:"migration_timestamp"`
+    // The size of the volume backup. Measured in gigabytes (GB).
+    Size                 *int64               `json:"size"`
+    // The timestamp of when this backup started. Represented in RFC-3339 format.
+    StartTimestamp       *string              `json:"start_timestamp"`
+    // A tag created through AWS Console which can be applied to EBS volumes.
+    Tags                 []*AwsTagCommonModel `json:"tags"`
+    // The type of the backup. Possible values - `clumio_backup`, `aws_snapshot`.
+    ClumioType           *string              `json:"type"`
+    // Utilized size
+    UtilizedSizeInBytes  *uint64              `json:"utilized_size_in_bytes"`
+    // The Clumio-assigned ID of the EBS volume associated with the volume backup.
+    VolumeId             *string              `json:"volume_id"`
+    // The AWS-assigned ID of the EBS volume associated with the volume backup.
+    VolumeNativeId       *string              `json:"volume_native_id"`
+    // The volume type of the original EBS volume before backup. Possible values include `gp2`, `io1`, `st1`, `sc1`, `standard`.
+    VolumeType           *string              `json:"volume_type"`
+}
+
 // EBSBackupAdvancedSetting represents a custom type struct.
 // Advanced settings for EBS backup.
 type EBSBackupAdvancedSetting struct {
     // Backup tier to store the backup in. Valid values are: (empty) equivalent to standard, `standard`, and `lite`.
     BackupTier *string `json:"backup_tier"`
+}
+
+// EBSBackupLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type EBSBackupLinks struct {
+    // The HATEOAS link to this resource.
+    Self                *HateoasSelfLink `json:"_self"`
+    // A resource-specific HATEOAS link.
+    RestoreAwsEbsVolume *HateoasLink     `json:"restore-aws-ebs-volume"`
 }
 
 // EBSBackupLinksV1 represents a custom type struct.
@@ -2274,11 +1996,33 @@ type EBSBackupLinksV1 struct {
     Self *HateoasSelfLink `json:"_self"`
 }
 
+// EBSBackupListEmbedded represents a custom type struct.
+// Embedded responses related to the resource.
+type EBSBackupListEmbedded struct {
+    // TODO: Add struct field description
+    Items []*EBSBackup `json:"items"`
+}
+
 // EBSBackupListEmbeddedV1 represents a custom type struct.
 // Embedded responses related to the resource.
 type EBSBackupListEmbeddedV1 struct {
     // TODO: Add struct field description
     Items []*EBSBackupV1 `json:"items"`
+}
+
+// EBSBackupListLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type EBSBackupListLinks struct {
+    // The HATEOAS link to the first page of results.
+    First *HateoasFirstLink `json:"_first"`
+    // The HATEOAS link to the last page of results.
+    Last  *HateoasLastLink  `json:"_last"`
+    // The HATEOAS link to the next page of results.
+    Next  *HateoasNextLink  `json:"_next"`
+    // The HATEOAS link to the previous page of results.
+    Prev  *HateoasPrevLink  `json:"_prev"`
+    // The HATEOAS link to this resource.
+    Self  *HateoasSelfLink  `json:"_self"`
 }
 
 // EBSBackupListLinksV1 represents a custom type struct.
@@ -2864,6 +2608,15 @@ type EmailRecipientsDataAccessOption struct {
     RecipientEmails []*string `json:"recipient_emails"`
 }
 
+// EntityGroupAssignmentUpdates represents a custom type struct.
+// Updates to the organizational units along with the role assigned to the user.
+type EntityGroupAssignmentUpdates struct {
+    // The organizational units assigned to the user, with the specified role.
+    Add    []*RoleForOrganizationalUnits `json:"add"`
+    // The organizational units assigned to the user, with the specified role.
+    Remove []*RoleForOrganizationalUnits `json:"remove"`
+}
+
 // EntityGroupAssignmentUpdatesV1 represents a custom type struct.
 // Updates to the organizational unit assignments.
 type EntityGroupAssignmentUpdatesV1 struct {
@@ -2978,7 +2731,7 @@ type FileSearchResult struct {
 
 // FileSystem represents a custom type struct
 type FileSystem struct {
-    // TODO: Add struct field description
+    // HateoasCommonLinks are the common fields for HATEOAS response.
     Links                *HateoasCommonLinks `json:"_links"`
     // The amount of available memory on the filesystem in bytes. Does not include
     // reserved memory.
@@ -3218,7 +2971,8 @@ type GrrTarget struct {
     QueryStatement *string `json:"query_statement"`
 }
 
-// HateoasCommonLinks represents a custom type struct
+// HateoasCommonLinks represents a custom type struct.
+// HateoasCommonLinks are the common fields for HATEOAS response.
 type HateoasCommonLinks struct {
     // The HATEOAS link to this resource.
     Self *HateoasSelfLink `json:"_self"`
@@ -4147,6 +3901,15 @@ type OnDemandDynamoDBBackupLinks struct {
     ReadTask *ReadTaskHateoasLink `json:"read-task"`
 }
 
+// OnDemandEBSBackupLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type OnDemandEBSBackupLinks struct {
+    // The HATEOAS link to this resource.
+    Self     *HateoasSelfLink     `json:"_self"`
+    // A HATEOAS link to the task associated with this resource.
+    ReadTask *ReadTaskHateoasLink `json:"read-task"`
+}
+
 // OnDemandSetting represents a custom type struct.
 // Settings for requesting on-demand backup directly.
 type OnDemandSetting struct {
@@ -4274,6 +4037,13 @@ type OrganizationalUnitLinksForDelete struct {
     ReadTask *HateoasLink     `json:"read-task"`
 }
 
+// OrganizationalUnitListEmbedded represents a custom type struct.
+// Embedded responses related to the resource.
+type OrganizationalUnitListEmbedded struct {
+    // OrganizationalUnitWithETag to support etag string to be calculated
+    Items []*OrganizationalUnitWithETag `json:"items"`
+}
+
 // OrganizationalUnitListEmbeddedV1 represents a custom type struct.
 // Embedded responses related to the resource.
 type OrganizationalUnitListEmbeddedV1 struct {
@@ -4313,6 +4083,41 @@ type OrganizationalUnitPrimaryEntity struct {
     Id         *string `json:"id"`
     // The entity type.
     ClumioType *string `json:"type"`
+}
+
+// OrganizationalUnitWithETag represents a custom type struct.
+// OrganizationalUnitWithETag to support etag string to be calculated
+type OrganizationalUnitWithETag struct {
+    // Embedded responses related to the resource.
+    Embedded                  *EntityGroupEmbedded     `json:"_embedded"`
+    // ETag value
+    Etag                      *string                  `json:"_etag"`
+    // URLs to pages related to the resource.
+    Links                     *OrganizationalUnitLinks `json:"_links"`
+    // Number of immediate children of the organizational unit.
+    ChildrenCount             *int64                   `json:"children_count"`
+    // Datasource types configured in this organizational unit. Possible values include `aws`, `microsoft365`, `vmware`, or `mssql`.
+    ConfiguredDatasourceTypes []*string                `json:"configured_datasource_types"`
+    // List of all recursive descendant organizational units of this OU.
+    DescendantIds             []*string                `json:"descendant_ids"`
+    // A description of the organizational unit.
+    Description               *string                  `json:"description"`
+    // The Clumio assigned ID of the organizational unit.
+    Id                        *string                  `json:"id"`
+    // Unique name assigned to the organizational unit.
+    Name                      *string                  `json:"name"`
+    // The Clumio assigned ID of the parent organizational unit.
+    // The parent organizational unit contains the entities in this organizational unit and can update this organizational unit.
+    // If this organizational unit is the global organizational unit, then this field has a value of `null`.
+    ParentId                  *string                  `json:"parent_id"`
+    // The Clumio-assigned ID of the task associated with this organizational unit.
+    // The progress of the task can be monitored using the
+    // [GET /tasks/{task_id}](#operation/read-task) endpoint.
+    TaskId                    *string                  `json:"task_id"`
+    // Number of users to whom this organizational unit or any of its descendants have been assigned.
+    UserCount                 *int64                   `json:"user_count"`
+    // A user along with a role.
+    Users                     []*UserWithRole          `json:"users"`
 }
 
 // OrganizationalUnitWithETagV1 represents a custom type struct.
@@ -5834,67 +5639,8 @@ type ResourcePoolWithETag struct {
 type RestEntity struct {
     // A system-generated ID assigned to this entity.
     Id         *string `json:"id"`
-    // 
-    // Entity Type
-    // Details
-    // 
-    // 
-    // vmware_vcenter
-    // VMware vCenter.
-    // 
-    // 
-    // vmware_vm
-    // VMware virtual machine.
-    // 
-    // 
-    // vmware_vm_folder
-    // VMware VM folder.
-    // 
-    // 
-    // vmware_datacenter
-    // VMware data center.
-    // 
-    // 
-    // vmware_datacenter_folder
-    // VMware data center folder.
-    // 
-    // 
-    // vmware_tag
-    // VMware tag.
-    // 
-    // 
-    // vmware_category
-    // VMware tag category.
-    // 
-    // 
-    // vmware_compute_resource
-    // VMware compute resource.
-    // 
-    // 
-    // vmware_compute_resource_folder
-    // VMware compute resource folder.
-    // 
-    // 
-    // aws_ebs_volume
-    // AWS EBS volume.
-    // 
-    // 
-    // aws_connection
-    // AWS connection mediated by a CloudFormation stack.
-    // 
-    // 
-    // aws_environment
-    // AWS environment specified by an account/region pair.
-    // 
-    // 
-    // aws_tag
-    // AWS tag.
-    // 
-    // 
-    // aws_cmk
-    // AWS Customer Master Key used to encrypt data.
-    // 
-    // 
+    // Type is mostly an asset type or the type of Entity. Some examples are
+    // "restored_file", "vmware_vm",  etc.
     ClumioType *string `json:"type"`
     // A system-generated value assigned to the entity. For example, if the primary entity type is "vmware_vm" for a virtual machine, then the value is the name of the VM.
     Value      *string `json:"value"`
@@ -6092,6 +5838,17 @@ type RetentionBackupSLAParam struct {
     Value *int64  `json:"value"`
 }
 
+// RoleForOrganizationalUnits represents a custom type struct.
+// The organizational units assigned to the user, with the specified role.
+type RoleForOrganizationalUnits struct {
+    // The Clumio-assigned IDs of the organizational units assigned to the user.
+    // Use the [GET /organizational-units](#operation/list-organizational-units) endpoint to fetch valid values.
+    OrganizationalUnitIds *string `json:"organizational_unit_ids"`
+    // The Clumio-assigned ID of the role assigned to the user.
+    // Use the [GET /roles](#operation/list-roles) endpoint to fetch valid values.
+    RoleId                *string `json:"role_id"`
+}
+
 // RoleLinks represents a custom type struct.
 // URLs to pages related to the resource.
 type RoleLinks struct {
@@ -6119,6 +5876,21 @@ type RoleListLinks struct {
     Prev  *HateoasPrevLink  `json:"_prev"`
     // The HATEOAS link to this resource.
     Self  *HateoasSelfLink  `json:"_self"`
+}
+
+// RoleModel represents a custom type struct.
+// RoleModel denotes the Model for Role
+type RoleModel struct {
+    // A description of the role.
+    Description *string            `json:"description"`
+    // The Clumio-assigned ID of the role.
+    Id          *string            `json:"id"`
+    // Unique name assigned to the role.
+    Name        *string            `json:"name"`
+    // TODO: Add struct field description
+    Permissions []*PermissionModel `json:"permissions"`
+    // Number of users to whom the role has been assigned.
+    UserCount   *int64             `json:"user_count"`
 }
 
 // RoleWithETag represents a custom type struct.
@@ -7039,67 +6811,8 @@ type TaskListLinks struct {
 type TaskParentEntity struct {
     // A system-generated ID assigned to this entity.
     Id         *string `json:"id"`
-    // 
-    // Entity Type
-    // Details
-    // 
-    // 
-    // vmware_vcenter
-    // VMware vCenter.
-    // 
-    // 
-    // vmware_vm
-    // VMware virtual machine.
-    // 
-    // 
-    // vmware_vm_folder
-    // VMware VM folder.
-    // 
-    // 
-    // vmware_datacenter
-    // VMware data center.
-    // 
-    // 
-    // vmware_datacenter_folder
-    // VMware data center folder.
-    // 
-    // 
-    // vmware_tag
-    // VMware tag.
-    // 
-    // 
-    // vmware_category
-    // VMware tag category.
-    // 
-    // 
-    // vmware_compute_resource
-    // VMware compute resource.
-    // 
-    // 
-    // vmware_compute_resource_folder
-    // VMware compute resource folder.
-    // 
-    // 
-    // aws_ebs_volume
-    // AWS EBS volume.
-    // 
-    // 
-    // aws_connection
-    // AWS connection mediated by a CloudFormation stack.
-    // 
-    // 
-    // aws_environment
-    // AWS environment specified by an account/region pair.
-    // 
-    // 
-    // aws_tag
-    // AWS tag.
-    // 
-    // 
-    // aws_cmk
-    // AWS Customer Master Key used to encrypt data.
-    // 
-    // 
+    // Type is mostly an asset type or the type of Entity. Some examples are
+    // "restored_file", "vmware_vm",  etc.
     ClumioType *string `json:"type"`
     // A system-generated value assigned to the entity. For example, if the primary entity type is "vmware_vm" for a virtual machine, then the value is the name of the VM.
     Value      *string `json:"value"`
@@ -7110,67 +6823,8 @@ type TaskParentEntity struct {
 type TaskPrimaryEntity struct {
     // A system-generated ID assigned to this entity.
     Id         *string `json:"id"`
-    // 
-    // Entity Type
-    // Details
-    // 
-    // 
-    // vmware_vcenter
-    // VMware vCenter.
-    // 
-    // 
-    // vmware_vm
-    // VMware virtual machine.
-    // 
-    // 
-    // vmware_vm_folder
-    // VMware VM folder.
-    // 
-    // 
-    // vmware_datacenter
-    // VMware data center.
-    // 
-    // 
-    // vmware_datacenter_folder
-    // VMware data center folder.
-    // 
-    // 
-    // vmware_tag
-    // VMware tag.
-    // 
-    // 
-    // vmware_category
-    // VMware tag category.
-    // 
-    // 
-    // vmware_compute_resource
-    // VMware compute resource.
-    // 
-    // 
-    // vmware_compute_resource_folder
-    // VMware compute resource folder.
-    // 
-    // 
-    // aws_ebs_volume
-    // AWS EBS volume.
-    // 
-    // 
-    // aws_connection
-    // AWS connection mediated by a CloudFormation stack.
-    // 
-    // 
-    // aws_environment
-    // AWS environment specified by an account/region pair.
-    // 
-    // 
-    // aws_tag
-    // AWS tag.
-    // 
-    // 
-    // aws_cmk
-    // AWS Customer Master Key used to encrypt data.
-    // 
-    // 
+    // Type is mostly an asset type or the type of Entity. Some examples are
+    // "restored_file", "vmware_vm",  etc.
     ClumioType *string `json:"type"`
     // A system-generated value assigned to the entity. For example, if the primary entity type is "vmware_vm" for a virtual machine, then the value is the name of the VM.
     Value      *string `json:"value"`
@@ -7261,6 +6915,22 @@ type UpdateUserAssignments struct {
     Remove []*string `json:"remove"`
 }
 
+// UpdateUserAssignmentsWithRole represents a custom type struct.
+// UpdateUserAssignmentsWithRole denotes the users to be added or removed along with the role.
+type UpdateUserAssignmentsWithRole struct {
+    // A user along with a role.
+    Add    []*UserWithRole `json:"add"`
+    // A user along with a role.
+    Remove []*UserWithRole `json:"remove"`
+}
+
+// UserEmbedded represents a custom type struct.
+// Embedded responses related to the resource.
+type UserEmbedded struct {
+    // RoleModel denotes the Model for Role
+    ReadRole []*RoleModel `json:"read-role"`
+}
+
 // UserEmbeddedV1 represents a custom type struct.
 // Embedded responses related to the resource.
 type UserEmbeddedV1 struct {
@@ -7300,7 +6970,7 @@ type UserHateoasV1 struct {
     // If `false`, the user has been manually suspended and cannot log in to Clumio
     // until another Clumio user reactivates the account.
     IsEnabled                     *bool           `json:"is_enabled"`
-    // The timestamp of when when the user was last active in the Clumio system. Represented in RFC-3339 format.
+    // The timestamp of when the user was last active in the Clumio system. Represented in RFC-3339 format.
     LastActivityTimestamp         *string         `json:"last_activity_timestamp"`
     // The number of organizational units accessible to the user.
     OrganizationalUnitCount       *int64          `json:"organizational_unit_count"`
@@ -7315,6 +6985,13 @@ type UserLinks struct {
     DeleteUser *HateoasLink     `json:"delete-user"`
     // A resource-specific HATEOAS link.
     UpdateUser *HateoasLink     `json:"update-user"`
+}
+
+// UserListEmbedded represents a custom type struct.
+// Embedded responses related to the resource.
+type UserListEmbedded struct {
+    // UserWithETag to support etag string to be calculated.
+    Items []*UserWithETag `json:"items"`
 }
 
 // UserListEmbeddedV1 represents a custom type struct.
@@ -7339,6 +7016,51 @@ type UserListHateoasLinks struct {
     Self       *HateoasSelfLink  `json:"_self"`
     // A resource-specific HATEOAS link.
     CreateUser *HateoasLink      `json:"create-user"`
+}
+
+// UserWithETag represents a custom type struct.
+// UserWithETag to support etag string to be calculated.
+type UserWithETag struct {
+    // Embedded responses related to the resource.
+    Embedded                   *UserEmbedded                 `json:"_embedded"`
+    // ETag value
+    Etag                       *string                       `json:"_etag"`
+    // URLs to pages related to the resource.
+    Links                      *UserLinks                    `json:"_links"`
+    // The organizational units assigned to the user, with the specified role.
+    AccessControlConfiguration []*RoleForOrganizationalUnits `json:"access_control_configuration"`
+    // The email address of the Clumio user.
+    Email                      *string                       `json:"email"`
+    // The first and last name of the Clumio user. The name appears in the User Management screen and is used to identify the user.
+    FullName                   *string                       `json:"full_name"`
+    // The Clumio-assigned ID of the Clumio user.
+    Id                         *string                       `json:"id"`
+    // The ID number of the user who sent the email invitation.
+    Inviter                    *string                       `json:"inviter"`
+    // Determines whether the user has activated their Clumio account.
+    // If `true`, the user has activated the account.
+    IsConfirmed                *bool                         `json:"is_confirmed"`
+    // Determines whether the user is enabled (in "Activated" or "Invited" status) in Clumio.
+    // If `true`, the user is in "Activated" or "Invited" status in Clumio.
+    // Users in "Activated" status can log in to Clumio.
+    // Users in "Invited" status have been invited to log in to Clumio via an email invitation and the invitation
+    // is pending acceptance from the user.
+    // If `false`, the user has been manually suspended and cannot log in to Clumio
+    // until another Clumio user reactivates the account.
+    IsEnabled                  *bool                         `json:"is_enabled"`
+    // The timestamp of when the user was last active in the Clumio system. Represented in RFC-3339 format.
+    LastActivityTimestamp      *string                       `json:"last_activity_timestamp"`
+    // The number of organizational units accessible to the user.
+    OrganizationalUnitCount    *int64                        `json:"organizational_unit_count"`
+}
+
+// UserWithRole represents a custom type struct.
+// A user along with a role.
+type UserWithRole struct {
+    // The Clumio-assigned ID of the role to be assigned to the user.
+    AssignedRole *string `json:"assigned_role"`
+    // The ID of the user.
+    UserId       *string `json:"user_id"`
 }
 
 // VCenterComputeResource represents a custom type struct

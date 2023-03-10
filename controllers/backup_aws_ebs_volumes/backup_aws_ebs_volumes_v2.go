@@ -13,24 +13,24 @@ import (
     "github.com/clumio-code/clumio-go-sdk/models"
 )
 
-// BackupAwsEbsVolumesV1 represents a custom type struct
-type BackupAwsEbsVolumesV1 struct {
+// BackupAwsEbsVolumesV2 represents a custom type struct
+type BackupAwsEbsVolumesV2 struct {
     config config.Config
 }
 
 // ListBackupAwsEbsVolumes Returns a list of EBS volumes that have been backed up by Clumio. EBS volume backups can be restored through the [POST /restores/aws/ebs-volumes](#operation/restore-aws-ebs-volume) endpoint.
-func (b *BackupAwsEbsVolumesV1) ListBackupAwsEbsVolumes(
+func (b *BackupAwsEbsVolumesV2) ListBackupAwsEbsVolumes(
     limit *int64, 
     start *string, 
     sort *string, 
     filter *string)(
-    *models.ListEBSBackupsResponseV1, *apiutils.APIError) {
+    *models.ListEBSBackupsResponse, *apiutils.APIError) {
 
     queryBuilder := b.config.BaseUrl + "/backups/aws/ebs-volumes"
 
     
-    header := "application/api.clumio.backup-aws-ebs-volumes=v1+json"
-    result := &models.ListEBSBackupsResponseV1{}
+    header := "application/api.clumio.backup-aws-ebs-volumes=v2+json"
+    result := &models.ListEBSBackupsResponse{}
     defaultInt64 := int64(0)
     defaultString := "" 
     
@@ -68,10 +68,10 @@ func (b *BackupAwsEbsVolumesV1) ListBackupAwsEbsVolumes(
 
 
 // CreateBackupAwsEbsVolume Performs an on-demand backup for the specified EBS volume.
-func (b *BackupAwsEbsVolumesV1) CreateBackupAwsEbsVolume(
+func (b *BackupAwsEbsVolumesV2) CreateBackupAwsEbsVolume(
     embed *string, 
-    body models.CreateBackupAwsEbsVolumeV1Request)(
-    *models.OnDemandEBSBackupResponseV1, *apiutils.APIError) {
+    body models.CreateBackupAwsEbsVolumeV2Request)(
+    *models.OnDemandEBSBackupResponse, *apiutils.APIError) {
 
     queryBuilder := b.config.BaseUrl + "/backups/aws/ebs-volumes"
 
@@ -84,8 +84,8 @@ func (b *BackupAwsEbsVolumesV1) CreateBackupAwsEbsVolume(
         }
     }
     payload := string(bytes)
-    header := "application/api.clumio.backup-aws-ebs-volumes=v1+json"
-    result := &models.OnDemandEBSBackupResponseV1{}
+    header := "application/api.clumio.backup-aws-ebs-volumes=v2+json"
+    result := &models.OnDemandEBSBackupResponse{}
     defaultString := "" 
     
     if embed == nil {
@@ -111,9 +111,9 @@ func (b *BackupAwsEbsVolumesV1) CreateBackupAwsEbsVolume(
 
 
 // ReadBackupAwsEbsVolume Returns a representation of the specified EBS volume backup.
-func (b *BackupAwsEbsVolumesV1) ReadBackupAwsEbsVolume(
+func (b *BackupAwsEbsVolumesV2) ReadBackupAwsEbsVolume(
     backupId string)(
-    *models.ReadEBSBackupResponseV1, *apiutils.APIError) {
+    *models.ReadEBSBackupResponse, *apiutils.APIError) {
 
     pathURL := "/backups/aws/ebs-volumes/{backup_id}"
     //process optional template parameters
@@ -123,8 +123,8 @@ func (b *BackupAwsEbsVolumesV1) ReadBackupAwsEbsVolume(
     queryBuilder := b.config.BaseUrl + pathURL
 
     
-    header := "application/api.clumio.backup-aws-ebs-volumes=v1+json"
-    result := &models.ReadEBSBackupResponseV1{}
+    header := "application/api.clumio.backup-aws-ebs-volumes=v2+json"
+    result := &models.ReadEBSBackupResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: b.config,

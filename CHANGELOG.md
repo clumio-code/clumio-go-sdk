@@ -1,3 +1,5 @@
+## 0.8.0
+New versions added for Users, Organizational Units and EBS Backups APIs.
 ## 0.7.0
 Updates to Policy and OrganizationalUnit APIs.
 ## 0.6.0

@@ -3,6 +3,16 @@
 // Package models has the structs representing responses
 package models
 
+// CreateOrganizationalUnitResponseWrapper represents a custom type struct wrapper for different success responses
+type CreateOrganizationalUnitResponseWrapper struct {
+    // HTTP status code of response
+    StatusCode int
+    // CreateOrganizationalUnitNoTaskResponse represents Success response of status code Http200
+    Http200 *CreateOrganizationalUnitNoTaskResponse 
+    // CreateOrganizationalUnitResponse represents Success response of status code Http202
+    Http202 *CreateOrganizationalUnitResponse 
+}
+
 // CreateOrganizationalUnitV1ResponseWrapper represents a custom type struct wrapper for different success responses
 type CreateOrganizationalUnitV1ResponseWrapper struct {
     // HTTP status code of response
@@ -11,6 +21,16 @@ type CreateOrganizationalUnitV1ResponseWrapper struct {
     Http200 *CreateOrganizationalUnitNoTaskResponseV1 
     // CreateOrganizationalUnitResponseV1 represents Success response of status code Http202
     Http202 *CreateOrganizationalUnitResponseV1 
+}
+
+// PatchOrganizationalUnitResponseWrapper represents a custom type struct wrapper for different success responses
+type PatchOrganizationalUnitResponseWrapper struct {
+    // HTTP status code of response
+    StatusCode int
+    // PatchOrganizationalUnitNoTaskResponse represents Success response of status code Http200
+    Http200 *PatchOrganizationalUnitNoTaskResponse 
+    // PatchOrganizationalUnitResponse represents Success response of status code Http202
+    Http202 *PatchOrganizationalUnitResponse 
 }
 
 // PatchOrganizationalUnitV1ResponseWrapper represents a custom type struct wrapper for different success responses
@@ -103,6 +123,12 @@ type AddBucketToProtectionGroupResponse struct {
     // Cumulative size of all unexpired objects in each backup (any new or updated since
     // the last backup) that have been backed up as part of this protection group
     TotalBackedUpSizeBytes        *int64  `json:"total_backed_up_size_bytes"`
+}
+
+// ChangePasswordResponse represents a custom type struct for Success
+type ChangePasswordResponse struct {
+    // HateoasCommonLinks are the common fields for HATEOAS response.
+    Links *HateoasCommonLinks `json:"_links"`
 }
 
 // CreateAWSConnectionResponse represents a custom type struct for Success
@@ -306,6 +332,32 @@ type CreateMssqlDatabaseRestoreResponse struct {
     Links    *ReadTaskHateoasLinks         `json:"_links"`
 }
 
+// CreateOrganizationalUnitNoTaskResponse represents a custom type struct for Success
+type CreateOrganizationalUnitNoTaskResponse struct {
+    // URLs to pages related to the resource.
+    Links                     *OULinks        `json:"_links"`
+    // Number of immediate children of the organizational unit.
+    ChildrenCount             *int64          `json:"children_count"`
+    // Datasource types configured in this organizational unit. Possible values include `aws`, `microsoft365`, `vmware`, or `mssql`.
+    ConfiguredDatasourceTypes []*string       `json:"configured_datasource_types"`
+    // List of all recursive descendant organizational units of this OU.
+    DescendantIds             []*string       `json:"descendant_ids"`
+    // A description of the organizational unit.
+    Description               *string         `json:"description"`
+    // The Clumio assigned ID of the organizational unit.
+    Id                        *string         `json:"id"`
+    // Unique name assigned to the organizational unit.
+    Name                      *string         `json:"name"`
+    // The Clumio assigned ID of the parent organizational unit.
+    // The parent organizational unit contains the entities in this organizational unit and can update this organizational unit.
+    // If this organizational unit is the global organizational unit, then this field has a value of `null`.
+    ParentId                  *string         `json:"parent_id"`
+    // Number of users to whom this organizational unit or any of its descendants have been assigned.
+    UserCount                 *int64          `json:"user_count"`
+    // A user along with a role.
+    Users                     []*UserWithRole `json:"users"`
+}
+
 // CreateOrganizationalUnitNoTaskResponseV1 represents a custom type struct for Success
 type CreateOrganizationalUnitNoTaskResponseV1 struct {
     // URLs to pages related to the resource.
@@ -331,6 +383,39 @@ type CreateOrganizationalUnitNoTaskResponseV1 struct {
     // Users IDs to whom the organizational unit has been assigned.
     // This attribute will be available when reading a single OU and not when listing OUs.
     Users                     []*string `json:"users"`
+}
+
+// CreateOrganizationalUnitResponse represents a custom type struct.
+// Accepted
+type CreateOrganizationalUnitResponse struct {
+    // Embedded responses related to the resource.
+    Embedded                  *EntityGroupEmbedded     `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links                     *OrganizationalUnitLinks `json:"_links"`
+    // Number of immediate children of the organizational unit.
+    ChildrenCount             *int64                   `json:"children_count"`
+    // Datasource types configured in this organizational unit. Possible values include `aws`, `microsoft365`, `vmware`, or `mssql`.
+    ConfiguredDatasourceTypes []*string                `json:"configured_datasource_types"`
+    // List of all recursive descendant organizational units of this OU.
+    DescendantIds             []*string                `json:"descendant_ids"`
+    // A description of the organizational unit.
+    Description               *string                  `json:"description"`
+    // The Clumio assigned ID of the organizational unit.
+    Id                        *string                  `json:"id"`
+    // Unique name assigned to the organizational unit.
+    Name                      *string                  `json:"name"`
+    // The Clumio assigned ID of the parent organizational unit.
+    // The parent organizational unit contains the entities in this organizational unit and can update this organizational unit.
+    // If this organizational unit is the global organizational unit, then this field has a value of `null`.
+    ParentId                  *string                  `json:"parent_id"`
+    // The Clumio-assigned ID of the task associated with this organizational unit.
+    // The progress of the task can be monitored using the
+    // [GET /tasks/{task_id}](#operation/read-task) endpoint.
+    TaskId                    *string                  `json:"task_id"`
+    // Number of users to whom this organizational unit or any of its descendants have been assigned.
+    UserCount                 *int64                   `json:"user_count"`
+    // A user along with a role.
+    Users                     []*UserWithRole          `json:"users"`
 }
 
 // CreateOrganizationalUnitResponseV1 represents a custom type struct.
@@ -492,6 +577,41 @@ type CreateRuleResponse struct {
     TaskId *string                  `json:"task_id"`
 }
 
+// CreateUserResponse represents a custom type struct for Success
+type CreateUserResponse struct {
+    // Embedded responses related to the resource.
+    Embedded                   *UserEmbedded                 `json:"_embedded"`
+    // ETag value
+    Etag                       *string                       `json:"_etag"`
+    // URLs to pages related to the resource.
+    Links                      *UserLinks                    `json:"_links"`
+    // The organizational units assigned to the user, with the specified role.
+    AccessControlConfiguration []*RoleForOrganizationalUnits `json:"access_control_configuration"`
+    // The email address of the Clumio user.
+    Email                      *string                       `json:"email"`
+    // The first and last name of the Clumio user. The name appears in the User Management screen and is used to identify the user.
+    FullName                   *string                       `json:"full_name"`
+    // The Clumio-assigned ID of the Clumio user.
+    Id                         *string                       `json:"id"`
+    // The ID number of the user who sent the email invitation.
+    Inviter                    *string                       `json:"inviter"`
+    // Determines whether the user has activated their Clumio account.
+    // If `true`, the user has activated the account.
+    IsConfirmed                *bool                         `json:"is_confirmed"`
+    // Determines whether the user is enabled (in "Activated" or "Invited" status) in Clumio.
+    // If `true`, the user is in "Activated" or "Invited" status in Clumio.
+    // Users in "Activated" status can log in to Clumio.
+    // Users in "Invited" status have been invited to log in to Clumio via an email invitation and the invitation
+    // is pending acceptance from the user.
+    // If `false`, the user has been manually suspended and cannot log in to Clumio
+    // until another Clumio user reactivates the account.
+    IsEnabled                  *bool                         `json:"is_enabled"`
+    // The timestamp of when the user was last active in the Clumio system. Represented in RFC-3339 format.
+    LastActivityTimestamp      *string                       `json:"last_activity_timestamp"`
+    // The number of organizational units accessible to the user.
+    OrganizationalUnitCount    *int64                        `json:"organizational_unit_count"`
+}
+
 // CreateUserResponseV1 represents a custom type struct for Success
 type CreateUserResponseV1 struct {
     // Embedded responses related to the resource.
@@ -522,7 +642,7 @@ type CreateUserResponseV1 struct {
     // If `false`, the user has been manually suspended and cannot log in to Clumio
     // until another Clumio user reactivates the account.
     IsEnabled                     *bool           `json:"is_enabled"`
-    // The timestamp of when when the user was last active in the Clumio system. Represented in RFC-3339 format.
+    // The timestamp of when the user was last active in the Clumio system. Represented in RFC-3339 format.
     LastActivityTimestamp         *string         `json:"last_activity_timestamp"`
     // The number of organizational units accessible to the user.
     OrganizationalUnitCount       *int64          `json:"organizational_unit_count"`
@@ -659,6 +779,12 @@ type DeleteRuleResponse struct {
     TaskId    *string                  `json:"task_id"`
 }
 
+// DeleteUserResponseV1 represents a custom type struct for Success
+type DeleteUserResponseV1 struct {
+    // HateoasCommonLinks are the common fields for HATEOAS response.
+    Links *HateoasCommonLinks `json:"_links"`
+}
+
 // DownloadSharedFileResponse represents a custom type struct for Success
 type DownloadSharedFileResponse struct {
     // URLs to pages related to the resource.
@@ -666,6 +792,41 @@ type DownloadSharedFileResponse struct {
     // A download link that lets you directly download the file. The link expires
     // 24 hours after file restore.
     DownloadUrl *string                  `json:"download_url"`
+}
+
+// EditProfileResponse represents a custom type struct for Success
+type EditProfileResponse struct {
+    // Embedded responses related to the resource.
+    Embedded                   *UserEmbedded                 `json:"_embedded"`
+    // ETag value
+    Etag                       *string                       `json:"_etag"`
+    // URLs to pages related to the resource.
+    Links                      *UserLinks                    `json:"_links"`
+    // The organizational units assigned to the user, with the specified role.
+    AccessControlConfiguration []*RoleForOrganizationalUnits `json:"access_control_configuration"`
+    // The email address of the Clumio user.
+    Email                      *string                       `json:"email"`
+    // The first and last name of the Clumio user. The name appears in the User Management screen and is used to identify the user.
+    FullName                   *string                       `json:"full_name"`
+    // The Clumio-assigned ID of the Clumio user.
+    Id                         *string                       `json:"id"`
+    // The ID number of the user who sent the email invitation.
+    Inviter                    *string                       `json:"inviter"`
+    // Determines whether the user has activated their Clumio account.
+    // If `true`, the user has activated the account.
+    IsConfirmed                *bool                         `json:"is_confirmed"`
+    // Determines whether the user is enabled (in "Activated" or "Invited" status) in Clumio.
+    // If `true`, the user is in "Activated" or "Invited" status in Clumio.
+    // Users in "Activated" status can log in to Clumio.
+    // Users in "Invited" status have been invited to log in to Clumio via an email invitation and the invitation
+    // is pending acceptance from the user.
+    // If `false`, the user has been manually suspended and cannot log in to Clumio
+    // until another Clumio user reactivates the account.
+    IsEnabled                  *bool                         `json:"is_enabled"`
+    // The timestamp of when the user was last active in the Clumio system. Represented in RFC-3339 format.
+    LastActivityTimestamp      *string                       `json:"last_activity_timestamp"`
+    // The number of organizational units accessible to the user.
+    OrganizationalUnitCount    *int64                        `json:"organizational_unit_count"`
 }
 
 // EditProfileResponseV1 represents a custom type struct for Success
@@ -698,7 +859,7 @@ type EditProfileResponseV1 struct {
     // If `false`, the user has been manually suspended and cannot log in to Clumio
     // until another Clumio user reactivates the account.
     IsEnabled                     *bool           `json:"is_enabled"`
-    // The timestamp of when when the user was last active in the Clumio system. Represented in RFC-3339 format.
+    // The timestamp of when the user was last active in the Clumio system. Represented in RFC-3339 format.
     LastActivityTimestamp         *string         `json:"last_activity_timestamp"`
     // The number of organizational units accessible to the user.
     OrganizationalUnitCount       *int64          `json:"organizational_unit_count"`
@@ -978,6 +1139,27 @@ type ListDynamoDBTableResponse struct {
     TotalCount      *int64                     `json:"total_count"`
     // The total number of pages of results.
     TotalPagesCount *int64                     `json:"total_pages_count"`
+}
+
+// ListEBSBackupsResponse represents a custom type struct for Success
+type ListEBSBackupsResponse struct {
+    // Embedded responses related to the resource.
+    Embedded        *EBSBackupListEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links           *EBSBackupListLinks    `json:"_links"`
+    // The number of items listed on the current page.
+    CurrentCount    *int64                 `json:"current_count"`
+    // The filter used in the request. The filter includes both manually-specified and system-generated filters.
+    FilterApplied   *string                `json:"filter_applied"`
+    // The maximum number of items displayed per page in the response.
+    Limit           *int64                 `json:"limit"`
+    // The page number used to get this response.
+    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
+    Start           *string                `json:"start"`
+    // The total number of items, summed across all pages.
+    TotalCount      *int64                 `json:"total_count"`
+    // The total number of pages of results.
+    TotalPagesCount *int64                 `json:"total_pages_count"`
 }
 
 // ListEBSBackupsResponseV1 represents a custom type struct for Success
@@ -1274,6 +1456,27 @@ type ListMssqlInstancesResponse struct {
     TotalCount      *int64                     `json:"total_count"`
     // The total number of pages of results.
     TotalPagesCount *int64                     `json:"total_pages_count"`
+}
+
+// ListOrganizationalUnitsResponse represents a custom type struct for Success
+type ListOrganizationalUnitsResponse struct {
+    // Embedded responses related to the resource.
+    Embedded        *OrganizationalUnitListEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links           *OrganizationalUnitListLinks    `json:"_links"`
+    // The number of items listed on the current page.
+    CurrentCount    *int64                          `json:"current_count"`
+    // The filter used in the request. The filter includes both manually-specified and system-generated filters.
+    FilterApplied   *string                         `json:"filter_applied"`
+    // The maximum number of items displayed per page in the response.
+    Limit           *int64                          `json:"limit"`
+    // The page number used to get this response.
+    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
+    Start           *string                         `json:"start"`
+    // The total number of items, summed across all pages.
+    TotalCount      *int64                          `json:"total_count"`
+    // The total number of pages of results.
+    TotalPagesCount *int64                          `json:"total_pages_count"`
 }
 
 // ListOrganizationalUnitsResponseV1 represents a custom type struct for Success
@@ -1653,6 +1856,27 @@ type ListTasksResponse struct {
     TotalPagesCount *int64            `json:"total_pages_count"`
 }
 
+// ListUsersResponse represents a custom type struct for Success
+type ListUsersResponse struct {
+    // Embedded responses related to the resource.
+    Embedded        *UserListEmbedded     `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links           *UserListHateoasLinks `json:"_links"`
+    // The number of items listed on the current page.
+    CurrentCount    *int64                `json:"current_count"`
+    // The filter used in the request. The filter includes both manually-specified and system-generated filters.
+    FilterApplied   *string               `json:"filter_applied"`
+    // The maximum number of items displayed per page in the response.
+    Limit           *int64                `json:"limit"`
+    // The page number used to get this response.
+    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
+    Start           *string               `json:"start"`
+    // The total number of items, summed across all pages.
+    TotalCount      *int64                `json:"total_count"`
+    // The total number of pages of results.
+    TotalPagesCount *int64                `json:"total_pages_count"`
+}
+
 // ListUsersResponseV1 represents a custom type struct for Success
 type ListUsersResponseV1 struct {
     // Embedded responses related to the resource.
@@ -1813,6 +2037,30 @@ type OnDemandDynamoDBBackupResponse struct {
     TaskId   *string                       `json:"task_id"`
 }
 
+// OnDemandEBSBackupResponse represents a custom type struct for Success
+type OnDemandEBSBackupResponse struct {
+    // Embedded responses related to the resource.
+    Embedded *ReadTaskHateoasOuterEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links    *OnDemandEBSBackupLinks       `json:"_links"`
+    // The Clumio-assigned ID of the task created for EBS backup.
+    // The progress of the task can be monitored using the
+    // `GET /tasks/{task_id}` endpoint.
+    TaskId   *string                       `json:"task_id"`
+}
+
+// OnDemandEBSBackupResponseV1 represents a custom type struct for Success
+type OnDemandEBSBackupResponseV1 struct {
+    // Embedded responses related to the resource.
+    Embedded *ReadTaskHateoasOuterEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links    *OnDemandEBSBackupLinks       `json:"_links"`
+    // The Clumio-assigned ID of the task created for EBS backup.
+    // The progress of the task can be monitored using the
+    // `GET /tasks/{task_id}` endpoint.
+    TaskId   *string                       `json:"task_id"`
+}
+
 // OnDemandEC2MSSQLDatabaseBackupResponse represents a custom type struct for Success
 type OnDemandEC2MSSQLDatabaseBackupResponse struct {
     // Embedded responses related to the resource.
@@ -1872,6 +2120,32 @@ type PatchGeneralSettingsResponseV2 struct {
     PasswordExpirationDuration   *int64                `json:"password_expiration_duration"`
 }
 
+// PatchOrganizationalUnitNoTaskResponse represents a custom type struct for Success
+type PatchOrganizationalUnitNoTaskResponse struct {
+    // URLs to pages related to the resource.
+    Links                     *OULinks        `json:"_links"`
+    // Number of immediate children of the organizational unit.
+    ChildrenCount             *int64          `json:"children_count"`
+    // Datasource types configured in this organizational unit. Possible values include `aws`, `microsoft365`, `vmware`, or `mssql`.
+    ConfiguredDatasourceTypes []*string       `json:"configured_datasource_types"`
+    // List of all recursive descendant organizational units of this OU.
+    DescendantIds             []*string       `json:"descendant_ids"`
+    // A description of the organizational unit.
+    Description               *string         `json:"description"`
+    // The Clumio assigned ID of the organizational unit.
+    Id                        *string         `json:"id"`
+    // Unique name assigned to the organizational unit.
+    Name                      *string         `json:"name"`
+    // The Clumio assigned ID of the parent organizational unit.
+    // The parent organizational unit contains the entities in this organizational unit and can update this organizational unit.
+    // If this organizational unit is the global organizational unit, then this field has a value of `null`.
+    ParentId                  *string         `json:"parent_id"`
+    // Number of users to whom this organizational unit or any of its descendants have been assigned.
+    UserCount                 *int64          `json:"user_count"`
+    // A user along with a role.
+    Users                     []*UserWithRole `json:"users"`
+}
+
 // PatchOrganizationalUnitNoTaskResponseV1 represents a custom type struct for Success
 type PatchOrganizationalUnitNoTaskResponseV1 struct {
     // URLs to pages related to the resource.
@@ -1897,6 +2171,39 @@ type PatchOrganizationalUnitNoTaskResponseV1 struct {
     // Users IDs to whom the organizational unit has been assigned.
     // This attribute will be available when reading a single OU and not when listing OUs.
     Users                     []*string `json:"users"`
+}
+
+// PatchOrganizationalUnitResponse represents a custom type struct.
+// Accepted
+type PatchOrganizationalUnitResponse struct {
+    // Embedded responses related to the resource.
+    Embedded                  *EntityGroupEmbedded     `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links                     *OrganizationalUnitLinks `json:"_links"`
+    // Number of immediate children of the organizational unit.
+    ChildrenCount             *int64                   `json:"children_count"`
+    // Datasource types configured in this organizational unit. Possible values include `aws`, `microsoft365`, `vmware`, or `mssql`.
+    ConfiguredDatasourceTypes []*string                `json:"configured_datasource_types"`
+    // List of all recursive descendant organizational units of this OU.
+    DescendantIds             []*string                `json:"descendant_ids"`
+    // A description of the organizational unit.
+    Description               *string                  `json:"description"`
+    // The Clumio assigned ID of the organizational unit.
+    Id                        *string                  `json:"id"`
+    // Unique name assigned to the organizational unit.
+    Name                      *string                  `json:"name"`
+    // The Clumio assigned ID of the parent organizational unit.
+    // The parent organizational unit contains the entities in this organizational unit and can update this organizational unit.
+    // If this organizational unit is the global organizational unit, then this field has a value of `null`.
+    ParentId                  *string                  `json:"parent_id"`
+    // The Clumio-assigned ID of the task associated with this organizational unit.
+    // The progress of the task can be monitored using the
+    // [GET /tasks/{task_id}](#operation/read-task) endpoint.
+    TaskId                    *string                  `json:"task_id"`
+    // Number of users to whom this organizational unit or any of its descendants have been assigned.
+    UserCount                 *int64                   `json:"user_count"`
+    // A user along with a role.
+    Users                     []*UserWithRole          `json:"users"`
 }
 
 // PatchOrganizationalUnitResponseV1 represents a custom type struct.
@@ -2119,6 +2426,8 @@ type ReadAWSTemplatesV2Response struct {
 type ReadAlertResponse struct {
     // Embedded responses related to the resource.
     Embedded            *AlertEmbedded          `json:"_embedded"`
+    // The ETag value.
+    Etag                *string                 `json:"_etag"`
     // URLs to pages related to the resource.
     Links               *AlertLinks             `json:"_links"`
     // The issue that generated the alert. Each cause belongs to an alert type.
@@ -2338,6 +2647,8 @@ type ReadComputeResourceResponse struct {
 
 // ReadConsolidatedAlertResponse represents a custom type struct for Success
 type ReadConsolidatedAlertResponse struct {
+    // The ETag value.
+    Etag               *string                        `json:"_etag"`
     // URLs to pages related to the resource.
     Links              *ConsolidatedAlertLinks        `json:"_links"`
     // The number of currently active individual alerts associated with the consolidated alert.
@@ -2558,6 +2869,54 @@ type ReadDynamoDBTableResponse struct {
     // The reason why protection is not available. If the table is supported,
     // then this field has a value of `null`.
     UnsupportedReason                             *string                 `json:"unsupported_reason"`
+}
+
+// ReadEBSBackupResponse represents a custom type struct for Success
+type ReadEBSBackupResponse struct {
+    // URLs to pages related to the resource.
+    Links                *EBSBackupLinks      `json:"_links"`
+    // The AWS-assigned ID of the account associated with the backup.
+    AccountNativeId      *string              `json:"account_native_id"`
+    // The availability zone associated with the volume backup. For example, `us-west-2a`.
+    AwsAz                *string              `json:"aws_az"`
+    // The AWS region in which the volume backup resides. For example, `us-west-2`.
+    AwsRegion            *string              `json:"aws_region"`
+    // Backup Tier
+    BackupTier           *string              `json:"backup_tier"`
+    // The reason that browsing is unavailable for the backup. Possible values include "file_limit_exceeded" and
+    // "browsing_unavailable". If browse indexing is successful, then this field has a value of `null`.
+    BrowsingFailedReason *string              `json:"browsing_failed_reason"`
+    // The timestamp of when this backup expires. Represented in RFC-3339 format.
+    ExpirationTimestamp  *string              `json:"expiration_timestamp"`
+    // The Clumio-assigned ID of the volume backup.
+    Id                   *string              `json:"id"`
+    // Iops of the volume.
+    Iops                 *int64               `json:"iops"`
+    // Determines whether browsing is available for the backup. If `true`, then browsing is available for the backup.
+    IsBrowsable          *bool                `json:"is_browsable"`
+    // Determines whether the EBS volume backup is encrypted. If `true`, the volume backup is encrypted.
+    IsEncrypted          *bool                `json:"is_encrypted"`
+    // The AWS-assigned ID of the KMS key encrypting this EBS volume backup. If the volume is not encrypted, this field has a value of `null`.
+    KmsKeyNativeId       *string              `json:"kms_key_native_id"`
+    // The timestamp of when the migration was triggered. This field will be set only for
+    // migration backups. Represented in RFC-3339 format.
+    MigrationTimestamp   *string              `json:"migration_timestamp"`
+    // The size of the volume backup. Measured in gigabytes (GB).
+    Size                 *int64               `json:"size"`
+    // The timestamp of when this backup started. Represented in RFC-3339 format.
+    StartTimestamp       *string              `json:"start_timestamp"`
+    // A tag created through AWS Console which can be applied to EBS volumes.
+    Tags                 []*AwsTagCommonModel `json:"tags"`
+    // The type of the backup. Possible values - `clumio_backup`, `aws_snapshot`.
+    ClumioType           *string              `json:"type"`
+    // Utilized size
+    UtilizedSizeInBytes  *uint64              `json:"utilized_size_in_bytes"`
+    // The Clumio-assigned ID of the EBS volume associated with the volume backup.
+    VolumeId             *string              `json:"volume_id"`
+    // The AWS-assigned ID of the EBS volume associated with the volume backup.
+    VolumeNativeId       *string              `json:"volume_native_id"`
+    // The volume type of the original EBS volume before backup. Possible values include `gp2`, `io1`, `st1`, `sc1`, `standard`.
+    VolumeType           *string              `json:"volume_type"`
 }
 
 // ReadEBSBackupResponseV1 represents a custom type struct for Success
@@ -2795,7 +3154,7 @@ type ReadEc2InstanceResponse struct {
 
 // ReadFileSystemResponse represents a custom type struct for Success
 type ReadFileSystemResponse struct {
-    // TODO: Add struct field description
+    // HateoasCommonLinks are the common fields for HATEOAS response.
     Links                *HateoasCommonLinks `json:"_links"`
     // The amount of available memory on the filesystem in bytes. Does not include
     // reserved memory.
@@ -3152,6 +3511,40 @@ type ReadMssqlInstanceResponse struct {
     Status                         *string                `json:"status"`
     // The Clumio-assigned ID of the management subgroup to which the host belongs.
     SubgroupId                     *string                `json:"subgroup_id"`
+}
+
+// ReadOrganizationalUnitResponse represents a custom type struct for Success
+type ReadOrganizationalUnitResponse struct {
+    // Embedded responses related to the resource.
+    Embedded                  *EntityGroupEmbedded     `json:"_embedded"`
+    // ETag value
+    Etag                      *string                  `json:"_etag"`
+    // URLs to pages related to the resource.
+    Links                     *OrganizationalUnitLinks `json:"_links"`
+    // Number of immediate children of the organizational unit.
+    ChildrenCount             *int64                   `json:"children_count"`
+    // Datasource types configured in this organizational unit. Possible values include `aws`, `microsoft365`, `vmware`, or `mssql`.
+    ConfiguredDatasourceTypes []*string                `json:"configured_datasource_types"`
+    // List of all recursive descendant organizational units of this OU.
+    DescendantIds             []*string                `json:"descendant_ids"`
+    // A description of the organizational unit.
+    Description               *string                  `json:"description"`
+    // The Clumio assigned ID of the organizational unit.
+    Id                        *string                  `json:"id"`
+    // Unique name assigned to the organizational unit.
+    Name                      *string                  `json:"name"`
+    // The Clumio assigned ID of the parent organizational unit.
+    // The parent organizational unit contains the entities in this organizational unit and can update this organizational unit.
+    // If this organizational unit is the global organizational unit, then this field has a value of `null`.
+    ParentId                  *string                  `json:"parent_id"`
+    // The Clumio-assigned ID of the task associated with this organizational unit.
+    // The progress of the task can be monitored using the
+    // [GET /tasks/{task_id}](#operation/read-task) endpoint.
+    TaskId                    *string                  `json:"task_id"`
+    // Number of users to whom this organizational unit or any of its descendants have been assigned.
+    UserCount                 *int64                   `json:"user_count"`
+    // A user along with a role.
+    Users                     []*UserWithRole          `json:"users"`
 }
 
 // ReadOrganizationalUnitResponseV1 represents a custom type struct for Success
@@ -3848,6 +4241,41 @@ type ReadTaskResponse struct {
     ClumioType         *string            `json:"type"`
 }
 
+// ReadUserResponse represents a custom type struct for Success
+type ReadUserResponse struct {
+    // Embedded responses related to the resource.
+    Embedded                   *UserEmbedded                 `json:"_embedded"`
+    // ETag value
+    Etag                       *string                       `json:"_etag"`
+    // URLs to pages related to the resource.
+    Links                      *UserLinks                    `json:"_links"`
+    // The organizational units assigned to the user, with the specified role.
+    AccessControlConfiguration []*RoleForOrganizationalUnits `json:"access_control_configuration"`
+    // The email address of the Clumio user.
+    Email                      *string                       `json:"email"`
+    // The first and last name of the Clumio user. The name appears in the User Management screen and is used to identify the user.
+    FullName                   *string                       `json:"full_name"`
+    // The Clumio-assigned ID of the Clumio user.
+    Id                         *string                       `json:"id"`
+    // The ID number of the user who sent the email invitation.
+    Inviter                    *string                       `json:"inviter"`
+    // Determines whether the user has activated their Clumio account.
+    // If `true`, the user has activated the account.
+    IsConfirmed                *bool                         `json:"is_confirmed"`
+    // Determines whether the user is enabled (in "Activated" or "Invited" status) in Clumio.
+    // If `true`, the user is in "Activated" or "Invited" status in Clumio.
+    // Users in "Activated" status can log in to Clumio.
+    // Users in "Invited" status have been invited to log in to Clumio via an email invitation and the invitation
+    // is pending acceptance from the user.
+    // If `false`, the user has been manually suspended and cannot log in to Clumio
+    // until another Clumio user reactivates the account.
+    IsEnabled                  *bool                         `json:"is_enabled"`
+    // The timestamp of when the user was last active in the Clumio system. Represented in RFC-3339 format.
+    LastActivityTimestamp      *string                       `json:"last_activity_timestamp"`
+    // The number of organizational units accessible to the user.
+    OrganizationalUnitCount    *int64                        `json:"organizational_unit_count"`
+}
+
 // ReadUserResponseV1 represents a custom type struct for Success
 type ReadUserResponseV1 struct {
     // Embedded responses related to the resource.
@@ -3878,7 +4306,7 @@ type ReadUserResponseV1 struct {
     // If `false`, the user has been manually suspended and cannot log in to Clumio
     // until another Clumio user reactivates the account.
     IsEnabled                     *bool           `json:"is_enabled"`
-    // The timestamp of when when the user was last active in the Clumio system. Represented in RFC-3339 format.
+    // The timestamp of when the user was last active in the Clumio system. Represented in RFC-3339 format.
     LastActivityTimestamp         *string         `json:"last_activity_timestamp"`
     // The number of organizational units accessible to the user.
     OrganizationalUnitCount       *int64          `json:"organizational_unit_count"`
@@ -4345,7 +4773,7 @@ type RestoreProtectionGroupS3AssetResponse struct {
 // RestoreRecordPreviewResponse represents a custom type struct.
 // Preview Success
 type RestoreRecordPreviewResponse struct {
-    // TODO: Add struct field description
+    // HateoasCommonLinks are the common fields for HATEOAS response.
     Links         *HateoasCommonLinks           `json:"_links"`
     // The preview of the query result, if `preview:true` in the request.
     // If preview was not set to true in the request, then the result of the query will be
@@ -4515,6 +4943,8 @@ type UpdateAWSConnectionResponse struct {
 type UpdateAlertResponse struct {
     // Embedded responses related to the resource.
     Embedded            *AlertEmbedded          `json:"_embedded"`
+    // The ETag value.
+    Etag                *string                 `json:"_etag"`
     // URLs to pages related to the resource.
     Links               *AlertLinks             `json:"_links"`
     // The issue that generated the alert. Each cause belongs to an alert type.
@@ -4631,6 +5061,8 @@ type UpdateAutoUserProvisioningSettingResponse struct {
 
 // UpdateConsolidatedAlertResponse represents a custom type struct for Success
 type UpdateConsolidatedAlertResponse struct {
+    // The ETag value.
+    Etag               *string                        `json:"_etag"`
     // URLs to pages related to the resource.
     Links              *ConsolidatedAlertLinks        `json:"_links"`
     // The number of currently active individual alerts associated with the consolidated alert.
@@ -4862,6 +5294,41 @@ type UpdateTaskResponse struct {
     ClumioType         *string            `json:"type"`
 }
 
+// UpdateUserResponse represents a custom type struct for Success
+type UpdateUserResponse struct {
+    // Embedded responses related to the resource.
+    Embedded                   *UserEmbedded                 `json:"_embedded"`
+    // ETag value
+    Etag                       *string                       `json:"_etag"`
+    // URLs to pages related to the resource.
+    Links                      *UserLinks                    `json:"_links"`
+    // The organizational units assigned to the user, with the specified role.
+    AccessControlConfiguration []*RoleForOrganizationalUnits `json:"access_control_configuration"`
+    // The email address of the Clumio user.
+    Email                      *string                       `json:"email"`
+    // The first and last name of the Clumio user. The name appears in the User Management screen and is used to identify the user.
+    FullName                   *string                       `json:"full_name"`
+    // The Clumio-assigned ID of the Clumio user.
+    Id                         *string                       `json:"id"`
+    // The ID number of the user who sent the email invitation.
+    Inviter                    *string                       `json:"inviter"`
+    // Determines whether the user has activated their Clumio account.
+    // If `true`, the user has activated the account.
+    IsConfirmed                *bool                         `json:"is_confirmed"`
+    // Determines whether the user is enabled (in "Activated" or "Invited" status) in Clumio.
+    // If `true`, the user is in "Activated" or "Invited" status in Clumio.
+    // Users in "Activated" status can log in to Clumio.
+    // Users in "Invited" status have been invited to log in to Clumio via an email invitation and the invitation
+    // is pending acceptance from the user.
+    // If `false`, the user has been manually suspended and cannot log in to Clumio
+    // until another Clumio user reactivates the account.
+    IsEnabled                  *bool                         `json:"is_enabled"`
+    // The timestamp of when the user was last active in the Clumio system. Represented in RFC-3339 format.
+    LastActivityTimestamp      *string                       `json:"last_activity_timestamp"`
+    // The number of organizational units accessible to the user.
+    OrganizationalUnitCount    *int64                        `json:"organizational_unit_count"`
+}
+
 // UpdateUserResponseV1 represents a custom type struct for Success
 type UpdateUserResponseV1 struct {
     // Embedded responses related to the resource.
@@ -4892,7 +5359,7 @@ type UpdateUserResponseV1 struct {
     // If `false`, the user has been manually suspended and cannot log in to Clumio
     // until another Clumio user reactivates the account.
     IsEnabled                     *bool           `json:"is_enabled"`
-    // The timestamp of when when the user was last active in the Clumio system. Represented in RFC-3339 format.
+    // The timestamp of when the user was last active in the Clumio system. Represented in RFC-3339 format.
     LastActivityTimestamp         *string         `json:"last_activity_timestamp"`
     // The number of organizational units accessible to the user.
     OrganizationalUnitCount       *int64          `json:"organizational_unit_count"`
