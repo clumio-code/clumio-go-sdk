@@ -55,6 +55,17 @@ type CreateBackupAwsEbsVolumeV2Request struct {
     VolumeId   *string          `json:"volume_id"`
 }
 
+// CreateBackupAwsEc2InstanceV1Request represents a custom type struct
+type CreateBackupAwsEc2InstanceV1Request struct {
+    // Performs the operation on the EC2 instance with the specified Clumio-assigned ID.
+    InstanceId *string          `json:"instance_id"`
+    // Settings for requesting on-demand backup directly.
+    Settings   *OnDemandSetting `json:"settings"`
+    // The type of the backup. Possible values - `clumio_backup`, `aws_snapshot`. The
+    // type will be assumed as `clumio_backup` if the field is left empty.
+    ClumioType *string          `json:"type"`
+}
+
 // CreateBackupEc2MssqlDatabaseV1Request represents a custom type struct
 type CreateBackupEc2MssqlDatabaseV1Request struct {
     // Performs the operation on the MSSQL asset with the specified Clumio-assigned ID.
@@ -120,25 +131,27 @@ type CreateAwsConnectionTemplateV1Request struct {
 // The body of the request.
 type PostProcessAwsConnectionV1Request struct {
     // The AWS-assigned ID of the account associated with the connection.
-    AccountNativeId  *string            `json:"account_native_id"`
+    AccountNativeId     *string            `json:"account_native_id"`
     // The AWS region associated with the connection. For example, `us-east-1`.
-    AwsRegion        *string            `json:"aws_region"`
+    AwsRegion           *string            `json:"aws_region"`
     // ClumioEventPubId is the Clumio Event Pub SNS topic ID.
-    ClumioEventPubId *string            `json:"clumio_event_pub_id"`
+    ClumioEventPubId    *string            `json:"clumio_event_pub_id"`
     // Configuration represents the AWS connection configuration in json string format
-    Configuration    *string            `json:"configuration"`
+    Configuration       *string            `json:"configuration"`
+    // Role arn to be assumed before accessing ClumioRole in customer account
+    IntermediateRoleArn *string            `json:"intermediate_role_arn"`
     // Properties is a key value map meant to be used for passing additional information
     // like resource IDs/ARNs.
-    Properties       map[string]*string `json:"properties"`
+    Properties          map[string]*string `json:"properties"`
     // RequestType indicates whether this is a Create, Update or Delete request
-    RequestType      *string            `json:"request_type"`
+    RequestType         *string            `json:"request_type"`
     // RoleArn is the ARN of the ClumioIAMRole created in the customer account
-    RoleArn          *string            `json:"role_arn"`
+    RoleArn             *string            `json:"role_arn"`
     // Role External Id is the unique string passed while creating the AWS resources .
-    RoleExternalId   *string            `json:"role_external_id"`
+    RoleExternalId      *string            `json:"role_external_id"`
     // The 36-character Clumio AWS integration ID token used to identify the
     // installation of the CloudFormation/Terraform template on the account.
-    Token            *string            `json:"token"`
+    Token               *string            `json:"token"`
 }
 
 // CreateConnectionTemplateV1Request represents a custom type struct
@@ -188,7 +201,7 @@ type MoveMssqlHostConnectionsV1Request struct {
 type CreateMssqlHostConnectionCredentialsV1Request struct {
     // Performs the operation on a host within the specified endpoint.
     Endpoint   *string `json:"endpoint"`
-    // Performs the operation on a host within the specified group.
+    // TODO: Add struct field description
     GroupId    *string `json:"group_id"`
     // Performs the operation on a host within the specified subgroup.
     SubgroupId *string `json:"subgroup_id"`

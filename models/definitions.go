@@ -229,6 +229,43 @@ type AlertPrimaryEntity struct {
     Value      *string `json:"value"`
 }
 
+// AmiModel represents a custom type struct.
+// An Amazon Machine Image is a supported and maintained image provided by AWS
+// that provides the information required to launch an instance.
+type AmiModel struct {
+    // The AWS-assigned ID of the AMI.
+    AmiNativeId              *string `json:"ami_native_id"`
+    // The architecture of the AMI. Possible values include 'i386', 'x86_64', and 'arm64'.
+    Architecture             *string `json:"architecture"`
+    // Specifies whether enhanced networking with ENA is enabled.
+    HasEnaSupport            *bool   `json:"has_ena_support"`
+    // The hypervisor type of the AMI. Possible values include 'ovm' and 'xen'.
+    HypervisorType           *string `json:"hypervisor_type"`
+    // Type of Image (machine | kernel | ramdisk ).
+    ImageType                *string `json:"image_type"`
+    // A Boolean that indicates whether the image is public.
+    IsPublic                 *bool   `json:"is_public"`
+    // The name of the AMI.
+    Name                     *string `json:"name"`
+    // Number of ebs volumes.
+    NumberOfEbsVolumes       *int64  `json:"number_of_ebs_volumes"`
+    // Number of ephemeral volumes.
+    NumberOfEphemeralVolumes *int64  `json:"number_of_ephemeral_volumes"`
+    // The ID of the Amazon Web Services account that owns the image.
+    OwnerId                  *string `json:"owner_id"`
+    // The platform of the AMI. Possible values include "windows" and "linux".
+    Platform                 *string `json:"platform"`
+    // The name of the root device used by the AMI.
+    RootDeviceName           *string `json:"root_device_name"`
+    // The type of root device used by the AMI.
+    RootDeviceType           *string `json:"root_device_type"`
+    // A value of simple indicates that enhanced networking with the Intel 82599 VF
+    // interface is enabled.
+    SriovNetSupport          *string `json:"sriov_net_support"`
+    // The type of virtualization of the AMI. Possible values include 'hvm' and 'paravirtual.'
+    VirtualizationType       *string `json:"virtualization_type"`
+}
+
 // AncestorRefModel represents a custom type struct
 type AncestorRefModel struct {
     // A VMware-assigned ID for this ancestor.
@@ -288,6 +325,31 @@ type AssignmentInputModel struct {
     // If `action: assign`, then this parameter is required.
     // Otherwise, it must not be provided.
     PolicyId *string           `json:"policy_id"`
+}
+
+// AttachedEBSVolumeFullModel represents a custom type struct
+type AttachedEBSVolumeFullModel struct {
+    // The Clumio-assigned id for the volume.
+    Id                  *string              `json:"id"`
+    // Determines whether this device is the root for the instance.
+    IsRoot              *bool                `json:"is_root"`
+    // The AWS-assigned id of the KMS key used for encryption of the volume.
+    KmsKeyNativeId      *string              `json:"kms_key_native_id"`
+    // The device name for the EBS volume. For example, '/dev/xvda'.
+    Name                *string              `json:"name"`
+    // The size of the EBS volume. Measured in bytes (B).
+    Size                *int64               `json:"size"`
+    // The status of the EBS volume. Possible values include 'attaching', 'attached',
+    // 'detaching', 'detached'.
+    Status              *string              `json:"status"`
+    // A tag created through AWS Console which can be applied to EBS volumes.
+    Tags                []*AwsTagCommonModel `json:"tags"`
+    // The type of the volume. Possible values include 'gp2', 'io1', 'st1', 'sc1', and 'standard'.
+    ClumioType          *string              `json:"type"`
+    // The number of bytes written in the EBS volume.
+    UtilizedSizeInBytes *uint64              `json:"utilized_size_in_bytes"`
+    // The AWS-assigned ID of the EBS volume.
+    VolumeNativeId      *string              `json:"volume_native_id"`
 }
 
 // AttributeDefinition represents a custom type struct.
@@ -2214,11 +2276,108 @@ type EC2AMIRestoreTarget struct {
     Tags                   []*AwsTagCommonModel               `json:"tags"`
 }
 
+// EC2Backup represents a custom type struct
+type EC2Backup struct {
+    // URLs to pages related to the resource.
+    Links                            *EC2BackupLinks                    `json:"_links"`
+    // The AWS-assigned ID of the account associated with the backup.
+    AccountNativeId                  *string                            `json:"account_native_id"`
+    // An Amazon Machine Image is a supported and maintained image provided by AWS
+    // that provides the information required to launch an instance.
+    Ami                              *AmiModel                          `json:"ami"`
+    // TODO: Add struct field description
+    AttachedBackupEbsVolumes         []*AttachedEBSVolumeFullModel      `json:"attached_backup_ebs_volumes"`
+    // The availability zone of the instance.
+    AwsAz                            *string                            `json:"aws_az"`
+    // The AWS region in which the instance backup resides. For example, `us-west-2`.
+    AwsRegion                        *string                            `json:"aws_region"`
+    // An Amazon Machine Image is a supported and maintained image provided by AWS
+    // that provides the information required to launch an instance.
+    BackupAmi                        *AmiModel                          `json:"backup_ami"`
+    // The tier to which the backup is tagged to.
+    BackupTier                       *string                            `json:"backup_tier"`
+    // The reason that browsing is unavailable for the backup.
+    // If browse indexing is successful, then this field has a value of `null`.
+    BrowsingFailedReason             *string                            `json:"browsing_failed_reason"`
+    // The timestamp of when this backup expires. Represented in RFC-3339 format.
+    ExpirationTimestamp              *string                            `json:"expiration_timestamp"`
+    // Denotes an IAM instance profile. An instance profile is a container for an
+    // IAM role that you can use to pass role information to an EC2 instance when
+    // the instance starts.
+    IamInstanceProfile               *IamInstanceProfileModel           `json:"iam_instance_profile"`
+    // The Clumio-assigned ID of the instance backup.
+    Id                               *string                            `json:"id"`
+    // The Clumio-assigned ID of the EC2 instance associated with the instance backup.
+    InstanceId                       *string                            `json:"instance_id"`
+    // The AWS-assigned ID of the EC2 instance associated with the instance backup.
+    InstanceNativeId                 *string                            `json:"instance_native_id"`
+    // TODO: Add struct field description
+    InstanceStoreBlockDeviceMappings []*InstanceStoreBlockDeviceMapping `json:"instance_store_block_device_mappings"`
+    // The instance type of the original EC2 instance before backup. For example, `m5.large`.
+    InstanceType                     *string                            `json:"instance_type"`
+    // Determines whether browsing is available for the backup. If `true`, then browsing is available for the backup.
+    IsBrowsable                      *bool                              `json:"is_browsable"`
+    // The name of the key pair associated with this instance. If this instance was not launched with an associated key pair, then this field has a value of `null`.
+    KeyPairName                      *string                            `json:"key_pair_name"`
+    // The ID of the key pair associated with this instance. If this instance was not launched with an associated key pair, then this field has a value of `null`.
+    KeyPairNativeId                  *string                            `json:"key_pair_native_id"`
+    // The timestamp of when the migration was triggered. This field will be set only for
+    // migration backups. Represented in RFC-3339 format.
+    MigrationTimestamp               *string                            `json:"migration_timestamp"`
+    // TODO: Add struct field description
+    NetworkInterfaces                []*NetworkInterface                `json:"network_interfaces"`
+    // The size of the instance backup. This is the sum of all the EBS volumes attached to the EC2 measured in gigabytes (GB).
+    Size                             *int64                             `json:"size"`
+    // The timestamp of when this backup started. Represented in RFC-3339 format.
+    StartTimestamp                   *string                            `json:"start_timestamp"`
+    // The AWS-assigned Subnet ID of the EC2 instance.
+    SubnetNativeId                   *string                            `json:"subnet_native_id"`
+    // A tag created through AWS Console which can be applied to EBS volumes.
+    Tags                             []*AwsTagCommonModel               `json:"tags"`
+    // The type of the backup.
+    ClumioType                       *string                            `json:"type"`
+    // The total number of bytes written in all the disks of the EC2 instance.
+    UtilizedSizeInBytes              *uint64                            `json:"utilized_size_in_bytes"`
+    // The AWS-assigned ID of the VPC associated with the EC2 instance.
+    VpcNativeId                      *string                            `json:"vpc_native_id"`
+}
+
 // EC2BackupAdvancedSetting represents a custom type struct.
 // Advanced settings for EC2 backup.
 type EC2BackupAdvancedSetting struct {
     // Backup tier to store the backup in. Valid values are: (empty) equivalent to standard, `standard`, and `lite`.
     BackupTier *string `json:"backup_tier"`
+}
+
+// EC2BackupLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type EC2BackupLinks struct {
+    // The HATEOAS link to this resource.
+    Self                  *HateoasSelfLink `json:"_self"`
+    // A resource-specific HATEOAS link.
+    RestoreAwsEc2Instance *HateoasLink     `json:"restore-aws-ec2-instance"`
+}
+
+// EC2BackupListEmbedded represents a custom type struct.
+// Embedded responses related to the resource.
+type EC2BackupListEmbedded struct {
+    // TODO: Add struct field description
+    Items []*EC2Backup `json:"items"`
+}
+
+// EC2BackupListLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type EC2BackupListLinks struct {
+    // The HATEOAS link to the first page of results.
+    First *HateoasFirstLink `json:"_first"`
+    // The HATEOAS link to the last page of results.
+    Last  *HateoasLastLink  `json:"_last"`
+    // The HATEOAS link to the next page of results.
+    Next  *HateoasNextLink  `json:"_next"`
+    // The HATEOAS link to the previous page of results.
+    Prev  *HateoasPrevLink  `json:"_prev"`
+    // The HATEOAS link to this resource.
+    Self  *HateoasSelfLink  `json:"_self"`
 }
 
 // EC2InstanceListLinks represents a custom type struct.
@@ -3136,6 +3295,19 @@ type HostWithETag struct {
     PowerState          *string                                `json:"power_state"`
 }
 
+// IamInstanceProfileModel represents a custom type struct.
+// Denotes an IAM instance profile. An instance profile is a container for an
+// IAM role that you can use to pass role information to an EC2 instance when
+// the instance starts.
+type IamInstanceProfileModel struct {
+    // The Amazon Resource Name (ARN) specifying the IAM instance profile.
+    Arn      *string `json:"arn"`
+    // The AWS-assigned name of the IAM instance profile.
+    Name     *string `json:"name"`
+    // The AWS-assigned ID of the IAM instance profile.
+    NativeId *string `json:"native_id"`
+}
+
 // IndividualAlertDetails represents a custom type struct.
 // Additional information about the alert.
 type IndividualAlertDetails struct {
@@ -3159,6 +3331,24 @@ type InheritedFrom struct {
     Name       *string `json:"name"`
     // VCenterObjectType denotes the VCenter object type
     Objecttype *string `json:"objectType"`
+}
+
+// InstanceStoreBlockDeviceMapping represents a custom type struct
+type InstanceStoreBlockDeviceMapping struct {
+    // Encryption for the instance store volume. Possible values include 'hardware encrypted'
+    // and 'Not encrypted'.
+    Encryption  *string `json:"encryption"`
+    // Determines whether or not the volume is a NVME instance store volume or a
+    // non-NVME instance store volume.
+    IsNvme      *bool   `json:"is_nvme"`
+    // The device name for the instance store volume. For example, '/dev/sdb'.
+    Name        *string `json:"name"`
+    // The size of the instance store volume. Measured in bytes (B).
+    Size        *int64  `json:"size"`
+    // The type of the block device. Only possible value is "Instance Store".
+    ClumioType  *string `json:"type"`
+    // The AWS-assigned name of the instance store volume.
+    VirtualName *string `json:"virtual_name"`
 }
 
 // KeySchemaElement represents a custom type struct.
@@ -3298,7 +3488,7 @@ type MoveHostsLinks struct {
 type MoveHostsSource struct {
     // Endpoints of hosts to be deleted
     Endpoints  []*string `json:"endpoints"`
-    // Performs the operation on a host within the specified group id.
+    // TODO: Add struct field description
     GroupId    *string   `json:"group_id"`
     // Performs the operation on a host within the specified subgroup id.
     SubgroupId *string   `json:"subgroup_id"`
@@ -3307,7 +3497,7 @@ type MoveHostsSource struct {
 // MoveHostsTarget represents a custom type struct.
 // The target configuration of the hosts to be moved.
 type MoveHostsTarget struct {
-    // Performs the operation on a host within the specified group id.
+    // TODO: Add struct field description
     GroupId    *string `json:"group_id"`
     // Performs the operation on a host within the specified subgroup id.
     SubgroupId *string `json:"subgroup_id"`
@@ -3826,6 +4016,20 @@ type MssqlRestoreTarget struct {
     LogFilesPath  *string `json:"log_files_path"`
 }
 
+// NetworkInterface represents a custom type struct
+type NetworkInterface struct {
+    // The device index for the network interface.
+    DeviceIndex              *int64    `json:"device_index"`
+    // The AWS-assigned ID for the network interface.
+    NetworkInterfaceNativeId *string   `json:"network_interface_native_id"`
+    // The AWS-assigned IDs for the security groups associated with this network interface.
+    SecurityGroupNativeIds   []*string `json:"security_group_native_ids"`
+    // The subnet native ID for the network interface.
+    SubnetNativeId           *string   `json:"subnet_native_id"`
+    // The AWS-assigned name of the network interface. For example, `eth0`.
+    VirtualName              *string   `json:"virtual_name"`
+}
+
 // OUGroupingCriteria represents a custom type struct.
 // The grouping criteria for each datasource type.
 // These can only be edited for datasource types which do not have any
@@ -3904,6 +4108,15 @@ type OnDemandDynamoDBBackupLinks struct {
 // OnDemandEBSBackupLinks represents a custom type struct.
 // URLs to pages related to the resource.
 type OnDemandEBSBackupLinks struct {
+    // The HATEOAS link to this resource.
+    Self     *HateoasSelfLink     `json:"_self"`
+    // A HATEOAS link to the task associated with this resource.
+    ReadTask *ReadTaskHateoasLink `json:"read-task"`
+}
+
+// OnDemandEC2BackupLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type OnDemandEC2BackupLinks struct {
     // The HATEOAS link to this resource.
     Self     *HateoasSelfLink     `json:"_self"`
     // A HATEOAS link to the task associated with this resource.
@@ -5843,10 +6056,10 @@ type RetentionBackupSLAParam struct {
 type RoleForOrganizationalUnits struct {
     // The Clumio-assigned IDs of the organizational units assigned to the user.
     // Use the [GET /organizational-units](#operation/list-organizational-units) endpoint to fetch valid values.
-    OrganizationalUnitIds *string `json:"organizational_unit_ids"`
+    OrganizationalUnitIds []*string `json:"organizational_unit_ids"`
     // The Clumio-assigned ID of the role assigned to the user.
     // Use the [GET /roles](#operation/list-roles) endpoint to fetch valid values.
-    RoleId                *string `json:"role_id"`
+    RoleId                *string   `json:"role_id"`
 }
 
 // RoleLinks represents a custom type struct.
@@ -6699,8 +6912,67 @@ type TagParentCategoryModel struct {
     OrganizationalUnitId *string `json:"organizational_unit_id"`
 }
 
-// Task represents a custom type struct
-type Task struct {
+// TaskLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type TaskLinks struct {
+    // The HATEOAS link to this resource.
+    Self                   *HateoasSelfLink `json:"_self"`
+    // A resource-specific HATEOAS link.
+    ReadOrganizationalUnit *HateoasLink     `json:"read-organizational-unit"`
+    // A resource-specific HATEOAS link.
+    UpdateTask             *HateoasLink     `json:"update-task"`
+}
+
+// TaskListEmbedded represents a custom type struct.
+// Embedded responses related to the resource.
+type TaskListEmbedded struct {
+    // TODO: Add struct field description
+    Items []*TaskWithETag `json:"items"`
+}
+
+// TaskListLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type TaskListLinks struct {
+    // The HATEOAS link to the first page of results.
+    First *HateoasFirstLink `json:"_first"`
+    // The HATEOAS link to the last page of results.
+    Last  *HateoasLastLink  `json:"_last"`
+    // The HATEOAS link to the next page of results.
+    Next  *HateoasNextLink  `json:"_next"`
+    // The HATEOAS link to the previous page of results.
+    Prev  *HateoasPrevLink  `json:"_prev"`
+    // The HATEOAS link to this resource.
+    Self  *HateoasSelfLink  `json:"_self"`
+}
+
+// TaskParentEntity represents a custom type struct.
+// The parent entity associated with the task.
+type TaskParentEntity struct {
+    // A system-generated ID assigned to this entity.
+    Id         *string `json:"id"`
+    // Type is mostly an asset type or the type of Entity. Some examples are
+    // "restored_file", "vmware_vm",  etc.
+    ClumioType *string `json:"type"`
+    // A system-generated value assigned to the entity. For example, if the primary entity type is "vmware_vm" for a virtual machine, then the value is the name of the VM.
+    Value      *string `json:"value"`
+}
+
+// TaskPrimaryEntity represents a custom type struct.
+// The primary entity associated with the task.
+type TaskPrimaryEntity struct {
+    // A system-generated ID assigned to this entity.
+    Id         *string `json:"id"`
+    // Type is mostly an asset type or the type of Entity. Some examples are
+    // "restored_file", "vmware_vm",  etc.
+    ClumioType *string `json:"type"`
+    // A system-generated value assigned to the entity. For example, if the primary entity type is "vmware_vm" for a virtual machine, then the value is the name of the VM.
+    Value      *string `json:"value"`
+}
+
+// TaskWithETag represents a custom type struct
+type TaskWithETag struct {
+    // The ETag value.
+    Etag               *string            `json:"_etag"`
     // URLs to pages related to the resource.
     Links              *TaskLinks         `json:"_links"`
     // The task category. Examples of task types include "backup", "restore", "snapshot", and "system".
@@ -6768,66 +7040,8 @@ type Task struct {
     // The task status. Examples of task statuses include, "queued", "in_progress", and "completed".
     // Refer to the Task Status table for a complete list of task statuses.
     Status             *string            `json:"status"`
-    // The task type. Examples of task types include "vm_backup_seeding", "ebs_indexing", and "file_restore".
     // Refer to the Task Type table for a complete list of task types.
     ClumioType         *string            `json:"type"`
-}
-
-// TaskLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type TaskLinks struct {
-    // The HATEOAS link to this resource.
-    Self                   *HateoasSelfLink `json:"_self"`
-    // A resource-specific HATEOAS link.
-    ReadOrganizationalUnit *HateoasLink     `json:"read-organizational-unit"`
-    // A resource-specific HATEOAS link.
-    UpdateTask             *HateoasLink     `json:"update-task"`
-}
-
-// TaskListEmbedded represents a custom type struct.
-// Embedded responses related to the resource.
-type TaskListEmbedded struct {
-    // TODO: Add struct field description
-    Items []*Task `json:"items"`
-}
-
-// TaskListLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type TaskListLinks struct {
-    // The HATEOAS link to the first page of results.
-    First *HateoasFirstLink `json:"_first"`
-    // The HATEOAS link to the last page of results.
-    Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
-    Next  *HateoasNextLink  `json:"_next"`
-    // The HATEOAS link to the previous page of results.
-    Prev  *HateoasPrevLink  `json:"_prev"`
-    // The HATEOAS link to this resource.
-    Self  *HateoasSelfLink  `json:"_self"`
-}
-
-// TaskParentEntity represents a custom type struct.
-// The parent entity associated with the task.
-type TaskParentEntity struct {
-    // A system-generated ID assigned to this entity.
-    Id         *string `json:"id"`
-    // Type is mostly an asset type or the type of Entity. Some examples are
-    // "restored_file", "vmware_vm",  etc.
-    ClumioType *string `json:"type"`
-    // A system-generated value assigned to the entity. For example, if the primary entity type is "vmware_vm" for a virtual machine, then the value is the name of the VM.
-    Value      *string `json:"value"`
-}
-
-// TaskPrimaryEntity represents a custom type struct.
-// The primary entity associated with the task.
-type TaskPrimaryEntity struct {
-    // A system-generated ID assigned to this entity.
-    Id         *string `json:"id"`
-    // Type is mostly an asset type or the type of Entity. Some examples are
-    // "restored_file", "vmware_vm",  etc.
-    ClumioType *string `json:"type"`
-    // A system-generated value assigned to the entity. For example, if the primary entity type is "vmware_vm" for a virtual machine, then the value is the name of the VM.
-    Value      *string `json:"value"`
 }
 
 // TemplateConfiguration represents a custom type struct

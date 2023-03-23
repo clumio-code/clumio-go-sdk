@@ -1183,6 +1183,27 @@ type ListEBSBackupsResponseV1 struct {
     TotalPagesCount *int64                   `json:"total_pages_count"`
 }
 
+// ListEC2BackupsResponse represents a custom type struct for Success
+type ListEC2BackupsResponse struct {
+    // Embedded responses related to the resource.
+    Embedded        *EC2BackupListEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links           *EC2BackupListLinks    `json:"_links"`
+    // The number of items listed on the current page.
+    CurrentCount    *int64                 `json:"current_count"`
+    // The filter used in the request. The filter includes both manually-specified and system-generated filters.
+    FilterApplied   *string                `json:"filter_applied"`
+    // The maximum number of items displayed per page in the response.
+    Limit           *int64                 `json:"limit"`
+    // The page number used to get this response.
+    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
+    Start           *string                `json:"start"`
+    // The total number of items, summed across all pages.
+    TotalCount      *int64                 `json:"total_count"`
+    // The total number of pages of results.
+    TotalPagesCount *int64                 `json:"total_pages_count"`
+}
+
 // ListEC2MSSQLDatabaseBackupsResponse represents a custom type struct for Success
 type ListEC2MSSQLDatabaseBackupsResponse struct {
     // Embedded responses related to the resource.
@@ -2056,6 +2077,18 @@ type OnDemandEBSBackupResponseV1 struct {
     // URLs to pages related to the resource.
     Links    *OnDemandEBSBackupLinks       `json:"_links"`
     // The Clumio-assigned ID of the task created for EBS backup.
+    // The progress of the task can be monitored using the
+    // `GET /tasks/{task_id}` endpoint.
+    TaskId   *string                       `json:"task_id"`
+}
+
+// OnDemandEC2BackupResponse represents a custom type struct for Success
+type OnDemandEC2BackupResponse struct {
+    // Embedded responses related to the resource.
+    Embedded *ReadTaskHateoasOuterEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links    *OnDemandEC2BackupLinks       `json:"_links"`
+    // The Clumio-assigned ID of the task created for EC2 backup.
     // The progress of the task can be monitored using the
     // `GET /tasks/{task_id}` endpoint.
     TaskId   *string                       `json:"task_id"`
@@ -2954,6 +2987,72 @@ type ReadEBSBackupResponseV1 struct {
     VolumeId             *string              `json:"volume_id"`
     // The AWS-assigned ID of the EBS volume associated with the volume backup.
     VolumeNativeId       *string              `json:"volume_native_id"`
+}
+
+// ReadEC2BackupResponse represents a custom type struct for Success
+type ReadEC2BackupResponse struct {
+    // URLs to pages related to the resource.
+    Links                            *EC2BackupLinks                    `json:"_links"`
+    // The AWS-assigned ID of the account associated with the backup.
+    AccountNativeId                  *string                            `json:"account_native_id"`
+    // An Amazon Machine Image is a supported and maintained image provided by AWS
+    // that provides the information required to launch an instance.
+    Ami                              *AmiModel                          `json:"ami"`
+    // TODO: Add struct field description
+    AttachedBackupEbsVolumes         []*AttachedEBSVolumeFullModel      `json:"attached_backup_ebs_volumes"`
+    // The availability zone of the instance.
+    AwsAz                            *string                            `json:"aws_az"`
+    // The AWS region in which the instance backup resides. For example, `us-west-2`.
+    AwsRegion                        *string                            `json:"aws_region"`
+    // An Amazon Machine Image is a supported and maintained image provided by AWS
+    // that provides the information required to launch an instance.
+    BackupAmi                        *AmiModel                          `json:"backup_ami"`
+    // The tier to which the backup is tagged to.
+    BackupTier                       *string                            `json:"backup_tier"`
+    // The reason that browsing is unavailable for the backup.
+    // If browse indexing is successful, then this field has a value of `null`.
+    BrowsingFailedReason             *string                            `json:"browsing_failed_reason"`
+    // The timestamp of when this backup expires. Represented in RFC-3339 format.
+    ExpirationTimestamp              *string                            `json:"expiration_timestamp"`
+    // Denotes an IAM instance profile. An instance profile is a container for an
+    // IAM role that you can use to pass role information to an EC2 instance when
+    // the instance starts.
+    IamInstanceProfile               *IamInstanceProfileModel           `json:"iam_instance_profile"`
+    // The Clumio-assigned ID of the instance backup.
+    Id                               *string                            `json:"id"`
+    // The Clumio-assigned ID of the EC2 instance associated with the instance backup.
+    InstanceId                       *string                            `json:"instance_id"`
+    // The AWS-assigned ID of the EC2 instance associated with the instance backup.
+    InstanceNativeId                 *string                            `json:"instance_native_id"`
+    // TODO: Add struct field description
+    InstanceStoreBlockDeviceMappings []*InstanceStoreBlockDeviceMapping `json:"instance_store_block_device_mappings"`
+    // The instance type of the original EC2 instance before backup. For example, `m5.large`.
+    InstanceType                     *string                            `json:"instance_type"`
+    // Determines whether browsing is available for the backup. If `true`, then browsing is available for the backup.
+    IsBrowsable                      *bool                              `json:"is_browsable"`
+    // The name of the key pair associated with this instance. If this instance was not launched with an associated key pair, then this field has a value of `null`.
+    KeyPairName                      *string                            `json:"key_pair_name"`
+    // The ID of the key pair associated with this instance. If this instance was not launched with an associated key pair, then this field has a value of `null`.
+    KeyPairNativeId                  *string                            `json:"key_pair_native_id"`
+    // The timestamp of when the migration was triggered. This field will be set only for
+    // migration backups. Represented in RFC-3339 format.
+    MigrationTimestamp               *string                            `json:"migration_timestamp"`
+    // TODO: Add struct field description
+    NetworkInterfaces                []*NetworkInterface                `json:"network_interfaces"`
+    // The size of the instance backup. This is the sum of all the EBS volumes attached to the EC2 measured in gigabytes (GB).
+    Size                             *int64                             `json:"size"`
+    // The timestamp of when this backup started. Represented in RFC-3339 format.
+    StartTimestamp                   *string                            `json:"start_timestamp"`
+    // The AWS-assigned Subnet ID of the EC2 instance.
+    SubnetNativeId                   *string                            `json:"subnet_native_id"`
+    // A tag created through AWS Console which can be applied to EBS volumes.
+    Tags                             []*AwsTagCommonModel               `json:"tags"`
+    // The type of the backup.
+    ClumioType                       *string                            `json:"type"`
+    // The total number of bytes written in all the disks of the EC2 instance.
+    UtilizedSizeInBytes              *uint64                            `json:"utilized_size_in_bytes"`
+    // The AWS-assigned ID of the VPC associated with the EC2 instance.
+    VpcNativeId                      *string                            `json:"vpc_native_id"`
 }
 
 // ReadEC2MSSQLDatabaseBackupResponse represents a custom type struct for Success
@@ -4169,6 +4268,8 @@ type ReadTagResponse struct {
 
 // ReadTaskResponse represents a custom type struct for Success
 type ReadTaskResponse struct {
+    // The ETag value.
+    Etag               *string            `json:"_etag"`
     // URLs to pages related to the resource.
     Links              *TaskLinks         `json:"_links"`
     // The task category. Examples of task types include "backup", "restore", "snapshot", and "system".
@@ -4236,7 +4337,6 @@ type ReadTaskResponse struct {
     // The task status. Examples of task statuses include, "queued", "in_progress", and "completed".
     // Refer to the Task Status table for a complete list of task statuses.
     Status             *string            `json:"status"`
-    // The task type. Examples of task types include "vm_backup_seeding", "ebs_indexing", and "file_restore".
     // Refer to the Task Type table for a complete list of task types.
     ClumioType         *string            `json:"type"`
 }
@@ -5222,6 +5322,8 @@ type UpdateRuleResponse struct {
 
 // UpdateTaskResponse represents a custom type struct for Success
 type UpdateTaskResponse struct {
+    // The ETag value.
+    Etag               *string            `json:"_etag"`
     // URLs to pages related to the resource.
     Links              *TaskLinks         `json:"_links"`
     // The task category. Examples of task types include "backup", "restore", "snapshot", and "system".
@@ -5289,7 +5391,6 @@ type UpdateTaskResponse struct {
     // The task status. Examples of task statuses include, "queued", "in_progress", and "completed".
     // Refer to the Task Status table for a complete list of task statuses.
     Status             *string            `json:"status"`
-    // The task type. Examples of task types include "vm_backup_seeding", "ebs_indexing", and "file_restore".
     // Refer to the Task Type table for a complete list of task types.
     ClumioType         *string            `json:"type"`
 }
