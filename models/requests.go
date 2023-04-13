@@ -121,12 +121,6 @@ type CreateAwsConnectionV1Request struct {
     ServicesEnabled          []*string `json:"services_enabled"`
 }
 
-// CreateAwsConnectionTemplateV1Request represents a custom type struct
-type CreateAwsConnectionTemplateV1Request struct {
-    // TODO: Add struct field description
-    Protect *ProtectTemplateConfig `json:"protect"`
-}
-
 // PostProcessAwsConnectionV1Request represents a custom type struct.
 // The body of the request.
 type PostProcessAwsConnectionV1Request struct {

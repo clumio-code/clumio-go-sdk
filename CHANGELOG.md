@@ -1,3 +1,5 @@
+## 0.9.1
+Go version required changed to 1.20
 ## 0.9.0
 EC2 backup APIs added.
 ## 0.8.0

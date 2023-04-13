@@ -194,14 +194,6 @@ type CreateAWSConnectionResponse struct {
     Token                    *string             `json:"token"`
 }
 
-// CreateAWSTemplateResponse represents a custom type struct for Success
-type CreateAWSTemplateResponse struct {
-    // The latest available URL for the template.
-    AvailableTemplateUrl *string                `json:"available_template_url"`
-    // TODO: Add struct field description
-    Config               *TemplateConfiguration `json:"config"`
-}
-
 // CreateAWSTemplateV2Response represents a custom type struct for Success
 type CreateAWSTemplateV2Response struct {
     // URLs to pages related to the resource.
@@ -2439,14 +2431,6 @@ type ReadAWSEnvironmentResponse struct {
     TemplateVersion      *int64                  `json:"template_version"`
 }
 
-// ReadAWSTemplatesResponse represents a custom type struct for Success
-type ReadAWSTemplatesResponse struct {
-    // The latest available CloudFormation template for Clumio Discover.
-    Discover *DiscoverTemplateInfo `json:"discover"`
-    // The latest available CloudFormation template for Clumio Cloud Protect.
-    Protect  *ProtectTemplateInfo  `json:"protect"`
-}
-
 // ReadAWSTemplatesV2Response represents a custom type struct for Success
 type ReadAWSTemplatesV2Response struct {
     // URLs to pages related to the resource.
@@ -2601,6 +2585,8 @@ type ReadAwsTagResponse struct {
 type ReadBucketResponse struct {
     // Embedded responses related to the resource.
     Embedded                      interface{}                                   `json:"_embedded"`
+    // The ETag value.
+    Etag                          *string                                       `json:"_etag"`
     // URLs to pages related to the resource.
     Links                         *BucketLinks                                  `json:"_links"`
     // The AWS-assigned ID of the account associated with the S3 bucket.

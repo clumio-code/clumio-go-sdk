@@ -1335,25 +1335,6 @@ type DiscoverConfig struct {
     InstalledTemplateVersion *string   `json:"installed_template_version"`
 }
 
-// DiscoverTemplateInfo represents a custom type struct.
-// The latest available CloudFormation template for Clumio Discover.
-type DiscoverTemplateInfo struct {
-    // The AWS asset types supported with the available version of the template.
-    AssetTypesEnabled        []*string `json:"asset_types_enabled"`
-    // The latest available URL for the template.
-    AvailableTemplateUrl     *string   `json:"available_template_url"`
-    // The latest available version for the template.
-    AvailableTemplateVersion *string   `json:"available_template_version"`
-}
-
-// DiscoverTemplateInfoV2 represents a custom type struct
-type DiscoverTemplateInfoV2 struct {
-    // The AWS asset types supported with the available version of the template.
-    AssetTypesEnabled        []*string `json:"asset_types_enabled"`
-    // The latest available version for the template.
-    AvailableTemplateVersion *string   `json:"available_template_version"`
-}
-
 // DownloadSharedFileLinks represents a custom type struct.
 // URLs to pages related to the resource.
 type DownloadSharedFileLinks struct {
@@ -4644,40 +4625,6 @@ type ProtectEntitiesHateoasLink struct {
     ClumioType *string `json:"type"`
 }
 
-// ProtectTemplateConfig represents a custom type struct
-type ProtectTemplateConfig struct {
-    // The asset types for which the template is to be generated. Possible
-    // asset types are ["EBS", "RDS", "DynamoDB", "EC2MSSQL"].
-    AssetTypesEnabled []*string `json:"asset_types_enabled"`
-}
-
-// ProtectTemplateInfo represents a custom type struct.
-// The latest available CloudFormation template for Clumio Cloud Protect.
-type ProtectTemplateInfo struct {
-    // The AWS asset types supported with the available version of the template.
-    AssetTypesEnabled        []*string        `json:"asset_types_enabled"`
-    // The latest available URL for the template.
-    AvailableTemplateUrl     *string          `json:"available_template_url"`
-    // The latest available version for the template.
-    AvailableTemplateVersion *string          `json:"available_template_version"`
-    // TODO: Add struct field description
-    Ebs                      *EbsTemplateInfo `json:"ebs"`
-    // TODO: Add struct field description
-    Rds                      *RdsTemplateInfo `json:"rds"`
-}
-
-// ProtectTemplateInfoV2 represents a custom type struct
-type ProtectTemplateInfoV2 struct {
-    // The AWS asset types supported with the available version of the template.
-    AssetTypesEnabled        []*string        `json:"asset_types_enabled"`
-    // The latest available version for the template.
-    AvailableTemplateVersion *string          `json:"available_template_version"`
-    // TODO: Add struct field description
-    Ebs                      *EbsTemplateInfo `json:"ebs"`
-    // TODO: Add struct field description
-    Rds                      *RdsTemplateInfo `json:"rds"`
-}
-
 // ProtectedStatsDeprecated represents a custom type struct.
 // ProtectedStatsDeprecated contains the compliance stats for policies which are protected along with
 // the unprotected policies count
@@ -7042,14 +6989,6 @@ type TaskWithETag struct {
     Status             *string            `json:"status"`
     // Refer to the Task Type table for a complete list of task types.
     ClumioType         *string            `json:"type"`
-}
-
-// TemplateConfiguration represents a custom type struct
-type TemplateConfiguration struct {
-    // TODO: Add struct field description
-    Discover *DiscoverTemplateInfoV2 `json:"discover"`
-    // TODO: Add struct field description
-    Protect  *ProtectTemplateInfoV2  `json:"protect"`
 }
 
 // TemplateConfigurationV2 represents a custom type struct.
