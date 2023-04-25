@@ -2408,6 +2408,142 @@ type EC2InstanceRestoreTarget struct {
     VpcNativeId            *string                            `json:"vpc_native_id"`
 }
 
+// EC2MSSQLAG represents a custom type struct
+type EC2MSSQLAG struct {
+    // Embedded responses related to the resource.
+    Embedded             *EC2MSSQLAGEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links                *EC2MSSQLAGLinks    `json:"_links"`
+    // The Clumio-assigned ID of the availability group.
+    Id                   *string             `json:"id"`
+    // The Microsoft SQL-assigned name of the availability group.
+    Name                 *string             `json:"name"`
+    // The Clumio-assigned ID of the organizational unit associated with the availability group.
+    OrganizationalUnitId *string             `json:"organizational_unit_id"`
+    // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
+    ProtectionInfo       *ProtectionInfo     `json:"protection_info"`
+    // The status of the availability group, Possible values include 'active' and 'inactive'.
+    Status               *string             `json:"status"`
+}
+
+// EC2MSSQLAGEmbedded represents a custom type struct.
+// Embedded responses related to the resource.
+type EC2MSSQLAGEmbedded struct {
+    // availability group level stats
+    GetMssqlEc2AvailabilityGroupStats interface{} `json:"get-mssql-ec2-availability-group-stats"`
+    // Embeds the associated policy of a protected resource in the response if requested using the `embed` query parameter. Unprotected resources will not have an associated policy.
+    ReadPolicyDefinition              interface{} `json:"read-policy-definition"`
+}
+
+// EC2MSSQLAGLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type EC2MSSQLAGLinks struct {
+    // The HATEOAS link to this resource.
+    Self                              *HateoasSelfLink                 `json:"_self"`
+    // A resource-specific HATEOAS link.
+    GetMssqlEc2AvailabilityGroupStats *HateoasLink                     `json:"get-mssql-ec2-availability-group-stats"`
+    // A HATEOAS link to the policy protecting this resource. Will be omitted for unprotected entities.
+    ReadPolicyDefinition              *ReadPolicyDefinitionHateoasLink `json:"read-policy-definition"`
+}
+
+// EC2MSSQLAGListEmbedded represents a custom type struct.
+// Embedded responses related to the resource.
+type EC2MSSQLAGListEmbedded struct {
+    // TODO: Add struct field description
+    Items []*EC2MSSQLAG `json:"items"`
+}
+
+// EC2MSSQLAGListLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type EC2MSSQLAGListLinks struct {
+    // The HATEOAS link to the first page of results.
+    First *HateoasFirstLink `json:"_first"`
+    // The HATEOAS link to the last page of results.
+    Last  *HateoasLastLink  `json:"_last"`
+    // The HATEOAS link to the next page of results.
+    Next  *HateoasNextLink  `json:"_next"`
+    // The HATEOAS link to the previous page of results.
+    Prev  *HateoasPrevLink  `json:"_prev"`
+    // The HATEOAS link to this resource.
+    Self  *HateoasSelfLink  `json:"_self"`
+}
+
+// EC2MSSQLDatabase represents a custom type struct
+type EC2MSSQLDatabase struct {
+    // Embedded responses related to the resource.
+    Embedded                                *EC2MSSQLDatabaseEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links                                   *EC2MSSQLDatabaseLinks    `json:"_links"`
+    // The AWS-assigned ID of the account associated with the EC2 instance the database resides in.
+    AccountNativeId                         *string                   `json:"account_native_id"`
+    // The Clumio-assigned ID of the availability group. It is null in case of a standalone database.
+    AvailabilityGroupId                     *string                   `json:"availability_group_id"`
+    // The Microsoft SQL assigned name of the availability group. It is null in case of a standalone database.
+    AvailabilityGroupName                   *string                   `json:"availability_group_name"`
+    // The AWS region associated with the EC2 instance the database resides in.
+    AwsRegion                               *string                   `json:"aws_region"`
+    // The policy compliance status of the resource. If the database is not protected,
+    // then this field has a value of `null`. Refer to
+    // 
+    // the Compliance Status table
+    // 
+    // for a complete list of compliance statuses.
+    ComplianceStatus                        *string                   `json:"compliance_status"`
+    // The Clumio-assigned ID of the AWS environment associated with the EC2 MSSQL database.
+    EnvironmentId                           *string                   `json:"environment_id"`
+    // The Clumio-assigned ID of the failover cluster.
+    FailoverClusterId                       *string                   `json:"failover_cluster_id"`
+    // The Microsoft SQL assigned name of the Failover Cluster
+    FailoverClusterName                     *string                   `json:"failover_cluster_name"`
+    // Failovercluster Protection Status is used to indicate the fci protection status associated with the
+    // fci database
+    FailoverClusterProtectionStatus         *string                   `json:"failover_cluster_protection_status"`
+    // The Clumio-assigned ID of the host connection containing the given database.
+    HostConnectionId                        *string                   `json:"host_connection_id"`
+    // The user-provided endpoint of the host containing the given database.
+    HostEndpoint                            *string                   `json:"host_endpoint"`
+    // The Clumio-assigned ID of the host containing the given database.
+    HostId                                  *string                   `json:"host_id"`
+    // The Clumio-assigned ID of the Database.
+    Id                                      *string                   `json:"id"`
+    // The Clumio-assigned ID of the instance containing the given database.
+    InstanceId                              *string                   `json:"instance_id"`
+    // The name of the Microsoft SQL instance containing the given database.
+    InstanceName                            *string                   `json:"instance_name"`
+    // is_supported is true if Clumio supports backup of the database.
+    IsSupported                             *bool                     `json:"is_supported"`
+    // The timestamp of the last time this database was full backed up.
+    // Represented in RFC-3339 format. If this database has never been backed up,
+    // this field has a value of `null`.
+    LastBackupTimestamp                     *string                   `json:"last_backup_timestamp"`
+    // The timestamp of the last time this database was log backed up in Bulk Recovery Model.
+    // Represented in RFC-3339 format. If this database has never been backed up,
+    // this field has a value of `null`.
+    LastBulkRecoveryModelLogBackupTimestamp *string                   `json:"last_bulk_recovery_model_log_backup_timestamp"`
+    // The timestamp of the last time this database was log backed up in Full Recovery Model.
+    // Represented in RFC-3339 format. If this database has never been backed up,
+    // this field has a value of `null`.
+    LastFullRecoveryModelLogBackupTimestamp *string                   `json:"last_full_recovery_model_log_backup_timestamp"`
+    // The name of the Database.
+    Name                                    *string                   `json:"name"`
+    // The Clumio-assigned ID of the organizational unit associated with the database.
+    OrganizationalUnitId                    *string                   `json:"organizational_unit_id"`
+    // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
+    ProtectionInfo                          *ProtectionInfo           `json:"protection_info"`
+    // recovery_model is the recovery model of the database. Possible values include 'simple_recovery_model',
+    // 'bulk_recovery_model', and 'full_recovery_model'.
+    RecoveryModel                           *string                   `json:"recovery_model"`
+    // The size of the Database.
+    Size                                    *float64                  `json:"size"`
+    // The status of the database, Possible values include 'active' and 'inactive'.
+    Status                                  *string                   `json:"status"`
+    // The type of the database. Possible values include 'availability_group_database' and 'standalone_database'.
+    ClumioType                              *string                   `json:"type"`
+    // unsupported_reason is the reason why Clumio doesn't support backup of such database,
+    // possible values include 'filestream_enabled_database'.
+    UnsupportedReason                       *string                   `json:"unsupported_reason"`
+}
+
 // EC2MSSQLDatabaseBackup represents a custom type struct
 type EC2MSSQLDatabaseBackup struct {
     // Embedded responses related to the resource.
@@ -2491,6 +2627,261 @@ type EC2MSSQLDatabaseBackupListLinks struct {
     Self  *HateoasSelfLink  `json:"_self"`
 }
 
+// EC2MSSQLDatabaseEmbedded represents a custom type struct.
+// Embedded responses related to the resource.
+type EC2MSSQLDatabaseEmbedded struct {
+    // Embed information about the Hosts part of FCI databases
+    GetEc2MssqlFailoverClustersHostsInfo interface{} `json:"get-ec2-mssql-failover-clusters-hosts-info"`
+    // AWS inventory EC2 Instance embed
+    ReadAwsEc2Instance                   interface{} `json:"read-aws-ec2-instance"`
+    // Embed information for AWS Environment details
+    ReadAwsEnvironment                   interface{} `json:"read-aws-environment"`
+    // Embeds the associated policy of a protected resource in the response if requested using the `embed` query parameter. Unprotected resources will not have an associated policy.
+    ReadPolicyDefinition                 interface{} `json:"read-policy-definition"`
+}
+
+// EC2MSSQLDatabaseLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type EC2MSSQLDatabaseLinks struct {
+    // The HATEOAS link to this resource.
+    Self                         *HateoasSelfLink                 `json:"_self"`
+    // A resource-specific HATEOAS link.
+    CreateBackupEc2MssqlDatabase *HateoasLink                     `json:"create-backup-ec2-mssql-database"`
+    // A resource-specific HATEOAS link.
+    ListBackupEc2MssqlDatabases  *HateoasLink                     `json:"list-backup-ec2-mssql-databases"`
+    // A resource-specific HATEOAS link.
+    ReadAwsEc2Instance           *HateoasLink                     `json:"read-aws-ec2-instance"`
+    // A resource-specific HATEOAS link.
+    ReadAwsEnvironment           *HateoasLink                     `json:"read-aws-environment"`
+    // A HATEOAS link to the policy protecting this resource. Will be omitted for unprotected entities.
+    ReadPolicyDefinition         *ReadPolicyDefinitionHateoasLink `json:"read-policy-definition"`
+}
+
+// EC2MSSQLDatabaseListEmbedded represents a custom type struct.
+// Embedded responses related to the resource.
+type EC2MSSQLDatabaseListEmbedded struct {
+    // TODO: Add struct field description
+    Items []*EC2MSSQLDatabase `json:"items"`
+}
+
+// EC2MSSQLDatabaseListLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type EC2MSSQLDatabaseListLinks struct {
+    // The HATEOAS link to the first page of results.
+    First *HateoasFirstLink `json:"_first"`
+    // The HATEOAS link to the last page of results.
+    Last  *HateoasLastLink  `json:"_last"`
+    // The HATEOAS link to the next page of results.
+    Next  *HateoasNextLink  `json:"_next"`
+    // The HATEOAS link to the previous page of results.
+    Prev  *HateoasPrevLink  `json:"_prev"`
+    // The HATEOAS link to this resource.
+    Self  *HateoasSelfLink  `json:"_self"`
+}
+
+// EC2MSSQLFCI represents a custom type struct
+type EC2MSSQLFCI struct {
+    // Embedded responses related to the resource.
+    Embedded             *EC2MSSQLFCIEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links                *EC2MSSQLFCILinks    `json:"_links"`
+    // ComplianceStatus of the resource
+    ComplianceStatus     *string              `json:"compliance_status"`
+    // The Clumio-assigned ID of the failover cluster.
+    Id                   *string              `json:"id"`
+    // The Microsoft SQL-assigned name of the failover cluster.
+    Name                 *string              `json:"name"`
+    // The Clumio-assigned ID of the organizational unit associated with the FCI.
+    OrganizationalUnitId *string              `json:"organizational_unit_id"`
+    // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
+    ProtectionInfo       *ProtectionInfo      `json:"protection_info"`
+    // ProtectionStatus of the FCI
+    ProtectionStatus     *string              `json:"protection_status"`
+    // The status of the FCI, Possible values include 'active' and 'inactive'.
+    Status               *string              `json:"status"`
+}
+
+// EC2MSSQLFCIEmbedded represents a custom type struct.
+// Embedded responses related to the resource.
+type EC2MSSQLFCIEmbedded struct {
+    // ConnectedHostsInfo contains information about the hosts associated with the cluster
+    GetEc2MssqlFailoverClusterHostsInfo interface{} `json:"get-ec2-mssql-failover-cluster-hosts-info"`
+    // FCIStats contain information about the compliant databases in the cluster
+    GetEc2MssqlFailoverClusterStats     interface{} `json:"get-ec2-mssql-failover-cluster-stats"`
+    // Embeds the associated policy of a protected resource in the response if requested using the `embed` query parameter. Unprotected resources will not have an associated policy.
+    ReadPolicyDefinition                interface{} `json:"read-policy-definition"`
+}
+
+// EC2MSSQLFCILinks represents a custom type struct.
+// URLs to pages related to the resource.
+type EC2MSSQLFCILinks struct {
+    // The HATEOAS link to this resource.
+    Self                 *HateoasSelfLink                 `json:"_self"`
+    // A HATEOAS link to the policy protecting this resource. Will be omitted for unprotected entities.
+    ReadPolicyDefinition *ReadPolicyDefinitionHateoasLink `json:"read-policy-definition"`
+}
+
+// EC2MSSQLFCIListEmbedded represents a custom type struct.
+// Embedded responses related to the resource.
+type EC2MSSQLFCIListEmbedded struct {
+    // TODO: Add struct field description
+    Items []*EC2MSSQLFCI `json:"items"`
+}
+
+// EC2MSSQLFCIListLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type EC2MSSQLFCIListLinks struct {
+    // The HATEOAS link to the first page of results.
+    First *HateoasFirstLink `json:"_first"`
+    // The HATEOAS link to the last page of results.
+    Last  *HateoasLastLink  `json:"_last"`
+    // The HATEOAS link to the next page of results.
+    Next  *HateoasNextLink  `json:"_next"`
+    // The HATEOAS link to the previous page of results.
+    Prev  *HateoasPrevLink  `json:"_prev"`
+    // The HATEOAS link to this resource.
+    Self  *HateoasSelfLink  `json:"_self"`
+}
+
+// EC2MSSQLInstance represents a custom type struct
+type EC2MSSQLInstance struct {
+    // Embedded responses related to the resource.
+    Embedded                       *EC2MSSQLInstanceEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links                          *EC2MSSQLInstanceLinks    `json:"_links"`
+    // The AWS-assigned ID of the account associated with the EC2 instance of the MSSQL instance.
+    AccountNativeId                *string                   `json:"account_native_id"`
+    // The AWS region associated with the EC2 instance of the MSSQL instance.
+    AwsRegion                      *string                   `json:"aws_region"`
+    // The Clumio-assigned ID of the AWS environment associated with the EC2 MSSQL instance.
+    EnvironmentId                  *string                   `json:"environment_id"`
+    // The boolean value represents if availability group is present in the instance.
+    HasAssociatedAvailabilityGroup *bool                     `json:"has_associated_availability_group"`
+    // The Clumio-assigned ID of the host connection containing the given mssql instance.
+    HostConnectionId               *string                   `json:"host_connection_id"`
+    // The user-provided endpoint of the host containing the given database.
+    HostEndpoint                   *string                   `json:"host_endpoint"`
+    // The Clumio-assigned ID of the host, containing the instance.
+    HostId                         *string                   `json:"host_id"`
+    // The Clumio-assigned ID of the Instance.
+    Id                             *string                   `json:"id"`
+    // The Microsoft SQL assigned name of the instance.
+    Name                           *string                   `json:"name"`
+    // The Clumio-assigned ID of the organizational unit associated with the instance.
+    OrganizationalUnitId           *string                   `json:"organizational_unit_id"`
+    // Product Version of the instance.
+    ProductVersion                 *string                   `json:"product_version"`
+    // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
+    ProtectionInfo                 *ProtectionInfo           `json:"protection_info"`
+    // The Microsoft SQL assigned server name of the instance.
+    ServerName                     *string                   `json:"server_name"`
+    // The status of the Instance, Possible values include 'active' and 'inactive'.
+    Status                         *string                   `json:"status"`
+}
+
+// EC2MSSQLInstanceEmbedded represents a custom type struct.
+// Embedded responses related to the resource.
+type EC2MSSQLInstanceEmbedded struct {
+    // Stats pertaining to the EC2 MSSQL Instance.
+    GetEc2MssqlInstanceStats interface{} `json:"get-ec2-mssql-instance-stats"`
+    // Embeds the associated policy of a protected resource in the response if requested using the `embed` query parameter. Unprotected resources will not have an associated policy.
+    ReadPolicyDefinition     interface{} `json:"read-policy-definition"`
+}
+
+// EC2MSSQLInstanceLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type EC2MSSQLInstanceLinks struct {
+    // The HATEOAS link to this resource.
+    Self                 *HateoasSelfLink                 `json:"_self"`
+    // A HATEOAS link to the policy protecting this resource. Will be omitted for unprotected entities.
+    ReadPolicyDefinition *ReadPolicyDefinitionHateoasLink `json:"read-policy-definition"`
+}
+
+// EC2MSSQLInstanceListEmbedded represents a custom type struct.
+// Embedded responses related to the resource.
+type EC2MSSQLInstanceListEmbedded struct {
+    // TODO: Add struct field description
+    Items []*EC2MSSQLInstance `json:"items"`
+}
+
+// EC2MSSQLInstanceListLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type EC2MSSQLInstanceListLinks struct {
+    // The HATEOAS link to the first page of results.
+    First *HateoasFirstLink `json:"_first"`
+    // The HATEOAS link to the last page of results.
+    Last  *HateoasLastLink  `json:"_last"`
+    // The HATEOAS link to the next page of results.
+    Next  *HateoasNextLink  `json:"_next"`
+    // The HATEOAS link to the previous page of results.
+    Prev  *HateoasPrevLink  `json:"_prev"`
+    // The HATEOAS link to this resource.
+    Self  *HateoasSelfLink  `json:"_self"`
+}
+
+// EC2MSSQLInvHost represents a custom type struct
+type EC2MSSQLInvHost struct {
+    // Embedded responses related to the resource.
+    Embedded                       interface{}           `json:"_embedded"`
+    // EC2MSSQLInvHostLinks contains links related to ec2 mssql host
+    // URLs to pages related to the resource.
+    Links                          *EC2MSSQLInvHostLinks `json:"_links"`
+    // The AWS-assigned ID of the account associated with the EC2 instance of the MSSQL host.
+    AccountNativeId                *string               `json:"account_native_id"`
+    // The AWS region associated with the EC2 instance of the MSSQL host.
+    AwsRegion                      *string               `json:"aws_region"`
+    // The Clumio-assigned ID of the host connection.
+    ConnectionId                   *string               `json:"connection_id"`
+    // The user-provided endpoint of the host containing the given database.
+    Endpoint                       *string               `json:"endpoint"`
+    // The Clumio-assigned ID of the AWS environment associated with the EC2 MSSQL host.
+    EnvironmentId                  *string               `json:"environment_id"`
+    // Determines whether or not an availability group is present in the host.
+    HasAssociatedAvailabilityGroup *bool                 `json:"has_associated_availability_group"`
+    // The Clumio-assigned ID of the Host.
+    Id                             *string               `json:"id"`
+    // The number of instances present in the host.
+    InstanceCount                  *int64                `json:"instance_count"`
+    // IsPartOfFCI is a boolean field representing if the Host is part of Failover Cluster
+    IsPartOfFci                    *bool                 `json:"is_part_of_fci"`
+    // The Clumio-assigned ID of the organizational unit associated with the host.
+    OrganizationalUnitId           *string               `json:"organizational_unit_id"`
+    // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
+    ProtectionInfo                 *ProtectionInfo       `json:"protection_info"`
+    // The status of the Host, Possible values include 'active' and 'inactive'.
+    Status                         *string               `json:"status"`
+}
+
+// EC2MSSQLInvHostLinks represents a custom type struct.
+// EC2MSSQLInvHostLinks contains links related to ec2 mssql host
+// URLs to pages related to the resource.
+type EC2MSSQLInvHostLinks struct {
+    // The HATEOAS link to this resource.
+    Self *HateoasSelfLink `json:"_self"`
+}
+
+// EC2MSSQLInvHostListEmbedded represents a custom type struct.
+// Embedded responses related to the resource.
+type EC2MSSQLInvHostListEmbedded struct {
+    // TODO: Add struct field description
+    Items []*EC2MSSQLInvHost `json:"items"`
+}
+
+// EC2MSSQLInvHostListLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type EC2MSSQLInvHostListLinks struct {
+    // The HATEOAS link to the first page of results.
+    First *HateoasFirstLink `json:"_first"`
+    // The HATEOAS link to the last page of results.
+    Last  *HateoasLastLink  `json:"_last"`
+    // The HATEOAS link to the next page of results.
+    Next  *HateoasNextLink  `json:"_next"`
+    // The HATEOAS link to the previous page of results.
+    Prev  *HateoasPrevLink  `json:"_prev"`
+    // The HATEOAS link to this resource.
+    Self  *HateoasSelfLink  `json:"_self"`
+}
+
 // EC2MSSQLLogBackupAdvancedSetting represents a custom type struct.
 // Additional policy configuration settings for the `ec2_mssql_log_backup` operation. If this operation is not of type `ec2_mssql_log_backup`, then this field is omitted from the response.
 type EC2MSSQLLogBackupAdvancedSetting struct {
@@ -2559,6 +2950,32 @@ type EC2MSSQLRestoreTarget struct {
 type EC2MSSQLTemplateInfo struct {
     // The latest available feature version for the asset.
     AvailableTemplateVersion *string `json:"available_template_version"`
+}
+
+// EC2MssqlDatabasePitrInterval represents a custom type struct
+type EC2MssqlDatabasePitrInterval struct {
+    // End timestamp of the interval. Represented in RFC-3339 format.
+    EndTimestamp   *string `json:"end_timestamp"`
+    // Start timestamp of the interval. Represented in RFC-3339 format.
+    StartTimestamp *string `json:"start_timestamp"`
+}
+
+// EC2MssqlDatabasePitrIntervalListEmbedded represents a custom type struct.
+// Embedded responses related to the resource.
+type EC2MssqlDatabasePitrIntervalListEmbedded struct {
+    // TODO: Add struct field description
+    Items []*EC2MssqlDatabasePitrInterval `json:"items"`
+}
+
+// EC2MssqlDatabasePitrIntervalListLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type EC2MssqlDatabasePitrIntervalListLinks struct {
+    // The HATEOAS link to the first page of results.
+    First *HateoasFirstLink `json:"_first"`
+    // The HATEOAS link to the next page of results.
+    Next  *HateoasNextLink  `json:"_next"`
+    // The HATEOAS link to this resource.
+    Self  *HateoasSelfLink  `json:"_self"`
 }
 
 // EC2RestoreEbsBlockDeviceMapping represents a custom type struct
@@ -4840,6 +5257,8 @@ type ProtectionGroupBucket struct {
     // Cumulative size of all unexpired objects in each backup (any new or updated since
     // the last backup) that have been backed up as part of this protection group
     TotalBackedUpSizeBytes        *int64                         `json:"total_backed_up_size_bytes"`
+    // The unsupported reason for the S3 bucket.
+    UnsupportedReason             *string                        `json:"unsupported_reason"`
 }
 
 // ProtectionGroupBucketEmbedded represents a custom type struct.
@@ -5070,7 +5489,8 @@ type ProtectionGroupS3AssetBackupListLinks struct {
 }
 
 // ProtectionGroupS3AssetRestoreSource represents a custom type struct.
-// The parameters for initiating a protection group S3 asset restore from a backup.
+// The parameters for initiating a protection group S3 asset restore
+// or creation of an instant access endpoint from a backup.
 type ProtectionGroupS3AssetRestoreSource struct {
     // The Clumio-assigned ID of the protection group S3 asset backup to be restored. Use the
     // [GET /backups/protection-groups/s3-assets](#operation/list-backup-protection-group-s3-assets)
@@ -5703,7 +6123,7 @@ type ReportDownload struct {
     FileName            *string `json:"file_name"`
     // The filters applied to the report when download was initiated.
     Filters             *string `json:"filters"`
-    // TODO: Add struct field description
+    // The id of the report that uniquely identifies the report.
     Id                  *string `json:"id"`
     // The time when the request was made.
     StartTimestamp      *string `json:"start_timestamp"`
@@ -5712,6 +6132,15 @@ type ReportDownload struct {
     // The type of report this CSV Download is associated with.
     // The possible values include "activity" and "compliance".
     ClumioType          *string `json:"type"`
+}
+
+// ReportDownloadLinks represents a custom type struct.
+// _links provides URLs to the related resources of a report CSV download
+type ReportDownloadLinks struct {
+    // The HATEOAS link to this resource.
+    Self     *HateoasSelfLink     `json:"_self"`
+    // A HATEOAS link to the task associated with this resource.
+    ReadTask *ReadTaskHateoasLink `json:"read-task"`
 }
 
 // ReportDownloadListEmbedded represents a custom type struct.

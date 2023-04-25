@@ -86,7 +86,7 @@ func (r *ReportDownloadsV1) CreateReportDownload(
         RequestUrl: queryBuilder,
         AcceptHeader: header,
         Body: payload,
-        Result200: &result,
+        Result202: &result,
         RequestType: common.Post,
     })
 

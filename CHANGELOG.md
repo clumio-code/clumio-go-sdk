@@ -1,3 +1,5 @@
+## 0.10.0
+New APIs added for EC2MSSQL.
 ## 0.9.1
 Go version required changed to 1.20
 ## 0.9.0

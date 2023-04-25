@@ -18,10 +18,10 @@ type RestoredAwsEbsVolumesV1 struct {
     config config.Config
 }
 
-// RestoreAwsEbsVolume Restores the specified source EBS volume backup to the specified target destination. The source EBS volume must be one that was backup up by Clumio.
+// RestoreAwsEbsVolume TODO: Add comment
 func (r *RestoredAwsEbsVolumesV1) RestoreAwsEbsVolume(
     body models.RestoreAwsEbsVolumeV1Request)(
-    interface{}, *apiutils.APIError) {
+    *models.RestoreEBSResponseV1, *apiutils.APIError) {
 
     queryBuilder := r.config.BaseUrl + "/restores/aws/ebs-volumes"
 
@@ -35,7 +35,7 @@ func (r *RestoredAwsEbsVolumesV1) RestoreAwsEbsVolume(
     }
     payload := string(bytes)
     header := "application/api.clumio.restored-aws-ebs-volumes=v1+json"
-    var result interface{}
+    result := &models.RestoreEBSResponseV1{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: r.config,

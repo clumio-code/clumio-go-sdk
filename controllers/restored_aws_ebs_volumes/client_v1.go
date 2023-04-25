@@ -10,10 +10,10 @@ import (
 
 // RestoredAwsEbsVolumesV1Client represents a custom type interface
 type RestoredAwsEbsVolumesV1Client interface {
-    // RestoreAwsEbsVolume Restores the specified source EBS volume backup to the specified target destination. The source EBS volume must be one that was backup up by Clumio.
+    // RestoreAwsEbsVolume TODO: Add comment
     RestoreAwsEbsVolume(
         body models.RestoreAwsEbsVolumeV1Request)(
-        interface{},  *apiutils.APIError)
+        *models.RestoreEBSResponseV1,  *apiutils.APIError)
     
 }
 

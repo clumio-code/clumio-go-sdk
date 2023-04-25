@@ -123,6 +123,8 @@ type AddBucketToProtectionGroupResponse struct {
     // Cumulative size of all unexpired objects in each backup (any new or updated since
     // the last backup) that have been backed up as part of this protection group
     TotalBackedUpSizeBytes        *int64  `json:"total_backed_up_size_bytes"`
+    // The unsupported reason for the S3 bucket.
+    UnsupportedReason             *string `json:"unsupported_reason"`
 }
 
 // ChangePasswordResponse represents a custom type struct for Success
@@ -553,10 +555,12 @@ type CreateRdsResourceRestoreResponse struct {
 
 // CreateReportDownloadResponse represents a custom type struct for Success
 type CreateReportDownloadResponse struct {
+    // _links provides URLs to the related resources of a report CSV download
+    Links  *ReportDownloadLinks `json:"_links"`
     // The Clumio-assigned ID of the task created by the request.
     // The progress of the task can be monitored using the
     // [`GET /tasks/{task_id}`](#operation/list-tasks) endpoint.
-    TaskId *string `json:"task_id"`
+    TaskId *string              `json:"task_id"`
 }
 
 // CreateRuleResponse represents a custom type struct for Success
@@ -727,6 +731,8 @@ type DeleteBucketFromProtectionGroupResponse struct {
     // Cumulative size of all unexpired objects in each backup (any new or updated since
     // the last backup) that have been backed up as part of this protection group
     TotalBackedUpSizeBytes        *int64  `json:"total_backed_up_size_bytes"`
+    // The unsupported reason for the S3 bucket.
+    UnsupportedReason             *string `json:"unsupported_reason"`
 }
 
 // DeleteHcmHostResponse represents a custom type struct for Success
@@ -1215,6 +1221,128 @@ type ListEC2MSSQLDatabaseBackupsResponse struct {
     TotalCount      *int64                              `json:"total_count"`
     // The total number of pages of results.
     TotalPagesCount *int64                              `json:"total_pages_count"`
+}
+
+// ListEC2MSSQLDatabasesResponse represents a custom type struct for Success
+type ListEC2MSSQLDatabasesResponse struct {
+    // Embedded responses related to the resource.
+    Embedded        *EC2MSSQLDatabaseListEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links           *EC2MSSQLDatabaseListLinks    `json:"_links"`
+    // The number of items listed on the current page.
+    CurrentCount    *int64                        `json:"current_count"`
+    // The filter used in the request. The filter includes both manually-specified and system-generated filters.
+    FilterApplied   *string                       `json:"filter_applied"`
+    // The maximum number of items displayed per page in the response.
+    Limit           *int64                        `json:"limit"`
+    // The page number used to get this response.
+    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
+    Start           *string                       `json:"start"`
+    // The total number of items, summed across all pages.
+    TotalCount      *int64                        `json:"total_count"`
+    // The total number of pages of results.
+    TotalPagesCount *int64                        `json:"total_pages_count"`
+}
+
+// ListEC2MSSQLFCIsResponse represents a custom type struct for Success
+type ListEC2MSSQLFCIsResponse struct {
+    // Embedded responses related to the resource.
+    Embedded        *EC2MSSQLFCIListEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links           *EC2MSSQLFCIListLinks    `json:"_links"`
+    // The number of items listed on the current page.
+    CurrentCount    *int64                   `json:"current_count"`
+    // The filter used in the request. The filter includes both manually-specified and system-generated filters.
+    FilterApplied   *string                  `json:"filter_applied"`
+    // The maximum number of items displayed per page in the response.
+    Limit           *int64                   `json:"limit"`
+    // The page number used to get this response.
+    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
+    Start           *string                  `json:"start"`
+    // The total number of items, summed across all pages.
+    TotalCount      *int64                   `json:"total_count"`
+    // The total number of pages of results.
+    TotalPagesCount *int64                   `json:"total_pages_count"`
+}
+
+// ListEC2MSSQLInstancesResponse represents a custom type struct for Success
+type ListEC2MSSQLInstancesResponse struct {
+    // Embedded responses related to the resource.
+    Embedded        *EC2MSSQLInstanceListEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links           *EC2MSSQLInstanceListLinks    `json:"_links"`
+    // The number of items listed on the current page.
+    CurrentCount    *int64                        `json:"current_count"`
+    // The filter used in the request. The filter includes both manually-specified and system-generated filters.
+    FilterApplied   *string                       `json:"filter_applied"`
+    // The maximum number of items displayed per page in the response.
+    Limit           *int64                        `json:"limit"`
+    // The page number used to get this response.
+    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
+    Start           *string                       `json:"start"`
+    // The total number of items, summed across all pages.
+    TotalCount      *int64                        `json:"total_count"`
+    // The total number of pages of results.
+    TotalPagesCount *int64                        `json:"total_pages_count"`
+}
+
+// ListEC2MSSQLInvHostsResponse represents a custom type struct for Success
+type ListEC2MSSQLInvHostsResponse struct {
+    // Embedded responses related to the resource.
+    Embedded        *EC2MSSQLInvHostListEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links           *EC2MSSQLInvHostListLinks    `json:"_links"`
+    // The number of items listed on the current page.
+    CurrentCount    *int64                       `json:"current_count"`
+    // The filter used in the request. The filter includes both manually-specified and system-generated filters.
+    FilterApplied   *string                      `json:"filter_applied"`
+    // The maximum number of items displayed per page in the response.
+    Limit           *int64                       `json:"limit"`
+    // The page number used to get this response.
+    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
+    Start           *string                      `json:"start"`
+    // The total number of items, summed across all pages.
+    TotalCount      *int64                       `json:"total_count"`
+    // The total number of pages of results.
+    TotalPagesCount *int64                       `json:"total_pages_count"`
+}
+
+// ListEC2MssqlAGsResponse represents a custom type struct for Success
+type ListEC2MssqlAGsResponse struct {
+    // Embedded responses related to the resource.
+    Embedded        *EC2MSSQLAGListEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links           *EC2MSSQLAGListLinks    `json:"_links"`
+    // The number of items listed on the current page.
+    CurrentCount    *int64                  `json:"current_count"`
+    // The filter used in the request. The filter includes both manually-specified and system-generated filters.
+    FilterApplied   *string                 `json:"filter_applied"`
+    // The maximum number of items displayed per page in the response.
+    Limit           *int64                  `json:"limit"`
+    // The page number used to get this response.
+    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
+    Start           *string                 `json:"start"`
+    // The total number of items, summed across all pages.
+    TotalCount      *int64                  `json:"total_count"`
+    // The total number of pages of results.
+    TotalPagesCount *int64                  `json:"total_pages_count"`
+}
+
+// ListEC2MssqlDatabasePitrIntervalsResponse represents a custom type struct.
+// ListEC2MssqlDatabasePitrIntervalsResponse represents the success response
+type ListEC2MssqlDatabasePitrIntervalsResponse struct {
+    // Embedded responses related to the resource.
+    Embedded      *EC2MssqlDatabasePitrIntervalListEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links         *EC2MssqlDatabasePitrIntervalListLinks    `json:"_links"`
+    // The number of items listed on the current page.
+    CurrentCount  *int64                                    `json:"current_count"`
+    // The filter used in the request. The filter includes both manually-specified and system-generated filters.
+    FilterApplied *string                                   `json:"filter_applied"`
+    // The maximum number of items displayed per page in the response.
+    Limit         *int64                                    `json:"limit"`
+    // The page token used to get this response.
+    Start         *string                                   `json:"start"`
 }
 
 // ListEbsVolumesResponse represents a custom type struct for Success
@@ -3075,6 +3203,191 @@ type ReadEC2MSSQLDatabaseBackupResponse struct {
     ClumioType          *string                         `json:"type"`
 }
 
+// ReadEC2MSSQLDatabaseResponse represents a custom type struct for Success
+type ReadEC2MSSQLDatabaseResponse struct {
+    // Embedded responses related to the resource.
+    Embedded                                *EC2MSSQLDatabaseEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links                                   *EC2MSSQLDatabaseLinks    `json:"_links"`
+    // The AWS-assigned ID of the account associated with the EC2 instance the database resides in.
+    AccountNativeId                         *string                   `json:"account_native_id"`
+    // The Clumio-assigned ID of the availability group. It is null in case of a standalone database.
+    AvailabilityGroupId                     *string                   `json:"availability_group_id"`
+    // The Microsoft SQL assigned name of the availability group. It is null in case of a standalone database.
+    AvailabilityGroupName                   *string                   `json:"availability_group_name"`
+    // The AWS region associated with the EC2 instance the database resides in.
+    AwsRegion                               *string                   `json:"aws_region"`
+    // The policy compliance status of the resource. If the database is not protected,
+    // then this field has a value of `null`. Refer to
+    // 
+    // the Compliance Status table
+    // 
+    // for a complete list of compliance statuses.
+    ComplianceStatus                        *string                   `json:"compliance_status"`
+    // The Clumio-assigned ID of the AWS environment associated with the EC2 MSSQL database.
+    EnvironmentId                           *string                   `json:"environment_id"`
+    // The Clumio-assigned ID of the failover cluster.
+    FailoverClusterId                       *string                   `json:"failover_cluster_id"`
+    // The Microsoft SQL assigned name of the Failover Cluster
+    FailoverClusterName                     *string                   `json:"failover_cluster_name"`
+    // Failovercluster Protection Status is used to indicate the fci protection status associated with the
+    // fci database
+    FailoverClusterProtectionStatus         *string                   `json:"failover_cluster_protection_status"`
+    // The Clumio-assigned ID of the host connection containing the given database.
+    HostConnectionId                        *string                   `json:"host_connection_id"`
+    // The user-provided endpoint of the host containing the given database.
+    HostEndpoint                            *string                   `json:"host_endpoint"`
+    // The Clumio-assigned ID of the host containing the given database.
+    HostId                                  *string                   `json:"host_id"`
+    // The Clumio-assigned ID of the Database.
+    Id                                      *string                   `json:"id"`
+    // The Clumio-assigned ID of the instance containing the given database.
+    InstanceId                              *string                   `json:"instance_id"`
+    // The name of the Microsoft SQL instance containing the given database.
+    InstanceName                            *string                   `json:"instance_name"`
+    // is_supported is true if Clumio supports backup of the database.
+    IsSupported                             *bool                     `json:"is_supported"`
+    // The timestamp of the last time this database was full backed up.
+    // Represented in RFC-3339 format. If this database has never been backed up,
+    // this field has a value of `null`.
+    LastBackupTimestamp                     *string                   `json:"last_backup_timestamp"`
+    // The timestamp of the last time this database was log backed up in Bulk Recovery Model.
+    // Represented in RFC-3339 format. If this database has never been backed up,
+    // this field has a value of `null`.
+    LastBulkRecoveryModelLogBackupTimestamp *string                   `json:"last_bulk_recovery_model_log_backup_timestamp"`
+    // The timestamp of the last time this database was log backed up in Full Recovery Model.
+    // Represented in RFC-3339 format. If this database has never been backed up,
+    // this field has a value of `null`.
+    LastFullRecoveryModelLogBackupTimestamp *string                   `json:"last_full_recovery_model_log_backup_timestamp"`
+    // The name of the Database.
+    Name                                    *string                   `json:"name"`
+    // The Clumio-assigned ID of the organizational unit associated with the database.
+    OrganizationalUnitId                    *string                   `json:"organizational_unit_id"`
+    // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
+    ProtectionInfo                          *ProtectionInfo           `json:"protection_info"`
+    // recovery_model is the recovery model of the database. Possible values include 'simple_recovery_model',
+    // 'bulk_recovery_model', and 'full_recovery_model'.
+    RecoveryModel                           *string                   `json:"recovery_model"`
+    // The size of the Database.
+    Size                                    *float64                  `json:"size"`
+    // The status of the database, Possible values include 'active' and 'inactive'.
+    Status                                  *string                   `json:"status"`
+    // The type of the database. Possible values include 'availability_group_database' and 'standalone_database'.
+    ClumioType                              *string                   `json:"type"`
+    // unsupported_reason is the reason why Clumio doesn't support backup of such database,
+    // possible values include 'filestream_enabled_database'.
+    UnsupportedReason                       *string                   `json:"unsupported_reason"`
+}
+
+// ReadEC2MSSQLFCIResponse represents a custom type struct for Success
+type ReadEC2MSSQLFCIResponse struct {
+    // Embedded responses related to the resource.
+    Embedded             *EC2MSSQLFCIEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links                *EC2MSSQLFCILinks    `json:"_links"`
+    // ComplianceStatus of the resource
+    ComplianceStatus     *string              `json:"compliance_status"`
+    // The Clumio-assigned ID of the failover cluster.
+    Id                   *string              `json:"id"`
+    // The Microsoft SQL-assigned name of the failover cluster.
+    Name                 *string              `json:"name"`
+    // The Clumio-assigned ID of the organizational unit associated with the FCI.
+    OrganizationalUnitId *string              `json:"organizational_unit_id"`
+    // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
+    ProtectionInfo       *ProtectionInfo      `json:"protection_info"`
+    // ProtectionStatus of the FCI
+    ProtectionStatus     *string              `json:"protection_status"`
+    // The status of the FCI, Possible values include 'active' and 'inactive'.
+    Status               *string              `json:"status"`
+}
+
+// ReadEC2MSSQLInstanceResponse represents a custom type struct for Success
+type ReadEC2MSSQLInstanceResponse struct {
+    // Embedded responses related to the resource.
+    Embedded                       *EC2MSSQLInstanceEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links                          *EC2MSSQLInstanceLinks    `json:"_links"`
+    // The AWS-assigned ID of the account associated with the EC2 instance of the MSSQL instance.
+    AccountNativeId                *string                   `json:"account_native_id"`
+    // The AWS region associated with the EC2 instance of the MSSQL instance.
+    AwsRegion                      *string                   `json:"aws_region"`
+    // The Clumio-assigned ID of the AWS environment associated with the EC2 MSSQL instance.
+    EnvironmentId                  *string                   `json:"environment_id"`
+    // The boolean value represents if availability group is present in the instance.
+    HasAssociatedAvailabilityGroup *bool                     `json:"has_associated_availability_group"`
+    // The Clumio-assigned ID of the host connection containing the given mssql instance.
+    HostConnectionId               *string                   `json:"host_connection_id"`
+    // The user-provided endpoint of the host containing the given database.
+    HostEndpoint                   *string                   `json:"host_endpoint"`
+    // The Clumio-assigned ID of the host, containing the instance.
+    HostId                         *string                   `json:"host_id"`
+    // The Clumio-assigned ID of the Instance.
+    Id                             *string                   `json:"id"`
+    // The Microsoft SQL assigned name of the instance.
+    Name                           *string                   `json:"name"`
+    // The Clumio-assigned ID of the organizational unit associated with the instance.
+    OrganizationalUnitId           *string                   `json:"organizational_unit_id"`
+    // Product Version of the instance.
+    ProductVersion                 *string                   `json:"product_version"`
+    // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
+    ProtectionInfo                 *ProtectionInfo           `json:"protection_info"`
+    // The Microsoft SQL assigned server name of the instance.
+    ServerName                     *string                   `json:"server_name"`
+    // The status of the Instance, Possible values include 'active' and 'inactive'.
+    Status                         *string                   `json:"status"`
+}
+
+// ReadEC2MSSQLInvHostResponse represents a custom type struct for Success
+type ReadEC2MSSQLInvHostResponse struct {
+    // Embedded responses related to the resource.
+    Embedded                       interface{}           `json:"_embedded"`
+    // EC2MSSQLInvHostLinks contains links related to ec2 mssql host
+    // URLs to pages related to the resource.
+    Links                          *EC2MSSQLInvHostLinks `json:"_links"`
+    // The AWS-assigned ID of the account associated with the EC2 instance of the MSSQL host.
+    AccountNativeId                *string               `json:"account_native_id"`
+    // The AWS region associated with the EC2 instance of the MSSQL host.
+    AwsRegion                      *string               `json:"aws_region"`
+    // The Clumio-assigned ID of the host connection.
+    ConnectionId                   *string               `json:"connection_id"`
+    // The user-provided endpoint of the host containing the given database.
+    Endpoint                       *string               `json:"endpoint"`
+    // The Clumio-assigned ID of the AWS environment associated with the EC2 MSSQL host.
+    EnvironmentId                  *string               `json:"environment_id"`
+    // Determines whether or not an availability group is present in the host.
+    HasAssociatedAvailabilityGroup *bool                 `json:"has_associated_availability_group"`
+    // The Clumio-assigned ID of the Host.
+    Id                             *string               `json:"id"`
+    // The number of instances present in the host.
+    InstanceCount                  *int64                `json:"instance_count"`
+    // IsPartOfFCI is a boolean field representing if the Host is part of Failover Cluster
+    IsPartOfFci                    *bool                 `json:"is_part_of_fci"`
+    // The Clumio-assigned ID of the organizational unit associated with the host.
+    OrganizationalUnitId           *string               `json:"organizational_unit_id"`
+    // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
+    ProtectionInfo                 *ProtectionInfo       `json:"protection_info"`
+    // The status of the Host, Possible values include 'active' and 'inactive'.
+    Status                         *string               `json:"status"`
+}
+
+// ReadEC2MssqlAGResponse represents a custom type struct for Success
+type ReadEC2MssqlAGResponse struct {
+    // Embedded responses related to the resource.
+    Embedded             *EC2MSSQLAGEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links                *EC2MSSQLAGLinks    `json:"_links"`
+    // The Clumio-assigned ID of the availability group.
+    Id                   *string             `json:"id"`
+    // The Microsoft SQL-assigned name of the availability group.
+    Name                 *string             `json:"name"`
+    // The Clumio-assigned ID of the organizational unit associated with the availability group.
+    OrganizationalUnitId *string             `json:"organizational_unit_id"`
+    // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
+    ProtectionInfo       *ProtectionInfo     `json:"protection_info"`
+    // The status of the availability group, Possible values include 'active' and 'inactive'.
+    Status               *string             `json:"status"`
+}
+
 // ReadEbsTagComplianceStatsResponse represents a custom type struct for Success
 type ReadEbsTagComplianceStatsResponse struct {
     // The total number of compliant entities.
@@ -3895,6 +4208,8 @@ type ReadProtectionGroupS3AssetResponse struct {
     // Cumulative size of all unexpired objects in each backup (any new or updated since
     // the last backup) that have been backed up as part of this protection group
     TotalBackedUpSizeBytes        *int64                         `json:"total_backed_up_size_bytes"`
+    // The unsupported reason for the S3 bucket.
+    UnsupportedReason             *string                        `json:"unsupported_reason"`
 }
 
 // ReadRDSDatabaseTableColumnsResponse represents a custom type struct for Success
@@ -4788,6 +5103,12 @@ type RestoreEBSResponse struct {
     // The progress of the task can be monitored using the
     // `GET /tasks/{task_id}` endpoint.
     TaskId   *string                       `json:"task_id"`
+}
+
+// RestoreEBSResponseV1 represents a custom type struct for Success
+type RestoreEBSResponseV1 struct {
+    // HateoasCommonLinks are the common fields for HATEOAS response.
+    Links *HateoasCommonLinks `json:"_links"`
 }
 
 // RestoreEC2Response represents a custom type struct for Success

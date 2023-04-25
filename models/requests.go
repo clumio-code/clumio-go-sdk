@@ -856,7 +856,6 @@ type CreateReportDownloadV1Request struct {
     //  
     // For more information about filtering, refer to the
     // Filtering section of this guide.
-    // in: query
     Filter     *string `json:"filter"`
     // The report type. Examples of report types include, "activity",
     // "compliance", "audit", and "consumption".
@@ -991,7 +990,8 @@ type RestoreProtectionGroupV1Request struct {
 
 // RestoreProtectionGroupS3AssetV1Request represents a custom type struct
 type RestoreProtectionGroupS3AssetV1Request struct {
-    // The parameters for initiating a protection group S3 asset restore from a backup.
+    // The parameters for initiating a protection group S3 asset restore
+    // or creation of an instant access endpoint from a backup.
     Source *ProtectionGroupS3AssetRestoreSource `json:"source"`
     // The destination where the protection group will be restored.
     Target *ProtectionGroupRestoreTarget        `json:"target"`
