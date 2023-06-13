@@ -5095,10 +5095,6 @@ type ProtectionGroup struct {
     BucketRule                    *string                               `json:"bucket_rule"`
     // The compliance statistics of workloads associated with this entity.
     ComplianceStats               *ProtectionComplianceStatsWithSeeding `json:"compliance_stats"`
-    // The compliance status of the protected protection group. Possible values include
-    // "compliant" and "noncompliant". If the table is not protected, then this field has
-    // a value of `null`.
-    ComplianceStatus              *string                               `json:"compliance_status"`
     // Creation time of the protection group in RFC-3339 format.
     CreatedTimestamp              *string                               `json:"created_timestamp"`
     // The user-assigned description of the protection group.
@@ -7477,6 +7473,17 @@ type UpdatePolicyResponseLinks struct {
     Self     *HateoasSelfLink     `json:"_self"`
     // A HATEOAS link to the task associated with this resource.
     ReadTask *ReadTaskHateoasLink `json:"read-task"`
+}
+
+// UpdateProtectionGroupAssignments represents a custom type struct.
+// UpdateProtectionGroupAssignments denotes the protection groups to be assigned or
+// unassigned.
+// Updates to the protection group assignments.
+type UpdateProtectionGroupAssignments struct {
+    // List of protection group IDs to assign to this organizational unit.
+    Assign   []*string `json:"assign"`
+    // List of protection group IDs to un-assign from this organizational unit.
+    Unassign []*string `json:"unassign"`
 }
 
 // UpdateRuleResponseLinks represents a custom type struct.

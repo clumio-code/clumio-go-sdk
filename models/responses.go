@@ -4076,10 +4076,6 @@ type ReadProtectionGroupResponse struct {
     BucketRule                    *string                               `json:"bucket_rule"`
     // The compliance statistics of workloads associated with this entity.
     ComplianceStats               *ProtectionComplianceStatsWithSeeding `json:"compliance_stats"`
-    // The compliance status of the protected protection group. Possible values include
-    // "compliant" and "noncompliant". If the table is not protected, then this field has
-    // a value of `null`.
-    ComplianceStatus              *string                               `json:"compliance_status"`
     // Creation time of the protection group in RFC-3339 format.
     CreatedTimestamp              *string                               `json:"created_timestamp"`
     // The user-assigned description of the protection group.

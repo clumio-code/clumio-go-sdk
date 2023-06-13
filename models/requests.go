@@ -249,15 +249,19 @@ type CreateOrganizationalUnitV1Request struct {
 // PatchOrganizationalUnitV2Request represents a custom type struct
 type PatchOrganizationalUnitV2Request struct {
     // A description of the organizational unit.
-    Description *string                        `json:"description"`
+    Description      *string                           `json:"description"`
     // Updates to the entities in the organizational unit.
     // Adding or removing entities from the OU is an asynchronous operation.
     // The response has a task ID which can be used to track the progress of the operation.
-    Entities    *UpdateEntities                `json:"entities"`
+    Entities         *UpdateEntities                   `json:"entities"`
     // Unique name assigned to the organizational unit.
-    Name        *string                        `json:"name"`
+    Name             *string                           `json:"name"`
+    // UpdateProtectionGroupAssignments denotes the protection groups to be assigned or
+    // unassigned.
+    // Updates to the protection group assignments.
+    ProtectionGroups *UpdateProtectionGroupAssignments `json:"protection_groups"`
     // UpdateUserAssignmentsWithRole denotes the users to be added or removed along with the role.
-    Users       *UpdateUserAssignmentsWithRole `json:"users"`
+    Users            *UpdateUserAssignmentsWithRole    `json:"users"`
 }
 
 // PatchOrganizationalUnitV1Request represents a custom type struct
