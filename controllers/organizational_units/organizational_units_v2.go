@@ -194,10 +194,11 @@ func (o *OrganizationalUnitsV2) DeleteOrganizationalUnit(
 
 
 // PatchOrganizationalUnit Patch the specified organizational unit.
-//  The complete updated attribute(s) of the organizational unit have to be provided in the request.
-//  Adding or removing entities from the OU is an asynchronous operation and has a task associated.
-//  When the request has entities to be added or removed, the response has a task ID
-//  which can be used to track the progress of the operation.
+//  The complete updated attribute(s) of the organizational unit must be provided in
+//  the request. Adding or removing entities from the OU is an asynchronous operation
+//  and has an associated task. When the request has entities to be added or removed,
+//  the response contains a task ID that can be used to track the progress of the
+//  operation.
 func (o *OrganizationalUnitsV2) PatchOrganizationalUnit(
     id string, 
     embed *string, 

@@ -1070,17 +1070,22 @@ type ConsolidatedAlertWithETag struct {
 type ConsolidatedConfig struct {
     // The asset types supported on the current version of the feature
     AssetTypesEnabled        []*string              `json:"asset_types_enabled"`
-    // TODO: Add struct field description
+    // DynamodbAssetInfo
+    // The installed information for the DynamoDB feature.
     Dynamodb                 *DynamodbAssetInfo     `json:"dynamodb"`
-    // TODO: Add struct field description
+    // EbsAssetInfo
+    // The installed information for the EBS feature.
     Ebs                      *EbsAssetInfo          `json:"ebs"`
-    // TODO: Add struct field description
+    // EC2MSSQLProtectConfig
+    // The installed information for the EC2_MSSQL feature.
     Ec2Mssql                 *EC2MSSQLProtectConfig `json:"ec2_mssql"`
     // The current version of the feature.
     InstalledTemplateVersion *string                `json:"installed_template_version"`
-    // TODO: Add struct field description
+    // RdsAssetInfo
+    // The installed information for the RDS feature.
     Rds                      *RdsAssetInfo          `json:"rds"`
-    // TODO: Add struct field description
+    // S3AssetInfo
+    // The installed information for the S3 feature.
     S3                       *S3AssetInfo           `json:"s3"`
     // The configuration of the Clumio Cloud Warm-Tier Protect product for this connection.
     WarmTierProtect          *WarmTierProtectConfig `json:"warm_tier_protect"`
@@ -1882,7 +1887,9 @@ type DynamoDBTableRestoreTarget struct {
     Tags                   []*AwsTagCommonModel    `json:"tags"`
 }
 
-// DynamodbAssetInfo represents a custom type struct
+// DynamodbAssetInfo represents a custom type struct.
+// DynamodbAssetInfo
+// The installed information for the DynamoDB feature.
 type DynamodbAssetInfo struct {
     // The current version of the feature.
     InstalledTemplateVersion *string `json:"installed_template_version"`
@@ -2902,7 +2909,9 @@ type EC2MSSQLPITROptions struct {
     Timestamp  *string `json:"timestamp"`
 }
 
-// EC2MSSQLProtectConfig represents a custom type struct
+// EC2MSSQLProtectConfig represents a custom type struct.
+// EC2MSSQLProtectConfig
+// The installed information for the EC2_MSSQL feature.
 type EC2MSSQLProtectConfig struct {
     // The current version of the feature.
     InstalledTemplateVersion *string `json:"installed_template_version"`
@@ -2933,16 +2942,22 @@ type EC2MSSQLRestoreTarget struct {
     // The target location within the instance to restore data files. For example,
     // `C:\\Programe Files\clumio\restored-data-files\`. If this field is empty, we
     // will restore data files into the same location as the source database.
-    DataFilesPath *string `json:"data_files_path"`
+    DataFilesPath        *string `json:"data_files_path"`
     // The user-assigned name of the database.
-    DatabaseName  *string `json:"database_name"`
+    DatabaseName         *string `json:"database_name"`
+    // Final database state after clumio restored the database. If final_database_state
+    // is set to empty then clumio will make database in online state.
+    // Possible vales are `RESTORING` or `ONLINE`
+    FinalDatabaseState   *string `json:"final_database_state"`
     // The Clumio-assigned ID of the instance to restore the database into.
     // Use the [GET /datasources/aws/ec2-mssql/instances](#operation/list-ec2-mssql-instances) to fetch valid values.
-    InstanceId    *string `json:"instance_id"`
+    InstanceId           *string `json:"instance_id"`
     // The target location within the instance to restore log files. For example,
     // `C:\\Programe Files\clumio\restored-log-files\`. If this field is empty, we
     // will restore log files into the same location as the source database.
-    LogFilesPath  *string `json:"log_files_path"`
+    LogFilesPath         *string `json:"log_files_path"`
+    // The boolean value represent if restore is database as a new database.
+    RestoreAsNewDatabase *bool   `json:"restore_as_new_database"`
 }
 
 // EC2MSSQLTemplateInfo represents a custom type struct.
@@ -3055,7 +3070,9 @@ type EC2VolumesRestoreTarget struct {
     TargetInstanceNativeId *string                            `json:"target_instance_native_id"`
 }
 
-// EbsAssetInfo represents a custom type struct
+// EbsAssetInfo represents a custom type struct.
+// EbsAssetInfo
+// The installed information for the EBS feature.
 type EbsAssetInfo struct {
     // The current version of the feature.
     InstalledTemplateVersion *string `json:"installed_template_version"`
@@ -5023,11 +5040,13 @@ type Projection struct {
 type ProtectConfig struct {
     // The asset types supported on the current version of the feature
     AssetTypesEnabled        []*string     `json:"asset_types_enabled"`
-    // TODO: Add struct field description
+    // EbsAssetInfo
+    // The installed information for the EBS feature.
     Ebs                      *EbsAssetInfo `json:"ebs"`
     // The current version of the feature.
     InstalledTemplateVersion *string       `json:"installed_template_version"`
-    // TODO: Add struct field description
+    // RdsAssetInfo
+    // The installed information for the RDS feature.
     Rds                      *RdsAssetInfo `json:"rds"`
 }
 
@@ -5095,10 +5114,6 @@ type ProtectionGroup struct {
     BucketRule                    *string                               `json:"bucket_rule"`
     // The compliance statistics of workloads associated with this entity.
     ComplianceStats               *ProtectionComplianceStatsWithSeeding `json:"compliance_stats"`
-    // The compliance status of the protected protection group. Possible values include
-    // "compliant" and "noncompliant". If the table is not protected, then this field has
-    // a value of `null`.
-    ComplianceStatus              *string                               `json:"compliance_status"`
     // Creation time of the protection group in RFC-3339 format.
     CreatedTimestamp              *string                               `json:"created_timestamp"`
     // The user-assigned description of the protection group.
@@ -5259,6 +5274,55 @@ type ProtectionGroupBucket struct {
     TotalBackedUpSizeBytes        *int64                         `json:"total_backed_up_size_bytes"`
     // The unsupported reason for the S3 bucket.
     UnsupportedReason             *string                        `json:"unsupported_reason"`
+}
+
+// ProtectionGroupBucketContinuousBackupStats represents a custom type struct.
+// ProtectionGroupBucketContinuousBackupStats
+type ProtectionGroupBucketContinuousBackupStats struct {
+    // The end time for the continuous backup stats in RFC-3339 format.
+    BackupEndTime                    *string `json:"backup_end_time"`
+    // The start time for the continuous backup stats in RFC-3339 format.
+    BackupStartTime                  *string `json:"backup_start_time"`
+    // The number of objects in the continuous backup task successfully deleted.
+    DeletedObjectsCount              *uint64 `json:"deleted_objects_count"`
+    // The total size in bytes of objects in the continuous backup task successfully deleted.
+    DeletedObjectsSize               *uint64 `json:"deleted_objects_size"`
+    // The number of failed continuous backup task executions.
+    FailedContinuousBackupsCount     *uint32 `json:"failed_continuous_backups_count"`
+    // The number of objects in the continuous backup task failed to be backed up.
+    FailedObjectsCount               *uint64 `json:"failed_objects_count"`
+    // The total size in bytes of objects in the continuous backup task failed to be backed up.
+    FailedObjectsSize                *uint64 `json:"failed_objects_size"`
+    // The number of included objects after the protection group filter.
+    FilteredInCount                  *uint64 `json:"filtered_in_count"`
+    // The total size in bytes of included objects after the protection group filter.
+    FilteredInSize                   *uint64 `json:"filtered_in_size"`
+    // The number of excluded objects after the protection group filter.
+    FilteredOutCount                 *uint64 `json:"filtered_out_count"`
+    // The total size in bytes of excluded objects after the protection group filter.
+    FilteredOutSize                  *uint64 `json:"filtered_out_size"`
+    // The number of objects in the continuous backup task missed to be backed up.
+    MissingObjectsCount              *uint64 `json:"missing_objects_count"`
+    // The total size in bytes of objects in the continuous backup task missed to be backed up.
+    MissingObjectsSize               *uint64 `json:"missing_objects_size"`
+    // The number of ongoing continuous backup task executions.
+    OngoingContinuousBackupsCount    *uint32 `json:"ongoing_continuous_backups_count"`
+    // The number of successful continuous backup task executions.
+    SuccessfulContinuousBackupsCount *uint32 `json:"successful_continuous_backups_count"`
+    // The number of objects in the continuous backup task successfully backed up.
+    SuccessfulObjectsCount           *uint64 `json:"successful_objects_count"`
+    // The total size in bytes of objects in the continuous backup task successfully backed up.
+    SuccessfulObjectsSize            *uint64 `json:"successful_objects_size"`
+    // The number of total continuous backup task executions.
+    TotalContinuousBackupsCount      *uint32 `json:"total_continuous_backups_count"`
+}
+
+// ProtectionGroupBucketContinuousBackupStatsLinks represents a custom type struct.
+// ProtectionGroupBucketContinuousBackupStatsLinks
+// URLs to pages related to the resources.
+type ProtectionGroupBucketContinuousBackupStatsLinks struct {
+    // The HATEOAS link to this resource.
+    Self *HateoasSelfLink `json:"_self"`
 }
 
 // ProtectionGroupBucketEmbedded represents a custom type struct.
@@ -5736,7 +5800,9 @@ type RPOBackupSLAParam struct {
     Value   *int64   `json:"value"`
 }
 
-// RdsAssetInfo represents a custom type struct
+// RdsAssetInfo represents a custom type struct.
+// RdsAssetInfo
+// The installed information for the RDS feature.
 type RdsAssetInfo struct {
     // The current version of the feature.
     InstalledTemplateVersion *string `json:"installed_template_version"`
@@ -6676,7 +6742,9 @@ type S3AccessControlTranslation struct {
     Owner *string `json:"owner"`
 }
 
-// S3AssetInfo represents a custom type struct
+// S3AssetInfo represents a custom type struct.
+// S3AssetInfo
+// The installed information for the S3 feature.
 type S3AssetInfo struct {
     // The current version of the feature.
     InstalledTemplateVersion *string `json:"installed_template_version"`
@@ -7477,6 +7545,17 @@ type UpdatePolicyResponseLinks struct {
     Self     *HateoasSelfLink     `json:"_self"`
     // A HATEOAS link to the task associated with this resource.
     ReadTask *ReadTaskHateoasLink `json:"read-task"`
+}
+
+// UpdateProtectionGroupAssignments represents a custom type struct.
+// UpdateProtectionGroupAssignments denotes the protection groups to be assigned or
+// unassigned.
+// Updates to the protection group assignments.
+type UpdateProtectionGroupAssignments struct {
+    // List of protection group IDs to assign to this organizational unit.
+    Assign   []*string `json:"assign"`
+    // List of protection group IDs to un-assign from this organizational unit.
+    Unassign []*string `json:"unassign"`
 }
 
 // UpdateRuleResponseLinks represents a custom type struct.
@@ -8545,7 +8624,8 @@ type WalletListLinks struct {
 // WarmTierProtectConfig represents a custom type struct.
 // The configuration of the Clumio Cloud Warm-Tier Protect product for this connection.
 type WarmTierProtectConfig struct {
-    // TODO: Add struct field description
+    // DynamodbAssetInfo
+    // The installed information for the DynamoDB feature.
     Dynamodb                 *DynamodbAssetInfo `json:"dynamodb"`
     // The current version of the feature.
     InstalledTemplateVersion *string            `json:"installed_template_version"`

@@ -22,6 +22,16 @@ type ProtectionGroupsS3AssetsV1Client interface {
         protectionGroupS3AssetId string)(
         *models.ReadProtectionGroupS3AssetResponse,  *apiutils.APIError)
     
+    // ReadProtectionGroupS3AssetContinuousBackupStats Returns continuous backup statistics of the specified protection group S3 asset.
+    ReadProtectionGroupS3AssetContinuousBackupStats(
+        protectionGroupS3AssetId string, 
+        bucketName *string, 
+        bucketId *string, 
+        beginTimestamp string, 
+        endTimestamp string, 
+        interval *string)(
+        *models.ReadProtectionGroupS3AssetContinuousBackupStatsResponse,  *apiutils.APIError)
+    
 }
 
 // NewProtectionGroupsS3AssetsV1 returns ProtectionGroupsS3AssetsV1Client

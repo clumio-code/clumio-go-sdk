@@ -88,3 +88,57 @@ func (p *ProtectionGroupsS3AssetsV1) ReadProtectionGroupS3Asset(
 
     return result, apiErr
 }
+
+
+// ReadProtectionGroupS3AssetContinuousBackupStats Returns continuous backup statistics of the specified protection group S3 asset.
+func (p *ProtectionGroupsS3AssetsV1) ReadProtectionGroupS3AssetContinuousBackupStats(
+    protectionGroupS3AssetId string, 
+    bucketName *string, 
+    bucketId *string, 
+    beginTimestamp string, 
+    endTimestamp string, 
+    interval *string)(
+    *models.ReadProtectionGroupS3AssetContinuousBackupStatsResponse, *apiutils.APIError) {
+
+    pathURL := "/datasources/protection-groups/s3-assets/{protection_group_s3_asset_id}/continuous-backup-stats"
+    //process optional template parameters
+    pathParams := map[string]string{
+        "protection_group_s3_asset_id": protectionGroupS3AssetId,
+    }
+    queryBuilder := p.config.BaseUrl + pathURL
+
+    
+    header := "application/api.clumio.protection-groups-s3-assets=v1+json"
+    result := &models.ReadProtectionGroupS3AssetContinuousBackupStatsResponse{}
+    defaultString := "" 
+    
+    if bucketName == nil {
+        bucketName = &defaultString
+    }
+    if bucketId == nil {
+        bucketId = &defaultString
+    }
+    if interval == nil {
+        interval = &defaultString
+    }
+    
+    queryParams := map[string]string{
+        "bucketName": *bucketName,
+        "bucketId": *bucketId,
+        "beginTimestamp": beginTimestamp,
+        "endTimestamp": endTimestamp,
+        "interval": *interval,
+    }
+
+    apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
+        Config: p.config,
+        RequestUrl: queryBuilder,
+        QueryParams: queryParams,
+        PathParams: pathParams,
+        AcceptHeader: header,
+        Result200: &result,
+        RequestType: common.Get,
+    })
+
+    return result, apiErr
+}

@@ -4076,10 +4076,6 @@ type ReadProtectionGroupResponse struct {
     BucketRule                    *string                               `json:"bucket_rule"`
     // The compliance statistics of workloads associated with this entity.
     ComplianceStats               *ProtectionComplianceStatsWithSeeding `json:"compliance_stats"`
-    // The compliance status of the protected protection group. Possible values include
-    // "compliant" and "noncompliant". If the table is not protected, then this field has
-    // a value of `null`.
-    ComplianceStatus              *string                               `json:"compliance_status"`
     // Creation time of the protection group in RFC-3339 format.
     CreatedTimestamp              *string                               `json:"created_timestamp"`
     // The user-assigned description of the protection group.
@@ -4152,6 +4148,17 @@ type ReadProtectionGroupS3AssetBackupResponse struct {
     StartTimestamp           *string                            `json:"start_timestamp"`
     // The type of backup. Possible values include `protection_group_s3_asset_backup`.
     ClumioType               *string                            `json:"type"`
+}
+
+// ReadProtectionGroupS3AssetContinuousBackupStatsResponse represents a custom type struct for Success
+type ReadProtectionGroupS3AssetContinuousBackupStatsResponse struct {
+    // ProtectionGroupBucketContinuousBackupStatsLinks
+    // URLs to pages related to the resources.
+    Links      *ProtectionGroupBucketContinuousBackupStatsLinks `json:"_links"`
+    // ProtectionGroupBucketContinuousBackupStats
+    Bins       []*ProtectionGroupBucketContinuousBackupStats    `json:"bins"`
+    // ProtectionGroupBucketContinuousBackupStats
+    TotalStats *ProtectionGroupBucketContinuousBackupStats      `json:"total_stats"`
 }
 
 // ReadProtectionGroupS3AssetResponse represents a custom type struct for Success
