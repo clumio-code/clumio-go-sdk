@@ -156,7 +156,7 @@ type CreateAWSConnectionResponse struct {
     ConnectionStatus         *string             `json:"connection_status"`
     // The timestamp of when the connection was created.
     CreatedTimestamp         *string             `json:"created_timestamp"`
-    // An optional, user-provided description for this connection.
+    // The user-provided description for this connection.
     Description              *string             `json:"description"`
     // The configuration of the Clumio Discover product for this connection.
     // If this connection is not configured for Clumio Discover, then this field has a
@@ -2485,7 +2485,7 @@ type ReadAWSConnectionResponse struct {
     ConnectionStatus         *string             `json:"connection_status"`
     // The timestamp of when the connection was created.
     CreatedTimestamp         *string             `json:"created_timestamp"`
-    // An optional, user-provided description for this connection.
+    // The user-provided description for this connection.
     Description              *string             `json:"description"`
     // The configuration of the Clumio Discover product for this connection.
     // If this connection is not configured for Clumio Discover, then this field has a
@@ -5313,7 +5313,7 @@ type UpdateAWSConnectionResponse struct {
     ConnectionStatus         *string             `json:"connection_status"`
     // The timestamp of when the connection was created.
     CreatedTimestamp         *string             `json:"created_timestamp"`
-    // An optional, user-provided description for this connection.
+    // The user-provided description for this connection.
     Description              *string             `json:"description"`
     // The configuration of the Clumio Discover product for this connection.
     // If this connection is not configured for Clumio Discover, then this field has a

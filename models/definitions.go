@@ -26,7 +26,7 @@ type AWSConnection struct {
     ConnectionStatus         *string             `json:"connection_status"`
     // The timestamp of when the connection was created.
     CreatedTimestamp         *string             `json:"created_timestamp"`
-    // An optional, user-provided description for this connection.
+    // The user-provided description for this connection.
     Description              *string             `json:"description"`
     // The configuration of the Clumio Discover product for this connection.
     // If this connection is not configured for Clumio Discover, then this field has a
@@ -4473,28 +4473,31 @@ type OULinks struct {
 // Object defines one object to restore
 type Object struct {
     // Bucket the object belongs to
-    Bucket           *string `json:"bucket"`
+    Bucket                 *string `json:"bucket"`
     // Etag of the contents of the object.
-    Etag             *string `json:"etag"`
+    Etag                   *string `json:"etag"`
     // Last time the object was backed up as an RFC3339 string.
-    LastBackupTime   *string `json:"last_backup_time"`
+    LastBackupTime         *string `json:"last_backup_time"`
     // Last modified time of the object as an RFC3339 string.
-    LastModifiedTime *string `json:"last_modified_time"`
+    LastModifiedTime       *string `json:"last_modified_time"`
     // Object key
-    ObjectKey        *string `json:"object_key"`
+    ObjectKey              *string `json:"object_key"`
+    // The Clumio-assigned ID of a protection group S3 asset,
+    // which represents the bucket within the protection group to restore from.
+    ProtectionGroupAssetId *string `json:"protection_group_asset_id"`
     // region of the backup object
-    Region           *string `json:"region"`
+    Region                 *string `json:"region"`
     // Encrypted metadata for the object to be restored 
     // You can get `restore_cookie` via
     // [POST /restores/protection-groups/{protection_group_id}/previews](#operation/preview-protection-group)
-    RestoreCookie    *string `json:"restore_cookie"`
+    RestoreCookie          *string `json:"restore_cookie"`
     // Size in Bytes
-    SizeInBytes      *int64  `json:"size_in_bytes"`
+    SizeInBytes            *int64  `json:"size_in_bytes"`
     // Storage class. Valid values are: `S3 Standard`, `S3 Standard-IA`, `S3 Intelligent-Tiering`,
     // and `S3 One Zone-IA`.
-    StorageClass     *string `json:"storage_class"`
+    StorageClass           *string `json:"storage_class"`
     // Version ID
-    VersionId        *string `json:"version_id"`
+    VersionId              *string `json:"version_id"`
 }
 
 // ObjectFilter represents a custom type struct.
