@@ -8,7 +8,7 @@ information on how to build and use the SDK.
 
 ## Requirements
 
-The library requires GO 1.20 and higher. Third-party libraries are also required.
+The library requires GO 1.16 and higher. Third-party libraries are also required.
 
 ### Install
 ```
