@@ -102,7 +102,7 @@ type CreateAwsConnectionV1Request struct {
     AccountNativeId          *string   `json:"account_native_id"`
     // The AWS region associated with the connection. For example, `us-east-1`.
     AwsRegion                *string   `json:"aws_region"`
-    // An optional, user-provided description for this connection.
+    // The user-provided description for this connection.
     Description              *string   `json:"description"`
     // The Clumio-assigned ID of the organizational unit associated with the
     // AWS environment. If this parameter is not provided, then the value
@@ -110,8 +110,9 @@ type CreateAwsConnectionV1Request struct {
     // user. For more information about organizational units, refer to the
     // Organizational-Units documentation.
     OrganizationalUnitId     *string   `json:"organizational_unit_id"`
-    // The asset types enabled for protect.
+    // The asset types for which Clumio protect is enabled.
     // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
+    // If an empty list is provided, all assets are selected for protection.
     ProtectAssetTypesEnabled []*string `json:"protect_asset_types_enabled"`
     // The services to be enabled for this configuration. Valid values are
     // ["discover"], ["discover", "protect"]. This is only set when the
@@ -204,8 +205,12 @@ type CreateMssqlHostConnectionCredentialsV1Request struct {
 // SetBucketPropertiesV1Request represents a custom type struct.
 // The set of properties that are being updated for the given bucket.
 type SetBucketPropertiesV1Request struct {
-    // True if enabling the bucket for continuous backup, false if disabling
-    EventBridgeEnabled *bool `json:"event_bridge_enabled"`
+    // If true, enables continuous backup for the given bucket.
+    // If false, disables continuous backup for the given bucket.
+    EventBridgeEnabled              *bool `json:"event_bridge_enabled"`
+    // If true, tries to disable EventBridge notification for the given bucket.
+    // This may override the existing bucket notification configuration in the customer's account.
+    EventBridgeNotificationDisabled *bool `json:"event_bridge_notification_disabled"`
 }
 
 // UpdateManagementGroupV1Request represents a custom type struct

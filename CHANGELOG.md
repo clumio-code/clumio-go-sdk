@@ -1,3 +1,5 @@
+## 0.11.1
+Minor updates to the S3 and Connection API request and response parameters.
 ## 0.11.0
 New API added for S3 data source.
 ## 0.10.0

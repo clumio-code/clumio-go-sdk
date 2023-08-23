@@ -93,6 +93,8 @@ type AddBucketToProtectionGroupResponse struct {
     AddedByUser                   *bool   `json:"added_by_user"`
     // The AWS region associated with the DynamoDB table.
     AwsRegion                     *string `json:"aws_region"`
+    // The backup target AWS region associated with the protection group S3 asset.
+    BackupTargetAwsRegion         *string `json:"backup_target_aws_region"`
     // The Clumio-assigned ID of the bucket
     BucketId                      *string `json:"bucket_id"`
     // The name of the bucket
@@ -156,12 +158,14 @@ type CreateAWSConnectionResponse struct {
     ConnectionStatus         *string             `json:"connection_status"`
     // The timestamp of when the connection was created.
     CreatedTimestamp         *string             `json:"created_timestamp"`
-    // An optional, user-provided description for this connection.
+    // The user-provided description for this connection.
     Description              *string             `json:"description"`
     // The configuration of the Clumio Discover product for this connection.
     // If this connection is not configured for Clumio Discover, then this field has a
     // value of `null`.
     Discover                 *DiscoverConfig     `json:"discover"`
+    // Clumio assigned external ID of the connection or of the associated connection group.
+    ExternalId               *string             `json:"external_id"`
     // The Clumio-assigned ID of the connection.
     Id                       *string             `json:"id"`
     // K8S Namespace
@@ -176,8 +180,9 @@ type CreateAWSConnectionResponse struct {
     // If this connection is not configured for Clumio Cloud Protect, then this field has a
     // value of `null`.
     Protect                  *ProtectConfig      `json:"protect"`
-    // The asset types enabled for protect.
+    // The asset types for which Clumio protect is enabled.
     // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
+    // If an empty list is provided, all assets are selected for protection.
     ProtectAssetTypesEnabled []*string           `json:"protect_asset_types_enabled"`
     // The services to be enabled for this configuration. Valid values are
     // ["discover"], ["discover", "protect"]. This is only set when the
@@ -490,11 +495,14 @@ type CreatePolicyResponse struct {
 // CreateProtectionGroupResponse represents a custom type struct for Success
 type CreateProtectionGroupResponse struct {
     // Embedded responses related to the resource.
-    Embedded                      interface{}                  `json:"_embedded"`
+    Embedded                       interface{}                  `json:"_embedded"`
     // URLs to pages related to the resource.
-    Links                         *ProtectionGroupVersionLinks `json:"_links"`
+    Links                          *ProtectionGroupVersionLinks `json:"_links"`
+    // The backup target AWS region associated with the protection group, empty if
+    // in-region or not configured.
+    BackupTargetAwsRegion          *string                      `json:"backup_target_aws_region"`
     // Number of buckets
-    BucketCount                   *int64                       `json:"bucket_count"`
+    BucketCount                    *int64                       `json:"bucket_count"`
     // The following table describes the possible conditions for a bucket to be
     // automatically added to a protection group.
     // 
@@ -509,37 +517,40 @@ type CreateProtectionGroupResponse struct {
     // |         |                |                                                   |
     // +---------+----------------+---------------------------------------------------+
     // 
-    BucketRule                    *string                      `json:"bucket_rule"`
+    BucketRule                     *string                      `json:"bucket_rule"`
     // Creation time of the protection group in RFC-3339 format.
-    CreatedTimestamp              *string                      `json:"created_timestamp"`
+    CreatedTimestamp               *string                      `json:"created_timestamp"`
     // The user-assigned description of the protection group.
-    Description                   *string                      `json:"description"`
+    Description                    *string                      `json:"description"`
     // The Clumio-assigned ID of the protection group.
-    Id                            *string                      `json:"id"`
+    Id                             *string                      `json:"id"`
+    // Whether the protection group already has a backup target configured by a policy, or
+    // is open to be protected by an in-region or out-of-region S3 policy.
+    IsBackupTargetRegionConfigured *bool                        `json:"is_backup_target_region_configured"`
     // Time of the last backup in RFC-3339 format.
-    LastBackupTimestamp           *string                      `json:"last_backup_timestamp"`
+    LastBackupTimestamp            *string                      `json:"last_backup_timestamp"`
     // Time of the last successful continuous backup in RFC-3339 format.
-    LastContinuousBackupTimestamp *string                      `json:"last_continuous_backup_timestamp"`
+    LastContinuousBackupTimestamp  *string                      `json:"last_continuous_backup_timestamp"`
     // Time of the last discover sync in RFC-3339 format.
-    LastDiscoverSyncTimestamp     *string                      `json:"last_discover_sync_timestamp"`
+    LastDiscoverSyncTimestamp      *string                      `json:"last_discover_sync_timestamp"`
     // Modified time of the protection group in RFC-3339 format.
-    ModifiedTimestamp             *string                      `json:"modified_timestamp"`
+    ModifiedTimestamp              *string                      `json:"modified_timestamp"`
     // The user-assigned name of the protection group.
-    Name                          *string                      `json:"name"`
+    Name                           *string                      `json:"name"`
     // ObjectFilter
     // defines which objects will be backed up.
-    ObjectFilter                  *ObjectFilter                `json:"object_filter"`
+    ObjectFilter                   *ObjectFilter                `json:"object_filter"`
     // The Clumio-assigned ID of the organizational unit associated with the Protection Group.
-    OrganizationalUnitId          *string                      `json:"organizational_unit_id"`
+    OrganizationalUnitId           *string                      `json:"organizational_unit_id"`
     // Cumulative count of all unexpired objects in each backup (any new or updated since
     // the last backup) that have been backed up as part of this protection group
-    TotalBackedUpObjectCount      *int64                       `json:"total_backed_up_object_count"`
+    TotalBackedUpObjectCount       *int64                       `json:"total_backed_up_object_count"`
     // Cumulative size of all unexpired objects in each backup (any new or updated since
     // the last backup) that have been backed up as part of this protection group
-    TotalBackedUpSizeBytes        *int64                       `json:"total_backed_up_size_bytes"`
+    TotalBackedUpSizeBytes         *int64                       `json:"total_backed_up_size_bytes"`
     // Version of the protection group. The version number is incremented every time
     // a change is made to the protection group.
-    Version                       *int64                       `json:"version"`
+    Version                        *int64                       `json:"version"`
 }
 
 // CreateRdsResourceRestoreResponse represents a custom type struct for Success
@@ -701,6 +712,8 @@ type DeleteBucketFromProtectionGroupResponse struct {
     AddedByUser                   *bool   `json:"added_by_user"`
     // The AWS region associated with the DynamoDB table.
     AwsRegion                     *string `json:"aws_region"`
+    // The backup target AWS region associated with the protection group S3 asset.
+    BackupTargetAwsRegion         *string `json:"backup_target_aws_region"`
     // The Clumio-assigned ID of the bucket
     BucketId                      *string `json:"bucket_id"`
     // The name of the bucket
@@ -2485,12 +2498,14 @@ type ReadAWSConnectionResponse struct {
     ConnectionStatus         *string             `json:"connection_status"`
     // The timestamp of when the connection was created.
     CreatedTimestamp         *string             `json:"created_timestamp"`
-    // An optional, user-provided description for this connection.
+    // The user-provided description for this connection.
     Description              *string             `json:"description"`
     // The configuration of the Clumio Discover product for this connection.
     // If this connection is not configured for Clumio Discover, then this field has a
     // value of `null`.
     Discover                 *DiscoverConfig     `json:"discover"`
+    // Clumio assigned external ID of the connection or of the associated connection group.
+    ExternalId               *string             `json:"external_id"`
     // The Clumio-assigned ID of the connection.
     Id                       *string             `json:"id"`
     // K8S Namespace
@@ -2505,8 +2520,9 @@ type ReadAWSConnectionResponse struct {
     // If this connection is not configured for Clumio Cloud Protect, then this field has a
     // value of `null`.
     Protect                  *ProtectConfig      `json:"protect"`
-    // The asset types enabled for protect.
+    // The asset types for which Clumio protect is enabled.
     // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
+    // If an empty list is provided, all assets are selected for protection.
     ProtectAssetTypesEnabled []*string           `json:"protect_asset_types_enabled"`
     // The services to be enabled for this configuration. Valid values are
     // ["discover"], ["discover", "protect"]. This is only set when the
@@ -4054,11 +4070,14 @@ type ReadProtectionGroupBackupResponse struct {
 // ReadProtectionGroupResponse represents a custom type struct for Success
 type ReadProtectionGroupResponse struct {
     // Embedded responses related to the resource.
-    Embedded                      *ProtectionGroupEmbedded              `json:"_embedded"`
+    Embedded                       *ProtectionGroupEmbedded              `json:"_embedded"`
     // URLs to pages related to the resource.
-    Links                         *ProtectionGroupLinks                 `json:"_links"`
+    Links                          *ProtectionGroupLinks                 `json:"_links"`
+    // The backup target AWS region associated with the protection group, empty if
+    // in-region or not configured.
+    BackupTargetAwsRegion          *string                               `json:"backup_target_aws_region"`
     // Number of buckets
-    BucketCount                   *int64                                `json:"bucket_count"`
+    BucketCount                    *int64                                `json:"bucket_count"`
     // The following table describes the possible conditions for a bucket to be
     // automatically added to a protection group.
     // 
@@ -4073,47 +4092,50 @@ type ReadProtectionGroupResponse struct {
     // |         |                |                                                   |
     // +---------+----------------+---------------------------------------------------+
     // 
-    BucketRule                    *string                               `json:"bucket_rule"`
+    BucketRule                     *string                               `json:"bucket_rule"`
     // The compliance statistics of workloads associated with this entity.
-    ComplianceStats               *ProtectionComplianceStatsWithSeeding `json:"compliance_stats"`
+    ComplianceStats                *ProtectionComplianceStatsWithSeeding `json:"compliance_stats"`
     // Creation time of the protection group in RFC-3339 format.
-    CreatedTimestamp              *string                               `json:"created_timestamp"`
+    CreatedTimestamp               *string                               `json:"created_timestamp"`
     // The user-assigned description of the protection group.
-    Description                   *string                               `json:"description"`
+    Description                    *string                               `json:"description"`
     // The Clumio-assigned ID of the protection group.
-    Id                            *string                               `json:"id"`
+    Id                             *string                               `json:"id"`
+    // Whether the protection group already has a backup target configured by a policy, or
+    // is open to be protected by an in-region or out-of-region S3 policy.
+    IsBackupTargetRegionConfigured *bool                                 `json:"is_backup_target_region_configured"`
     // Time of the last backup in RFC-3339 format.
-    LastBackupTimestamp           *string                               `json:"last_backup_timestamp"`
+    LastBackupTimestamp            *string                               `json:"last_backup_timestamp"`
     // Time of the last successful continuous backup in RFC-3339 format.
-    LastContinuousBackupTimestamp *string                               `json:"last_continuous_backup_timestamp"`
+    LastContinuousBackupTimestamp  *string                               `json:"last_continuous_backup_timestamp"`
     // Time of the last discover sync in RFC-3339 format.
-    LastDiscoverSyncTimestamp     *string                               `json:"last_discover_sync_timestamp"`
+    LastDiscoverSyncTimestamp      *string                               `json:"last_discover_sync_timestamp"`
     // Modified time of the protection group in RFC-3339 format.
-    ModifiedTimestamp             *string                               `json:"modified_timestamp"`
+    ModifiedTimestamp              *string                               `json:"modified_timestamp"`
     // The user-assigned name of the protection group.
-    Name                          *string                               `json:"name"`
+    Name                           *string                               `json:"name"`
     // ObjectFilter
     // defines which objects will be backed up.
-    ObjectFilter                  *ObjectFilter                         `json:"object_filter"`
+    ObjectFilter                   *ObjectFilter                         `json:"object_filter"`
     // The Clumio-assigned ID of the organizational unit associated with the Protection Group.
-    OrganizationalUnitId          *string                               `json:"organizational_unit_id"`
+    OrganizationalUnitId           *string                               `json:"organizational_unit_id"`
     // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
-    ProtectionInfo                *ProtectionInfoWithRule               `json:"protection_info"`
+    ProtectionInfo                 *ProtectionInfoWithRule               `json:"protection_info"`
     // The protection status of the protection group. Possible values include "protected",
     // "unprotected", and "unsupported". If the protection group does not support backups, then
     // this field has a value of `unsupported`.
-    ProtectionStatus              *string                               `json:"protection_status"`
+    ProtectionStatus               *string                               `json:"protection_status"`
     // The list of AWS regions that this protection group is linked to
-    Regions                       []*string                             `json:"regions"`
+    Regions                        []*string                             `json:"regions"`
     // Cumulative count of all unexpired objects in each backup (any new or updated since
     // the last backup) that have been backed up as part of this protection group
-    TotalBackedUpObjectCount      *int64                                `json:"total_backed_up_object_count"`
+    TotalBackedUpObjectCount       *int64                                `json:"total_backed_up_object_count"`
     // Cumulative size of all unexpired objects in each backup (any new or updated since
     // the last backup) that have been backed up as part of this protection group
-    TotalBackedUpSizeBytes        *int64                                `json:"total_backed_up_size_bytes"`
+    TotalBackedUpSizeBytes         *int64                                `json:"total_backed_up_size_bytes"`
     // Version of the protection group. The version number is incremented every time
     // a change is made to the protection group.
-    Version                       *int64                                `json:"version"`
+    Version                        *int64                                `json:"version"`
 }
 
 // ReadProtectionGroupS3AssetBackupResponse represents a custom type struct for Success
@@ -4175,6 +4197,8 @@ type ReadProtectionGroupS3AssetResponse struct {
     AddedByUser                   *bool                          `json:"added_by_user"`
     // The AWS region associated with the DynamoDB table.
     AwsRegion                     *string                        `json:"aws_region"`
+    // The backup target AWS region associated with the protection group S3 asset.
+    BackupTargetAwsRegion         *string                        `json:"backup_target_aws_region"`
     // The Clumio-assigned ID of the bucket
     BucketId                      *string                        `json:"bucket_id"`
     // The name of the bucket
@@ -5313,12 +5337,14 @@ type UpdateAWSConnectionResponse struct {
     ConnectionStatus         *string             `json:"connection_status"`
     // The timestamp of when the connection was created.
     CreatedTimestamp         *string             `json:"created_timestamp"`
-    // An optional, user-provided description for this connection.
+    // The user-provided description for this connection.
     Description              *string             `json:"description"`
     // The configuration of the Clumio Discover product for this connection.
     // If this connection is not configured for Clumio Discover, then this field has a
     // value of `null`.
     Discover                 *DiscoverConfig     `json:"discover"`
+    // Clumio assigned external ID of the connection or of the associated connection group.
+    ExternalId               *string             `json:"external_id"`
     // The Clumio-assigned ID of the connection.
     Id                       *string             `json:"id"`
     // K8S Namespace
@@ -5333,8 +5359,9 @@ type UpdateAWSConnectionResponse struct {
     // If this connection is not configured for Clumio Cloud Protect, then this field has a
     // value of `null`.
     Protect                  *ProtectConfig      `json:"protect"`
-    // The asset types enabled for protect.
+    // The asset types for which Clumio protect is enabled.
     // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
+    // If an empty list is provided, all assets are selected for protection.
     ProtectAssetTypesEnabled []*string           `json:"protect_asset_types_enabled"`
     // The services to be enabled for this configuration. Valid values are
     // ["discover"], ["discover", "protect"]. This is only set when the
@@ -5572,11 +5599,14 @@ type UpdatePolicyResponse struct {
 // UpdateProtectionGroupResponse represents a custom type struct for Success
 type UpdateProtectionGroupResponse struct {
     // Embedded responses related to the resource.
-    Embedded                      interface{}                  `json:"_embedded"`
+    Embedded                       interface{}                  `json:"_embedded"`
     // URLs to pages related to the resource.
-    Links                         *ProtectionGroupVersionLinks `json:"_links"`
+    Links                          *ProtectionGroupVersionLinks `json:"_links"`
+    // The backup target AWS region associated with the protection group, empty if
+    // in-region or not configured.
+    BackupTargetAwsRegion          *string                      `json:"backup_target_aws_region"`
     // Number of buckets
-    BucketCount                   *int64                       `json:"bucket_count"`
+    BucketCount                    *int64                       `json:"bucket_count"`
     // The following table describes the possible conditions for a bucket to be
     // automatically added to a protection group.
     // 
@@ -5591,37 +5621,40 @@ type UpdateProtectionGroupResponse struct {
     // |         |                |                                                   |
     // +---------+----------------+---------------------------------------------------+
     // 
-    BucketRule                    *string                      `json:"bucket_rule"`
+    BucketRule                     *string                      `json:"bucket_rule"`
     // Creation time of the protection group in RFC-3339 format.
-    CreatedTimestamp              *string                      `json:"created_timestamp"`
+    CreatedTimestamp               *string                      `json:"created_timestamp"`
     // The user-assigned description of the protection group.
-    Description                   *string                      `json:"description"`
+    Description                    *string                      `json:"description"`
     // The Clumio-assigned ID of the protection group.
-    Id                            *string                      `json:"id"`
+    Id                             *string                      `json:"id"`
+    // Whether the protection group already has a backup target configured by a policy, or
+    // is open to be protected by an in-region or out-of-region S3 policy.
+    IsBackupTargetRegionConfigured *bool                        `json:"is_backup_target_region_configured"`
     // Time of the last backup in RFC-3339 format.
-    LastBackupTimestamp           *string                      `json:"last_backup_timestamp"`
+    LastBackupTimestamp            *string                      `json:"last_backup_timestamp"`
     // Time of the last successful continuous backup in RFC-3339 format.
-    LastContinuousBackupTimestamp *string                      `json:"last_continuous_backup_timestamp"`
+    LastContinuousBackupTimestamp  *string                      `json:"last_continuous_backup_timestamp"`
     // Time of the last discover sync in RFC-3339 format.
-    LastDiscoverSyncTimestamp     *string                      `json:"last_discover_sync_timestamp"`
+    LastDiscoverSyncTimestamp      *string                      `json:"last_discover_sync_timestamp"`
     // Modified time of the protection group in RFC-3339 format.
-    ModifiedTimestamp             *string                      `json:"modified_timestamp"`
+    ModifiedTimestamp              *string                      `json:"modified_timestamp"`
     // The user-assigned name of the protection group.
-    Name                          *string                      `json:"name"`
+    Name                           *string                      `json:"name"`
     // ObjectFilter
     // defines which objects will be backed up.
-    ObjectFilter                  *ObjectFilter                `json:"object_filter"`
+    ObjectFilter                   *ObjectFilter                `json:"object_filter"`
     // The Clumio-assigned ID of the organizational unit associated with the Protection Group.
-    OrganizationalUnitId          *string                      `json:"organizational_unit_id"`
+    OrganizationalUnitId           *string                      `json:"organizational_unit_id"`
     // Cumulative count of all unexpired objects in each backup (any new or updated since
     // the last backup) that have been backed up as part of this protection group
-    TotalBackedUpObjectCount      *int64                       `json:"total_backed_up_object_count"`
+    TotalBackedUpObjectCount       *int64                       `json:"total_backed_up_object_count"`
     // Cumulative size of all unexpired objects in each backup (any new or updated since
     // the last backup) that have been backed up as part of this protection group
-    TotalBackedUpSizeBytes        *int64                       `json:"total_backed_up_size_bytes"`
+    TotalBackedUpSizeBytes         *int64                       `json:"total_backed_up_size_bytes"`
     // Version of the protection group. The version number is incremented every time
     // a change is made to the protection group.
-    Version                       *int64                       `json:"version"`
+    Version                        *int64                       `json:"version"`
 }
 
 // UpdateRuleResponse represents a custom type struct for Success
