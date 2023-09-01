@@ -1,3 +1,5 @@
+## 0.11.2
+Minor updates to the Policy API request parameters and Connection Template and ProtectionGroup response parameters.
 ## 0.11.1
 Minor updates to the S3 and Connection API request and response parameters.
 ## 0.11.0

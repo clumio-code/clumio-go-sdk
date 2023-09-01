@@ -115,8 +115,6 @@ type AddBucketToProtectionGroupResponse struct {
     LastBackupTimestamp           *string `json:"last_backup_timestamp"`
     // Time of the last successful continuous backup in RFC-3339 format.
     LastContinuousBackupTimestamp *string `json:"last_continuous_backup_timestamp"`
-    // Time of the last discover sync in RFC-3339 format.
-    LastDiscoverSyncTimestamp     *string `json:"last_discover_sync_timestamp"`
     // The Clumio-assigned ID of the organizational unit associated with the protection group.
     OrganizationalUnitId          *string `json:"organizational_unit_id"`
     // Cumulative count of all unexpired objects in each backup (any new or updated since
@@ -204,13 +202,15 @@ type CreateAWSConnectionResponse struct {
 // CreateAWSTemplateV2Response represents a custom type struct for Success
 type CreateAWSTemplateV2Response struct {
     // URLs to pages related to the resource.
-    Links             *TemplateLinks           `json:"_links"`
+    Links                       *TemplateLinks           `json:"_links"`
     // The latest available URL for the template.
-    CloudformationUrl *string                  `json:"cloudformation_url"`
+    CloudformationUrl           *string                  `json:"cloudformation_url"`
     // The configuration of the given template
-    Config            *TemplateConfigurationV2 `json:"config"`
+    Config                      *TemplateConfigurationV2 `json:"config"`
+    // The latest available URL for the deployable template.
+    DeployableCloudformationUrl *string                  `json:"deployable_cloudformation_url"`
     // The latest available URL for the terraform template.
-    TerraformUrl      *string                  `json:"terraform_url"`
+    TerraformUrl                *string                  `json:"terraform_url"`
 }
 
 // CreateAutoUserProvisioningRuleResponse represents a custom type struct for Success
@@ -531,8 +531,6 @@ type CreateProtectionGroupResponse struct {
     LastBackupTimestamp            *string                      `json:"last_backup_timestamp"`
     // Time of the last successful continuous backup in RFC-3339 format.
     LastContinuousBackupTimestamp  *string                      `json:"last_continuous_backup_timestamp"`
-    // Time of the last discover sync in RFC-3339 format.
-    LastDiscoverSyncTimestamp      *string                      `json:"last_discover_sync_timestamp"`
     // Modified time of the protection group in RFC-3339 format.
     ModifiedTimestamp              *string                      `json:"modified_timestamp"`
     // The user-assigned name of the protection group.
@@ -734,8 +732,6 @@ type DeleteBucketFromProtectionGroupResponse struct {
     LastBackupTimestamp           *string `json:"last_backup_timestamp"`
     // Time of the last successful continuous backup in RFC-3339 format.
     LastContinuousBackupTimestamp *string `json:"last_continuous_backup_timestamp"`
-    // Time of the last discover sync in RFC-3339 format.
-    LastDiscoverSyncTimestamp     *string `json:"last_discover_sync_timestamp"`
     // The Clumio-assigned ID of the organizational unit associated with the protection group.
     OrganizationalUnitId          *string `json:"organizational_unit_id"`
     // Cumulative count of all unexpired objects in each backup (any new or updated since
@@ -4108,8 +4104,6 @@ type ReadProtectionGroupResponse struct {
     LastBackupTimestamp            *string                               `json:"last_backup_timestamp"`
     // Time of the last successful continuous backup in RFC-3339 format.
     LastContinuousBackupTimestamp  *string                               `json:"last_continuous_backup_timestamp"`
-    // Time of the last discover sync in RFC-3339 format.
-    LastDiscoverSyncTimestamp      *string                               `json:"last_discover_sync_timestamp"`
     // Modified time of the protection group in RFC-3339 format.
     ModifiedTimestamp              *string                               `json:"modified_timestamp"`
     // The user-assigned name of the protection group.
@@ -4142,6 +4136,8 @@ type ReadProtectionGroupResponse struct {
 type ReadProtectionGroupS3AssetBackupResponse struct {
     // URLs to pages related to the resource.
     Links                    *ProtectionGroupS3AssetBackupLinks `json:"_links"`
+    // The AWS region in which the instance backup resides. For example, `us-west-2`.
+    AwsRegion                *string                            `json:"aws_region"`
     // The number of objects in the protection group S3 asset that were successfully backed up.
     BackedUpObjectCount      *uint64                            `json:"backed_up_object_count"`
     // The total size in bytes of objects in the protection group S3 asset that were
@@ -4223,8 +4219,6 @@ type ReadProtectionGroupS3AssetResponse struct {
     LastBackupTimestamp           *string                        `json:"last_backup_timestamp"`
     // Time of the last successful continuous backup in RFC-3339 format.
     LastContinuousBackupTimestamp *string                        `json:"last_continuous_backup_timestamp"`
-    // Time of the last discover sync in RFC-3339 format.
-    LastDiscoverSyncTimestamp     *string                        `json:"last_discover_sync_timestamp"`
     // The Clumio-assigned ID of the organizational unit associated with the protection group.
     OrganizationalUnitId          *string                        `json:"organizational_unit_id"`
     // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
@@ -5635,8 +5629,6 @@ type UpdateProtectionGroupResponse struct {
     LastBackupTimestamp            *string                      `json:"last_backup_timestamp"`
     // Time of the last successful continuous backup in RFC-3339 format.
     LastContinuousBackupTimestamp  *string                      `json:"last_continuous_backup_timestamp"`
-    // Time of the last discover sync in RFC-3339 format.
-    LastDiscoverSyncTimestamp      *string                      `json:"last_discover_sync_timestamp"`
     // Modified time of the protection group in RFC-3339 format.
     ModifiedTimestamp              *string                      `json:"modified_timestamp"`
     // The user-assigned name of the protection group.

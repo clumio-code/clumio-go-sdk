@@ -3954,15 +3954,9 @@ type MssqlAGEmbedded struct {
 // URLs to pages related to the resource.
 type MssqlAGLinks struct {
     // The HATEOAS link to this resource.
-    Self                           *HateoasSelfLink                 `json:"_self"`
-    // A resource-specific HATEOAS link.
-    GetMssqlAvailabilityGroupStats *HateoasLink                     `json:"get-mssql-availability-group-stats"`
-    // A HATEOAS link to protect the entities.
-    ProtectEntities                *ProtectEntitiesHateoasLink      `json:"protect-entities"`
+    Self                 *HateoasSelfLink                 `json:"_self"`
     // A HATEOAS link to the policy protecting this resource. Will be omitted for unprotected entities.
-    ReadPolicyDefinition           *ReadPolicyDefinitionHateoasLink `json:"read-policy-definition"`
-    // A HATEOAS link to unprotect the entities.
-    UnprotectEntities              *UnprotectEntitiesHateoasLink    `json:"unprotect-entities"`
+    ReadPolicyDefinition *ReadPolicyDefinitionHateoasLink `json:"read-policy-definition"`
 }
 
 // MssqlAGListEmbedded represents a custom type struct.
@@ -4935,6 +4929,8 @@ type PolicyOperation struct {
     ActionSetting     *string                 `json:"action_setting"`
     // Additional operation-specific policy settings. For operation types which do not support additional settings, this field is `null`.
     AdvancedSettings  *PolicyAdvancedSettings `json:"advanced_settings"`
+    // The region in which to store backup data for this policy operation.
+    BackupAwsRegion   *string                 `json:"backup_aws_region"`
     // The start and end times of the customized backup window. Use of `backup_window` is deprecated, use `backup_window_tz` instead.
     BackupWindow      *BackupWindow           `json:"backup_window"`
     // The start and end times of the customized backup window. Use of `backup_window` is deprecated, use `backup_window_tz` instead.
@@ -4960,6 +4956,8 @@ type PolicyOperationInput struct {
     ActionSetting    *string                 `json:"action_setting"`
     // Additional operation-specific policy settings. For operation types which do not support additional settings, this field is `null`.
     AdvancedSettings *PolicyAdvancedSettings `json:"advanced_settings"`
+    // The region in which to store backup data for this policy operation.
+    BackupAwsRegion  *string                 `json:"backup_aws_region"`
     // The start and end times of the customized backup window. Use of `backup_window` is deprecated, use `backup_window_tz` instead.
     BackupWindow     *BackupWindow           `json:"backup_window"`
     // The start and end times of the customized backup window. Use of `backup_window` is deprecated, use `backup_window_tz` instead.
@@ -5136,8 +5134,6 @@ type ProtectionGroup struct {
     LastBackupTimestamp            *string                               `json:"last_backup_timestamp"`
     // Time of the last successful continuous backup in RFC-3339 format.
     LastContinuousBackupTimestamp  *string                               `json:"last_continuous_backup_timestamp"`
-    // Time of the last discover sync in RFC-3339 format.
-    LastDiscoverSyncTimestamp      *string                               `json:"last_discover_sync_timestamp"`
     // Modified time of the protection group in RFC-3339 format.
     ModifiedTimestamp              *string                               `json:"modified_timestamp"`
     // The user-assigned name of the protection group.
@@ -5270,8 +5266,6 @@ type ProtectionGroupBucket struct {
     LastBackupTimestamp           *string                        `json:"last_backup_timestamp"`
     // Time of the last successful continuous backup in RFC-3339 format.
     LastContinuousBackupTimestamp *string                        `json:"last_continuous_backup_timestamp"`
-    // Time of the last discover sync in RFC-3339 format.
-    LastDiscoverSyncTimestamp     *string                        `json:"last_discover_sync_timestamp"`
     // The Clumio-assigned ID of the organizational unit associated with the protection group.
     OrganizationalUnitId          *string                        `json:"organizational_unit_id"`
     // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
@@ -5507,6 +5501,8 @@ type ProtectionGroupRestoreTarget struct {
 type ProtectionGroupS3AssetBackup struct {
     // URLs to pages related to the resource.
     Links                    *ProtectionGroupS3AssetBackupLinks `json:"_links"`
+    // The AWS region in which the instance backup resides. For example, `us-west-2`.
+    AwsRegion                *string                            `json:"aws_region"`
     // The number of objects in the protection group S3 asset that were successfully backed up.
     BackedUpObjectCount      *uint64                            `json:"backed_up_object_count"`
     // The total size in bytes of objects in the protection group S3 asset that were
