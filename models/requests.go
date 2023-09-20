@@ -158,8 +158,14 @@ type CreateConnectionTemplateV1Request struct {
 
 // UpdateAwsConnectionV1Request represents a custom type struct
 type UpdateAwsConnectionV1Request struct {
+    // Asset types enabled with the given resource ARNs.
+    // This field is only applicable to manually configured connections.
+    AssetTypesEnabled []*string `json:"asset_types_enabled"`
     // An optional, user-provided description for this connection.
-    Description *string `json:"description"`
+    Description       *string   `json:"description"`
+    // Contains the resources required to manually configure a connection.
+    // Partial updates are not supported, therefore you must provide ARNs for all configured resources, including those for resources that are not being updated.
+    Resources         *string   `json:"resources"`
 }
 
 // CreateMssqlHostConnectionsV1Request represents a custom type struct
@@ -995,6 +1001,69 @@ type RestoreProtectionGroupV1Request struct {
     Source *ProtectionGroupRestoreSource `json:"source"`
     // The destination where the protection group will be restored.
     Target *ProtectionGroupRestoreTarget `json:"target"`
+}
+
+// CreateProtectionGroupInstantAccessEndpointV1Request represents a custom type struct
+type CreateProtectionGroupInstantAccessEndpointV1Request struct {
+    // The time that this endpoint expires at in RFC-3339 format.
+    ExpiryTimestamp *string                `json:"expiry_timestamp"`
+    // The user-assigned name of the S3 instant access endpoint.
+    Name            *string                `json:"name"`
+    // The parameters for creating a S3 instant access endpoint.
+    Source          *S3InstantAccessSource `json:"source"`
+}
+
+// CostEstimatesProtectionGroupInstantAccessEndpointV1Request represents a custom type struct
+type CostEstimatesProtectionGroupInstantAccessEndpointV1Request struct {
+    // The Clumio-assigned ID of the protection group S3 asset backup or protection group backup to
+    // be restored. Use the endpoints
+    // [GET /backups/protection-groups/s3-assets](#operation/list-backup-protection-group-s3-assets)
+    // for protection group S3 asset backup, and
+    // [GET /backups/protection-groups](#operation/list-backup-protection-groups)
+    // for protection group backups to fetch valid values. 
+    // Note that only one of either `backup_id` or `pitr` must be provided.
+    BackupId                 *string                           `json:"backup_id"`
+    // Whether to wait for the operation to complete.
+    IsSync                   *bool                             `json:"is_sync"`
+    // Search for or restore only objects that pass the source object filter.
+    ObjectFilters            *SourceObjectFilters              `json:"object_filters"`
+    // The parameters to initiate a point-in-time creation of S3 instant access endpoint.
+    // Note that only one of either `backup_id` or `pitr` must be provided.
+    Pitr                     *S3InstantAccessSourcePitrOptions `json:"pitr"`
+    // Clumio-assigned ID of protection group S3 asset, representing the
+    // bucket within the protection group to restore from. Use the
+    // [GET /datasources/protection-groups/s3-assets](#operation/list-protection-group-s3-assets)
+    // endpoint to fetch valid values.
+    ProtectionGroupS3AssetId *string                           `json:"protection_group_s3_asset_id"`
+}
+
+// UpdateProtectionGroupInstantAccessEndpointV1Request represents a custom type struct
+type UpdateProtectionGroupInstantAccessEndpointV1Request struct {
+    // The time that this endpoint expires, in RFC-3339 format. This will revert to default if no
+    // state passed.
+    ExpiryTimestamp *string `json:"expiry_timestamp"`
+    // The user-assigned name of the S3 instant access endpoint. This will be removed if left empty.
+    Name            *string `json:"name"`
+}
+
+// AddProtectionGroupInstantAccessEndpointRoleV1Request represents a custom type struct
+type AddProtectionGroupInstantAccessEndpointRoleV1Request struct {
+    // Descriptive alias of the IAM role.
+    RoleAlias *string `json:"role_alias"`
+    // ARN of the IAM role to allow access the endpoint. The role must be accessible from AWS account
+    // registered with Clumio.
+    RoleArn   *string `json:"role_arn"`
+}
+
+// UpdateProtectionGroupInstantAccessEndpointRoleV1Request represents a custom type struct
+type UpdateProtectionGroupInstantAccessEndpointRoleV1Request struct {
+    // The updated descriptive alias of the IAM role. The current alias will be retained if
+    // empty updated_role_alias is passed.
+    UpdatedRoleAlias *string `json:"updated_role_alias"`
+    // The updated ARN of the IAM role to allow access to the endpoint. The role must be
+    // accessible from an AWS account registered with Clumio. The current ARN will be retained
+    // if empty updated_role_arn is passed.
+    UpdatedRoleArn   *string `json:"updated_role_arn"`
 }
 
 // RestoreProtectionGroupS3AssetV1Request represents a custom type struct

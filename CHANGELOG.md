@@ -1,3 +1,5 @@
+## 0.12.0
+New APIs added for Protection Group Instance Access Endpoints and new request parameter added for UpdateAwsConnection API.
 ## 0.11.2
 Minor updates to the Policy API request parameters and Connection Template and ProtectionGroup response parameters.
 ## 0.11.1
