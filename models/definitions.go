@@ -13,9 +13,9 @@ type AWSConnection struct {
     AccountNativeId          *string             `json:"account_native_id"`
     // The AWS region associated with the connection. For example, `us-east-1`.
     AwsRegion                *string             `json:"aws_region"`
-    // AWS AccountId of Clumio Control Plane
+    // AWS account ID of the Clumio control plane.
     ClumioAwsAccountId       *string             `json:"clumio_aws_account_id"`
-    // AWS Region of Clumio Control Plane
+    // AWS region of the Clumio control plane
     ClumioAwsRegion          *string             `json:"clumio_aws_region"`
     // The consolidated configuration of the Clumio Cloud Protect and Clumio Cloud Discover products for this connection.
     // If this connection is deprecated to use unconsolidated configuration, then this field has a
@@ -26,6 +26,8 @@ type AWSConnection struct {
     ConnectionStatus         *string             `json:"connection_status"`
     // The timestamp of when the connection was created.
     CreatedTimestamp         *string             `json:"created_timestamp"`
+    // AWS account ID of the data plane for the connection.
+    DataPlaneAccountId       *string             `json:"data_plane_account_id"`
     // The user-provided description for this connection.
     Description              *string             `json:"description"`
     // The configuration of the Clumio Discover product for this connection.
@@ -1146,6 +1148,24 @@ type CreateRuleResponseLinks struct {
     Self     *HateoasSelfLink     `json:"_self"`
     // A HATEOAS link to the task associated with this resource.
     ReadTask *ReadTaskHateoasLink `json:"read-task"`
+}
+
+// CreateS3InstantAccessEndpointResponseEmbedded represents a custom type struct.
+// Embedded responses related to the resource.
+type CreateS3InstantAccessEndpointResponseEmbedded struct {
+    // Embeds the associated task of a resource in the response if requested using the `embed` query parameter.
+    ReadTask interface{} `json:"read-task"`
+}
+
+// CreateS3InstantAccessEndpointResponseLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type CreateS3InstantAccessEndpointResponseLinks struct {
+    // The HATEOAS link to this resource.
+    Self                                     *HateoasSelfLink     `json:"_self"`
+    // URL to the detailed information of the instant access endpoint
+    ReadProtectionGroupInstantAccessEndpoint interface{}          `json:"read-protection-group-instant-access-endpoint"`
+    // A HATEOAS link to the task associated with this resource.
+    ReadTask                                 *ReadTaskHateoasLink `json:"read-task"`
 }
 
 // DataAccessObject represents a custom type struct.
@@ -3229,6 +3249,31 @@ type ErrorModel struct {
     ErrorMessage *string `json:"error_message"`
 }
 
+// EstimateCostDetailsS3InstantAccessEndpointResponseLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type EstimateCostDetailsS3InstantAccessEndpointResponseLinks struct {
+    // The HATEOAS link to this resource.
+    Self *HateoasSelfLink `json:"_self"`
+}
+
+// EstimateCostS3InstantAccessEndpointAsyncResponseLinks represents a custom type struct.
+// EstimateCostS3InstantAccessEndpointAsyncResponseLinks
+type EstimateCostS3InstantAccessEndpointAsyncResponseLinks struct {
+    // The HATEOAS link to this resource.
+    Self                                                     *HateoasSelfLink     `json:"_self"`
+    // URL to retrieve details of cost estimates
+    CostEstimatesDetailsProtectionGroupInstantAccessEndpoint interface{}          `json:"cost-estimates-details-protection-group-instant-access-endpoint"`
+    // A HATEOAS link to the task associated with this resource.
+    ReadTask                                                 *ReadTaskHateoasLink `json:"read-task"`
+}
+
+// EstimateCostS3InstantAccessEndpointSyncResponseLinks represents a custom type struct.
+// EstimateCostS3InstantAccessEndpointSyncResponseLinks
+type EstimateCostS3InstantAccessEndpointSyncResponseLinks struct {
+    // The HATEOAS link to this resource.
+    Self *HateoasSelfLink `json:"_self"`
+}
+
 // FileDescriptor represents a custom type struct.
 // Specifies a file/directory by providing path and file system.
 type FileDescriptor struct {
@@ -4543,7 +4588,7 @@ type OnDemandEC2BackupLinks struct {
 type OnDemandSetting struct {
     // Additional operation-specific policy settings. For operation types which do not support additional settings, this field is `null`.
     AdvancedSettings  *PolicyAdvancedSettings  `json:"advanced_settings"`
-    // Specifies the destination vault for AWS backups.
+    // The region in which this backup is stored. This might be used for cross-region backup.
     BackupAwsRegion   *string                  `json:"backup_aws_region"`
     // The retention time for this SLA. For example, to retain the backup for 1 month, set `unit="months"` and `value=1`.
     RetentionDuration *RetentionBackupSLAParam `json:"retention_duration"`
@@ -4929,7 +4974,7 @@ type PolicyOperation struct {
     ActionSetting     *string                 `json:"action_setting"`
     // Additional operation-specific policy settings. For operation types which do not support additional settings, this field is `null`.
     AdvancedSettings  *PolicyAdvancedSettings `json:"advanced_settings"`
-    // The region in which to store backup data for this policy operation.
+    // The region in which this backup is stored. This might be used for cross-region backup.
     BackupAwsRegion   *string                 `json:"backup_aws_region"`
     // The start and end times of the customized backup window. Use of `backup_window` is deprecated, use `backup_window_tz` instead.
     BackupWindow      *BackupWindow           `json:"backup_window"`
@@ -4956,7 +5001,7 @@ type PolicyOperationInput struct {
     ActionSetting    *string                 `json:"action_setting"`
     // Additional operation-specific policy settings. For operation types which do not support additional settings, this field is `null`.
     AdvancedSettings *PolicyAdvancedSettings `json:"advanced_settings"`
-    // The region in which to store backup data for this policy operation.
+    // The region in which this backup is stored. This might be used for cross-region backup.
     BackupAwsRegion  *string                 `json:"backup_aws_region"`
     // The start and end times of the customized backup window. Use of `backup_window` is deprecated, use `backup_window_tz` instead.
     BackupWindow     *BackupWindow           `json:"backup_window"`
@@ -6941,6 +6986,140 @@ type S3EncryptionOutput struct {
 type S3ExistingObjectReplication struct {
     // Specifies whether the existing object replication is enabled.
     Status *string `json:"status"`
+}
+
+// S3InstantAccessEndpoint represents a custom type struct.
+// S3InstantAccessEndpoint
+type S3InstantAccessEndpoint struct {
+    // Embedded responses related to the resource.
+    Embedded                 *S3InstantAccessEndpointEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links                    *S3InstantAccessEndpointLinks    `json:"_links"`
+    // The AWS-assigned ID of the account associated with the S3 instant access endpoint.
+    AwsAccountId             *string                          `json:"aws_account_id"`
+    // The name of source bucket.
+    BucketName               *string                          `json:"bucket_name"`
+    // The time that this endpoint was created, in RFC-3339 format.
+    CreatedTimestamp         *string                          `json:"created_timestamp"`
+    // The status of the S3 instant access endpoint. Possible values include "preparing",
+    // "active", "expiring", and "expired".
+    EndpointStatus           *string                          `json:"endpoint_status"`
+    // The time that this endpoint expires, in RFC-3339 format.
+    ExpiryTimestamp          *string                          `json:"expiry_timestamp"`
+    // The Clumio-assigned ID of the S3 instant access endpoint.
+    Id                       *string                          `json:"id"`
+    // The user-assigned name of the S3 instant access endpoint.
+    Name                     *string                          `json:"name"`
+    // The Clumio-assigned ID of the organizational unit associated with the S3 instant access endpoint.
+    OrganizationalUnitId     *string                          `json:"organizational_unit_id"`
+    // The Clumio-assigned ID of the protection group this endpoint is created for.
+    ProtectionGroupId        *string                          `json:"protection_group_id"`
+    // The user-assigned name of the protection group this endpoints is created for.
+    ProtectionGroupName      *string                          `json:"protection_group_name"`
+    // The Clumio-assigned ID of the bucket protection group.
+    ProtectionGroupS3AssetId *string                          `json:"protection_group_s3_asset_id"`
+    // The AWS region of the S3 instant access endpoint.
+    Region                   *string                          `json:"region"`
+    // The time at which the backup was restored from this endpoint in RFC-3339 format.
+    RestoreTimestamp         *string                          `json:"restore_timestamp"`
+    // The time that this endpoint was last updated, in RFC-3339 format.
+    UpdatedTimestamp         *string                          `json:"updated_timestamp"`
+}
+
+// S3InstantAccessEndpointEmbedded represents a custom type struct.
+// Embedded responses related to the resource.
+type S3InstantAccessEndpointEmbedded struct {
+    // Embeds the associated protection group S3 asset
+    ReadProtectionGroupS3Asset interface{} `json:"read-protection-group-s3-asset"`
+}
+
+// S3InstantAccessEndpointLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type S3InstantAccessEndpointLinks struct {
+    // The HATEOAS link to this resource.
+    Self                                                   *HateoasSelfLink `json:"_self"`
+    // URL to the detailed information of the instant access endpoint
+    ReadProtectionGroupInstantAccessEndpoint               interface{}      `json:"read-protection-group-instant-access-endpoint"`
+    // URL to the role permissions of the instant access endpoint
+    ReadProtectionGroupInstantAccessEndpointRolePermission interface{}      `json:"read-protection-group-instant-access-endpoint-role-permission"`
+    // URL for getting URI of the instant access endpoint
+    ReadProtectionGroupInstantAccessEndpointUri            interface{}      `json:"read-protection-group-instant-access-endpoint-uri"`
+    // URL to the associated protection group S3 asset
+    ReadProtectionGroupS3Asset                             interface{}      `json:"read-protection-group-s3-asset"`
+}
+
+// S3InstantAccessEndpointListEmbedded represents a custom type struct.
+// Embedded responses related to the resource.
+type S3InstantAccessEndpointListEmbedded struct {
+    // S3InstantAccessEndpoint
+    Items []*S3InstantAccessEndpoint `json:"items"`
+}
+
+// S3InstantAccessEndpointListLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type S3InstantAccessEndpointListLinks struct {
+    // The HATEOAS link to this resource.
+    Self *HateoasSelfLink `json:"_self"`
+}
+
+// S3InstantAccessEndpointRole represents a custom type struct
+type S3InstantAccessEndpointRole struct {
+    // The alias of the IAM role given by the user in the UI.
+    Alias                 *string `json:"alias"`
+    // The ARN of the IAM role.
+    Arn                   *string `json:"arn"`
+    // The ID of the IAM role. Used as an identifier in the API URL.
+    Id                    *string `json:"id"`
+    // The time when the role was last modified, in RFC-3339 format.
+    LastModifiedTimestamp *string `json:"last_modified_timestamp"`
+}
+
+// S3InstantAccessEndpointStat represents a custom type struct.
+// S3InstantAccessEndpointStat swagger: model S3InstantAccessEndpointStat
+type S3InstantAccessEndpointStat struct {
+    // The unit counts of the metric.
+    Count *int64  `json:"count"`
+    // The name of the metric.
+    Name  *string `json:"name"`
+    // Unit of the metric.
+    Unit  *string `json:"unit"`
+}
+
+// S3InstantAccessSource represents a custom type struct.
+// The parameters for creating a S3 instant access endpoint.
+type S3InstantAccessSource struct {
+    // The Clumio-assigned ID of the protection group S3 asset backup or protection group backup to
+    // be restored. Use the endpoints
+    // [GET /backups/protection-groups/s3-assets](#operation/list-backup-protection-group-s3-assets)
+    // for protection group S3 asset backup, and
+    // [GET /backups/protection-groups](#operation/list-backup-protection-groups)
+    // for protection group backups to fetch valid values. 
+    // Note that only one of either `backup_id` or `pitr` must be provided.
+    BackupId                 *string                           `json:"backup_id"`
+    // Search for or restore only objects that pass the source object filter.
+    ObjectFilters            *SourceObjectFilters              `json:"object_filters"`
+    // The parameters to initiate a point-in-time creation of S3 instant access endpoint.
+    // Note that only one of either `backup_id` or `pitr` must be provided.
+    Pitr                     *S3InstantAccessSourcePitrOptions `json:"pitr"`
+    // Clumio-assigned ID of protection group S3 asset, representing the
+    // bucket within the protection group to restore from. Use the
+    // [GET /datasources/protection-groups/s3-assets](#operation/list-protection-group-s3-assets)
+    // endpoint to fetch valid values.
+    ProtectionGroupS3AssetId *string                           `json:"protection_group_s3_asset_id"`
+}
+
+// S3InstantAccessSourcePitrOptions represents a custom type struct.
+// The parameters to initiate a point-in-time creation of S3 instant access endpoint.<br>
+// Note that only one of either `backup_id` or `pitr` must be provided.
+type S3InstantAccessSourcePitrOptions struct {
+    // The end time of the period in which the objects must be restored in RFC-3339 format.
+    // Objects modified before this given time will be restored.
+    // If `restore_end_timestamp` is provided without `restore_start_timestamp`, then it is the same
+    // as a point-in-time restore.
+    RestoreEndTimestamp   *string `json:"restore_end_timestamp"`
+    // The start time of the period in which the objects must be restored in RFC-3339 format.
+    // Objects modified since the given time will be restored.
+    RestoreStartTimestamp *string `json:"restore_start_timestamp"`
 }
 
 // S3Metrics represents a custom type struct.

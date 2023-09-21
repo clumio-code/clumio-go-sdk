@@ -63,6 +63,16 @@ type RestoreRdsRecordResponseWrapper struct {
     Http202 *RestoreRecordResponse 
 }
 
+// CostEstimatesProtectionGroupInstantAccessEndpointResponseWrapper represents a custom type struct wrapper for different success responses
+type CostEstimatesProtectionGroupInstantAccessEndpointResponseWrapper struct {
+    // HTTP status code of response
+    StatusCode int
+    // EstimateCostS3InstantAccessEndpointSyncResponse represents Success response of status code Http200
+    Http200 *EstimateCostS3InstantAccessEndpointSyncResponse 
+    // EstimateCostS3InstantAccessEndpointAsyncResponse represents Success response of status code Http202
+    Http202 *EstimateCostS3InstantAccessEndpointAsyncResponse 
+}
+
 // PreviewProtectionGroupS3AssetResponseWrapper represents a custom type struct wrapper for different success responses
 type PreviewProtectionGroupS3AssetResponseWrapper struct {
     // HTTP status code of response
@@ -127,6 +137,16 @@ type AddBucketToProtectionGroupResponse struct {
     UnsupportedReason             *string `json:"unsupported_reason"`
 }
 
+// AddS3InstantAccessEndpointRoleResponse represents a custom type struct for Success
+type AddS3InstantAccessEndpointRoleResponse struct {
+    // Embedded responses related to the resource.
+    Embedded *S3InstantAccessEndpointEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links    *S3InstantAccessEndpointLinks    `json:"_links"`
+    // The issued ID to the added role
+    RoleId   *string                          `json:"role_id"`
+}
+
 // ChangePasswordResponse represents a custom type struct for Success
 type ChangePasswordResponse struct {
     // HateoasCommonLinks are the common fields for HATEOAS response.
@@ -143,9 +163,9 @@ type CreateAWSConnectionResponse struct {
     AccountNativeId          *string             `json:"account_native_id"`
     // The AWS region associated with the connection. For example, `us-east-1`.
     AwsRegion                *string             `json:"aws_region"`
-    // AWS AccountId of Clumio Control Plane
+    // AWS account ID of the Clumio control plane.
     ClumioAwsAccountId       *string             `json:"clumio_aws_account_id"`
-    // AWS Region of Clumio Control Plane
+    // AWS region of the Clumio control plane
     ClumioAwsRegion          *string             `json:"clumio_aws_region"`
     // The consolidated configuration of the Clumio Cloud Protect and Clumio Cloud Discover products for this connection.
     // If this connection is deprecated to use unconsolidated configuration, then this field has a
@@ -156,6 +176,8 @@ type CreateAWSConnectionResponse struct {
     ConnectionStatus         *string             `json:"connection_status"`
     // The timestamp of when the connection was created.
     CreatedTimestamp         *string             `json:"created_timestamp"`
+    // AWS account ID of the data plane for the connection.
+    DataPlaneAccountId       *string             `json:"data_plane_account_id"`
     // The user-provided description for this connection.
     Description              *string             `json:"description"`
     // The configuration of the Clumio Discover product for this connection.
@@ -582,6 +604,19 @@ type CreateRuleResponse struct {
     TaskId *string                  `json:"task_id"`
 }
 
+// CreateS3InstantAccessEndpointResponse represents a custom type struct for Success
+type CreateS3InstantAccessEndpointResponse struct {
+    // Embedded responses related to the resource.
+    Embedded *CreateS3InstantAccessEndpointResponseEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links    *CreateS3InstantAccessEndpointResponseLinks    `json:"_links"`
+    // The Clumio-assigned ID of the S3 instant access endpoint.
+    Id       *string                                        `json:"id"`
+    // The Clumio-assigned ID of the task created by this instant access creation request.
+    // The progress of the task can be monitored using the `GET /tasks/{task_id}` endpoint.
+    TaskId   *string                                        `json:"task_id"`
+}
+
 // CreateUserResponse represents a custom type struct for Success
 type CreateUserResponse struct {
     // Embedded responses related to the resource.
@@ -786,6 +821,14 @@ type DeleteRuleResponse struct {
     TaskId    *string                  `json:"task_id"`
 }
 
+// DeleteS3InstantAccessEndpointRoleResponse represents a custom type struct for Success
+type DeleteS3InstantAccessEndpointRoleResponse struct {
+    // Embedded responses related to the resource.
+    Embedded *S3InstantAccessEndpointEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links    *S3InstantAccessEndpointLinks    `json:"_links"`
+}
+
 // DeleteUserResponseV1 represents a custom type struct for Success
 type DeleteUserResponseV1 struct {
     // HateoasCommonLinks are the common fields for HATEOAS response.
@@ -877,6 +920,47 @@ type EditProfileResponseV1 struct {
 type Error struct {
     // TODO: Add struct field description
     Errors []*SingleErrorResponse `json:"errors"`
+}
+
+// EstimateCostDetailsS3InstantAccessEndpointResponse represents a custom type struct for Success
+type EstimateCostDetailsS3InstantAccessEndpointResponse struct {
+    // The ETag value.
+    Etag             *string                                                  `json:"_etag"`
+    // URLs to pages related to the resource.
+    Links            *EstimateCostDetailsS3InstantAccessEndpointResponseLinks `json:"_links"`
+    // The estimated cost for instant access endpoint.
+    EstimatedCost    *float64                                                 `json:"estimated_cost"`
+    // The count of objects to be restored.
+    TotalObjectCount *int64                                                   `json:"total_object_count"`
+    // The total size in bytes of objects to be restored.
+    TotalObjectSize  *int64                                                   `json:"total_object_size"`
+}
+
+// EstimateCostS3InstantAccessEndpointAsyncResponse represents a custom type struct.
+// Success (Async)
+type EstimateCostS3InstantAccessEndpointAsyncResponse struct {
+    // EstimateCostS3InstantAccessEndpointAsyncResponseLinks
+    Links      *EstimateCostS3InstantAccessEndpointAsyncResponseLinks `json:"_links"`
+    // The identifier for the requested estimate which is used to fetch results.
+    EstimateId *string                                                `json:"estimate_id"`
+    // The Clumio-assigned ID of the task created by this restore request.
+    // The progress of the task can be monitored using the
+    // `GET /tasks/{task_id}` endpoint.
+    // Note that this field is given only for async request.
+    TaskId     *string                                                `json:"task_id"`
+}
+
+// EstimateCostS3InstantAccessEndpointSyncResponse represents a custom type struct.
+// Success (Sync)
+type EstimateCostS3InstantAccessEndpointSyncResponse struct {
+    // EstimateCostS3InstantAccessEndpointSyncResponseLinks
+    Links            *EstimateCostS3InstantAccessEndpointSyncResponseLinks `json:"_links"`
+    // The estimated cost for instant access endpoint.
+    EstimatedCost    *float64                                              `json:"estimated_cost"`
+    // The count of objects to be restored.
+    TotalObjectCount *int64                                                `json:"total_object_count"`
+    // The total size in bytes of objects to be restored.
+    TotalObjectSize  *int64                                                `json:"total_object_size"`
 }
 
 // FileListResponse represents a custom type struct for Success
@@ -1928,6 +2012,14 @@ type ListRulesResponse struct {
     Start        *string           `json:"start"`
 }
 
+// ListS3InstantAccessEndpointsResponse represents a custom type struct for Success
+type ListS3InstantAccessEndpointsResponse struct {
+    // Embedded responses related to the resource.
+    Embedded *S3InstantAccessEndpointListEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links    *S3InstantAccessEndpointListLinks    `json:"_links"`
+}
+
 // ListSubgroupsResponse represents a custom type struct for Success
 type ListSubgroupsResponse struct {
     // Embedded responses related to the resource.
@@ -2481,9 +2573,9 @@ type ReadAWSConnectionResponse struct {
     AccountNativeId          *string             `json:"account_native_id"`
     // The AWS region associated with the connection. For example, `us-east-1`.
     AwsRegion                *string             `json:"aws_region"`
-    // AWS AccountId of Clumio Control Plane
+    // AWS account ID of the Clumio control plane.
     ClumioAwsAccountId       *string             `json:"clumio_aws_account_id"`
-    // AWS Region of Clumio Control Plane
+    // AWS region of the Clumio control plane
     ClumioAwsRegion          *string             `json:"clumio_aws_region"`
     // The consolidated configuration of the Clumio Cloud Protect and Clumio Cloud Discover products for this connection.
     // If this connection is deprecated to use unconsolidated configuration, then this field has a
@@ -2494,6 +2586,8 @@ type ReadAWSConnectionResponse struct {
     ConnectionStatus         *string             `json:"connection_status"`
     // The timestamp of when the connection was created.
     CreatedTimestamp         *string             `json:"created_timestamp"`
+    // AWS account ID of the data plane for the connection.
+    DataPlaneAccountId       *string             `json:"data_plane_account_id"`
     // The user-provided description for this connection.
     Description              *string             `json:"description"`
     // The configuration of the Clumio Discover product for this connection.
@@ -4536,6 +4630,76 @@ type ReadRuleResponse struct {
     Priority             *RulePriority `json:"priority"`
 }
 
+// ReadS3InstantAccessEndpointResponse represents a custom type struct for Success
+type ReadS3InstantAccessEndpointResponse struct {
+    // Embedded responses related to the resource.
+    Embedded                 *S3InstantAccessEndpointEmbedded `json:"_embedded"`
+    // The ETag value.
+    Etag                     *string                          `json:"_etag"`
+    // URLs to pages related to the resource.
+    Links                    *S3InstantAccessEndpointLinks    `json:"_links"`
+    // The AWS-assigned ID of the account associated with the S3 instant access endpoint.
+    AwsAccountId             *string                          `json:"aws_account_id"`
+    // The name of source bucket.
+    BucketName               *string                          `json:"bucket_name"`
+    // The time that this endpoint was created, in RFC-3339 format.
+    CreatedTimestamp         *string                          `json:"created_timestamp"`
+    // The status of the S3 instant access endpoint. Possible values include "preparing",
+    // "active", "expiring", and "expired".
+    EndpointStatus           *string                          `json:"endpoint_status"`
+    // The time that this endpoint expires, in RFC-3339 format.
+    ExpiryTimestamp          *string                          `json:"expiry_timestamp"`
+    // The Clumio-assigned ID of the S3 instant access endpoint.
+    Id                       *string                          `json:"id"`
+    // The user-assigned name of the S3 instant access endpoint.
+    Name                     *string                          `json:"name"`
+    // The Clumio-assigned ID of the organizational unit associated with the S3 instant access endpoint.
+    OrganizationalUnitId     *string                          `json:"organizational_unit_id"`
+    // The Clumio-assigned ID of the protection group this endpoint is created for.
+    ProtectionGroupId        *string                          `json:"protection_group_id"`
+    // The user-assigned name of the protection group this endpoints is created for.
+    ProtectionGroupName      *string                          `json:"protection_group_name"`
+    // The Clumio-assigned ID of the bucket protection group.
+    ProtectionGroupS3AssetId *string                          `json:"protection_group_s3_asset_id"`
+    // The AWS region of the S3 instant access endpoint.
+    Region                   *string                          `json:"region"`
+    // The time at which the backup was restored from this endpoint in RFC-3339 format.
+    RestoreTimestamp         *string                          `json:"restore_timestamp"`
+    // TODO: Add struct field description
+    Roles                    []*S3InstantAccessEndpointRole   `json:"roles"`
+    // S3InstantAccessEndpointStat swagger: model S3InstantAccessEndpointStat
+    Stats                    []*S3InstantAccessEndpointStat   `json:"stats"`
+    // The time that this endpoint was last updated, in RFC-3339 format.
+    UpdatedTimestamp         *string                          `json:"updated_timestamp"`
+}
+
+// ReadS3InstantAccessEndpointRolePermissionResponse represents a custom type struct for Success
+type ReadS3InstantAccessEndpointRolePermissionResponse struct {
+    // Embedded responses related to the resource.
+    Embedded    *S3InstantAccessEndpointEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links       *S3InstantAccessEndpointLinks    `json:"_links"`
+    // The permissions JSON string to be attached to the user's IAM role to allow access to the
+    // Instant Access endpoint.
+    Permissions *string                          `json:"permissions"`
+}
+
+// ReadS3InstantAccessEndpointUriResponse represents a custom type struct for Success
+type ReadS3InstantAccessEndpointUriResponse struct {
+    // Embedded responses related to the resource.
+    Embedded                           *S3InstantAccessEndpointEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links                              *S3InstantAccessEndpointLinks    `json:"_links"`
+    // An alias of the endpoint bucket.
+    BucketAlias                        *string                          `json:"bucket_alias"`
+    // An Origin Domain form of the endpoint URI for CloudFront distribution.
+    CloudfrontDistributionOriginDomain *string                          `json:"cloudfront_distribution_origin_domain"`
+    // The URI of the endpoint.
+    EndpointUri                        *string                          `json:"endpoint_uri"`
+    // The AWS region the endpoint is located in.
+    Region                             *string                          `json:"region"`
+}
+
 // ReadSubgroupResponse represents a custom type struct for Success
 type ReadSubgroupResponse struct {
     // URLs to pages related to the resource.
@@ -5318,9 +5482,9 @@ type UpdateAWSConnectionResponse struct {
     AccountNativeId          *string             `json:"account_native_id"`
     // The AWS region associated with the connection. For example, `us-east-1`.
     AwsRegion                *string             `json:"aws_region"`
-    // AWS AccountId of Clumio Control Plane
+    // AWS account ID of the Clumio control plane.
     ClumioAwsAccountId       *string             `json:"clumio_aws_account_id"`
-    // AWS Region of Clumio Control Plane
+    // AWS region of the Clumio control plane
     ClumioAwsRegion          *string             `json:"clumio_aws_region"`
     // The consolidated configuration of the Clumio Cloud Protect and Clumio Cloud Discover products for this connection.
     // If this connection is deprecated to use unconsolidated configuration, then this field has a
@@ -5331,6 +5495,8 @@ type UpdateAWSConnectionResponse struct {
     ConnectionStatus         *string             `json:"connection_status"`
     // The timestamp of when the connection was created.
     CreatedTimestamp         *string             `json:"created_timestamp"`
+    // AWS account ID of the data plane for the connection.
+    DataPlaneAccountId       *string             `json:"data_plane_account_id"`
     // The user-provided description for this connection.
     Description              *string             `json:"description"`
     // The configuration of the Clumio Discover product for this connection.
@@ -5657,6 +5823,51 @@ type UpdateRuleResponse struct {
     Rule   *Rule                    `json:"rule"`
     // The Clumio-assigned ID of the task generated by this request.
     TaskId *string                  `json:"task_id"`
+}
+
+// UpdateS3InstantAccessEndpointResponse represents a custom type struct for Success
+type UpdateS3InstantAccessEndpointResponse struct {
+    // Embedded responses related to the resource.
+    Embedded                 *S3InstantAccessEndpointEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links                    *S3InstantAccessEndpointLinks    `json:"_links"`
+    // The AWS-assigned ID of the account associated with the S3 instant access endpoint.
+    AwsAccountId             *string                          `json:"aws_account_id"`
+    // The name of source bucket.
+    BucketName               *string                          `json:"bucket_name"`
+    // The time that this endpoint was created, in RFC-3339 format.
+    CreatedTimestamp         *string                          `json:"created_timestamp"`
+    // The status of the S3 instant access endpoint. Possible values include "preparing",
+    // "active", "expiring", and "expired".
+    EndpointStatus           *string                          `json:"endpoint_status"`
+    // The time that this endpoint expires, in RFC-3339 format.
+    ExpiryTimestamp          *string                          `json:"expiry_timestamp"`
+    // The Clumio-assigned ID of the S3 instant access endpoint.
+    Id                       *string                          `json:"id"`
+    // The user-assigned name of the S3 instant access endpoint.
+    Name                     *string                          `json:"name"`
+    // The Clumio-assigned ID of the organizational unit associated with the S3 instant access endpoint.
+    OrganizationalUnitId     *string                          `json:"organizational_unit_id"`
+    // The Clumio-assigned ID of the protection group this endpoint is created for.
+    ProtectionGroupId        *string                          `json:"protection_group_id"`
+    // The user-assigned name of the protection group this endpoints is created for.
+    ProtectionGroupName      *string                          `json:"protection_group_name"`
+    // The Clumio-assigned ID of the bucket protection group.
+    ProtectionGroupS3AssetId *string                          `json:"protection_group_s3_asset_id"`
+    // The AWS region of the S3 instant access endpoint.
+    Region                   *string                          `json:"region"`
+    // The time at which the backup was restored from this endpoint in RFC-3339 format.
+    RestoreTimestamp         *string                          `json:"restore_timestamp"`
+    // The time that this endpoint was last updated, in RFC-3339 format.
+    UpdatedTimestamp         *string                          `json:"updated_timestamp"`
+}
+
+// UpdateS3InstantAccessEndpointRoleResponse represents a custom type struct for Success
+type UpdateS3InstantAccessEndpointRoleResponse struct {
+    // Embedded responses related to the resource.
+    Embedded *S3InstantAccessEndpointEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links    *S3InstantAccessEndpointLinks    `json:"_links"`
 }
 
 // UpdateTaskResponse represents a custom type struct for Success
