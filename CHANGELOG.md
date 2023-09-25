@@ -1,3 +1,5 @@
+## 0.12.1
+Fixed incorrect request parameter type for UpdateAwsConnection API.
 ## 0.12.0
 New APIs added for Protection Group Instance Access Endpoints and new request parameter added for UpdateAwsConnection API.
 ## 0.11.2

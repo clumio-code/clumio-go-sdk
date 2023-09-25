@@ -3274,6 +3274,14 @@ type EstimateCostS3InstantAccessEndpointSyncResponseLinks struct {
     Self *HateoasSelfLink `json:"_self"`
 }
 
+// EventRules represents a custom type struct
+type EventRules struct {
+    // Cloudtrail rule for the service if any.
+    CloudtrailRuleArn *string `json:"cloudtrail_rule_arn"`
+    // Cloudwatch rule for the service if any.
+    CloudwatchRuleArn *string `json:"cloudwatch_rule_arn"`
+}
+
 // FileDescriptor represents a custom type struct.
 // Specifies a file/directory by providing path and file system.
 type FileDescriptor struct {
@@ -4471,6 +4479,16 @@ type MssqlRestoreTarget struct {
     // `C:\\Programe Files\clumio\restored-log-files\`. If this field is empty, we
     // will restore log files into the same location as the source database.
     LogFilesPath  *string `json:"log_files_path"`
+}
+
+// MssqlServiceRoles represents a custom type struct
+type MssqlServiceRoles struct {
+    // Role assumable by ec2 service.
+    Ec2InstanceProfileRoleArn *string `json:"ec2_instance_profile_role_arn"`
+    // Instance created for ec2 instance profile role
+    Ec2SsmInstanceProfileArn  *string `json:"ec2_ssm_instance_profile_arn"`
+    // Role assumable by ssm service.
+    SsmNotificationRoleArn    *string `json:"ssm_notification_role_arn"`
 }
 
 // NetworkInterface represents a custom type struct
@@ -6345,6 +6363,22 @@ type ResourcePoolWithETag struct {
     Parent          *VMwareResourcePoolParentModel          `json:"parent"`
 }
 
+// Resources represents a custom type struct.
+// Partial updates are not supported, therefore you must provide ARNs for all configured resources,
+// including those for resources that are not being updated.
+type Resources struct {
+    // SNS topic created in the account to receive relevant events.
+    ClumioEventPubArn    *string       `json:"clumio_event_pub_arn"`
+    // ARN of the IAM role created in the account, which will be assumed by Clumio.
+    ClumioIamRoleArn     *string       `json:"clumio_iam_role_arn"`
+    // ARN of the support role which will be used by the Clumio support team.
+    ClumioSupportRoleArn *string       `json:"clumio_support_role_arn"`
+    // TODO: Add struct field description
+    EventRules           *EventRules   `json:"event_rules"`
+    // TODO: Add struct field description
+    ServiceRoles         *ServiceRoles `json:"service_roles"`
+}
+
 // RestEntity represents a custom type struct
 type RestEntity struct {
     // A system-generated ID assigned to this entity.
@@ -7253,6 +7287,12 @@ type S3ServerSideEncryptionRule struct {
     BucketKeyEnabled                   *bool                            `json:"bucket_key_enabled"`
 }
 
+// S3ServiceRoles represents a custom type struct
+type S3ServiceRoles struct {
+    // Role assumable by Event Bridge to send event notifications.
+    ContinuousBackupsRoleArn *string `json:"continuous_backups_role_arn"`
+}
+
 // S3SourceSelectionCriteria represents a custom type struct.
 // A container that describes additional filters for identifying
 // the source objects that you want to replicate.
@@ -7314,6 +7354,14 @@ type SSESpecification struct {
     // Name (ARN), alias name or alias ARN to specify a key to be used for encrypting the restored table.
     // In case of default encryption (AWS owned CMK), specify this as `null`.
     KmsMasterKeyId *string `json:"kms_master_key_id"`
+}
+
+// ServiceRoles represents a custom type struct
+type ServiceRoles struct {
+    // TODO: Add struct field description
+    Mssql *MssqlServiceRoles `json:"mssql"`
+    // TODO: Add struct field description
+    S3    *S3ServiceRoles    `json:"s3"`
 }
 
 // SetAssignmentsResponseLinks represents a custom type struct.
