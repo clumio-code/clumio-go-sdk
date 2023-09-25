@@ -160,12 +160,12 @@ type CreateConnectionTemplateV1Request struct {
 type UpdateAwsConnectionV1Request struct {
     // Asset types enabled with the given resource ARNs.
     // This field is only applicable to manually configured connections.
-    AssetTypesEnabled []*string `json:"asset_types_enabled"`
+    AssetTypesEnabled []*string  `json:"asset_types_enabled"`
     // An optional, user-provided description for this connection.
-    Description       *string   `json:"description"`
-    // Contains the resources required to manually configure a connection.
-    // Partial updates are not supported, therefore you must provide ARNs for all configured resources, including those for resources that are not being updated.
-    Resources         *string   `json:"resources"`
+    Description       *string    `json:"description"`
+    // Partial updates are not supported, therefore you must provide ARNs for all configured resources,
+    // including those for resources that are not being updated.
+    Resources         *Resources `json:"resources"`
 }
 
 // CreateMssqlHostConnectionsV1Request represents a custom type struct
