@@ -54,6 +54,8 @@ type PolicyDefinitionsV1Client interface {
     //  +----------------------------------+-------------------------------------------+
     //  | microsoft365_share_point_backup  | Microsoft365 site backup.                 |
     //  +----------------------------------+-------------------------------------------+
+    //  | microsoft365_teams_backup        | Microsoft365 team backup.                 |
+    //  +----------------------------------+-------------------------------------------+
     //  | mssql_database_backup            | VMC MSSQL database backup stored in       |
     //  |                                  | Clumio.                                   |
     //  +----------------------------------+-------------------------------------------+

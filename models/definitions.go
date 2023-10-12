@@ -50,9 +50,8 @@ type AWSConnection struct {
     // If this connection is not configured for Clumio Cloud Protect, then this field has a
     // value of `null`.
     Protect                  *ProtectConfig      `json:"protect"`
-    // The asset types for which Clumio protect is enabled.
+    // The asset types enabled for protect.
     // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
-    // If an empty list is provided, all assets are selected for protection.
     ProtectAssetTypesEnabled []*string           `json:"protect_asset_types_enabled"`
     // The services to be enabled for this configuration. Valid values are
     // ["discover"], ["discover", "protect"]. This is only set when the
@@ -892,6 +891,21 @@ type BucketListLinks struct {
     Self  *HateoasSelfLink  `json:"_self"`
 }
 
+// CategorisedResources represents a custom type struct.
+// Categorised Resources, based on the generated template, to be created manually by the user
+type CategorisedResources struct {
+    // TODO: Add struct field description
+    Policies     map[string]*PolicyDetails             `json:"policies"`
+    // Details for the IAM Role
+    Roles        map[string]*ClumioRoleResource        `json:"roles"`
+    // TODO: Add struct field description
+    Rules        map[string]*ClumioRuleResource        `json:"rules"`
+    // Details for the ssm document attached to any resource
+    SsmDocuments map[string]*ClumioSsmDocumentResource `json:"ssm_documents"`
+    // Details for the SNS Topic
+    Topics       map[string]*ClumioTopicResource       `json:"topics"`
+}
+
 // CloudConnectorCountByStatus represents a custom type struct.
 // The number of cloud connectors in this subgroup, aggregated by their status.
 type CloudConnectorCountByStatus struct {
@@ -899,6 +913,91 @@ type CloudConnectorCountByStatus struct {
     Degraded *int64 `json:"degraded"`
     // The number of healthy cloud connectors in this subgroup.
     Healthy  *int64 `json:"healthy"`
+}
+
+// ClumioRoleResource represents a custom type struct.
+// Details for the IAM Role
+type ClumioRoleResource struct {
+    // TODO: Add struct field description
+    Description     *string          `json:"description"`
+    // TODO: Add struct field description
+    InlinePolicies  []*PolicyDetails `json:"inline_policies"`
+    // TODO: Add struct field description
+    ManagedPolicies []*PolicyDetails `json:"managed_policies"`
+    // TODO: Add struct field description
+    Steps           *string          `json:"steps"`
+    // "trust_policy" stores the Trust Relationship policy for the role. It is a stringified JSON blob.
+    // The user has to JSONify it and then paste the JSONified blob in aws console while creating the role.
+    TrustPolicy     interface{}      `json:"trust_policy"`
+}
+
+// ClumioRuleResource represents a custom type struct
+type ClumioRuleResource struct {
+    // "description" is optional
+    Description  *string       `json:"description"`
+    // "event_pattern" has stringified JSON blob. The user has to JSONify it and then paste
+    // the JSONified blob in aws console while creating the rule.
+    EventPattern interface{}   `json:"event_pattern"`
+    // "steps" refers to commands to be executed
+    Steps        *string       `json:"steps"`
+    // "targets" is a string that essentially stores the target for the rule. It generally is an ARN.
+    Targets      []interface{} `json:"targets"`
+}
+
+// ClumioSsmDocumentInputs represents a custom type struct
+type ClumioSsmDocumentInputs struct {
+    // "runCommand" is an array of stringified commands.
+    Runcommand     []*string `json:"runCommand"`
+    // "timeoutSeconds" is a stringified number denoting the timeout for command execution
+    Timeoutseconds *string   `json:"timeoutSeconds"`
+}
+
+// ClumioSsmDocumentParameterValue represents a custom type struct.
+// Details for each parameters of the ssm document
+type ClumioSsmDocumentParameterValue struct {
+    // "allowedPattern" refers to the pattern that must be satisfied by the parameter
+    Allowedpattern *string `json:"allowedPattern"`
+    // "default" refers to the default value for that paramter
+    ClumioDefault  *string `json:"default"`
+    // "description" is optional
+    Description    *string `json:"description"`
+    // "type" refers to the parameter type
+    ClumioType     *string `json:"type"`
+}
+
+// ClumioSsmDocumentResource represents a custom type struct.
+// Details for the ssm document attached to any resource
+type ClumioSsmDocumentResource struct {
+    // "description" must contain the version being followed
+    Description   *string                                     `json:"description"`
+    // Details for each step present inside an ssm document
+    Mainsteps     []*ClumioSsmDocumentStep                    `json:"mainSteps"`
+    // Details for each parameters of the ssm document
+    Parameters    map[string]*ClumioSsmDocumentParameterValue `json:"parameters"`
+    // "schemaVersion" is an AWS value for versioning
+    Schemaversion *string                                     `json:"schemaVersion"`
+}
+
+// ClumioSsmDocumentStep represents a custom type struct.
+// Details for each step present inside an ssm document
+type ClumioSsmDocumentStep struct {
+    // "action" refers to a unique action identified for this step
+    Action       *string                  `json:"action"`
+    // TODO: Add struct field description
+    Inputs       *ClumioSsmDocumentInputs `json:"inputs"`
+    // "name" refers to name of that step
+    Name         *string                  `json:"name"`
+    // The JSON representation for `ListValue` is JSON array.
+    Precondition map[string]*ListValue    `json:"precondition"`
+}
+
+// ClumioTopicResource represents a custom type struct.
+// Details for the SNS Topic
+type ClumioTopicResource struct {
+    // TODO: Add struct field description
+    Policies []*PolicyDetails `json:"policies"`
+    // "steps" refers to commands to be executed
+    Steps    *string          `json:"steps"`
 }
 
 // ComplianceStatsDeprecated represents a custom type struct.
@@ -1274,6 +1373,15 @@ type DatacenterWithETag struct {
     RootComputeResourceFolder *VMwareRootComputeResourceFolderIDModel `json:"root_compute_resource_folder"`
     // The hidden root virtual machine folder of the data center.
     RootVmFolder              *VMwareRootVMFolderIDModel              `json:"root_vm_folder"`
+}
+
+// DeleteHostResponseLinks represents a custom type struct.
+// DeleteHostResponseLinks describes the Links response for the delete host response
+type DeleteHostResponseLinks struct {
+    // The HATEOAS link to this resource.
+    Self     *HateoasSelfLink     `json:"_self"`
+    // A HATEOAS link to the task associated with this resource.
+    ReadTask *ReadTaskHateoasLink `json:"read-task"`
 }
 
 // DeletePolicyResponseLinks represents a custom type struct.
@@ -2954,9 +3062,11 @@ type EC2MSSQLRestoreFromBackupOptions struct {
 // should be set.
 type EC2MSSQLRestoreSource struct {
     // The EC2 MSSQL database backup to be restored.
-    Backup *EC2MSSQLRestoreFromBackupOptions `json:"backup"`
+    Backup       *EC2MSSQLRestoreFromBackupOptions `json:"backup"`
     // A database and a point-in-time to be restored.
-    Pitr   *EC2MSSQLPITROptions              `json:"pitr"`
+    Pitr         *EC2MSSQLPITROptions              `json:"pitr"`
+    // An AG database to be restored to an AAG.
+    RestoreToAag *EC2MSSQLRestoreToAAGOptions      `json:"restore_to_aag"`
 }
 
 // EC2MSSQLRestoreTarget represents a custom type struct.
@@ -2981,6 +3091,15 @@ type EC2MSSQLRestoreTarget struct {
     LogFilesPath         *string `json:"log_files_path"`
     // The boolean value representing if the database has to be restored as new database.
     RestoreAsNewDatabase *bool   `json:"restore_as_new_database"`
+}
+
+// EC2MSSQLRestoreToAAGOptions represents a custom type struct.
+// An AG database to be restored to an AAG.
+type EC2MSSQLRestoreToAAGOptions struct {
+    // The Clumio-assigned ID of the MSSQL database to be restored.
+    // Use the [GET /datasources/aws/ec2-mssql/databases](#operation/list-ec2-mssql-databases)
+    // endpoint to fetch valid values.
+    DatabaseId *string `json:"database_id"`
 }
 
 // EC2MSSQLTemplateInfo represents a custom type struct.
@@ -3257,7 +3376,7 @@ type EstimateCostDetailsS3InstantAccessEndpointResponseLinks struct {
 }
 
 // EstimateCostS3InstantAccessEndpointAsyncResponseLinks represents a custom type struct.
-// EstimateCostS3InstantAccessEndpointAsyncResponseLinks
+// URLs to pages related to the resource.
 type EstimateCostS3InstantAccessEndpointAsyncResponseLinks struct {
     // The HATEOAS link to this resource.
     Self                                                     *HateoasSelfLink     `json:"_self"`
@@ -3268,7 +3387,7 @@ type EstimateCostS3InstantAccessEndpointAsyncResponseLinks struct {
 }
 
 // EstimateCostS3InstantAccessEndpointSyncResponseLinks represents a custom type struct.
-// EstimateCostS3InstantAccessEndpointSyncResponseLinks
+// URLs to pages related to the resource.
 type EstimateCostS3InstantAccessEndpointSyncResponseLinks struct {
     // The HATEOAS link to this resource.
     Self *HateoasSelfLink `json:"_self"`
@@ -3851,6 +3970,13 @@ type ListFileVersionsHateoasLinks struct {
     ListFileVersions *ListFileVersionsHateoasLink `json:"list-file-versions"`
 }
 
+// ListValue represents a custom type struct.
+// The JSON representation for `ListValue` is JSON array.
+type ListValue struct {
+    // The JSON representation for `Value` is JSON value.
+    Values []*Value `json:"values"`
+}
+
 // LocalSecondaryIndex represents a custom type struct.
 // Represents the properties of a local secondary index.
 type LocalSecondaryIndex struct {
@@ -3948,10 +4074,10 @@ type ManagementGroupListLinks struct {
 // MoveHostsLinks represents a custom type struct.
 // URLs to pages related to the resource.
 type MoveHostsLinks struct {
-    // URLs to pages related to the resource.
-    Links *ReadTaskHateoasLinks `json:"_links"`
     // The HATEOAS link to this resource.
-    Self  *HateoasSelfLink      `json:"_self"`
+    Self     *HateoasSelfLink     `json:"_self"`
+    // A HATEOAS link to the task associated with this resource.
+    ReadTask *ReadTaskHateoasLink `json:"read-task"`
 }
 
 // MoveHostsSource represents a custom type struct.
@@ -4564,14 +4690,28 @@ type Object struct {
 // ObjectFilter
 // defines which objects will be backed up.
 type ObjectFilter struct {
+    // A list of desired object prefixes to exclude in this protection group's backups.
+    // An object that matches any of these prefixes will not be in the backup, even if it
+    // matches an include expression. A wildcard * can be used to match any number of
+    // characters, except for the / character that is used as a folder separator, and must
+    // be matched explicitly. If an asterisk * needs to be matched explicitly, escape the
+    // asterisk with \\*.
+    ExcludePrefixExpressions []*string       `json:"exclude_prefix_expressions"`
+    // A list of desired object prefixes to include in this protection group's backups.
+    // If this input is non-empty, an object must match one of the given prefixes to be
+    // included in the backup. A wildcard * can be used to match any number of characters,
+    // except for the / character that is used as a folder separator, and must be matched
+    // explicitly. If an asterisk * needs to be matched explicitly, escape the asterisk
+    // with \\*.
+    IncludePrefixExpressions []*string       `json:"include_prefix_expressions"`
     // Whether to back up only the latest object version.
-    LatestVersionOnly *bool           `json:"latest_version_only"`
+    LatestVersionOnly        *bool           `json:"latest_version_only"`
     // PrefixFilter
-    PrefixFilters     []*PrefixFilter `json:"prefix_filters"`
+    PrefixFilters            []*PrefixFilter `json:"prefix_filters"`
     // Storage class to include in the backup. If not specified, then all objects across all storage
     // classes will be backed up. Valid values are: `S3 Standard`, `S3 Standard-IA`,
     // `S3 Intelligent-Tiering`, and `S3 One Zone-IA`.
-    StorageClasses    []*string       `json:"storage_classes"`
+    StorageClasses           []*string       `json:"storage_classes"`
 }
 
 // OnDemandDynamoDBBackupLinks represents a custom type struct.
@@ -4930,6 +5070,8 @@ type PolicyAdvancedSettings struct {
     AwsEbsVolumeBackup     *EBSBackupAdvancedSetting              `json:"aws_ebs_volume_backup"`
     // Advanced settings for EC2 backup.
     AwsEc2InstanceBackup   *EC2BackupAdvancedSetting              `json:"aws_ec2_instance_backup"`
+    // Advanced settings for RDS PITR configuration sync.
+    AwsRdsConfigSync       *RDSConfigSyncAdvancedSetting          `json:"aws_rds_config_sync"`
     // Additional policy configuration settings for the `ec2_mssql_database_backup` operation. If this operation is not of type `ec2_mssql_database_backup`, then this field is omitted from the response.
     Ec2MssqlDatabaseBackup *EC2MSSQLDatabaseBackupAdvancedSetting `json:"ec2_mssql_database_backup"`
     // Additional policy configuration settings for the `ec2_mssql_log_backup` operation. If this operation is not of type `ec2_mssql_log_backup`, then this field is omitted from the response.
@@ -4940,6 +5082,17 @@ type PolicyAdvancedSettings struct {
     MssqlLogBackup         *MSSQLLogBackupAdvancedSetting         `json:"mssql_log_backup"`
     // Additional policy configuration settings for the `protection_group_backup` operation. If this operation is not of type `protection_group_backup`, then this field is omitted from the response.
     ProtectionGroupBackup  *ProtectionGroupBackupAdvancedSetting  `json:"protection_group_backup"`
+}
+
+// PolicyDetails represents a custom type struct
+type PolicyDetails struct {
+    // "description" is a Clumio assigned term. User can choose to ignore it.
+    Description    *string     `json:"description"`
+    // "name" is a Clumio assigned term. User can choose to ignore it.
+    Name           *string     `json:"name"`
+    // "policy_document" has stringified JSON blob. The user has to JSONify it and then paste
+    // the JSONified blob in aws console while creating the policy.
+    PolicyDocument interface{} `json:"policy_document"`
 }
 
 // PolicyEmbedded represents a custom type struct.
@@ -5783,6 +5936,14 @@ type RDSBackupDatabaseListLinks struct {
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to this resource.
     Self  *HateoasSelfLink  `json:"_self"`
+}
+
+// RDSConfigSyncAdvancedSetting represents a custom type struct.
+// Advanced settings for RDS PITR configuration sync.
+type RDSConfigSyncAdvancedSetting struct {
+    // Syncs the configuration of RDS PITR in AWS. Valid values are: `immediate`, and `maintenance_window`.
+    // Note that applying the setting "immediately" can cause unexpected downtime.
+    Apply *string `json:"apply"`
 }
 
 // RDSDatabaseTable represents a custom type struct
@@ -7096,7 +7257,8 @@ type S3InstantAccessEndpointListLinks struct {
     Self *HateoasSelfLink `json:"_self"`
 }
 
-// S3InstantAccessEndpointRole represents a custom type struct
+// S3InstantAccessEndpointRole represents a custom type struct.
+// IAM role which is allowed access to the OLAP endpoint.
 type S3InstantAccessEndpointRole struct {
     // The alias of the IAM role given by the user in the UI.
     Alias                 *string `json:"alias"`
@@ -7109,6 +7271,8 @@ type S3InstantAccessEndpointRole struct {
 }
 
 // S3InstantAccessEndpointStat represents a custom type struct.
+// S3InstantAccessEndpointStat
+// Statistical metric related to the instant access endpoint.
 // S3InstantAccessEndpointStat swagger: model S3InstantAccessEndpointStat
 type S3InstantAccessEndpointStat struct {
     // The unit counts of the metric.
@@ -8568,6 +8732,13 @@ type VMwareVCenterNetworkWithETag struct {
 type VMwareVCenterParentFolderModel struct {
     // The VMware-assigned Managed Object Reference (MoRef) ID of the folder.
     Id *string `json:"id"`
+}
+
+// Value represents a custom type struct.
+// The JSON representation for `Value` is JSON value.
+type Value struct {
+    // TODO: Add struct field description
+    Kind interface{} `json:"Kind"`
 }
 
 // Vcenter represents a custom type struct

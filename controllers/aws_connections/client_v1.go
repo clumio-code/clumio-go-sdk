@@ -24,7 +24,8 @@ type AwsConnectionsV1Client interface {
     
     // ReadAwsConnection Returns a representation of the specified AWS connection.
     ReadAwsConnection(
-        connectionId string)(
+        connectionId string, 
+        returnExternalId *string)(
         *models.ReadAWSConnectionResponse,  *apiutils.APIError)
     
     // DeleteAwsConnection Delete the specified AWS connection.

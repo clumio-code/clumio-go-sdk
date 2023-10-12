@@ -200,9 +200,8 @@ type CreateAWSConnectionResponse struct {
     // If this connection is not configured for Clumio Cloud Protect, then this field has a
     // value of `null`.
     Protect                  *ProtectConfig      `json:"protect"`
-    // The asset types for which Clumio protect is enabled.
+    // The asset types enabled for protect.
     // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
-    // If an empty list is provided, all assets are selected for protection.
     ProtectAssetTypesEnabled []*string           `json:"protect_asset_types_enabled"`
     // The services to be enabled for this configuration. Valid values are
     // ["discover"], ["discover", "protect"]. This is only set when the
@@ -231,6 +230,8 @@ type CreateAWSTemplateV2Response struct {
     Config                      *TemplateConfigurationV2 `json:"config"`
     // The latest available URL for the deployable template.
     DeployableCloudformationUrl *string                  `json:"deployable_cloudformation_url"`
+    // Categorised Resources, based on the generated template, to be created manually by the user
+    Resources                   *CategorisedResources    `json:"resources"`
     // The latest available URL for the terraform template.
     TerraformUrl                *string                  `json:"terraform_url"`
 }
@@ -317,8 +318,10 @@ type CreateEC2MSSQLDatabaseRestoreResponse struct {
 
 // CreateHcmHostResponse represents a custom type struct for Success
 type CreateHcmHostResponse struct {
+    // HateoasCommonLinks are the common fields for HATEOAS response.
+    Links *HateoasCommonLinks `json:"_links"`
     // TODO: Add struct field description
-    Hosts []*Host `json:"hosts"`
+    Hosts []*Host             `json:"hosts"`
 }
 
 // CreateHostECCredentialsResponse represents a custom type struct for Success
@@ -783,8 +786,8 @@ type DeleteBucketFromProtectionGroupResponse struct {
 type DeleteHcmHostResponse struct {
     // Embedded responses related to the resource.
     Embedded *ReadTaskHateoasOuterEmbedded `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links    *ReadTaskHateoasLinks         `json:"_links"`
+    // DeleteHostResponseLinks describes the Links response for the delete host response
+    Links    *DeleteHostResponseLinks      `json:"_links"`
     // TaskID for DeleteHostsReq
     TaskId   *string                       `json:"task_id"`
 }
@@ -939,7 +942,7 @@ type EstimateCostDetailsS3InstantAccessEndpointResponse struct {
 // EstimateCostS3InstantAccessEndpointAsyncResponse represents a custom type struct.
 // Success (Async)
 type EstimateCostS3InstantAccessEndpointAsyncResponse struct {
-    // EstimateCostS3InstantAccessEndpointAsyncResponseLinks
+    // URLs to pages related to the resource.
     Links      *EstimateCostS3InstantAccessEndpointAsyncResponseLinks `json:"_links"`
     // The identifier for the requested estimate which is used to fetch results.
     EstimateId *string                                                `json:"estimate_id"`
@@ -953,7 +956,7 @@ type EstimateCostS3InstantAccessEndpointAsyncResponse struct {
 // EstimateCostS3InstantAccessEndpointSyncResponse represents a custom type struct.
 // Success (Sync)
 type EstimateCostS3InstantAccessEndpointSyncResponse struct {
-    // EstimateCostS3InstantAccessEndpointSyncResponseLinks
+    // URLs to pages related to the resource.
     Links            *EstimateCostS3InstantAccessEndpointSyncResponseLinks `json:"_links"`
     // The estimated cost for instant access endpoint.
     EstimatedCost    *float64                                              `json:"estimated_cost"`
@@ -2263,7 +2266,7 @@ type MoveHcmHostsResponse struct {
     Embedded *ReadTaskHateoasOuterEmbedded `json:"_embedded"`
     // URLs to pages related to the resource.
     Links    *MoveHostsLinks               `json:"_links"`
-    // TaskID for MoveHostsReq
+    // Clumio assigned TaskID for moving the hosts.
     TaskId   *string                       `json:"task_id"`
 }
 
@@ -2610,9 +2613,8 @@ type ReadAWSConnectionResponse struct {
     // If this connection is not configured for Clumio Cloud Protect, then this field has a
     // value of `null`.
     Protect                  *ProtectConfig      `json:"protect"`
-    // The asset types for which Clumio protect is enabled.
+    // The asset types enabled for protect.
     // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
-    // If an empty list is provided, all assets are selected for protection.
     ProtectAssetTypesEnabled []*string           `json:"protect_asset_types_enabled"`
     // The services to be enabled for this configuration. Valid values are
     // ["discover"], ["discover", "protect"]. This is only set when the
@@ -4665,8 +4667,10 @@ type ReadS3InstantAccessEndpointResponse struct {
     Region                   *string                          `json:"region"`
     // The time at which the backup was restored from this endpoint in RFC-3339 format.
     RestoreTimestamp         *string                          `json:"restore_timestamp"`
-    // TODO: Add struct field description
+    // IAM role which is allowed access to the OLAP endpoint.
     Roles                    []*S3InstantAccessEndpointRole   `json:"roles"`
+    // S3InstantAccessEndpointStat
+    // Statistical metric related to the instant access endpoint.
     // S3InstantAccessEndpointStat swagger: model S3InstantAccessEndpointStat
     Stats                    []*S3InstantAccessEndpointStat   `json:"stats"`
     // The time that this endpoint was last updated, in RFC-3339 format.
@@ -5519,9 +5523,8 @@ type UpdateAWSConnectionResponse struct {
     // If this connection is not configured for Clumio Cloud Protect, then this field has a
     // value of `null`.
     Protect                  *ProtectConfig      `json:"protect"`
-    // The asset types for which Clumio protect is enabled.
+    // The asset types enabled for protect.
     // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
-    // If an empty list is provided, all assets are selected for protection.
     ProtectAssetTypesEnabled []*string           `json:"protect_asset_types_enabled"`
     // The services to be enabled for this configuration. Valid values are
     // ["discover"], ["discover", "protect"]. This is only set when the
