@@ -110,9 +110,8 @@ type CreateAwsConnectionV1Request struct {
     // user. For more information about organizational units, refer to the
     // Organizational-Units documentation.
     OrganizationalUnitId     *string   `json:"organizational_unit_id"`
-    // The asset types for which Clumio protect is enabled.
+    // The asset types enabled for protect.
     // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
-    // If an empty list is provided, all assets are selected for protection.
     ProtectAssetTypesEnabled []*string `json:"protect_asset_types_enabled"`
     // The services to be enabled for this configuration. Valid values are
     // ["discover"], ["discover", "protect"]. This is only set when the
@@ -153,19 +152,30 @@ type PostProcessAwsConnectionV1Request struct {
 type CreateConnectionTemplateV1Request struct {
     // The asset types for which the template is to be generated. Possible
     // asset types are ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
-    AssetTypesEnabled []*string `json:"asset_types_enabled"`
+    AssetTypesEnabled   []*string `json:"asset_types_enabled"`
+    // Account ID for the AWS environment to be connected
+    // Mandatory to pass a 12 digit string if show_manual_resources is set to true
+    AwsAccountId        *string   `json:"aws_account_id"`
+    // AWS Region of the AWS environment to be connected
+    // Mandatory to pass a non-empty string if show_manual_resources is set to true
+    AwsRegion           *string   `json:"aws_region"`
+    // Returns the resources to be created manually if set to true
+    ShowManualResources *bool     `json:"show_manual_resources"`
 }
 
 // UpdateAwsConnectionV1Request represents a custom type struct
 type UpdateAwsConnectionV1Request struct {
     // Asset types enabled with the given resource ARNs.
     // This field is only applicable to manually configured connections.
-    AssetTypesEnabled []*string  `json:"asset_types_enabled"`
+    AssetTypesEnabled  []*string  `json:"asset_types_enabled"`
     // An optional, user-provided description for this connection.
-    Description       *string    `json:"description"`
+    Description        *string    `json:"description"`
+    // Set as true if created via clumio UI or clumio API.
+    // Set as false if created via terraform provider.
+    IsManualConnection *bool      `json:"is_manual_connection"`
     // Partial updates are not supported, therefore you must provide ARNs for all configured resources,
     // including those for resources that are not being updated.
-    Resources         *Resources `json:"resources"`
+    Resources          *Resources `json:"resources"`
 }
 
 // CreateMssqlHostConnectionsV1Request represents a custom type struct
@@ -174,7 +184,7 @@ type CreateMssqlHostConnectionsV1Request struct {
     Endpoints            []*string `json:"endpoints"`
     // TODO: Add struct field description
     GroupId              *string   `json:"group_id"`
-    // The Clumio-assigned ID of the organizational unit associated with the Host.
+    // The Clumio-assigned ID of the organizational unit associated with the host.
     OrganizationalUnitId *string   `json:"organizational_unit_id"`
     // Performs the operation on a host within the specified management subgroup.
     SubgroupId           *string   `json:"subgroup_id"`

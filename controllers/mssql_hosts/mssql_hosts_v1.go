@@ -134,7 +134,7 @@ func (m *MssqlHostsV1) DeleteMssqlHostConnections(
         QueryParams: queryParams,
         AcceptHeader: header,
         Body: payload,
-        Result200: &result,
+        Result202: &result,
         RequestType: common.Delete,
     })
 
@@ -177,7 +177,7 @@ func (m *MssqlHostsV1) MoveMssqlHostConnections(
         QueryParams: queryParams,
         AcceptHeader: header,
         Body: payload,
-        Result200: &result,
+        Result202: &result,
         RequestType: common.Patch,
     })
 

@@ -1,3 +1,5 @@
+## 0.13.0
+Updates to AWS Connection API.
 ## 0.12.1
 Fixed incorrect request parameter type for UpdateAwsConnection API.
 ## 0.12.0

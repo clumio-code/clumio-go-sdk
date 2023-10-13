@@ -96,7 +96,8 @@ func (a *AwsConnectionsV1) CreateAwsConnection(
 
 // ReadAwsConnection Returns a representation of the specified AWS connection.
 func (a *AwsConnectionsV1) ReadAwsConnection(
-    connectionId string)(
+    connectionId string, 
+    returnExternalId *string)(
     *models.ReadAWSConnectionResponse, *apiutils.APIError) {
 
     pathURL := "/connections/aws/{connection_id}"
@@ -109,10 +110,20 @@ func (a *AwsConnectionsV1) ReadAwsConnection(
     
     header := "application/api.clumio.aws-connections=v1+json"
     result := &models.ReadAWSConnectionResponse{}
+    defaultString := "" 
+    
+    if returnExternalId == nil {
+        returnExternalId = &defaultString
+    }
+    
+    queryParams := map[string]string{
+        "returnExternalId": *returnExternalId,
+    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: a.config,
         RequestUrl: queryBuilder,
+        QueryParams: queryParams,
         PathParams: pathParams,
         AcceptHeader: header,
         Result200: &result,
