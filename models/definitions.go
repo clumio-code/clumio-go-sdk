@@ -987,8 +987,8 @@ type ClumioSsmDocumentStep struct {
     Inputs       *ClumioSsmDocumentInputs `json:"inputs"`
     // "name" refers to name of that step
     Name         *string                  `json:"name"`
-    // The JSON representation for `ListValue` is JSON array.
-    Precondition map[string]*ListValue    `json:"precondition"`
+    // "preconditon" is used for targeting a OS or validating input parameters
+    Precondition map[string]*array        `json:"precondition"`
 }
 
 // ClumioTopicResource represents a custom type struct.
@@ -3968,13 +3968,6 @@ type ListFileVersionsHateoasLink struct {
 type ListFileVersionsHateoasLinks struct {
     // A HATEOAS link to the file versions associated with this resource.
     ListFileVersions *ListFileVersionsHateoasLink `json:"list-file-versions"`
-}
-
-// ListValue represents a custom type struct.
-// The JSON representation for `ListValue` is JSON array.
-type ListValue struct {
-    // The JSON representation for `Value` is JSON value.
-    Values []*Value `json:"values"`
 }
 
 // LocalSecondaryIndex represents a custom type struct.
@@ -8732,13 +8725,6 @@ type VMwareVCenterNetworkWithETag struct {
 type VMwareVCenterParentFolderModel struct {
     // The VMware-assigned Managed Object Reference (MoRef) ID of the folder.
     Id *string `json:"id"`
-}
-
-// Value represents a custom type struct.
-// The JSON representation for `Value` is JSON value.
-type Value struct {
-    // TODO: Add struct field description
-    Kind interface{} `json:"Kind"`
 }
 
 // Vcenter represents a custom type struct
