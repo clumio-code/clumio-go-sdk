@@ -20,6 +20,8 @@ type RestoredProtectionGroupInstantAccessEndpointsV1 struct {
 
 // ListProtectionGroupInstantAccessEndpoints Lists S3 instant access endpoints depending on the filters present in the body.
 func (r *RestoredProtectionGroupInstantAccessEndpointsV1) ListProtectionGroupInstantAccessEndpoints(
+    limit *int64, 
+    start *string, 
     filter *string)(
     *models.ListS3InstantAccessEndpointsResponse, *apiutils.APIError) {
 
@@ -28,13 +30,22 @@ func (r *RestoredProtectionGroupInstantAccessEndpointsV1) ListProtectionGroupIns
     
     header := "application/api.clumio.restored-protection-group-instant-access-endpoints=v1+json"
     result := &models.ListS3InstantAccessEndpointsResponse{}
+    defaultInt64 := int64(0)
     defaultString := "" 
     
+    if limit == nil {
+        limit = &defaultInt64
+    }
+    if start == nil {
+        start = &defaultString
+    }
     if filter == nil {
         filter = &defaultString
     }
     
     queryParams := map[string]string{
+        "limit": fmt.Sprintf("%v", *limit),
+        "start": *start,
         "filter": *filter,
     }
 

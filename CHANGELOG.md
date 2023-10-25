@@ -1,3 +1,5 @@
+## 0.13.1
+Minor release containing a bug fix for connection templates API and additional response parameters for ListProtectionGroupInstantAccessEndpoints API. 
 ## 0.13.0
 Updates to AWS Connection API.
 ## 0.12.1

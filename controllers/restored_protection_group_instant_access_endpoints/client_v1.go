@@ -12,6 +12,8 @@ import (
 type RestoredProtectionGroupInstantAccessEndpointsV1Client interface {
     // ListProtectionGroupInstantAccessEndpoints Lists S3 instant access endpoints depending on the filters present in the body.
     ListProtectionGroupInstantAccessEndpoints(
+        limit *int64, 
+        start *string, 
         filter *string)(
         *models.ListS3InstantAccessEndpointsResponse,  *apiutils.APIError)
     

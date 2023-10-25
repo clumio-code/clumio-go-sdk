@@ -987,8 +987,8 @@ type ClumioSsmDocumentStep struct {
     Inputs       *ClumioSsmDocumentInputs `json:"inputs"`
     // "name" refers to name of that step
     Name         *string                  `json:"name"`
-    // The JSON representation for `ListValue` is JSON array.
-    Precondition map[string]*ListValue    `json:"precondition"`
+    // "preconditon" is used for targeting a OS or validating input parameters
+    Precondition map[string]*[]string     `json:"precondition"`
 }
 
 // ClumioTopicResource represents a custom type struct.
@@ -3030,7 +3030,7 @@ type EC2MSSQLLogBackupAdvancedSetting struct {
 }
 
 // EC2MSSQLPITROptions represents a custom type struct.
-// A database and a point-in-time to be restored.
+// A database backup at a specific point-in-time to be restored.
 type EC2MSSQLPITROptions struct {
     // The Clumio-assigned ID of the MSSQL database to be restored.
     // Use the [GET /datasources/aws/ec2-mssql/databases](#operation/list-ec2-mssql-databases)
@@ -3060,10 +3060,11 @@ type EC2MSSQLRestoreFromBackupOptions struct {
 // EC2MSSQLRestoreSource represents a custom type struct.
 // The EC2 MSSQL database backup to be restored. Only one of `backup` or `pitr`
 // should be set.
+// `pitr` A database backup at a specific point in time to be restored.
 type EC2MSSQLRestoreSource struct {
     // The EC2 MSSQL database backup to be restored.
     Backup       *EC2MSSQLRestoreFromBackupOptions `json:"backup"`
-    // A database and a point-in-time to be restored.
+    // A database backup at a specific point-in-time to be restored.
     Pitr         *EC2MSSQLPITROptions              `json:"pitr"`
     // An AG database to be restored to an AAG.
     RestoreToAag *EC2MSSQLRestoreToAAGOptions      `json:"restore_to_aag"`
@@ -3968,13 +3969,6 @@ type ListFileVersionsHateoasLink struct {
 type ListFileVersionsHateoasLinks struct {
     // A HATEOAS link to the file versions associated with this resource.
     ListFileVersions *ListFileVersionsHateoasLink `json:"list-file-versions"`
-}
-
-// ListValue represents a custom type struct.
-// The JSON representation for `ListValue` is JSON array.
-type ListValue struct {
-    // The JSON representation for `Value` is JSON value.
-    Values []*Value `json:"values"`
 }
 
 // LocalSecondaryIndex represents a custom type struct.
@@ -5942,7 +5936,7 @@ type RDSBackupDatabaseListLinks struct {
 // Advanced settings for RDS PITR configuration sync.
 type RDSConfigSyncAdvancedSetting struct {
     // Syncs the configuration of RDS PITR in AWS. Valid values are: `immediate`, and `maintenance_window`.
-    // Note that applying the setting "immediately" can cause unexpected downtime.
+    // Note that applying the setting "immediately" may cause unexpected downtime.
     Apply *string `json:"apply"`
 }
 
@@ -7253,8 +7247,12 @@ type S3InstantAccessEndpointListEmbedded struct {
 // S3InstantAccessEndpointListLinks represents a custom type struct.
 // URLs to pages related to the resource.
 type S3InstantAccessEndpointListLinks struct {
+    // The HATEOAS link to the first page of results.
+    First *HateoasFirstLink `json:"_first"`
+    // The HATEOAS link to the next page of results.
+    Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to this resource.
-    Self *HateoasSelfLink `json:"_self"`
+    Self  *HateoasSelfLink  `json:"_self"`
 }
 
 // S3InstantAccessEndpointRole represents a custom type struct.
@@ -8732,13 +8730,6 @@ type VMwareVCenterNetworkWithETag struct {
 type VMwareVCenterParentFolderModel struct {
     // The VMware-assigned Managed Object Reference (MoRef) ID of the folder.
     Id *string `json:"id"`
-}
-
-// Value represents a custom type struct.
-// The JSON representation for `Value` is JSON value.
-type Value struct {
-    // TODO: Add struct field description
-    Kind interface{} `json:"Kind"`
 }
 
 // Vcenter represents a custom type struct

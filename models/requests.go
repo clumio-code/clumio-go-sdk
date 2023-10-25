@@ -167,15 +167,12 @@ type CreateConnectionTemplateV1Request struct {
 type UpdateAwsConnectionV1Request struct {
     // Asset types enabled with the given resource ARNs.
     // This field is only applicable to manually configured connections.
-    AssetTypesEnabled  []*string  `json:"asset_types_enabled"`
+    AssetTypesEnabled []*string  `json:"asset_types_enabled"`
     // An optional, user-provided description for this connection.
-    Description        *string    `json:"description"`
-    // Set as true if created via clumio UI or clumio API.
-    // Set as false if created via terraform provider.
-    IsManualConnection *bool      `json:"is_manual_connection"`
+    Description       *string    `json:"description"`
     // Partial updates are not supported, therefore you must provide ARNs for all configured resources,
     // including those for resources that are not being updated.
-    Resources          *Resources `json:"resources"`
+    Resources         *Resources `json:"resources"`
 }
 
 // CreateMssqlHostConnectionsV1Request represents a custom type struct
@@ -942,6 +939,7 @@ type RestoreAwsEc2InstanceV1Request struct {
 type RestoreEc2MssqlDatabaseV1Request struct {
     // The EC2 MSSQL database backup to be restored. Only one of `backup` or `pitr`
     // should be set.
+    // `pitr` A database backup at a specific point in time to be restored.
     Source *EC2MSSQLRestoreSource `json:"source"`
     // The configuration of the EC2 MSSQL database to which the data has to be restored.
     Target *EC2MSSQLRestoreTarget `json:"target"`
