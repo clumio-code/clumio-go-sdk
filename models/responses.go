@@ -2018,9 +2018,15 @@ type ListRulesResponse struct {
 // ListS3InstantAccessEndpointsResponse represents a custom type struct for Success
 type ListS3InstantAccessEndpointsResponse struct {
     // Embedded responses related to the resource.
-    Embedded *S3InstantAccessEndpointListEmbedded `json:"_embedded"`
+    Embedded     *S3InstantAccessEndpointListEmbedded `json:"_embedded"`
     // URLs to pages related to the resource.
-    Links    *S3InstantAccessEndpointListLinks    `json:"_links"`
+    Links        *S3InstantAccessEndpointListLinks    `json:"_links"`
+    // The number of items listed on the current page.
+    CurrentCount *int64                               `json:"current_count"`
+    // The maximum number of items displayed per page in the response.
+    Limit        *int64                               `json:"limit"`
+    // The page token used to get this response.
+    Start        *string                              `json:"start"`
 }
 
 // ListSubgroupsResponse represents a custom type struct for Success
