@@ -48,7 +48,7 @@ func (m *MssqlHostsV1) ListMssqlHostConnections(
     }
     
     queryParams := map[string]string{
-        "currentCount": fmt.Sprintf("%v", *currentCount),
+        "current_count": fmt.Sprintf("%v", *currentCount),
         "filter": *filter,
         "limit": fmt.Sprintf("%v", *limit),
         "start": *start,

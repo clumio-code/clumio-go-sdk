@@ -55,7 +55,7 @@ func (b *BackupAwsRdsResourceDatabaseTablesV1) ListBackupAwsRdsResourceDatabaseT
     }
     
     queryParams := map[string]string{
-        "currentCount": fmt.Sprintf("%v", *currentCount),
+        "current_count": fmt.Sprintf("%v", *currentCount),
         "limit": fmt.Sprintf("%v", *limit),
         "start": *start,
         "filter": *filter,
