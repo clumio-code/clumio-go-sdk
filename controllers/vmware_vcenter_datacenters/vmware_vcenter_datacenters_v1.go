@@ -56,7 +56,7 @@ func (v *VmwareVcenterDatacentersV1) ListVmwareVcenterDatacenters(
         "limit": fmt.Sprintf("%v", *limit),
         "start": *start,
         "filter": *filter,
-        "Embed": *Embed,
+        "_embed": *Embed,
     }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{

@@ -65,10 +65,10 @@ func (a *AwsEnvironmentTagsV1) ListAwsEnvironmentTags(
     }
     
     queryParams := map[string]string{
-        "currentCount": fmt.Sprintf("%v", *currentCount),
+        "current_count": fmt.Sprintf("%v", *currentCount),
         "limit": fmt.Sprintf("%v", *limit),
-        "totalCount": fmt.Sprintf("%v", *totalCount),
-        "totalPagesCount": fmt.Sprintf("%v", *totalPagesCount),
+        "total_count": fmt.Sprintf("%v", *totalCount),
+        "total_pages_count": fmt.Sprintf("%v", *totalPagesCount),
         "start": *start,
         "filter": *filter,
         "embed": *embed,

@@ -54,7 +54,7 @@ func (p *PolicyRulesV1) ListPolicyRules(
     queryParams := map[string]string{
         "limit": fmt.Sprintf("%v", *limit),
         "start": *start,
-        "organizationalUnitId": *organizationalUnitId,
+        "organizational_unit_id": *organizationalUnitId,
         "sort": *sort,
         "filter": *filter,
     }

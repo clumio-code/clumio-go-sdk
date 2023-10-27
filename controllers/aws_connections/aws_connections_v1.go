@@ -117,7 +117,7 @@ func (a *AwsConnectionsV1) ReadAwsConnection(
     }
     
     queryParams := map[string]string{
-        "returnExternalId": *returnExternalId,
+        "return_external_id": *returnExternalId,
     }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{

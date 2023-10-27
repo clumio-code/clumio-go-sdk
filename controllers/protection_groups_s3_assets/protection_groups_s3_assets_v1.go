@@ -123,10 +123,10 @@ func (p *ProtectionGroupsS3AssetsV1) ReadProtectionGroupS3AssetContinuousBackupS
     }
     
     queryParams := map[string]string{
-        "bucketName": *bucketName,
-        "bucketId": *bucketId,
-        "beginTimestamp": beginTimestamp,
-        "endTimestamp": endTimestamp,
+        "bucket_name": *bucketName,
+        "bucket_id": *bucketId,
+        "begin_timestamp": beginTimestamp,
+        "end_timestamp": endTimestamp,
         "interval": *interval,
     }
 

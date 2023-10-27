@@ -1,3 +1,5 @@
+## 0.13.2
+Bug fix release to update the queryParams in controller files to be in snake-case format.
 ## 0.13.1
 Minor release containing a bug fix for connection templates API and additional response parameters for ListProtectionGroupInstantAccessEndpoints API. 
 ## 0.13.0
