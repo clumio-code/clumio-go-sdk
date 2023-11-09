@@ -3112,10 +3112,21 @@ type EC2MSSQLTemplateInfo struct {
 
 // EC2MssqlDatabasePitrInterval represents a custom type struct
 type EC2MssqlDatabasePitrInterval struct {
+    // Embedded responses related to the resource.
+    Embedded       interface{}                        `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links          *EC2MssqlDatabasePitrIntervalLinks `json:"_links"`
     // End timestamp of the interval. Represented in RFC-3339 format.
-    EndTimestamp   *string `json:"end_timestamp"`
+    EndTimestamp   *string                            `json:"end_timestamp"`
     // Start timestamp of the interval. Represented in RFC-3339 format.
-    StartTimestamp *string `json:"start_timestamp"`
+    StartTimestamp *string                            `json:"start_timestamp"`
+}
+
+// EC2MssqlDatabasePitrIntervalLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type EC2MssqlDatabasePitrIntervalLinks struct {
+    // A resource-specific HATEOAS link.
+    RestoreEc2MssqlDatabase *HateoasLink `json:"restore-ec2-mssql-database"`
 }
 
 // EC2MssqlDatabasePitrIntervalListEmbedded represents a custom type struct.
@@ -5061,21 +5072,23 @@ type Policy struct {
 // Additional operation-specific policy settings. For operation types which do not support additional settings, this field is `null`.
 type PolicyAdvancedSettings struct {
     // Advanced settings for EBS backup.
-    AwsEbsVolumeBackup     *EBSBackupAdvancedSetting              `json:"aws_ebs_volume_backup"`
+    AwsEbsVolumeBackup           *EBSBackupAdvancedSetting              `json:"aws_ebs_volume_backup"`
     // Advanced settings for EC2 backup.
-    AwsEc2InstanceBackup   *EC2BackupAdvancedSetting              `json:"aws_ec2_instance_backup"`
+    AwsEc2InstanceBackup         *EC2BackupAdvancedSetting              `json:"aws_ec2_instance_backup"`
     // Advanced settings for RDS PITR configuration sync.
-    AwsRdsConfigSync       *RDSConfigSyncAdvancedSetting          `json:"aws_rds_config_sync"`
+    AwsRdsConfigSync             *RDSConfigSyncAdvancedSetting          `json:"aws_rds_config_sync"`
+    // Settings for determining if a RDS policy is created with standard or frozen tier.
+    AwsRdsResourceGranularBackup *RDSLogicalBackupAdvancedSetting       `json:"aws_rds_resource_granular_backup"`
     // Additional policy configuration settings for the `ec2_mssql_database_backup` operation. If this operation is not of type `ec2_mssql_database_backup`, then this field is omitted from the response.
-    Ec2MssqlDatabaseBackup *EC2MSSQLDatabaseBackupAdvancedSetting `json:"ec2_mssql_database_backup"`
+    Ec2MssqlDatabaseBackup       *EC2MSSQLDatabaseBackupAdvancedSetting `json:"ec2_mssql_database_backup"`
     // Additional policy configuration settings for the `ec2_mssql_log_backup` operation. If this operation is not of type `ec2_mssql_log_backup`, then this field is omitted from the response.
-    Ec2MssqlLogBackup      *EC2MSSQLLogBackupAdvancedSetting      `json:"ec2_mssql_log_backup"`
+    Ec2MssqlLogBackup            *EC2MSSQLLogBackupAdvancedSetting      `json:"ec2_mssql_log_backup"`
     // Additional policy configuration settings for the `mssql_database_backup` operation. If this operation is not of type `mssql_database_backup`, then this field is omitted from the response.
-    MssqlDatabaseBackup    *MSSQLDatabaseBackupAdvancedSetting    `json:"mssql_database_backup"`
+    MssqlDatabaseBackup          *MSSQLDatabaseBackupAdvancedSetting    `json:"mssql_database_backup"`
     // Additional policy configuration settings for the `mssql_log_backup` operation. If this operation is not of type `mssql_log_backup`, then this field is omitted from the response.
-    MssqlLogBackup         *MSSQLLogBackupAdvancedSetting         `json:"mssql_log_backup"`
+    MssqlLogBackup               *MSSQLLogBackupAdvancedSetting         `json:"mssql_log_backup"`
     // Additional policy configuration settings for the `protection_group_backup` operation. If this operation is not of type `protection_group_backup`, then this field is omitted from the response.
-    ProtectionGroupBackup  *ProtectionGroupBackupAdvancedSetting  `json:"protection_group_backup"`
+    ProtectionGroupBackup        *ProtectionGroupBackupAdvancedSetting  `json:"protection_group_backup"`
 }
 
 // PolicyDetails represents a custom type struct
@@ -6002,6 +6015,13 @@ type RDSDatabaseTableListLinks struct {
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to this resource.
     Self  *HateoasSelfLink  `json:"_self"`
+}
+
+// RDSLogicalBackupAdvancedSetting represents a custom type struct.
+// Settings for determining if a RDS policy is created with standard or frozen tier.
+type RDSLogicalBackupAdvancedSetting struct {
+    // Backup tier to store the backup in. Valid values are: `standard`, `frozen`
+    BackupTier *string `json:"backup_tier"`
 }
 
 // RDSLogicalPreviewQueryResult represents a custom type struct.

@@ -1,3 +1,5 @@
+## 0.14.0
+Policy API updates with RDSLogicalBackupAdvancedSetting added to Policy Advanced Settings.
 ## 0.13.2
 Bug fix release to update the queryParams in controller files to be in snake-case format.
 ## 0.13.1
