@@ -1,4 +1,4 @@
-// Copyright (c) 2021 Clumio All Rights Reserved
+// Copyright (c) 2023 Clumio All Rights Reserved
 
 // Package protectiongroupss3assets contains methods related to ProtectionGroupsS3Assets
 package protectiongroupss3assets

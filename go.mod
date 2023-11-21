@@ -1,4 +1,4 @@
-// Copyright (c) 2021 Clumio All Rights Reserved
+// Copyright (c) 2023 Clumio All Rights Reserved
 module github.com/clumio-code/clumio-go-sdk
 
 go 1.20

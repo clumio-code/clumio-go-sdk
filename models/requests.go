@@ -1056,11 +1056,13 @@ type UpdateProtectionGroupInstantAccessEndpointV1Request struct {
 
 // AddProtectionGroupInstantAccessEndpointRoleV1Request represents a custom type struct
 type AddProtectionGroupInstantAccessEndpointRoleV1Request struct {
+    // Allow the addition of a role from an external account. This requires a feature flag to be enabled, contact support@clumio.com.
+    IsAllowExternalAccount *bool   `json:"is_allow_external_account"`
     // Descriptive alias of the IAM role.
-    RoleAlias *string `json:"role_alias"`
+    RoleAlias              *string `json:"role_alias"`
     // ARN of the IAM role to allow access the endpoint. The role must be accessible from AWS account
     // registered with Clumio.
-    RoleArn   *string `json:"role_arn"`
+    RoleArn                *string `json:"role_arn"`
 }
 
 // UpdateProtectionGroupInstantAccessEndpointRoleV1Request represents a custom type struct
