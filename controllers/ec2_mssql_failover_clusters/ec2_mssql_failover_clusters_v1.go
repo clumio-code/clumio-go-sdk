@@ -1,4 +1,4 @@
-// Copyright (c) 2021 Clumio All Rights Reserved
+// Copyright (c) 2023 Clumio All Rights Reserved
 
 // Package ec2mssqlfailoverclusters contains methods related to Ec2MssqlFailoverClusters
 package ec2mssqlfailoverclusters

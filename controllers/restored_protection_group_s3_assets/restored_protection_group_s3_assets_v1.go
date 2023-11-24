@@ -1,4 +1,4 @@
-// Copyright (c) 2021 Clumio All Rights Reserved
+// Copyright (c) 2023 Clumio All Rights Reserved
 
 // Package restoredprotectiongroups3assets contains methods related to RestoredProtectionGroupS3Assets
 package restoredprotectiongroups3assets
