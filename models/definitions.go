@@ -7206,6 +7206,8 @@ type S3InstantAccessEndpoint struct {
     Links                    *S3InstantAccessEndpointLinks    `json:"_links"`
     // The AWS-assigned ID of the account associated with the S3 instant access endpoint.
     AwsAccountId             *string                          `json:"aws_account_id"`
+    // The AWS region of the S3 instant access endpoint and its source backup.
+    BackupRegion             *string                          `json:"backup_region"`
     // The name of source bucket.
     BucketName               *string                          `json:"bucket_name"`
     // The time that this endpoint was created, in RFC-3339 format.
@@ -7227,7 +7229,7 @@ type S3InstantAccessEndpoint struct {
     ProtectionGroupName      *string                          `json:"protection_group_name"`
     // The Clumio-assigned ID of the bucket protection group.
     ProtectionGroupS3AssetId *string                          `json:"protection_group_s3_asset_id"`
-    // The AWS region of the S3 instant access endpoint.
+    // The AWS region of the source bucket.
     Region                   *string                          `json:"region"`
     // The time at which the backup was restored from this endpoint in RFC-3339 format.
     RestoreTimestamp         *string                          `json:"restore_timestamp"`
