@@ -313,7 +313,8 @@ type CreatePolicyDefinitionV1Request struct {
     Operations           []*PolicyOperationInput `json:"operations"`
     // The Clumio-assigned ID of the organizational unit associated with the policy.
     OrganizationalUnitId *string                 `json:"organizational_unit_id"`
-    // The timezone for the policy.
+    // The timezone for the policy. The timezone must be a valid location name from the IANA Time Zone database.
+    // For instance, "America/New_York", "US/Central", "UTC".
     Timezone             *string                 `json:"timezone"`
 }
 
@@ -328,7 +329,8 @@ type UpdatePolicyDefinitionV1Request struct {
     Operations           []*PolicyOperationInput `json:"operations"`
     // The Clumio-assigned ID of the organizational unit associated with the policy.
     OrganizationalUnitId *string                 `json:"organizational_unit_id"`
-    // The timezone for the policy.
+    // The timezone for the policy. The timezone must be a valid location name from the IANA Time Zone database.
+    // For instance, "America/New_York", "US/Central", "UTC".
     Timezone             *string                 `json:"timezone"`
 }
 
