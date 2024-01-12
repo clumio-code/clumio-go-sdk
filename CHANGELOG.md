@@ -1,3 +1,5 @@
+## 0.15.0
+Updates to S3 instant access APIs.
 ## 0.14.0
 Policy API updates with RDSLogicalBackupAdvancedSetting added to Policy Advanced Settings.
 ## 0.13.2
