@@ -513,6 +513,7 @@ type CreatePolicyResponse struct {
     OrganizationalUnitId *string            `json:"organizational_unit_id"`
     // The timezone for the policy. The timezone must be a valid location name from the IANA Time Zone database.
     // For instance, "America/New_York", "US/Central", "UTC".
+    // deprecated: true
     Timezone             *string            `json:"timezone"`
     // The updated time of the policy in unix time.
     UpdatedTime          *int64             `json:"updated_time"`
@@ -553,6 +554,9 @@ type CreateProtectionGroupResponse struct {
     // Whether the protection group already has a backup target configured by a policy, or
     // is open to be protected by an in-region or out-of-region S3 policy.
     IsBackupTargetRegionConfigured *bool                        `json:"is_backup_target_region_configured"`
+    // Determines whether the protection group is active or has been deleted. Deleted protection
+    // groups may be purged after some time once there are no active backups associated with it.
+    IsDeleted                      *bool                        `json:"is_deleted"`
     // Time of the last backup in RFC-3339 format.
     LastBackupTimestamp            *string                      `json:"last_backup_timestamp"`
     // Time of the last successful continuous backup in RFC-3339 format.
@@ -4132,6 +4136,7 @@ type ReadPolicyResponse struct {
     OrganizationalUnitId *string            `json:"organizational_unit_id"`
     // The timezone for the policy. The timezone must be a valid location name from the IANA Time Zone database.
     // For instance, "America/New_York", "US/Central", "UTC".
+    // deprecated: true
     Timezone             *string            `json:"timezone"`
     // The updated time of the policy in unix time.
     UpdatedTime          *int64             `json:"updated_time"`
@@ -4204,6 +4209,9 @@ type ReadProtectionGroupResponse struct {
     // Whether the protection group already has a backup target configured by a policy, or
     // is open to be protected by an in-region or out-of-region S3 policy.
     IsBackupTargetRegionConfigured *bool                                 `json:"is_backup_target_region_configured"`
+    // Determines whether the protection group is active or has been deleted. Deleted protection
+    // groups may be purged after some time once there are no active backups associated with it.
+    IsDeleted                      *bool                                 `json:"is_deleted"`
     // Time of the last backup in RFC-3339 format.
     LastBackupTimestamp            *string                               `json:"last_backup_timestamp"`
     // Time of the last successful continuous backup in RFC-3339 format.
@@ -5770,6 +5778,7 @@ type UpdatePolicyResponse struct {
     TaskId               *string                    `json:"task_id"`
     // The timezone for the policy. The timezone must be a valid location name from the IANA Time Zone database.
     // For instance, "America/New_York", "US/Central", "UTC".
+    // deprecated: true
     Timezone             *string                    `json:"timezone"`
     // The updated time of the policy in unix time.
     UpdatedTime          *int64                     `json:"updated_time"`
@@ -5810,6 +5819,9 @@ type UpdateProtectionGroupResponse struct {
     // Whether the protection group already has a backup target configured by a policy, or
     // is open to be protected by an in-region or out-of-region S3 policy.
     IsBackupTargetRegionConfigured *bool                        `json:"is_backup_target_region_configured"`
+    // Determines whether the protection group is active or has been deleted. Deleted protection
+    // groups may be purged after some time once there are no active backups associated with it.
+    IsDeleted                      *bool                        `json:"is_deleted"`
     // Time of the last backup in RFC-3339 format.
     LastBackupTimestamp            *string                      `json:"last_backup_timestamp"`
     // Time of the last successful continuous backup in RFC-3339 format.

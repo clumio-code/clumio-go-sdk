@@ -1,3 +1,6 @@
+## 0.16.0
+New attribute added to ProtectionGroup API response.
+Also updated the dependencies to fix dependabot security alert.
 ## 0.15.0
 Updates to S3 instant access APIs.
 ## 0.14.0
