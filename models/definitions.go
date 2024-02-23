@@ -5064,7 +5064,6 @@ type Policy struct {
     OrganizationalUnitId *string            `json:"organizational_unit_id"`
     // The timezone for the policy. The timezone must be a valid location name from the IANA Time Zone database.
     // For instance, "America/New_York", "US/Central", "UTC".
-    // deprecated: true
     Timezone             *string            `json:"timezone"`
     // The updated time of the policy in unix time.
     UpdatedTime          *int64             `json:"updated_time"`
@@ -5148,8 +5147,8 @@ type PolicyListLinks struct {
 // PolicyOperation represents a custom type struct
 type PolicyOperation struct {
     // Determines whether the protection policy should take action now or during the specified backup window.
-    // If set to `immediate`, Clumio starts the backup process right away. If set to `window`, Clumio starts the backup process when the backup window (`backup_window_tz`) opens.
-    // If set to `window` and `operation in ("aws_rds_resource_aws_snapshot", "mssql_log_backup", "ec2_mssql_log_backup")`,
+    // If set to `immediate`, Clumio starts the backup process right away. If set to `backup_window_tz`, Clumio starts the backup process when the backup window (`backup_window_tz`) opens.
+    // If set to `backup_window_tz` and `operation in ("aws_rds_resource_aws_snapshot", "mssql_log_backup", "ec2_mssql_log_backup")`,
     // the backup window will not be determined by Clumio's backup window.
     ActionSetting     *string                 `json:"action_setting"`
     // Additional operation-specific policy settings. For operation types which do not support additional settings, this field is `null`.
@@ -5175,8 +5174,8 @@ type PolicyOperation struct {
 // PolicyOperationInput represents a custom type struct
 type PolicyOperationInput struct {
     // Determines whether the protection policy should take action now or during the specified backup window.
-    // If set to `immediate`, Clumio starts the backup process right away. If set to `window`, Clumio starts the backup process when the backup window (`backup_window_tz`) opens.
-    // If set to `window` and `operation in ("aws_rds_resource_aws_snapshot", "mssql_log_backup", "ec2_mssql_log_backup")`,
+    // If set to `immediate`, Clumio starts the backup process right away. If set to `backup_window_tz`, Clumio starts the backup process when the backup window (`backup_window_tz`) opens.
+    // If set to `backup_window_tz` and `operation in ("aws_rds_resource_aws_snapshot", "mssql_log_backup", "ec2_mssql_log_backup")`,
     // the backup window will not be determined by Clumio's backup window.
     ActionSetting    *string                 `json:"action_setting"`
     // Additional operation-specific policy settings. For operation types which do not support additional settings, this field is `null`.
@@ -5355,9 +5354,6 @@ type ProtectionGroup struct {
     // Whether the protection group already has a backup target configured by a policy, or
     // is open to be protected by an in-region or out-of-region S3 policy.
     IsBackupTargetRegionConfigured *bool                                 `json:"is_backup_target_region_configured"`
-    // Determines whether the protection group is active or has been deleted. Deleted protection
-    // groups may be purged after some time once there are no active backups associated with it.
-    IsDeleted                      *bool                                 `json:"is_deleted"`
     // Time of the last backup in RFC-3339 format.
     LastBackupTimestamp            *string                               `json:"last_backup_timestamp"`
     // Time of the last successful continuous backup in RFC-3339 format.
@@ -7226,10 +7222,6 @@ type S3InstantAccessEndpoint struct {
     Id                       *string                          `json:"id"`
     // The user-assigned name of the S3 instant access endpoint.
     Name                     *string                          `json:"name"`
-    // The time in RFC-3339 format that the restored objects are backed up from.
-    ObjectsCreatedAfter      *string                          `json:"objects_created_after"`
-    // The time in RFC-3339 format that the restored objects are backed up to.
-    ObjectsCreatedBefore     *string                          `json:"objects_created_before"`
     // The Clumio-assigned ID of the organizational unit associated with the S3 instant access endpoint.
     OrganizationalUnitId     *string                          `json:"organizational_unit_id"`
     // The Clumio-assigned ID of the protection group this endpoint is created for.
@@ -7241,7 +7233,6 @@ type S3InstantAccessEndpoint struct {
     // The AWS region of the source bucket.
     Region                   *string                          `json:"region"`
     // The time at which the backup was restored from this endpoint in RFC-3339 format.
-    // Deprecated.
     RestoreTimestamp         *string                          `json:"restore_timestamp"`
     // The time that this endpoint was last updated, in RFC-3339 format.
     UpdatedTimestamp         *string                          `json:"updated_timestamp"`

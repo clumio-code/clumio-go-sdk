@@ -315,7 +315,6 @@ type CreatePolicyDefinitionV1Request struct {
     OrganizationalUnitId *string                 `json:"organizational_unit_id"`
     // The timezone for the policy. The timezone must be a valid location name from the IANA Time Zone database.
     // For instance, "America/New_York", "US/Central", "UTC".
-    // deprecated: true
     Timezone             *string                 `json:"timezone"`
 }
 
@@ -332,7 +331,6 @@ type UpdatePolicyDefinitionV1Request struct {
     OrganizationalUnitId *string                 `json:"organizational_unit_id"`
     // The timezone for the policy. The timezone must be a valid location name from the IANA Time Zone database.
     // For instance, "America/New_York", "US/Central", "UTC".
-    // deprecated: true
     Timezone             *string                 `json:"timezone"`
 }
 
@@ -596,7 +594,7 @@ type CreateReportDownloadV1Request struct {
     // |                   |                  |                   | Compliance        |
     // |                   |                  |                   | reports.          |
     // |                   |                  |                   | $gte and $lt      |
-    // |                   |                  |                   | accept RFC-3339   |
+    // |                   |                  |                   | accept RFC-3999   |
     // |                   |                  |                   | timestamps and    |
     // |                   |                  |                   | $eq accepts a     |
     // |                   |                  |                   | unix timestamp    |
@@ -627,7 +625,7 @@ type CreateReportDownloadV1Request struct {
     // |                   |                  |                   | for Activity      |
     // |                   |                  |                   | reports.          |
     // |                   |                  |                   | $gte and $lt      |
-    // |                   |                  |                   | accept RFC-3339   |
+    // |                   |                  |                   | accept RFC-3999   |
     // |                   |                  |                   | timestamps and    |
     // |                   |                  |                   | $eq accepts a     |
     // |                   |                  |                   | unix timestamp    |
@@ -658,7 +656,7 @@ type CreateReportDownloadV1Request struct {
     // |                   |                  |                   | for Consumption   |
     // |                   |                  |                   | reports.          |
     // |                   |                  |                   | $gte and $lte     |
-    // |                   |                  |                   | accept RFC-3339   |
+    // |                   |                  |                   | accept RFC-3999   |
     // |                   |                  |                   | timestamps and    |
     // |                   |                  |                   | $eq accepts a     |
     // |                   |                  |                   | duration in       |

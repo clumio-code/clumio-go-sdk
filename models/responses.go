@@ -513,7 +513,6 @@ type CreatePolicyResponse struct {
     OrganizationalUnitId *string            `json:"organizational_unit_id"`
     // The timezone for the policy. The timezone must be a valid location name from the IANA Time Zone database.
     // For instance, "America/New_York", "US/Central", "UTC".
-    // deprecated: true
     Timezone             *string            `json:"timezone"`
     // The updated time of the policy in unix time.
     UpdatedTime          *int64             `json:"updated_time"`
@@ -554,9 +553,6 @@ type CreateProtectionGroupResponse struct {
     // Whether the protection group already has a backup target configured by a policy, or
     // is open to be protected by an in-region or out-of-region S3 policy.
     IsBackupTargetRegionConfigured *bool                        `json:"is_backup_target_region_configured"`
-    // Determines whether the protection group is active or has been deleted. Deleted protection
-    // groups may be purged after some time once there are no active backups associated with it.
-    IsDeleted                      *bool                        `json:"is_deleted"`
     // Time of the last backup in RFC-3339 format.
     LastBackupTimestamp            *string                      `json:"last_backup_timestamp"`
     // Time of the last successful continuous backup in RFC-3339 format.
@@ -4136,7 +4132,6 @@ type ReadPolicyResponse struct {
     OrganizationalUnitId *string            `json:"organizational_unit_id"`
     // The timezone for the policy. The timezone must be a valid location name from the IANA Time Zone database.
     // For instance, "America/New_York", "US/Central", "UTC".
-    // deprecated: true
     Timezone             *string            `json:"timezone"`
     // The updated time of the policy in unix time.
     UpdatedTime          *int64             `json:"updated_time"`
@@ -4209,9 +4204,6 @@ type ReadProtectionGroupResponse struct {
     // Whether the protection group already has a backup target configured by a policy, or
     // is open to be protected by an in-region or out-of-region S3 policy.
     IsBackupTargetRegionConfigured *bool                                 `json:"is_backup_target_region_configured"`
-    // Determines whether the protection group is active or has been deleted. Deleted protection
-    // groups may be purged after some time once there are no active backups associated with it.
-    IsDeleted                      *bool                                 `json:"is_deleted"`
     // Time of the last backup in RFC-3339 format.
     LastBackupTimestamp            *string                               `json:"last_backup_timestamp"`
     // Time of the last successful continuous backup in RFC-3339 format.
@@ -4673,10 +4665,6 @@ type ReadS3InstantAccessEndpointResponse struct {
     Id                       *string                          `json:"id"`
     // The user-assigned name of the S3 instant access endpoint.
     Name                     *string                          `json:"name"`
-    // The time in RFC-3339 format that the restored objects are backed up from.
-    ObjectsCreatedAfter      *string                          `json:"objects_created_after"`
-    // The time in RFC-3339 format that the restored objects are backed up to.
-    ObjectsCreatedBefore     *string                          `json:"objects_created_before"`
     // The Clumio-assigned ID of the organizational unit associated with the S3 instant access endpoint.
     OrganizationalUnitId     *string                          `json:"organizational_unit_id"`
     // The Clumio-assigned ID of the protection group this endpoint is created for.
@@ -4688,7 +4676,6 @@ type ReadS3InstantAccessEndpointResponse struct {
     // The AWS region of the source bucket.
     Region                   *string                          `json:"region"`
     // The time at which the backup was restored from this endpoint in RFC-3339 format.
-    // Deprecated.
     RestoreTimestamp         *string                          `json:"restore_timestamp"`
     // IAM role which is allowed access to the OLAP endpoint.
     Roles                    []*S3InstantAccessEndpointRole   `json:"roles"`
@@ -5778,7 +5765,6 @@ type UpdatePolicyResponse struct {
     TaskId               *string                    `json:"task_id"`
     // The timezone for the policy. The timezone must be a valid location name from the IANA Time Zone database.
     // For instance, "America/New_York", "US/Central", "UTC".
-    // deprecated: true
     Timezone             *string                    `json:"timezone"`
     // The updated time of the policy in unix time.
     UpdatedTime          *int64                     `json:"updated_time"`
@@ -5819,9 +5805,6 @@ type UpdateProtectionGroupResponse struct {
     // Whether the protection group already has a backup target configured by a policy, or
     // is open to be protected by an in-region or out-of-region S3 policy.
     IsBackupTargetRegionConfigured *bool                        `json:"is_backup_target_region_configured"`
-    // Determines whether the protection group is active or has been deleted. Deleted protection
-    // groups may be purged after some time once there are no active backups associated with it.
-    IsDeleted                      *bool                        `json:"is_deleted"`
     // Time of the last backup in RFC-3339 format.
     LastBackupTimestamp            *string                      `json:"last_backup_timestamp"`
     // Time of the last successful continuous backup in RFC-3339 format.
@@ -5879,10 +5862,6 @@ type UpdateS3InstantAccessEndpointResponse struct {
     Id                       *string                          `json:"id"`
     // The user-assigned name of the S3 instant access endpoint.
     Name                     *string                          `json:"name"`
-    // The time in RFC-3339 format that the restored objects are backed up from.
-    ObjectsCreatedAfter      *string                          `json:"objects_created_after"`
-    // The time in RFC-3339 format that the restored objects are backed up to.
-    ObjectsCreatedBefore     *string                          `json:"objects_created_before"`
     // The Clumio-assigned ID of the organizational unit associated with the S3 instant access endpoint.
     OrganizationalUnitId     *string                          `json:"organizational_unit_id"`
     // The Clumio-assigned ID of the protection group this endpoint is created for.
@@ -5894,7 +5873,6 @@ type UpdateS3InstantAccessEndpointResponse struct {
     // The AWS region of the source bucket.
     Region                   *string                          `json:"region"`
     // The time at which the backup was restored from this endpoint in RFC-3339 format.
-    // Deprecated.
     RestoreTimestamp         *string                          `json:"restore_timestamp"`
     // The time that this endpoint was last updated, in RFC-3339 format.
     UpdatedTimestamp         *string                          `json:"updated_timestamp"`
