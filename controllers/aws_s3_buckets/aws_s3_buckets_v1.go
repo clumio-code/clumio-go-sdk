@@ -91,8 +91,7 @@ func (a *AwsS3BucketsV1) ReadAwsS3Bucket(
 }
 
 
-// SetBucketProperties Idempotent call to set properties on an S3 bucket to enable flows like S3
-//  continuous backup.
+// SetBucketProperties Idempotent call to set properties on an S3 bucket to enable S3 continuous backup.
 func (a *AwsS3BucketsV1) SetBucketProperties(
     bucketId string, 
     body *models.SetBucketPropertiesV1Request)(

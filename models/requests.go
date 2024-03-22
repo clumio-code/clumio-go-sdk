@@ -220,9 +220,11 @@ type CreateMssqlHostConnectionCredentialsV1Request struct {
 type SetBucketPropertiesV1Request struct {
     // If true, enables continuous backup for the given bucket.
     // If false, disables continuous backup for the given bucket.
+    // If not set, does not update EventBridge.
     EventBridgeEnabled              *bool `json:"event_bridge_enabled"`
     // If true, tries to disable EventBridge notification for the given bucket.
-    // This may override the existing bucket notification configuration in the customer's account.
+    // It may override the existing bucket notification configuration in the customer's account.
+    // This takes effect only when `event_bridge_enabled` is set to `false`.
     EventBridgeNotificationDisabled *bool `json:"event_bridge_notification_disabled"`
 }
 
@@ -313,9 +315,10 @@ type CreatePolicyDefinitionV1Request struct {
     Operations           []*PolicyOperationInput `json:"operations"`
     // The Clumio-assigned ID of the organizational unit associated with the policy.
     OrganizationalUnitId *string                 `json:"organizational_unit_id"`
-    // The timezone for the policy. The timezone must be a valid location name from the IANA Time Zone database.
+    // The policy-level timezone is deprecated, as the operation-level timezone should be used instead.
+    // The timezone must be a valid location name from the IANA Time Zone database.
     // For instance, "America/New_York", "US/Central", "UTC".
-    // deprecated: true
+    // Deprecated: true
     Timezone             *string                 `json:"timezone"`
 }
 
@@ -330,9 +333,10 @@ type UpdatePolicyDefinitionV1Request struct {
     Operations           []*PolicyOperationInput `json:"operations"`
     // The Clumio-assigned ID of the organizational unit associated with the policy.
     OrganizationalUnitId *string                 `json:"organizational_unit_id"`
-    // The timezone for the policy. The timezone must be a valid location name from the IANA Time Zone database.
+    // The policy-level timezone is deprecated, as the operation-level timezone should be used instead.
+    // The timezone must be a valid location name from the IANA Time Zone database.
     // For instance, "America/New_York", "US/Central", "UTC".
-    // deprecated: true
+    // Deprecated: true
     Timezone             *string                 `json:"timezone"`
 }
 
