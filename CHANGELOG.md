@@ -1,3 +1,5 @@
+## 0.17.0
+Policy API changes with new attribute added to PolicyOperation model.
 ## 0.16.0
 New attribute added to ProtectionGroup API response.
 Also updated the dependencies to fix dependabot security alert.

@@ -22,8 +22,7 @@ type AwsS3BucketsV1Client interface {
         bucketId string)(
         *models.ReadBucketResponse,  *apiutils.APIError)
     
-    // SetBucketProperties Idempotent call to set properties on an S3 bucket to enable flows like S3
-    //  continuous backup.
+    // SetBucketProperties Idempotent call to set properties on an S3 bucket to enable S3 continuous backup.
     SetBucketProperties(
         bucketId string, 
         body *models.SetBucketPropertiesV1Request)(

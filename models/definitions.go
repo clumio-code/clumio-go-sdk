@@ -1285,15 +1285,7 @@ type DataAccessObject struct {
 // URLs to pages related to the resource.
 type DatabaseLinks struct {
     // The HATEOAS link to this resource.
-    Self                      *HateoasSelfLink `json:"_self"`
-    // A resource-specific HATEOAS link.
-    CreateBackupMssqlDatabase *HateoasLink     `json:"create-backup-mssql-database"`
-    // A resource-specific HATEOAS link.
-    ListBackupMssqlDatabases  *HateoasLink     `json:"list-backup-mssql-databases"`
-    // A resource-specific HATEOAS link.
-    ReadManagementGroup       *HateoasLink     `json:"read-management-group"`
-    // A resource-specific HATEOAS link.
-    ReadManagementSubgroup    *HateoasLink     `json:"read-management-subgroup"`
+    Self *HateoasSelfLink `json:"_self"`
 }
 
 // DatacenterEmbedded represents a custom type struct.
@@ -5062,9 +5054,10 @@ type Policy struct {
     Operations           []*PolicyOperation `json:"operations"`
     // The Clumio-assigned ID of the organizational unit associated with the policy.
     OrganizationalUnitId *string            `json:"organizational_unit_id"`
-    // The timezone for the policy. The timezone must be a valid location name from the IANA Time Zone database.
+    // The policy-level timezone is deprecated, as the operation-level timezone should be used instead.
+    // The timezone must be a valid location name from the IANA Time Zone database.
     // For instance, "America/New_York", "US/Central", "UTC".
-    // deprecated: true
+    // Deprecated: true
     Timezone             *string            `json:"timezone"`
     // The updated time of the policy in unix time.
     UpdatedTime          *int64             `json:"updated_time"`
@@ -5167,6 +5160,9 @@ type PolicyOperation struct {
     // backup_sla captures the SLA parameters
     // backup_sla captures the SLA parameters
     Slas              []*BackupSLA            `json:"slas"`
+    // The timezone for the operation. The timezone must be a valid location name from the IANA Time Zone database.
+    // For instance, "America/New_York", "US/Central", "UTC".
+    Timezone          *string                 `json:"timezone"`
     // The operation to be performed for this SLA set. Each SLA set corresponds to one and only one operation.
     // Refer to the Policy Operation table for a complete list of policy operations.
     ClumioType        *string                 `json:"type"`
@@ -5190,6 +5186,9 @@ type PolicyOperationInput struct {
     // backup_sla captures the SLA parameters
     // backup_sla captures the SLA parameters
     Slas             []*BackupSLA            `json:"slas"`
+    // The timezone for the operation. The timezone must be a valid location name from the IANA Time Zone database.
+    // For instance, "America/New_York", "US/Central", "UTC".
+    Timezone         *string                 `json:"timezone"`
     // The operation to be performed for this SLA set. Each SLA set corresponds to one and only one operation.
     // Refer to the Policy Operation table for a complete list of policy operations.
     ClumioType       *string                 `json:"type"`
