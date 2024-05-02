@@ -1285,7 +1285,15 @@ type DataAccessObject struct {
 // URLs to pages related to the resource.
 type DatabaseLinks struct {
     // The HATEOAS link to this resource.
-    Self *HateoasSelfLink `json:"_self"`
+    Self                      *HateoasSelfLink `json:"_self"`
+    // A resource-specific HATEOAS link.
+    CreateBackupMssqlDatabase *HateoasLink     `json:"create-backup-mssql-database"`
+    // A resource-specific HATEOAS link.
+    ListBackupMssqlDatabases  *HateoasLink     `json:"list-backup-mssql-databases"`
+    // A resource-specific HATEOAS link.
+    ReadManagementGroup       *HateoasLink     `json:"read-management-group"`
+    // A resource-specific HATEOAS link.
+    ReadManagementSubgroup    *HateoasLink     `json:"read-management-subgroup"`
 }
 
 // DatacenterEmbedded represents a custom type struct.
@@ -2437,6 +2445,8 @@ type EC2Backup struct {
     MigrationTimestamp               *string                            `json:"migration_timestamp"`
     // TODO: Add struct field description
     NetworkInterfaces                []*NetworkInterface                `json:"network_interfaces"`
+    // The public IP v4 address of the instance if one was assigned.
+    PublicIpAddress                  *string                            `json:"public_ip_address"`
     // The size of the instance backup. This is the sum of all the EBS volumes attached to the EC2 measured in gigabytes (GB).
     Size                             *int64                             `json:"size"`
     // The timestamp of when this backup started. Represented in RFC-3339 format.
@@ -2559,21 +2569,25 @@ type EC2MSSQLAG struct {
 // EC2MSSQLAGEmbedded represents a custom type struct.
 // Embedded responses related to the resource.
 type EC2MSSQLAGEmbedded struct {
-    // availability group level stats
-    GetMssqlEc2AvailabilityGroupStats interface{} `json:"get-mssql-ec2-availability-group-stats"`
+    // availability group level backup status stats
+    GetMssqlEc2AvailabilityGroupBackupStatusStats interface{} `json:"get-mssql-ec2-availability-group-backup-status-stats"`
+    // availability group level protection stats
+    GetMssqlEc2AvailabilityGroupStats             interface{} `json:"get-mssql-ec2-availability-group-stats"`
     // Embeds the associated policy of a protected resource in the response if requested using the `embed` query parameter. Unprotected resources will not have an associated policy.
-    ReadPolicyDefinition              interface{} `json:"read-policy-definition"`
+    ReadPolicyDefinition                          interface{} `json:"read-policy-definition"`
 }
 
 // EC2MSSQLAGLinks represents a custom type struct.
 // URLs to pages related to the resource.
 type EC2MSSQLAGLinks struct {
     // The HATEOAS link to this resource.
-    Self                              *HateoasSelfLink                 `json:"_self"`
+    Self                                          *HateoasSelfLink                 `json:"_self"`
     // A resource-specific HATEOAS link.
-    GetMssqlEc2AvailabilityGroupStats *HateoasLink                     `json:"get-mssql-ec2-availability-group-stats"`
+    GetMssqlEc2AvailabilityGroupBackupStatusStats *HateoasLink                     `json:"get-mssql-ec2-availability-group-backup-status-stats"`
+    // A resource-specific HATEOAS link.
+    GetMssqlEc2AvailabilityGroupStats             *HateoasLink                     `json:"get-mssql-ec2-availability-group-stats"`
     // A HATEOAS link to the policy protecting this resource. Will be omitted for unprotected entities.
-    ReadPolicyDefinition              *ReadPolicyDefinitionHateoasLink `json:"read-policy-definition"`
+    ReadPolicyDefinition                          *ReadPolicyDefinitionHateoasLink `json:"read-policy-definition"`
 }
 
 // EC2MSSQLAGListEmbedded represents a custom type struct.
@@ -2834,12 +2848,14 @@ type EC2MSSQLFCI struct {
 // EC2MSSQLFCIEmbedded represents a custom type struct.
 // Embedded responses related to the resource.
 type EC2MSSQLFCIEmbedded struct {
+    // FCIBackupStatusStats contain information about the backup status of the databases in the cluster
+    GetEc2MssqlFailoverClusterBackupStatusStats interface{} `json:"get-ec2-mssql-failover-cluster-backup-status-stats"`
     // ConnectedHostsInfo contains information about the hosts associated with the cluster
-    GetEc2MssqlFailoverClusterHostsInfo interface{} `json:"get-ec2-mssql-failover-cluster-hosts-info"`
+    GetEc2MssqlFailoverClusterHostsInfo         interface{} `json:"get-ec2-mssql-failover-cluster-hosts-info"`
     // FCIStats contain information about the compliant databases in the cluster
-    GetEc2MssqlFailoverClusterStats     interface{} `json:"get-ec2-mssql-failover-cluster-stats"`
+    GetEc2MssqlFailoverClusterStats             interface{} `json:"get-ec2-mssql-failover-cluster-stats"`
     // Embeds the associated policy of a protected resource in the response if requested using the `embed` query parameter. Unprotected resources will not have an associated policy.
-    ReadPolicyDefinition                interface{} `json:"read-policy-definition"`
+    ReadPolicyDefinition                        interface{} `json:"read-policy-definition"`
 }
 
 // EC2MSSQLFCILinks represents a custom type struct.
@@ -4620,6 +4636,8 @@ type NetworkInterface struct {
     DeviceIndex              *int64    `json:"device_index"`
     // The AWS-assigned ID for the network interface.
     NetworkInterfaceNativeId *string   `json:"network_interface_native_id"`
+    // The public IP v4 address of the network interface if one was assigned.
+    PublicIp                 *string   `json:"public_ip"`
     // The AWS-assigned IDs for the security groups associated with this network interface.
     SecurityGroupNativeIds   []*string `json:"security_group_native_ids"`
     // The subnet native ID for the network interface.

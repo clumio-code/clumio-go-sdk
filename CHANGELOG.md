@@ -1,3 +1,5 @@
+## 0.18.0
+Mssql API changes with new response parameters and HATEOAS links added.
 ## 0.17.0
 Policy API changes with new attribute added to PolicyOperation model.
 ## 0.16.0

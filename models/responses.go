@@ -3273,6 +3273,8 @@ type ReadEC2BackupResponse struct {
     MigrationTimestamp               *string                            `json:"migration_timestamp"`
     // TODO: Add struct field description
     NetworkInterfaces                []*NetworkInterface                `json:"network_interfaces"`
+    // The public IP v4 address of the instance if one was assigned.
+    PublicIpAddress                  *string                            `json:"public_ip_address"`
     // The size of the instance backup. This is the sum of all the EBS volumes attached to the EC2 measured in gigabytes (GB).
     Size                             *int64                             `json:"size"`
     // The timestamp of when this backup started. Represented in RFC-3339 format.
