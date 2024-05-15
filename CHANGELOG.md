@@ -1,3 +1,5 @@
+## 0.19.0
+Updates to Clumio AWS connection API response parameters.
 ## 0.18.0
 Mssql API changes with new response parameters and HATEOAS links added.
 ## 0.17.0
