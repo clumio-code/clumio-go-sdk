@@ -188,6 +188,9 @@ type CreateAWSConnectionResponse struct {
     ExternalId               *string             `json:"external_id"`
     // The Clumio-assigned ID of the connection.
     Id                       *string             `json:"id"`
+    // Status denoting whether Ingestion has started for the connection.
+    // Valid values are "initial", "in_progress", "failed", "completed".
+    IngestionStatus          *string             `json:"ingestion_status"`
     // K8S Namespace
     Namespace                *string             `json:"namespace"`
     // The Clumio-assigned ID of the organizational unit associated with the
@@ -213,6 +216,9 @@ type CreateAWSConnectionResponse struct {
     StackArn                 *string             `json:"stack_arn"`
     // The name given to the installed CloudFormation stack on AWS.
     StackName                *string             `json:"stack_name"`
+    // Status denoting whether Target Setup has started for the connection.
+    // Valid values are "initial", "in_progress", "failed", "completed".
+    TargetSetupStatus        *string             `json:"target_setup_status"`
     // The 36-character Clumio AWS integration ID token used to identify the
     // installation of the CloudFormation template on the account. This value
     // will be pasted into the ClumioToken field when creating the
@@ -2613,6 +2619,9 @@ type ReadAWSConnectionResponse struct {
     ExternalId               *string             `json:"external_id"`
     // The Clumio-assigned ID of the connection.
     Id                       *string             `json:"id"`
+    // Status denoting whether Ingestion has started for the connection.
+    // Valid values are "initial", "in_progress", "failed", "completed".
+    IngestionStatus          *string             `json:"ingestion_status"`
     // K8S Namespace
     Namespace                *string             `json:"namespace"`
     // The Clumio-assigned ID of the organizational unit associated with the
@@ -2638,6 +2647,9 @@ type ReadAWSConnectionResponse struct {
     StackArn                 *string             `json:"stack_arn"`
     // The name given to the installed CloudFormation stack on AWS.
     StackName                *string             `json:"stack_name"`
+    // Status denoting whether Target Setup has started for the connection.
+    // Valid values are "initial", "in_progress", "failed", "completed".
+    TargetSetupStatus        *string             `json:"target_setup_status"`
     // The 36-character Clumio AWS integration ID token used to identify the
     // installation of the CloudFormation template on the account. This value
     // will be pasted into the ClumioToken field when creating the
@@ -5538,6 +5550,9 @@ type UpdateAWSConnectionResponse struct {
     ExternalId               *string             `json:"external_id"`
     // The Clumio-assigned ID of the connection.
     Id                       *string             `json:"id"`
+    // Status denoting whether Ingestion has started for the connection.
+    // Valid values are "initial", "in_progress", "failed", "completed".
+    IngestionStatus          *string             `json:"ingestion_status"`
     // K8S Namespace
     Namespace                *string             `json:"namespace"`
     // The Clumio-assigned ID of the organizational unit associated with the
@@ -5563,6 +5578,9 @@ type UpdateAWSConnectionResponse struct {
     StackArn                 *string             `json:"stack_arn"`
     // The name given to the installed CloudFormation stack on AWS.
     StackName                *string             `json:"stack_name"`
+    // Status denoting whether Target Setup has started for the connection.
+    // Valid values are "initial", "in_progress", "failed", "completed".
+    TargetSetupStatus        *string             `json:"target_setup_status"`
     // The 36-character Clumio AWS integration ID token used to identify the
     // installation of the CloudFormation template on the account. This value
     // will be pasted into the ClumioToken field when creating the
