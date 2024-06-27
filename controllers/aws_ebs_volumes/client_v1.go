@@ -15,12 +15,14 @@ type AwsEbsVolumesV1Client interface {
         limit *int64, 
         start *string, 
         filter *string, 
-        embed *string)(
+        embed *string, 
+        lookbackDays *int64)(
         *models.ListEbsVolumesResponse,  *apiutils.APIError)
     
     // ReadAwsEbsVolume Returns a representation of the specified EBS volume.
     ReadAwsEbsVolume(
         volumeId string, 
+        lookbackDays *int64, 
         embed *string)(
         *models.ReadEbsVolumeResponse,  *apiutils.APIError)
     

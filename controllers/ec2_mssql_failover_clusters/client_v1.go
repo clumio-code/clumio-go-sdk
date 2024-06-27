@@ -15,7 +15,8 @@ type Ec2MssqlFailoverClustersV1Client interface {
         limit *int64, 
         start *string, 
         filter *string, 
-        embed *string)(
+        embed *string, 
+        lookbackDays *int64)(
         *models.ListEC2MSSQLFCIsResponse,  *apiutils.APIError)
     
 }

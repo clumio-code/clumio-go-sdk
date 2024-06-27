@@ -22,7 +22,8 @@ func (e *Ec2MssqlFailoverClustersV1) ListEc2MssqlFailoverClusters(
     limit *int64, 
     start *string, 
     filter *string, 
-    embed *string)(
+    embed *string, 
+    lookbackDays *int64)(
     *models.ListEC2MSSQLFCIsResponse, *apiutils.APIError) {
 
     queryBuilder := e.config.BaseUrl + "/datasources/aws/ec2-mssql/failover-clusters"
@@ -45,12 +46,16 @@ func (e *Ec2MssqlFailoverClustersV1) ListEc2MssqlFailoverClusters(
     if embed == nil {
         embed = &defaultString
     }
+    if lookbackDays == nil {
+        lookbackDays = &defaultInt64
+    }
     
     queryParams := map[string]string{
         "limit": fmt.Sprintf("%v", *limit),
         "start": *start,
         "filter": *filter,
         "embed": *embed,
+        "lookback_days": fmt.Sprintf("%v", *lookbackDays),
     }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{

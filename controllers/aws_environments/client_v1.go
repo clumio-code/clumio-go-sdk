@@ -15,13 +15,15 @@ type AwsEnvironmentsV1Client interface {
         limit *int64, 
         start *string, 
         filter *string, 
-        embed *string)(
+        embed *string, 
+        lookbackDays *int64)(
         *models.ListAWSEnvironmentsResponse,  *apiutils.APIError)
     
     // ReadAwsEnvironment Returns a representation of the specified AWS environment.
     ReadAwsEnvironment(
         environmentId string, 
-        embed *string)(
+        embed *string, 
+        lookbackDays *int64)(
         *models.ReadAWSEnvironmentResponse,  *apiutils.APIError)
     
 }

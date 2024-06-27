@@ -112,6 +112,7 @@ type CreateAwsConnectionV1Request struct {
     OrganizationalUnitId     *string   `json:"organizational_unit_id"`
     // The asset types enabled for protect.
     // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
+    // NOTE - EBS is required for EC2MSSQL.
     ProtectAssetTypesEnabled []*string `json:"protect_asset_types_enabled"`
     // The services to be enabled for this configuration. Valid values are
     // ["discover"], ["discover", "protect"]. This is only set when the
@@ -119,6 +120,45 @@ type CreateAwsConnectionV1Request struct {
     // the installed template after that. (Deprecated as all connections will have
     // both discover and protect enabled)
     ServicesEnabled          []*string `json:"services_enabled"`
+}
+
+// CreateAwsConnectionGroupV1Request represents a custom type struct.
+// The body of the request.
+type CreateAwsConnectionGroupV1Request struct {
+    // The AWS-assigned ID of the account to be associated with the Connection Group.
+    AccountNativeId      *string   `json:"account_native_id"`
+    // The asset types to be connected via the connection-group.
+    // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
+    // NOTE - EBS is required for EC2MSSQL.
+    AssetTypesEnabled    []*string `json:"asset_types_enabled"`
+    // The AWS regions to be associated with the Connection Group.
+    AwsRegions           []*string `json:"aws_regions"`
+    // Description for this connection group.
+    Description          *string   `json:"description"`
+    // The AWS Account that manages the connection-group's stack.
+    // If the provided master_aws_account_id different than the account_native_id then
+    // use service managed permissions while deploying stack.
+    MasterAwsAccountId   *string   `json:"master_aws_account_id"`
+    // The AWS Region that manages the connection-group's stack.
+    MasterRegion         *string   `json:"master_region"`
+    // The Clumio-assigned ID of the organizational unit associated with the
+    // AWS environment. If this parameter is not provided, then the value
+    // defaults to the first organizational unit assigned to the requesting
+    // user. For more information about organizational units, refer to the
+    // Organizational-Units documentation.
+    OrganizationalUnitId *string   `json:"organizational_unit_id"`
+}
+
+// UpdateAwsConnectionGroupV1Request represents a custom type struct
+type UpdateAwsConnectionGroupV1Request struct {
+    // The asset types to be connected via the connection-group.
+    // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
+    // NOTE - EBS is required for EC2MSSQL.
+    AssetTypesEnabled []*string `json:"asset_types_enabled"`
+    // The AWS regions to be associated with the Connection Group.
+    AwsRegions        []*string `json:"aws_regions"`
+    // Description for this connection group.
+    Description       *string   `json:"description"`
 }
 
 // PostProcessAwsConnectionV1Request represents a custom type struct.
@@ -533,16 +573,32 @@ type CreateProtectionGroupV1Request struct {
     // The following table describes the possible conditions for a bucket to be
     // automatically added to a protection group.
     // 
-    // +---------+----------------+---------------------------------------------------+
-    // |  Field  | Rule Condition |                    Description                    |
-    // +=========+================+===================================================+
-    // | aws_tag | $eq            | Denotes the AWS tag(s) to conditionalize on       |
-    // |         |                |                                                   |
-    // |         |                | {"aws_tag":{"$eq":{"key":"Environment",           |
-    // |         |                | "value":"Prod"}}}                                 |
-    // |         |                |                                                   |
-    // |         |                |                                                   |
-    // +---------+----------------+---------------------------------------------------+
+    // +-------------------+----------------+-----------------------------------------+
+    // |       Field       | Rule Condition |               Description               |
+    // +===================+================+=========================================+
+    // | aws_tag           | $eq            | Denotes the AWS tag(s) to               |
+    // |                   |                | conditionalize on                       |
+    // |                   |                |                                         |
+    // |                   |                | {"aws_tag":{"$eq":{"key":"Environment", |
+    // |                   |                | "value":"Prod"}}}                       |
+    // |                   |                |                                         |
+    // |                   |                |                                         |
+    // +-------------------+----------------+-----------------------------------------+
+    // | account_native_id | $eq            | Denotes the AWS account to              |
+    // |                   |                | conditionalize on                       |
+    // |                   |                |                                         |
+    // |                   |                | {"account_native_id":{"$eq":"1111111111 |
+    // |                   |                | 11"}}                                   |
+    // |                   |                |                                         |
+    // |                   |                |                                         |
+    // +-------------------+----------------+-----------------------------------------+
+    // | aws_region        | $eq            | Denotes the AWS region to               |
+    // |                   |                | conditionalize on                       |
+    // |                   |                |                                         |
+    // |                   |                | {"aws_region":{"$eq":"us-west-2"}}      |
+    // |                   |                |                                         |
+    // |                   |                |                                         |
+    // +-------------------+----------------+-----------------------------------------+
     // 
     BucketRule   *string       `json:"bucket_rule"`
     // The user-assigned description of the protection group.
@@ -559,16 +615,32 @@ type UpdateProtectionGroupV1Request struct {
     // The following table describes the possible conditions for a bucket to be
     // automatically added to a protection group.
     // 
-    // +---------+----------------+---------------------------------------------------+
-    // |  Field  | Rule Condition |                    Description                    |
-    // +=========+================+===================================================+
-    // | aws_tag | $eq            | Denotes the AWS tag(s) to conditionalize on       |
-    // |         |                |                                                   |
-    // |         |                | {"aws_tag":{"$eq":{"key":"Environment",           |
-    // |         |                | "value":"Prod"}}}                                 |
-    // |         |                |                                                   |
-    // |         |                |                                                   |
-    // +---------+----------------+---------------------------------------------------+
+    // +-------------------+----------------+-----------------------------------------+
+    // |       Field       | Rule Condition |               Description               |
+    // +===================+================+=========================================+
+    // | aws_tag           | $eq            | Denotes the AWS tag(s) to               |
+    // |                   |                | conditionalize on                       |
+    // |                   |                |                                         |
+    // |                   |                | {"aws_tag":{"$eq":{"key":"Environment", |
+    // |                   |                | "value":"Prod"}}}                       |
+    // |                   |                |                                         |
+    // |                   |                |                                         |
+    // +-------------------+----------------+-----------------------------------------+
+    // | account_native_id | $eq            | Denotes the AWS account to              |
+    // |                   |                | conditionalize on                       |
+    // |                   |                |                                         |
+    // |                   |                | {"account_native_id":{"$eq":"1111111111 |
+    // |                   |                | 11"}}                                   |
+    // |                   |                |                                         |
+    // |                   |                |                                         |
+    // +-------------------+----------------+-----------------------------------------+
+    // | aws_region        | $eq            | Denotes the AWS region to               |
+    // |                   |                | conditionalize on                       |
+    // |                   |                |                                         |
+    // |                   |                | {"aws_region":{"$eq":"us-west-2"}}      |
+    // |                   |                |                                         |
+    // |                   |                |                                         |
+    // +-------------------+----------------+-----------------------------------------+
     // 
     BucketRule   *string       `json:"bucket_rule"`
     // The user-assigned description of the protection group.

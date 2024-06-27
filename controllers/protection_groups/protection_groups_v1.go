@@ -22,7 +22,8 @@ type ProtectionGroupsV1 struct {
 func (p *ProtectionGroupsV1) ListProtectionGroups(
     limit *int64, 
     start *string, 
-    filter *string)(
+    filter *string, 
+    lookbackDays *int64)(
     *models.ListProtectionGroupsResponse, *apiutils.APIError) {
 
     queryBuilder := p.config.BaseUrl + "/datasources/protection-groups"
@@ -42,11 +43,15 @@ func (p *ProtectionGroupsV1) ListProtectionGroups(
     if filter == nil {
         filter = &defaultString
     }
+    if lookbackDays == nil {
+        lookbackDays = &defaultInt64
+    }
     
     queryParams := map[string]string{
         "limit": fmt.Sprintf("%v", *limit),
         "start": *start,
         "filter": *filter,
+        "lookback_days": fmt.Sprintf("%v", *lookbackDays),
     }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
@@ -64,7 +69,8 @@ func (p *ProtectionGroupsV1) ListProtectionGroups(
 
 // ReadProtectionGroup Returns a representation of the specified protection group.
 func (p *ProtectionGroupsV1) ReadProtectionGroup(
-    groupId string)(
+    groupId string, 
+    lookbackDays *int64)(
     *models.ReadProtectionGroupResponse, *apiutils.APIError) {
 
     pathURL := "/datasources/protection-groups/{group_id}"
@@ -77,10 +83,20 @@ func (p *ProtectionGroupsV1) ReadProtectionGroup(
     
     header := "application/api.clumio.protection-groups=v1+json"
     result := &models.ReadProtectionGroupResponse{}
+    defaultInt64 := int64(0)
+    
+    if lookbackDays == nil {
+        lookbackDays = &defaultInt64
+    }
+    
+    queryParams := map[string]string{
+        "lookback_days": fmt.Sprintf("%v", *lookbackDays),
+    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: p.config,
         RequestUrl: queryBuilder,
+        QueryParams: queryParams,
         PathParams: pathParams,
         AcceptHeader: header,
         Result200: &result,

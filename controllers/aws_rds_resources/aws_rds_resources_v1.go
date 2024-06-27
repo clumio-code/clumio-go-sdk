@@ -22,7 +22,8 @@ func (a *AwsRdsResourcesV1) ListAwsRdsResources(
     limit *int64, 
     start *string, 
     filter *string, 
-    embed *string)(
+    embed *string, 
+    lookbackDays *int64)(
     *models.ListRdsResourcesResponse, *apiutils.APIError) {
 
     queryBuilder := a.config.BaseUrl + "/datasources/aws/rds-resources"
@@ -45,12 +46,16 @@ func (a *AwsRdsResourcesV1) ListAwsRdsResources(
     if embed == nil {
         embed = &defaultString
     }
+    if lookbackDays == nil {
+        lookbackDays = &defaultInt64
+    }
     
     queryParams := map[string]string{
         "limit": fmt.Sprintf("%v", *limit),
         "start": *start,
         "filter": *filter,
         "embed": *embed,
+        "lookback_days": fmt.Sprintf("%v", *lookbackDays),
     }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
@@ -69,6 +74,7 @@ func (a *AwsRdsResourcesV1) ListAwsRdsResources(
 // ReadAwsRdsResource Returns a representation of the specified RDS resource.
 func (a *AwsRdsResourcesV1) ReadAwsRdsResource(
     resourceId string, 
+    lookbackDays *int64, 
     embed *string)(
     *models.ReadRdsResourceResponse, *apiutils.APIError) {
 
@@ -82,13 +88,18 @@ func (a *AwsRdsResourcesV1) ReadAwsRdsResource(
     
     header := "application/api.clumio.aws-rds-resources=v1+json"
     result := &models.ReadRdsResourceResponse{}
+    defaultInt64 := int64(0)
     defaultString := "" 
     
+    if lookbackDays == nil {
+        lookbackDays = &defaultInt64
+    }
     if embed == nil {
         embed = &defaultString
     }
     
     queryParams := map[string]string{
+        "lookback_days": fmt.Sprintf("%v", *lookbackDays),
         "embed": *embed,
     }
 

@@ -22,7 +22,8 @@ func (a *AwsEc2InstancesV1) ListAwsEc2Instances(
     limit *int64, 
     start *string, 
     filter *string, 
-    embed *string)(
+    embed *string, 
+    lookbackDays *int64)(
     *models.ListEc2InstancesResponse, *apiutils.APIError) {
 
     queryBuilder := a.config.BaseUrl + "/datasources/aws/ec2-instances"
@@ -45,12 +46,16 @@ func (a *AwsEc2InstancesV1) ListAwsEc2Instances(
     if embed == nil {
         embed = &defaultString
     }
+    if lookbackDays == nil {
+        lookbackDays = &defaultInt64
+    }
     
     queryParams := map[string]string{
         "limit": fmt.Sprintf("%v", *limit),
         "start": *start,
         "filter": *filter,
         "embed": *embed,
+        "lookback_days": fmt.Sprintf("%v", *lookbackDays),
     }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
@@ -69,6 +74,7 @@ func (a *AwsEc2InstancesV1) ListAwsEc2Instances(
 // ReadAwsEc2Instance Returns a representation of the specified EC2 instance.
 func (a *AwsEc2InstancesV1) ReadAwsEc2Instance(
     instanceId string, 
+    lookbackDays *int64, 
     embed *string)(
     *models.ReadEc2InstanceResponse, *apiutils.APIError) {
 
@@ -82,13 +88,18 @@ func (a *AwsEc2InstancesV1) ReadAwsEc2Instance(
     
     header := "application/api.clumio.aws-ec2-instances=v1+json"
     result := &models.ReadEc2InstanceResponse{}
+    defaultInt64 := int64(0)
     defaultString := "" 
     
+    if lookbackDays == nil {
+        lookbackDays = &defaultInt64
+    }
     if embed == nil {
         embed = &defaultString
     }
     
     queryParams := map[string]string{
+        "lookback_days": fmt.Sprintf("%v", *lookbackDays),
         "embed": *embed,
     }
 

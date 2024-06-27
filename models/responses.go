@@ -156,74 +156,87 @@ type ChangePasswordResponse struct {
 // CreateAWSConnectionResponse represents a custom type struct for Success
 type CreateAWSConnectionResponse struct {
     // URLs to pages related to the resource.
-    Links                    *AWSConnectionLinks `json:"_links"`
+    Links                      *AWSConnectionLinks      `json:"_links"`
     // The alias given to the account on AWS.
-    AccountName              *string             `json:"account_name"`
+    AccountName                *string                  `json:"account_name"`
     // The AWS-assigned ID of the account associated with the connection.
-    AccountNativeId          *string             `json:"account_native_id"`
+    AccountNativeId            *string                  `json:"account_native_id"`
     // The AWS region associated with the connection. For example, `us-east-1`.
-    AwsRegion                *string             `json:"aws_region"`
+    AwsRegion                  *string                  `json:"aws_region"`
     // AWS account ID of the Clumio control plane.
-    ClumioAwsAccountId       *string             `json:"clumio_aws_account_id"`
+    ClumioAwsAccountId         *string                  `json:"clumio_aws_account_id"`
     // AWS region of the Clumio control plane
-    ClumioAwsRegion          *string             `json:"clumio_aws_region"`
+    ClumioAwsRegion            *string                  `json:"clumio_aws_region"`
     // The consolidated configuration of the Clumio Cloud Protect and Clumio Cloud Discover products for this connection.
     // If this connection is deprecated to use unconsolidated configuration, then this field has a
     // value of `null`.
-    Config                   *ConsolidatedConfig `json:"config"`
-    // The status of the connection. Possible values include "connecting",
-    // "connected", and "unlinked".
-    ConnectionStatus         *string             `json:"connection_status"`
+    Config                     *ConsolidatedConfig      `json:"config"`
+    // Clumio assigned ID of the associated connection group.
+    ConnectionGroupId          *string                  `json:"connection_group_id"`
+    // Management status of connection.
+    ConnectionManagementStatus *string                  `json:"connection_management_status"`
+    // The status of the connection considering all the deployments made for it.
+    ConnectionStatus           *string                  `json:"connection_status"`
     // The timestamp of when the connection was created.
-    CreatedTimestamp         *string             `json:"created_timestamp"`
+    CreatedTimestamp           *string                  `json:"created_timestamp"`
     // AWS account ID of the data plane for the connection.
-    DataPlaneAccountId       *string             `json:"data_plane_account_id"`
+    DataPlaneAccountId         *string                  `json:"data_plane_account_id"`
+    // The deployment method with which the currently active connection was established.
+    DeploymentType             *string                  `json:"deployment_type"`
     // The user-provided description for this connection.
-    Description              *string             `json:"description"`
+    Description                *string                  `json:"description"`
     // The configuration of the Clumio Discover product for this connection.
     // If this connection is not configured for Clumio Discover, then this field has a
     // value of `null`.
-    Discover                 *DiscoverConfig     `json:"discover"`
+    Discover                   *DiscoverConfig          `json:"discover"`
     // Clumio assigned external ID of the connection or of the associated connection group.
-    ExternalId               *string             `json:"external_id"`
+    ExternalId                 *string                  `json:"external_id"`
     // The Clumio-assigned ID of the connection.
-    Id                       *string             `json:"id"`
+    Id                         *string                  `json:"id"`
     // Status denoting whether Ingestion has started for the connection.
     // Valid values are "initial", "in_progress", "failed", "completed".
-    IngestionStatus          *string             `json:"ingestion_status"`
+    IngestionStatus            *string                  `json:"ingestion_status"`
     // K8S Namespace
-    Namespace                *string             `json:"namespace"`
+    Namespace                  *string                  `json:"namespace"`
     // The Clumio-assigned ID of the organizational unit associated with the
     // AWS environment. If this parameter is not provided, then the value
     // defaults to the first organizational unit assigned to the requesting
     // user. For more information about organizational units, refer to the
     // Organizational-Units documentation.
-    OrganizationalUnitId     *string             `json:"organizational_unit_id"`
+    OrganizationalUnitId       *string                  `json:"organizational_unit_id"`
     // The configuration of the Clumio Cloud Protect product for this connection.
     // If this connection is not configured for Clumio Cloud Protect, then this field has a
     // value of `null`.
-    Protect                  *ProtectConfig      `json:"protect"`
+    Protect                    *ProtectConfig           `json:"protect"`
     // The asset types enabled for protect.
     // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
-    ProtectAssetTypesEnabled []*string           `json:"protect_asset_types_enabled"`
+    // NOTE - EBS is required for EC2MSSQL.
+    ProtectAssetTypesEnabled   []*string                `json:"protect_asset_types_enabled"`
+    // TODO: Add struct field description
+    Resources                  *ConnectionResourcesResp `json:"resources"`
+    // The Amazon Resource Name of the stale CloudFormation stack when the connection was migrated to connection groups.
+    // NOTE - This has to be removed from AWS as well to delete the connection completely.
+    RetiredStackArn            *string                  `json:"retired_stack_arn"`
     // The services to be enabled for this configuration. Valid values are
     // ["discover"], ["discover", "protect"]. This is only set when the
     // registration is created, the enabled services are obtained directly from
     // the installed template after that. (Deprecated as all connections will have
     // both discover and protect enabled)
-    ServicesEnabled          []*string           `json:"services_enabled"`
-    // The Amazon Resource Name of the installed CloudFormation stack in this AWS account
-    StackArn                 *string             `json:"stack_arn"`
-    // The name given to the installed CloudFormation stack on AWS.
-    StackName                *string             `json:"stack_name"`
+    ServicesEnabled            []*string                `json:"services_enabled"`
+    // The Amazon Resource Name of the installed and active CloudFormation stack(if any) in AWS.
+    StackArn                   *string                  `json:"stack_arn"`
+    // The name given to the installed and active CloudFormation stack(if any) in AWS.
+    StackName                  *string                  `json:"stack_name"`
     // Status denoting whether Target Setup has started for the connection.
     // Valid values are "initial", "in_progress", "failed", "completed".
-    TargetSetupStatus        *string             `json:"target_setup_status"`
+    TargetSetupStatus          *string                  `json:"target_setup_status"`
+    // TODO: Add struct field description
+    TemplatePermissionSet      *string                  `json:"template_permission_set"`
     // The 36-character Clumio AWS integration ID token used to identify the
     // installation of the CloudFormation template on the account. This value
     // will be pasted into the ClumioToken field when creating the
     // CloudFormation stack.
-    Token                    *string             `json:"token"`
+    Token                      *string                  `json:"token"`
 }
 
 // CreateAWSTemplateV2Response represents a custom type struct for Success
@@ -308,6 +321,64 @@ type CreateAutoUserProvisioningRuleResponse struct {
     Provision *RuleProvision                    `json:"provision"`
     // The Clumio-assigned ID of the rule.
     RuleId    *string                           `json:"rule_id"`
+}
+
+// CreateConnectionGroupResponse represents a custom type struct for Success
+type CreateConnectionGroupResponse struct {
+    // Embedded responses related to the resource.
+    Embedded                 interface{}           `json:"_embedded"`
+    // The ETag value.
+    Etag                     *string               `json:"_etag"`
+    // URLs to pages related to the resource.
+    Links                    *ConnectionGroupLinks `json:"_links"`
+    // The alias given to the associated account in AWS.
+    AccountName              *string               `json:"account_name"`
+    // The AWS-assigned IDs of the accounts associated with the Connection Group.
+    AccountNativeIds         []*string             `json:"account_native_ids"`
+    // List of asset types connected via the connection-group.
+    // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
+    AssetTypesEnabled        []*string             `json:"asset_types_enabled"`
+    // The AWS regions associated with the with the Connection Group.
+    AwsRegions               []*string             `json:"aws_regions"`
+    // The consolidated configuration of the Clumio Cloud Protect and Clumio Cloud Discover products for this connection.
+    // If this connection is deprecated to use unconsolidated configuration, then this field has a
+    // value of `null`.
+    Config                   *ConsolidatedConfig   `json:"config"`
+    // The timestamp of when the connection was created.
+    CreatedTimestamp         *string               `json:"created_timestamp"`
+    // Clumio's S3 URL that contains the template to create the required resources in the
+    // given account(s) according to the request.
+    DeploymentTemplateUrl    *string               `json:"deployment_template_url"`
+    // User-provided description for this connection group.
+    Description              *string               `json:"description"`
+    // Clumio assigned external ID for the connection group, should be used while creating the AWS stack.
+    ExternalId               *string               `json:"external_id"`
+    // The Clumio-assigned ID of the Connection Group, should be used as the token while creating the stack in AWS.
+    Id                       *string               `json:"id"`
+    // The AWS Account IDs that are intended to be associated with the Connection Group.
+    IntendedAccountNativeIds []*string             `json:"intended_account_native_ids"`
+    // THe asset types that are intended to be connected via connection-group.
+    IntendedAssetTypes       []*string             `json:"intended_asset_types"`
+    // The AWS regions that are intended to be connected with the Connection Group.
+    IntendedAwsRegions       []*string             `json:"intended_aws_regions"`
+    // The master account which manages the connection-group's stack.
+    MasterAwsAccountId       *string               `json:"master_aws_account_id"`
+    // The master region which manages the connection-group's stack.
+    MasterRegion             *string               `json:"master_region"`
+    // Ongoing Operation of the deployed and active stack of ConnectionGroup.
+    OngoingStackOperation    *string               `json:"ongoing_stack_operation"`
+    // The Clumio-assigned ID of the organizational unit associated with the
+    // AWS environment. If this parameter is not provided, then the value
+    // defaults to the first organizational unit assigned to the requesting
+    // user. For more information about organizational units, refer to the
+    // Organizational-Units documentation.
+    OrganizationalUnitId     *string               `json:"organizational_unit_id"`
+    // The Amazon Resource Name of the installed CloudFormation stack in AWS.
+    StackArn                 *string               `json:"stack_arn"`
+    // The name given to the installed CloudFormation stack in AWS.
+    StackName                *string               `json:"stack_name"`
+    // The status of the Connection Group based on the stack in associated AWS account.
+    Status                   *string               `json:"status"`
 }
 
 // CreateEC2MSSQLDatabaseRestoreResponse represents a custom type struct for Success
@@ -540,16 +611,32 @@ type CreateProtectionGroupResponse struct {
     // The following table describes the possible conditions for a bucket to be
     // automatically added to a protection group.
     // 
-    // +---------+----------------+---------------------------------------------------+
-    // |  Field  | Rule Condition |                    Description                    |
-    // +=========+================+===================================================+
-    // | aws_tag | $eq            | Denotes the AWS tag(s) to conditionalize on       |
-    // |         |                |                                                   |
-    // |         |                | {"aws_tag":{"$eq":{"key":"Environment",           |
-    // |         |                | "value":"Prod"}}}                                 |
-    // |         |                |                                                   |
-    // |         |                |                                                   |
-    // +---------+----------------+---------------------------------------------------+
+    // +-------------------+----------------+-----------------------------------------+
+    // |       Field       | Rule Condition |               Description               |
+    // +===================+================+=========================================+
+    // | aws_tag           | $eq            | Denotes the AWS tag(s) to               |
+    // |                   |                | conditionalize on                       |
+    // |                   |                |                                         |
+    // |                   |                | {"aws_tag":{"$eq":{"key":"Environment", |
+    // |                   |                | "value":"Prod"}}}                       |
+    // |                   |                |                                         |
+    // |                   |                |                                         |
+    // +-------------------+----------------+-----------------------------------------+
+    // | account_native_id | $eq            | Denotes the AWS account to              |
+    // |                   |                | conditionalize on                       |
+    // |                   |                |                                         |
+    // |                   |                | {"account_native_id":{"$eq":"1111111111 |
+    // |                   |                | 11"}}                                   |
+    // |                   |                |                                         |
+    // |                   |                |                                         |
+    // +-------------------+----------------+-----------------------------------------+
+    // | aws_region        | $eq            | Denotes the AWS region to               |
+    // |                   |                | conditionalize on                       |
+    // |                   |                |                                         |
+    // |                   |                | {"aws_region":{"$eq":"us-west-2"}}      |
+    // |                   |                |                                         |
+    // |                   |                |                                         |
+    // +-------------------+----------------+-----------------------------------------+
     // 
     BucketRule                     *string                      `json:"bucket_rule"`
     // Creation time of the protection group in RFC-3339 format.
@@ -1163,6 +1250,22 @@ type ListComputeResourcesResponse struct {
     Computeresourcefolders []*VCenterFolder          `json:"computeResourceFolders"`
     // TODO: Add struct field description
     Computeresources       []*VCenterComputeResource `json:"computeResources"`
+}
+
+// ListConnectionGroupsResponse represents a custom type struct for Success
+type ListConnectionGroupsResponse struct {
+    // Embedded responses related to the resource.
+    Embedded      *AWSConnectionGroupListEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links         *ConnectionGroupListLinks       `json:"_links"`
+    // The number of items listed on the current page.
+    CurrentCount  *int64                          `json:"current_count"`
+    // The filter used in the request. The filter includes both manually-specified and system-generated filters.
+    FilterApplied *string                         `json:"filter_applied"`
+    // The maximum number of items displayed per page in the response.
+    Limit         *int64                          `json:"limit"`
+    // The page token used to get this response.
+    Start         *string                         `json:"start"`
 }
 
 // ListConsolidatedAlertsResponse represents a custom type struct for Success
@@ -2585,110 +2688,127 @@ type PreviewProtectionGroupSyncResponse struct {
 // ReadAWSConnectionResponse represents a custom type struct for Success
 type ReadAWSConnectionResponse struct {
     // The ETag value.
-    Etag                     *string             `json:"_etag"`
+    Etag                       *string                  `json:"_etag"`
     // URLs to pages related to the resource.
-    Links                    *AWSConnectionLinks `json:"_links"`
+    Links                      *AWSConnectionLinks      `json:"_links"`
     // The alias given to the account on AWS.
-    AccountName              *string             `json:"account_name"`
+    AccountName                *string                  `json:"account_name"`
     // The AWS-assigned ID of the account associated with the connection.
-    AccountNativeId          *string             `json:"account_native_id"`
+    AccountNativeId            *string                  `json:"account_native_id"`
     // The AWS region associated with the connection. For example, `us-east-1`.
-    AwsRegion                *string             `json:"aws_region"`
+    AwsRegion                  *string                  `json:"aws_region"`
     // AWS account ID of the Clumio control plane.
-    ClumioAwsAccountId       *string             `json:"clumio_aws_account_id"`
+    ClumioAwsAccountId         *string                  `json:"clumio_aws_account_id"`
     // AWS region of the Clumio control plane
-    ClumioAwsRegion          *string             `json:"clumio_aws_region"`
+    ClumioAwsRegion            *string                  `json:"clumio_aws_region"`
     // The consolidated configuration of the Clumio Cloud Protect and Clumio Cloud Discover products for this connection.
     // If this connection is deprecated to use unconsolidated configuration, then this field has a
     // value of `null`.
-    Config                   *ConsolidatedConfig `json:"config"`
-    // The status of the connection. Possible values include "connecting",
-    // "connected", and "unlinked".
-    ConnectionStatus         *string             `json:"connection_status"`
+    Config                     *ConsolidatedConfig      `json:"config"`
+    // Clumio assigned ID of the associated connection group.
+    ConnectionGroupId          *string                  `json:"connection_group_id"`
+    // Management status of connection.
+    ConnectionManagementStatus *string                  `json:"connection_management_status"`
+    // The status of the connection considering all the deployments made for it.
+    ConnectionStatus           *string                  `json:"connection_status"`
     // The timestamp of when the connection was created.
-    CreatedTimestamp         *string             `json:"created_timestamp"`
+    CreatedTimestamp           *string                  `json:"created_timestamp"`
     // AWS account ID of the data plane for the connection.
-    DataPlaneAccountId       *string             `json:"data_plane_account_id"`
+    DataPlaneAccountId         *string                  `json:"data_plane_account_id"`
+    // The deployment method with which the currently active connection was established.
+    DeploymentType             *string                  `json:"deployment_type"`
     // The user-provided description for this connection.
-    Description              *string             `json:"description"`
+    Description                *string                  `json:"description"`
     // The configuration of the Clumio Discover product for this connection.
     // If this connection is not configured for Clumio Discover, then this field has a
     // value of `null`.
-    Discover                 *DiscoverConfig     `json:"discover"`
+    Discover                   *DiscoverConfig          `json:"discover"`
     // Clumio assigned external ID of the connection or of the associated connection group.
-    ExternalId               *string             `json:"external_id"`
+    ExternalId                 *string                  `json:"external_id"`
     // The Clumio-assigned ID of the connection.
-    Id                       *string             `json:"id"`
+    Id                         *string                  `json:"id"`
     // Status denoting whether Ingestion has started for the connection.
     // Valid values are "initial", "in_progress", "failed", "completed".
-    IngestionStatus          *string             `json:"ingestion_status"`
+    IngestionStatus            *string                  `json:"ingestion_status"`
     // K8S Namespace
-    Namespace                *string             `json:"namespace"`
+    Namespace                  *string                  `json:"namespace"`
     // The Clumio-assigned ID of the organizational unit associated with the
     // AWS environment. If this parameter is not provided, then the value
     // defaults to the first organizational unit assigned to the requesting
     // user. For more information about organizational units, refer to the
     // Organizational-Units documentation.
-    OrganizationalUnitId     *string             `json:"organizational_unit_id"`
+    OrganizationalUnitId       *string                  `json:"organizational_unit_id"`
     // The configuration of the Clumio Cloud Protect product for this connection.
     // If this connection is not configured for Clumio Cloud Protect, then this field has a
     // value of `null`.
-    Protect                  *ProtectConfig      `json:"protect"`
+    Protect                    *ProtectConfig           `json:"protect"`
     // The asset types enabled for protect.
     // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
-    ProtectAssetTypesEnabled []*string           `json:"protect_asset_types_enabled"`
+    // NOTE - EBS is required for EC2MSSQL.
+    ProtectAssetTypesEnabled   []*string                `json:"protect_asset_types_enabled"`
+    // TODO: Add struct field description
+    Resources                  *ConnectionResourcesResp `json:"resources"`
+    // The Amazon Resource Name of the stale CloudFormation stack when the connection was migrated to connection groups.
+    // NOTE - This has to be removed from AWS as well to delete the connection completely.
+    RetiredStackArn            *string                  `json:"retired_stack_arn"`
     // The services to be enabled for this configuration. Valid values are
     // ["discover"], ["discover", "protect"]. This is only set when the
     // registration is created, the enabled services are obtained directly from
     // the installed template after that. (Deprecated as all connections will have
     // both discover and protect enabled)
-    ServicesEnabled          []*string           `json:"services_enabled"`
-    // The Amazon Resource Name of the installed CloudFormation stack in this AWS account
-    StackArn                 *string             `json:"stack_arn"`
-    // The name given to the installed CloudFormation stack on AWS.
-    StackName                *string             `json:"stack_name"`
+    ServicesEnabled            []*string                `json:"services_enabled"`
+    // The Amazon Resource Name of the installed and active CloudFormation stack(if any) in AWS.
+    StackArn                   *string                  `json:"stack_arn"`
+    // The name given to the installed and active CloudFormation stack(if any) in AWS.
+    StackName                  *string                  `json:"stack_name"`
     // Status denoting whether Target Setup has started for the connection.
     // Valid values are "initial", "in_progress", "failed", "completed".
-    TargetSetupStatus        *string             `json:"target_setup_status"`
+    TargetSetupStatus          *string                  `json:"target_setup_status"`
+    // TODO: Add struct field description
+    TemplatePermissionSet      *string                  `json:"template_permission_set"`
     // The 36-character Clumio AWS integration ID token used to identify the
     // installation of the CloudFormation template on the account. This value
     // will be pasted into the ClumioToken field when creating the
     // CloudFormation stack.
-    Token                    *string             `json:"token"`
+    Token                      *string                  `json:"token"`
 }
 
 // ReadAWSEnvironmentResponse represents a custom type struct for Success
 type ReadAWSEnvironmentResponse struct {
     // Embedded responses related to the resource.
-    Embedded             *AWSEnvironmentEmbedded `json:"_embedded"`
+    Embedded                   *AWSEnvironmentEmbedded `json:"_embedded"`
     // URLs to pages related to the resource.
-    Links                *AWSEnvironmentLinks    `json:"_links"`
+    Links                      *AWSEnvironmentLinks    `json:"_links"`
     // The name given to the account.
-    AccountName          *string                 `json:"account_name"`
+    AccountName                *string                 `json:"account_name"`
     // The AWS-assigned ID of the account associated with the environment.
-    AccountNativeId      *string                 `json:"account_native_id"`
+    AccountNativeId            *string                 `json:"account_native_id"`
     // The valid AWS availability zones for the environment. For example, `us_west-2a`.
-    AwsAz                []*string               `json:"aws_az"`
+    AwsAz                      []*string               `json:"aws_az"`
     // The AWS region associated with the environment. For example, `us-west-2`.
-    AwsRegion            *string                 `json:"aws_region"`
+    AwsRegion                  *string                 `json:"aws_region"`
     // The consolidated configuration of the Clumio Cloud Protect and Clumio Cloud Discover products for this connection.
     // If this connection is deprecated to use unconsolidated configuration, then this field has a
     // value of `null`.
-    Config               *ConsolidatedConfig     `json:"config"`
+    Config                     *ConsolidatedConfig     `json:"config"`
+    // Clumio assigned ID of the associated connection group (if any).
+    ConnectionGroupId          *string                 `json:"connection_group_id"`
     // The Clumio-assigned ID of the connection associated with the environment.
-    ConnectionId         *string                 `json:"connection_id"`
-    // The status of the connection to the environment, which is mediated by a CloudFormation stack.
-    ConnectionStatus     *string                 `json:"connection_status"`
+    ConnectionId               *string                 `json:"connection_id"`
+    // Management status of connection for the environment.
+    ConnectionManagementStatus *string                 `json:"connection_management_status"`
+    // The status of the connection to the environment.
+    ConnectionStatus           *string                 `json:"connection_status"`
     // The user-provided account description.
-    Description          *string                 `json:"description"`
+    Description                *string                 `json:"description"`
     // The Clumio-assigned ID of the environment.
-    Id                   *string                 `json:"id"`
+    Id                         *string                 `json:"id"`
     // The Clumio-assigned ID of the organizational unit associated with the environment.
-    OrganizationalUnitId *string                 `json:"organizational_unit_id"`
+    OrganizationalUnitId       *string                 `json:"organizational_unit_id"`
     // The AWS services enabled for this environment. Possible values include "ebs", "rds" and "dynamodb".
-    ServicesEnabled      []*string               `json:"services_enabled"`
+    ServicesEnabled            []*string               `json:"services_enabled"`
     // The Clumio CloudFormation template version used to deploy the CloudFormation stack.
-    TemplateVersion      *int64                  `json:"template_version"`
+    TemplateVersion            *int64                  `json:"template_version"`
 }
 
 // ReadAWSTemplatesV2Response represents a custom type struct for Success
@@ -2924,6 +3044,64 @@ type ReadComputeResourceResponse struct {
     ProtectionStatus      *string                                      `json:"protection_status"`
 }
 
+// ReadConnectionGroupResponse represents a custom type struct for Success
+type ReadConnectionGroupResponse struct {
+    // Embedded responses related to the resource.
+    Embedded                 interface{}           `json:"_embedded"`
+    // The ETag value.
+    Etag                     *string               `json:"_etag"`
+    // URLs to pages related to the resource.
+    Links                    *ConnectionGroupLinks `json:"_links"`
+    // The alias given to the associated account in AWS.
+    AccountName              *string               `json:"account_name"`
+    // The AWS-assigned IDs of the accounts associated with the Connection Group.
+    AccountNativeIds         []*string             `json:"account_native_ids"`
+    // List of asset types connected via the connection-group.
+    // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
+    AssetTypesEnabled        []*string             `json:"asset_types_enabled"`
+    // The AWS regions associated with the with the Connection Group.
+    AwsRegions               []*string             `json:"aws_regions"`
+    // The consolidated configuration of the Clumio Cloud Protect and Clumio Cloud Discover products for this connection.
+    // If this connection is deprecated to use unconsolidated configuration, then this field has a
+    // value of `null`.
+    Config                   *ConsolidatedConfig   `json:"config"`
+    // The timestamp of when the connection was created.
+    CreatedTimestamp         *string               `json:"created_timestamp"`
+    // Clumio's S3 URL that contains the template to create the required resources in the
+    // given account(s) according to the request.
+    DeploymentTemplateUrl    *string               `json:"deployment_template_url"`
+    // User-provided description for this connection group.
+    Description              *string               `json:"description"`
+    // Clumio assigned external ID for the connection group, should be used while creating the AWS stack.
+    ExternalId               *string               `json:"external_id"`
+    // The Clumio-assigned ID of the Connection Group, should be used as the token while creating the stack in AWS.
+    Id                       *string               `json:"id"`
+    // The AWS Account IDs that are intended to be associated with the Connection Group.
+    IntendedAccountNativeIds []*string             `json:"intended_account_native_ids"`
+    // THe asset types that are intended to be connected via connection-group.
+    IntendedAssetTypes       []*string             `json:"intended_asset_types"`
+    // The AWS regions that are intended to be connected with the Connection Group.
+    IntendedAwsRegions       []*string             `json:"intended_aws_regions"`
+    // The master account which manages the connection-group's stack.
+    MasterAwsAccountId       *string               `json:"master_aws_account_id"`
+    // The master region which manages the connection-group's stack.
+    MasterRegion             *string               `json:"master_region"`
+    // Ongoing Operation of the deployed and active stack of ConnectionGroup.
+    OngoingStackOperation    *string               `json:"ongoing_stack_operation"`
+    // The Clumio-assigned ID of the organizational unit associated with the
+    // AWS environment. If this parameter is not provided, then the value
+    // defaults to the first organizational unit assigned to the requesting
+    // user. For more information about organizational units, refer to the
+    // Organizational-Units documentation.
+    OrganizationalUnitId     *string               `json:"organizational_unit_id"`
+    // The Amazon Resource Name of the installed CloudFormation stack in AWS.
+    StackArn                 *string               `json:"stack_arn"`
+    // The name given to the installed CloudFormation stack in AWS.
+    StackName                *string               `json:"stack_name"`
+    // The status of the Connection Group based on the stack in associated AWS account.
+    Status                   *string               `json:"status"`
+}
+
 // ReadConsolidatedAlertResponse represents a custom type struct for Success
 type ReadConsolidatedAlertResponse struct {
     // The ETag value.
@@ -3070,6 +3248,8 @@ type ReadDynamoDBTableResponse struct {
     AccountNativeId                               *string                 `json:"account_native_id"`
     // The AWS region associated with the DynamoDB table.
     AwsRegion                                     *string                 `json:"aws_region"`
+    // The backup status information applied to this resource.
+    BackupStatusInfo                              *BackupStatusInfo       `json:"backup_status_info"`
     // The billing mode of the DynamoDB table. Possible values are PROVISIONED or PAY_PER_REQUEST.
     // For [POST /restores/aws/dynamodb](#operation/restore-aws-dynamodb-table), this is defaulted to the
     // configuration of source table if both 'billing_mode' and 'provisioned_throughput' are empty or `null`.
@@ -3351,6 +3531,8 @@ type ReadEC2MSSQLDatabaseResponse struct {
     AvailabilityGroupName                   *string                   `json:"availability_group_name"`
     // The AWS region associated with the EC2 instance the database resides in.
     AwsRegion                               *string                   `json:"aws_region"`
+    // The backup status information applied to this resource.
+    BackupStatusInfo                        *BackupStatusInfo         `json:"backup_status_info"`
     // The policy compliance status of the resource. If the database is not protected,
     // then this field has a value of `null`. Refer to
     // 
@@ -3552,6 +3734,8 @@ type ReadEbsVolumeResponse struct {
     AwsAz                    *string                 `json:"aws_az"`
     // The AWS region associated with the EBS volume.
     AwsRegion                *string                 `json:"aws_region"`
+    // The backup status information applied to this resource.
+    BackupStatusInfo         *BackupStatusInfo       `json:"backup_status_info"`
     // The compliance status of the protected EBS volume. Possible values include
     // "compliant" and "noncompliant". If the volume is not protected, then this field has
     // a value of `null`.
@@ -3626,6 +3810,8 @@ type ReadEc2InstanceResponse struct {
     // Determines whether the EC2 instance has been deleted. If `true`, the instance has
     // been deleted.
     AwsRegion                *string                 `json:"aws_region"`
+    // The backup status information applied to this resource.
+    BackupStatusInfo         *BackupStatusInfo       `json:"backup_status_info"`
     // The compliance status of the protected EC2 instance. Possible values include
     // "compliant" and "noncompliant". If the instance is not protected, then this field
     // has a value of `null`.
@@ -3919,6 +4105,8 @@ type ReadMssqlDatabaseResponse struct {
     AvailabilityGroupId                     *string                `json:"availability_group_id"`
     // The Microsoft SQL assigned name of the availability group. It is null in case of a standalone database.
     AvailabilityGroupName                   *string                `json:"availability_group_name"`
+    // The backup status information applied to this resource.
+    BackupStatusInfo                        *BackupStatusInfo      `json:"backup_status_info"`
     // The policy compliance status of the resource. If the database is not protected,
     // then this field has a value of `null`. Refer to
     // 
@@ -4194,6 +4382,8 @@ type ReadProtectionGroupResponse struct {
     Embedded                       *ProtectionGroupEmbedded              `json:"_embedded"`
     // URLs to pages related to the resource.
     Links                          *ProtectionGroupLinks                 `json:"_links"`
+    // Represents the aggregated stats for backup status.
+    BackupStatusStats              *BackupStatusStats                    `json:"backup_status_stats"`
     // The backup target AWS region associated with the protection group, empty if
     // in-region or not configured.
     BackupTargetAwsRegion          *string                               `json:"backup_target_aws_region"`
@@ -4202,16 +4392,32 @@ type ReadProtectionGroupResponse struct {
     // The following table describes the possible conditions for a bucket to be
     // automatically added to a protection group.
     // 
-    // +---------+----------------+---------------------------------------------------+
-    // |  Field  | Rule Condition |                    Description                    |
-    // +=========+================+===================================================+
-    // | aws_tag | $eq            | Denotes the AWS tag(s) to conditionalize on       |
-    // |         |                |                                                   |
-    // |         |                | {"aws_tag":{"$eq":{"key":"Environment",           |
-    // |         |                | "value":"Prod"}}}                                 |
-    // |         |                |                                                   |
-    // |         |                |                                                   |
-    // +---------+----------------+---------------------------------------------------+
+    // +-------------------+----------------+-----------------------------------------+
+    // |       Field       | Rule Condition |               Description               |
+    // +===================+================+=========================================+
+    // | aws_tag           | $eq            | Denotes the AWS tag(s) to               |
+    // |                   |                | conditionalize on                       |
+    // |                   |                |                                         |
+    // |                   |                | {"aws_tag":{"$eq":{"key":"Environment", |
+    // |                   |                | "value":"Prod"}}}                       |
+    // |                   |                |                                         |
+    // |                   |                |                                         |
+    // +-------------------+----------------+-----------------------------------------+
+    // | account_native_id | $eq            | Denotes the AWS account to              |
+    // |                   |                | conditionalize on                       |
+    // |                   |                |                                         |
+    // |                   |                | {"account_native_id":{"$eq":"1111111111 |
+    // |                   |                | 11"}}                                   |
+    // |                   |                |                                         |
+    // |                   |                |                                         |
+    // +-------------------+----------------+-----------------------------------------+
+    // | aws_region        | $eq            | Denotes the AWS region to               |
+    // |                   |                | conditionalize on                       |
+    // |                   |                |                                         |
+    // |                   |                | {"aws_region":{"$eq":"us-west-2"}}      |
+    // |                   |                |                                         |
+    // |                   |                |                                         |
+    // +-------------------+----------------+-----------------------------------------+
     // 
     BucketRule                     *string                               `json:"bucket_rule"`
     // The compliance statistics of workloads associated with this entity.
@@ -4321,6 +4527,8 @@ type ReadProtectionGroupS3AssetResponse struct {
     AddedByUser                   *bool                          `json:"added_by_user"`
     // The AWS region associated with the DynamoDB table.
     AwsRegion                     *string                        `json:"aws_region"`
+    // The backup status information applied to this resource.
+    BackupStatusInfo              *BackupStatusInfo              `json:"backup_status_info"`
     // The backup target AWS region associated with the protection group S3 asset.
     BackupTargetAwsRegion         *string                        `json:"backup_target_aws_region"`
     // The Clumio-assigned ID of the bucket
@@ -4442,6 +4650,8 @@ type ReadRdsResourceResponse struct {
     AwsAzs                                 []*string               `json:"aws_azs"`
     // The AWS region associated with this resource.
     AwsRegion                              *string                 `json:"aws_region"`
+    // The backup status information applied to this resource.
+    BackupStatusInfo                       *BackupStatusInfo       `json:"backup_status_info"`
     // The compliance status of the protected RDS resource. Possible values include
     // `compliant` and `noncompliant`. If the resource is not protected, then this field has
     // a value of `null`.
@@ -5518,74 +5728,87 @@ type ShareFileRestoreEmailResponse struct {
 // UpdateAWSConnectionResponse represents a custom type struct for Success
 type UpdateAWSConnectionResponse struct {
     // URLs to pages related to the resource.
-    Links                    *AWSConnectionLinks `json:"_links"`
+    Links                      *AWSConnectionLinks      `json:"_links"`
     // The alias given to the account on AWS.
-    AccountName              *string             `json:"account_name"`
+    AccountName                *string                  `json:"account_name"`
     // The AWS-assigned ID of the account associated with the connection.
-    AccountNativeId          *string             `json:"account_native_id"`
+    AccountNativeId            *string                  `json:"account_native_id"`
     // The AWS region associated with the connection. For example, `us-east-1`.
-    AwsRegion                *string             `json:"aws_region"`
+    AwsRegion                  *string                  `json:"aws_region"`
     // AWS account ID of the Clumio control plane.
-    ClumioAwsAccountId       *string             `json:"clumio_aws_account_id"`
+    ClumioAwsAccountId         *string                  `json:"clumio_aws_account_id"`
     // AWS region of the Clumio control plane
-    ClumioAwsRegion          *string             `json:"clumio_aws_region"`
+    ClumioAwsRegion            *string                  `json:"clumio_aws_region"`
     // The consolidated configuration of the Clumio Cloud Protect and Clumio Cloud Discover products for this connection.
     // If this connection is deprecated to use unconsolidated configuration, then this field has a
     // value of `null`.
-    Config                   *ConsolidatedConfig `json:"config"`
-    // The status of the connection. Possible values include "connecting",
-    // "connected", and "unlinked".
-    ConnectionStatus         *string             `json:"connection_status"`
+    Config                     *ConsolidatedConfig      `json:"config"`
+    // Clumio assigned ID of the associated connection group.
+    ConnectionGroupId          *string                  `json:"connection_group_id"`
+    // Management status of connection.
+    ConnectionManagementStatus *string                  `json:"connection_management_status"`
+    // The status of the connection considering all the deployments made for it.
+    ConnectionStatus           *string                  `json:"connection_status"`
     // The timestamp of when the connection was created.
-    CreatedTimestamp         *string             `json:"created_timestamp"`
+    CreatedTimestamp           *string                  `json:"created_timestamp"`
     // AWS account ID of the data plane for the connection.
-    DataPlaneAccountId       *string             `json:"data_plane_account_id"`
+    DataPlaneAccountId         *string                  `json:"data_plane_account_id"`
+    // The deployment method with which the currently active connection was established.
+    DeploymentType             *string                  `json:"deployment_type"`
     // The user-provided description for this connection.
-    Description              *string             `json:"description"`
+    Description                *string                  `json:"description"`
     // The configuration of the Clumio Discover product for this connection.
     // If this connection is not configured for Clumio Discover, then this field has a
     // value of `null`.
-    Discover                 *DiscoverConfig     `json:"discover"`
+    Discover                   *DiscoverConfig          `json:"discover"`
     // Clumio assigned external ID of the connection or of the associated connection group.
-    ExternalId               *string             `json:"external_id"`
+    ExternalId                 *string                  `json:"external_id"`
     // The Clumio-assigned ID of the connection.
-    Id                       *string             `json:"id"`
+    Id                         *string                  `json:"id"`
     // Status denoting whether Ingestion has started for the connection.
     // Valid values are "initial", "in_progress", "failed", "completed".
-    IngestionStatus          *string             `json:"ingestion_status"`
+    IngestionStatus            *string                  `json:"ingestion_status"`
     // K8S Namespace
-    Namespace                *string             `json:"namespace"`
+    Namespace                  *string                  `json:"namespace"`
     // The Clumio-assigned ID of the organizational unit associated with the
     // AWS environment. If this parameter is not provided, then the value
     // defaults to the first organizational unit assigned to the requesting
     // user. For more information about organizational units, refer to the
     // Organizational-Units documentation.
-    OrganizationalUnitId     *string             `json:"organizational_unit_id"`
+    OrganizationalUnitId       *string                  `json:"organizational_unit_id"`
     // The configuration of the Clumio Cloud Protect product for this connection.
     // If this connection is not configured for Clumio Cloud Protect, then this field has a
     // value of `null`.
-    Protect                  *ProtectConfig      `json:"protect"`
+    Protect                    *ProtectConfig           `json:"protect"`
     // The asset types enabled for protect.
     // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
-    ProtectAssetTypesEnabled []*string           `json:"protect_asset_types_enabled"`
+    // NOTE - EBS is required for EC2MSSQL.
+    ProtectAssetTypesEnabled   []*string                `json:"protect_asset_types_enabled"`
+    // TODO: Add struct field description
+    Resources                  *ConnectionResourcesResp `json:"resources"`
+    // The Amazon Resource Name of the stale CloudFormation stack when the connection was migrated to connection groups.
+    // NOTE - This has to be removed from AWS as well to delete the connection completely.
+    RetiredStackArn            *string                  `json:"retired_stack_arn"`
     // The services to be enabled for this configuration. Valid values are
     // ["discover"], ["discover", "protect"]. This is only set when the
     // registration is created, the enabled services are obtained directly from
     // the installed template after that. (Deprecated as all connections will have
     // both discover and protect enabled)
-    ServicesEnabled          []*string           `json:"services_enabled"`
-    // The Amazon Resource Name of the installed CloudFormation stack in this AWS account
-    StackArn                 *string             `json:"stack_arn"`
-    // The name given to the installed CloudFormation stack on AWS.
-    StackName                *string             `json:"stack_name"`
+    ServicesEnabled            []*string                `json:"services_enabled"`
+    // The Amazon Resource Name of the installed and active CloudFormation stack(if any) in AWS.
+    StackArn                   *string                  `json:"stack_arn"`
+    // The name given to the installed and active CloudFormation stack(if any) in AWS.
+    StackName                  *string                  `json:"stack_name"`
     // Status denoting whether Target Setup has started for the connection.
     // Valid values are "initial", "in_progress", "failed", "completed".
-    TargetSetupStatus        *string             `json:"target_setup_status"`
+    TargetSetupStatus          *string                  `json:"target_setup_status"`
+    // TODO: Add struct field description
+    TemplatePermissionSet      *string                  `json:"template_permission_set"`
     // The 36-character Clumio AWS integration ID token used to identify the
     // installation of the CloudFormation template on the account. This value
     // will be pasted into the ClumioToken field when creating the
     // CloudFormation stack.
-    Token                    *string             `json:"token"`
+    Token                      *string                  `json:"token"`
 }
 
 // UpdateAlertResponse represents a custom type struct for Success
@@ -5708,6 +5931,64 @@ type UpdateAutoUserProvisioningSettingResponse struct {
     IsEnabled *bool                             `json:"is_enabled"`
 }
 
+// UpdateConnectionGroupResponse represents a custom type struct for Success
+type UpdateConnectionGroupResponse struct {
+    // Embedded responses related to the resource.
+    Embedded                 interface{}           `json:"_embedded"`
+    // The ETag value.
+    Etag                     *string               `json:"_etag"`
+    // URLs to pages related to the resource.
+    Links                    *ConnectionGroupLinks `json:"_links"`
+    // The alias given to the associated account in AWS.
+    AccountName              *string               `json:"account_name"`
+    // The AWS-assigned IDs of the accounts associated with the Connection Group.
+    AccountNativeIds         []*string             `json:"account_native_ids"`
+    // List of asset types connected via the connection-group.
+    // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
+    AssetTypesEnabled        []*string             `json:"asset_types_enabled"`
+    // The AWS regions associated with the with the Connection Group.
+    AwsRegions               []*string             `json:"aws_regions"`
+    // The consolidated configuration of the Clumio Cloud Protect and Clumio Cloud Discover products for this connection.
+    // If this connection is deprecated to use unconsolidated configuration, then this field has a
+    // value of `null`.
+    Config                   *ConsolidatedConfig   `json:"config"`
+    // The timestamp of when the connection was created.
+    CreatedTimestamp         *string               `json:"created_timestamp"`
+    // Clumio's S3 URL that contains the template to create the required resources in the
+    // given account(s) according to the request.
+    DeploymentTemplateUrl    *string               `json:"deployment_template_url"`
+    // User-provided description for this connection group.
+    Description              *string               `json:"description"`
+    // Clumio assigned external ID for the connection group, should be used while creating the AWS stack.
+    ExternalId               *string               `json:"external_id"`
+    // The Clumio-assigned ID of the Connection Group, should be used as the token while creating the stack in AWS.
+    Id                       *string               `json:"id"`
+    // The AWS Account IDs that are intended to be associated with the Connection Group.
+    IntendedAccountNativeIds []*string             `json:"intended_account_native_ids"`
+    // THe asset types that are intended to be connected via connection-group.
+    IntendedAssetTypes       []*string             `json:"intended_asset_types"`
+    // The AWS regions that are intended to be connected with the Connection Group.
+    IntendedAwsRegions       []*string             `json:"intended_aws_regions"`
+    // The master account which manages the connection-group's stack.
+    MasterAwsAccountId       *string               `json:"master_aws_account_id"`
+    // The master region which manages the connection-group's stack.
+    MasterRegion             *string               `json:"master_region"`
+    // Ongoing Operation of the deployed and active stack of ConnectionGroup.
+    OngoingStackOperation    *string               `json:"ongoing_stack_operation"`
+    // The Clumio-assigned ID of the organizational unit associated with the
+    // AWS environment. If this parameter is not provided, then the value
+    // defaults to the first organizational unit assigned to the requesting
+    // user. For more information about organizational units, refer to the
+    // Organizational-Units documentation.
+    OrganizationalUnitId     *string               `json:"organizational_unit_id"`
+    // The Amazon Resource Name of the installed CloudFormation stack in AWS.
+    StackArn                 *string               `json:"stack_arn"`
+    // The name given to the installed CloudFormation stack in AWS.
+    StackName                *string               `json:"stack_name"`
+    // The status of the Connection Group based on the stack in associated AWS account.
+    Status                   *string               `json:"status"`
+}
+
 // UpdateConsolidatedAlertResponse represents a custom type struct for Success
 type UpdateConsolidatedAlertResponse struct {
     // The ETag value.
@@ -5821,16 +6102,32 @@ type UpdateProtectionGroupResponse struct {
     // The following table describes the possible conditions for a bucket to be
     // automatically added to a protection group.
     // 
-    // +---------+----------------+---------------------------------------------------+
-    // |  Field  | Rule Condition |                    Description                    |
-    // +=========+================+===================================================+
-    // | aws_tag | $eq            | Denotes the AWS tag(s) to conditionalize on       |
-    // |         |                |                                                   |
-    // |         |                | {"aws_tag":{"$eq":{"key":"Environment",           |
-    // |         |                | "value":"Prod"}}}                                 |
-    // |         |                |                                                   |
-    // |         |                |                                                   |
-    // +---------+----------------+---------------------------------------------------+
+    // +-------------------+----------------+-----------------------------------------+
+    // |       Field       | Rule Condition |               Description               |
+    // +===================+================+=========================================+
+    // | aws_tag           | $eq            | Denotes the AWS tag(s) to               |
+    // |                   |                | conditionalize on                       |
+    // |                   |                |                                         |
+    // |                   |                | {"aws_tag":{"$eq":{"key":"Environment", |
+    // |                   |                | "value":"Prod"}}}                       |
+    // |                   |                |                                         |
+    // |                   |                |                                         |
+    // +-------------------+----------------+-----------------------------------------+
+    // | account_native_id | $eq            | Denotes the AWS account to              |
+    // |                   |                | conditionalize on                       |
+    // |                   |                |                                         |
+    // |                   |                | {"account_native_id":{"$eq":"1111111111 |
+    // |                   |                | 11"}}                                   |
+    // |                   |                |                                         |
+    // |                   |                |                                         |
+    // +-------------------+----------------+-----------------------------------------+
+    // | aws_region        | $eq            | Denotes the AWS region to               |
+    // |                   |                | conditionalize on                       |
+    // |                   |                |                                         |
+    // |                   |                | {"aws_region":{"$eq":"us-west-2"}}      |
+    // |                   |                |                                         |
+    // |                   |                |                                         |
+    // +-------------------+----------------+-----------------------------------------+
     // 
     BucketRule                     *string                      `json:"bucket_rule"`
     // Creation time of the protection group in RFC-3339 format.

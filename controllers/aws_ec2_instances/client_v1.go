@@ -15,12 +15,14 @@ type AwsEc2InstancesV1Client interface {
         limit *int64, 
         start *string, 
         filter *string, 
-        embed *string)(
+        embed *string, 
+        lookbackDays *int64)(
         *models.ListEc2InstancesResponse,  *apiutils.APIError)
     
     // ReadAwsEc2Instance Returns a representation of the specified EC2 instance.
     ReadAwsEc2Instance(
         instanceId string, 
+        lookbackDays *int64, 
         embed *string)(
         *models.ReadEc2InstanceResponse,  *apiutils.APIError)
     

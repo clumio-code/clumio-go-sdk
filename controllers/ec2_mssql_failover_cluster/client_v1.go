@@ -12,7 +12,9 @@ import (
 type Ec2MssqlFailoverClusterV1Client interface {
     // ReadEc2MssqlFailoverCluster Returns a representation of the specified failover cluster.
     ReadEc2MssqlFailoverCluster(
-        failoverClusterId string)(
+        failoverClusterId string, 
+        embed *string, 
+        lookbackDays *int64)(
         *models.ReadEC2MSSQLFCIResponse,  *apiutils.APIError)
     
 }

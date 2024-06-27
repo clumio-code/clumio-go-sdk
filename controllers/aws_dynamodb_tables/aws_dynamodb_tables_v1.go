@@ -22,7 +22,8 @@ func (a *AwsDynamodbTablesV1) ListAwsDynamodbTables(
     limit *int64, 
     start *string, 
     filter *string, 
-    embed *string)(
+    embed *string, 
+    lookbackDays *int64)(
     *models.ListDynamoDBTableResponse, *apiutils.APIError) {
 
     queryBuilder := a.config.BaseUrl + "/datasources/aws/dynamodb-tables"
@@ -45,12 +46,16 @@ func (a *AwsDynamodbTablesV1) ListAwsDynamodbTables(
     if embed == nil {
         embed = &defaultString
     }
+    if lookbackDays == nil {
+        lookbackDays = &defaultInt64
+    }
     
     queryParams := map[string]string{
         "limit": fmt.Sprintf("%v", *limit),
         "start": *start,
         "filter": *filter,
         "embed": *embed,
+        "lookback_days": fmt.Sprintf("%v", *lookbackDays),
     }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
@@ -69,6 +74,7 @@ func (a *AwsDynamodbTablesV1) ListAwsDynamodbTables(
 // ReadAwsDynamodbTable Returns a representation of specified DynamoDB table.
 func (a *AwsDynamodbTablesV1) ReadAwsDynamodbTable(
     tableId string, 
+    lookbackDays *int64, 
     embed *string)(
     *models.ReadDynamoDBTableResponse, *apiutils.APIError) {
 
@@ -82,13 +88,18 @@ func (a *AwsDynamodbTablesV1) ReadAwsDynamodbTable(
     
     header := "application/api.clumio.aws-dynamodb-tables=v1+json"
     result := &models.ReadDynamoDBTableResponse{}
+    defaultInt64 := int64(0)
     defaultString := "" 
     
+    if lookbackDays == nil {
+        lookbackDays = &defaultInt64
+    }
     if embed == nil {
         embed = &defaultString
     }
     
     queryParams := map[string]string{
+        "lookback_days": fmt.Sprintf("%v", *lookbackDays),
         "embed": *embed,
     }
 

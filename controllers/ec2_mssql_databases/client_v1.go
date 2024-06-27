@@ -15,12 +15,14 @@ type Ec2MssqlDatabasesV1Client interface {
         limit *int64, 
         start *string, 
         filter *string, 
-        embed *string)(
+        embed *string, 
+        lookbackDays *int64)(
         *models.ListEC2MSSQLDatabasesResponse,  *apiutils.APIError)
     
     // ReadEc2MssqlDatabase Returns a representation of the specified database.
     ReadEc2MssqlDatabase(
-        databaseId string)(
+        databaseId string, 
+        lookbackDays *int64)(
         *models.ReadEC2MSSQLDatabaseResponse,  *apiutils.APIError)
     
     // ListEc2MssqlDatabasePitrIntervals Returns a list of time intervals (start timestamp and end timestamp) in which the MSSQL database can be restored.

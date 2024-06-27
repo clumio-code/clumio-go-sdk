@@ -22,7 +22,8 @@ func (a *AwsEbsVolumesV1) ListAwsEbsVolumes(
     limit *int64, 
     start *string, 
     filter *string, 
-    embed *string)(
+    embed *string, 
+    lookbackDays *int64)(
     *models.ListEbsVolumesResponse, *apiutils.APIError) {
 
     queryBuilder := a.config.BaseUrl + "/datasources/aws/ebs-volumes"
@@ -45,12 +46,16 @@ func (a *AwsEbsVolumesV1) ListAwsEbsVolumes(
     if embed == nil {
         embed = &defaultString
     }
+    if lookbackDays == nil {
+        lookbackDays = &defaultInt64
+    }
     
     queryParams := map[string]string{
         "limit": fmt.Sprintf("%v", *limit),
         "start": *start,
         "filter": *filter,
         "embed": *embed,
+        "lookback_days": fmt.Sprintf("%v", *lookbackDays),
     }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
@@ -69,6 +74,7 @@ func (a *AwsEbsVolumesV1) ListAwsEbsVolumes(
 // ReadAwsEbsVolume Returns a representation of the specified EBS volume.
 func (a *AwsEbsVolumesV1) ReadAwsEbsVolume(
     volumeId string, 
+    lookbackDays *int64, 
     embed *string)(
     *models.ReadEbsVolumeResponse, *apiutils.APIError) {
 
@@ -82,13 +88,18 @@ func (a *AwsEbsVolumesV1) ReadAwsEbsVolume(
     
     header := "application/api.clumio.aws-ebs-volumes=v1+json"
     result := &models.ReadEbsVolumeResponse{}
+    defaultInt64 := int64(0)
     defaultString := "" 
     
+    if lookbackDays == nil {
+        lookbackDays = &defaultInt64
+    }
     if embed == nil {
         embed = &defaultString
     }
     
     queryParams := map[string]string{
+        "lookback_days": fmt.Sprintf("%v", *lookbackDays),
         "embed": *embed,
     }
 
