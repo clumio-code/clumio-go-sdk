@@ -22,7 +22,8 @@ func (a *AwsEnvironmentsV1) ListAwsEnvironments(
     limit *int64, 
     start *string, 
     filter *string, 
-    embed *string)(
+    embed *string, 
+    lookbackDays *int64)(
     *models.ListAWSEnvironmentsResponse, *apiutils.APIError) {
 
     queryBuilder := a.config.BaseUrl + "/datasources/aws/environments"
@@ -45,12 +46,16 @@ func (a *AwsEnvironmentsV1) ListAwsEnvironments(
     if embed == nil {
         embed = &defaultString
     }
+    if lookbackDays == nil {
+        lookbackDays = &defaultInt64
+    }
     
     queryParams := map[string]string{
         "limit": fmt.Sprintf("%v", *limit),
         "start": *start,
         "filter": *filter,
         "embed": *embed,
+        "lookback_days": fmt.Sprintf("%v", *lookbackDays),
     }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
@@ -69,7 +74,8 @@ func (a *AwsEnvironmentsV1) ListAwsEnvironments(
 // ReadAwsEnvironment Returns a representation of the specified AWS environment.
 func (a *AwsEnvironmentsV1) ReadAwsEnvironment(
     environmentId string, 
-    embed *string)(
+    embed *string, 
+    lookbackDays *int64)(
     *models.ReadAWSEnvironmentResponse, *apiutils.APIError) {
 
     pathURL := "/datasources/aws/environments/{environment_id}"
@@ -82,14 +88,19 @@ func (a *AwsEnvironmentsV1) ReadAwsEnvironment(
     
     header := "application/api.clumio.aws-environments=v1+json"
     result := &models.ReadAWSEnvironmentResponse{}
+    defaultInt64 := int64(0)
     defaultString := "" 
     
     if embed == nil {
         embed = &defaultString
     }
+    if lookbackDays == nil {
+        lookbackDays = &defaultInt64
+    }
     
     queryParams := map[string]string{
         "embed": *embed,
+        "lookback_days": fmt.Sprintf("%v", *lookbackDays),
     }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{

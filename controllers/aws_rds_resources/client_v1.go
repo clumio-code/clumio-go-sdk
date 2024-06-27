@@ -15,12 +15,14 @@ type AwsRdsResourcesV1Client interface {
         limit *int64, 
         start *string, 
         filter *string, 
-        embed *string)(
+        embed *string, 
+        lookbackDays *int64)(
         *models.ListRdsResourcesResponse,  *apiutils.APIError)
     
     // ReadAwsRdsResource Returns a representation of the specified RDS resource.
     ReadAwsRdsResource(
         resourceId string, 
+        lookbackDays *int64, 
         embed *string)(
         *models.ReadRdsResourceResponse,  *apiutils.APIError)
     

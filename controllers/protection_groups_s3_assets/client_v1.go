@@ -14,12 +14,14 @@ type ProtectionGroupsS3AssetsV1Client interface {
     ListProtectionGroupS3Assets(
         limit *int64, 
         start *string, 
-        filter *string)(
+        filter *string, 
+        lookbackDays *int64)(
         *models.ListProtectionGroupS3AssetsResponse,  *apiutils.APIError)
     
     // ReadProtectionGroupS3Asset Returns a representation of the specified protection group S3 asset.
     ReadProtectionGroupS3Asset(
-        protectionGroupS3AssetId string)(
+        protectionGroupS3AssetId string, 
+        lookbackDays *int64)(
         *models.ReadProtectionGroupS3AssetResponse,  *apiutils.APIError)
     
     // ReadProtectionGroupS3AssetContinuousBackupStats Returns continuous backup statistics of the specified protection group S3 asset.

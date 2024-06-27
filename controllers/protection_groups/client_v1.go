@@ -14,12 +14,14 @@ type ProtectionGroupsV1Client interface {
     ListProtectionGroups(
         limit *int64, 
         start *string, 
-        filter *string)(
+        filter *string, 
+        lookbackDays *int64)(
         *models.ListProtectionGroupsResponse,  *apiutils.APIError)
     
     // ReadProtectionGroup Returns a representation of the specified protection group.
     ReadProtectionGroup(
-        groupId string)(
+        groupId string, 
+        lookbackDays *int64)(
         *models.ReadProtectionGroupResponse,  *apiutils.APIError)
     
     // CreateProtectionGroup Creates a new protection group by specifying object filters. Appearance in

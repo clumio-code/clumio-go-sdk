@@ -15,12 +15,14 @@ type AwsDynamodbTablesV1Client interface {
         limit *int64, 
         start *string, 
         filter *string, 
-        embed *string)(
+        embed *string, 
+        lookbackDays *int64)(
         *models.ListDynamoDBTableResponse,  *apiutils.APIError)
     
     // ReadAwsDynamodbTable Returns a representation of specified DynamoDB table.
     ReadAwsDynamodbTable(
         tableId string, 
+        lookbackDays *int64, 
         embed *string)(
         *models.ReadDynamoDBTableResponse,  *apiutils.APIError)
     

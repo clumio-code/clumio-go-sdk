@@ -21,7 +21,9 @@ type Ec2MssqlAvailabilityGroupsV1 struct {
 func (e *Ec2MssqlAvailabilityGroupsV1) ListEc2MssqlAvailabilityGroups(
     limit *int64, 
     start *string, 
-    filter *string)(
+    filter *string, 
+    embed *string, 
+    lookbackDays *int64)(
     *models.ListEC2MssqlAGsResponse, *apiutils.APIError) {
 
     queryBuilder := e.config.BaseUrl + "/datasources/aws/ec2-mssql/availability-groups"
@@ -41,11 +43,19 @@ func (e *Ec2MssqlAvailabilityGroupsV1) ListEc2MssqlAvailabilityGroups(
     if filter == nil {
         filter = &defaultString
     }
+    if embed == nil {
+        embed = &defaultString
+    }
+    if lookbackDays == nil {
+        lookbackDays = &defaultInt64
+    }
     
     queryParams := map[string]string{
         "limit": fmt.Sprintf("%v", *limit),
         "start": *start,
         "filter": *filter,
+        "embed": *embed,
+        "lookback_days": fmt.Sprintf("%v", *lookbackDays),
     }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
@@ -63,7 +73,9 @@ func (e *Ec2MssqlAvailabilityGroupsV1) ListEc2MssqlAvailabilityGroups(
 
 // ReadEc2MssqlAvailabilityGroup Returns a representation of the specified availability group.
 func (e *Ec2MssqlAvailabilityGroupsV1) ReadEc2MssqlAvailabilityGroup(
-    availabilityGroupId string)(
+    availabilityGroupId string, 
+    embed *string, 
+    lookbackDays *int64)(
     *models.ReadEC2MssqlAGResponse, *apiutils.APIError) {
 
     pathURL := "/datasources/aws/ec2-mssql/availability-groups/{availability_group_id}"
@@ -76,10 +88,25 @@ func (e *Ec2MssqlAvailabilityGroupsV1) ReadEc2MssqlAvailabilityGroup(
     
     header := "application/api.clumio.ec2-mssql-availability-groups=v1+json"
     result := &models.ReadEC2MssqlAGResponse{}
+    defaultInt64 := int64(0)
+    defaultString := "" 
+    
+    if embed == nil {
+        embed = &defaultString
+    }
+    if lookbackDays == nil {
+        lookbackDays = &defaultInt64
+    }
+    
+    queryParams := map[string]string{
+        "embed": *embed,
+        "lookback_days": fmt.Sprintf("%v", *lookbackDays),
+    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: e.config,
         RequestUrl: queryBuilder,
+        QueryParams: queryParams,
         PathParams: pathParams,
         AcceptHeader: header,
         Result200: &result,

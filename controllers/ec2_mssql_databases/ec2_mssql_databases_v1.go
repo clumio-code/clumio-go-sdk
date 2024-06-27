@@ -22,7 +22,8 @@ func (e *Ec2MssqlDatabasesV1) ListEc2MssqlDatabases(
     limit *int64, 
     start *string, 
     filter *string, 
-    embed *string)(
+    embed *string, 
+    lookbackDays *int64)(
     *models.ListEC2MSSQLDatabasesResponse, *apiutils.APIError) {
 
     queryBuilder := e.config.BaseUrl + "/datasources/aws/ec2-mssql/databases"
@@ -45,12 +46,16 @@ func (e *Ec2MssqlDatabasesV1) ListEc2MssqlDatabases(
     if embed == nil {
         embed = &defaultString
     }
+    if lookbackDays == nil {
+        lookbackDays = &defaultInt64
+    }
     
     queryParams := map[string]string{
         "limit": fmt.Sprintf("%v", *limit),
         "start": *start,
         "filter": *filter,
         "embed": *embed,
+        "lookback_days": fmt.Sprintf("%v", *lookbackDays),
     }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
@@ -68,7 +73,8 @@ func (e *Ec2MssqlDatabasesV1) ListEc2MssqlDatabases(
 
 // ReadEc2MssqlDatabase Returns a representation of the specified database.
 func (e *Ec2MssqlDatabasesV1) ReadEc2MssqlDatabase(
-    databaseId string)(
+    databaseId string, 
+    lookbackDays *int64)(
     *models.ReadEC2MSSQLDatabaseResponse, *apiutils.APIError) {
 
     pathURL := "/datasources/aws/ec2-mssql/databases/{database_id}"
@@ -81,10 +87,20 @@ func (e *Ec2MssqlDatabasesV1) ReadEc2MssqlDatabase(
     
     header := "application/api.clumio.ec2-mssql-databases=v1+json"
     result := &models.ReadEC2MSSQLDatabaseResponse{}
+    defaultInt64 := int64(0)
+    
+    if lookbackDays == nil {
+        lookbackDays = &defaultInt64
+    }
+    
+    queryParams := map[string]string{
+        "lookback_days": fmt.Sprintf("%v", *lookbackDays),
+    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: e.config,
         RequestUrl: queryBuilder,
+        QueryParams: queryParams,
         PathParams: pathParams,
         AcceptHeader: header,
         Result200: &result,

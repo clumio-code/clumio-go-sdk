@@ -14,12 +14,16 @@ type Ec2MssqlAvailabilityGroupsV1Client interface {
     ListEc2MssqlAvailabilityGroups(
         limit *int64, 
         start *string, 
-        filter *string)(
+        filter *string, 
+        embed *string, 
+        lookbackDays *int64)(
         *models.ListEC2MssqlAGsResponse,  *apiutils.APIError)
     
     // ReadEc2MssqlAvailabilityGroup Returns a representation of the specified availability group.
     ReadEc2MssqlAvailabilityGroup(
-        availabilityGroupId string)(
+        availabilityGroupId string, 
+        embed *string, 
+        lookbackDays *int64)(
         *models.ReadEC2MssqlAGResponse,  *apiutils.APIError)
     
 }

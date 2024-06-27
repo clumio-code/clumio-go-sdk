@@ -21,7 +21,8 @@ type ProtectionGroupsS3AssetsV1 struct {
 func (p *ProtectionGroupsS3AssetsV1) ListProtectionGroupS3Assets(
     limit *int64, 
     start *string, 
-    filter *string)(
+    filter *string, 
+    lookbackDays *int64)(
     *models.ListProtectionGroupS3AssetsResponse, *apiutils.APIError) {
 
     queryBuilder := p.config.BaseUrl + "/datasources/protection-groups/s3-assets"
@@ -41,11 +42,15 @@ func (p *ProtectionGroupsS3AssetsV1) ListProtectionGroupS3Assets(
     if filter == nil {
         filter = &defaultString
     }
+    if lookbackDays == nil {
+        lookbackDays = &defaultInt64
+    }
     
     queryParams := map[string]string{
         "limit": fmt.Sprintf("%v", *limit),
         "start": *start,
         "filter": *filter,
+        "lookback_days": fmt.Sprintf("%v", *lookbackDays),
     }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
@@ -63,7 +68,8 @@ func (p *ProtectionGroupsS3AssetsV1) ListProtectionGroupS3Assets(
 
 // ReadProtectionGroupS3Asset Returns a representation of the specified protection group S3 asset.
 func (p *ProtectionGroupsS3AssetsV1) ReadProtectionGroupS3Asset(
-    protectionGroupS3AssetId string)(
+    protectionGroupS3AssetId string, 
+    lookbackDays *int64)(
     *models.ReadProtectionGroupS3AssetResponse, *apiutils.APIError) {
 
     pathURL := "/datasources/protection-groups/s3-assets/{protection_group_s3_asset_id}"
@@ -76,10 +82,20 @@ func (p *ProtectionGroupsS3AssetsV1) ReadProtectionGroupS3Asset(
     
     header := "application/api.clumio.protection-groups-s3-assets=v1+json"
     result := &models.ReadProtectionGroupS3AssetResponse{}
+    defaultInt64 := int64(0)
+    
+    if lookbackDays == nil {
+        lookbackDays = &defaultInt64
+    }
+    
+    queryParams := map[string]string{
+        "lookback_days": fmt.Sprintf("%v", *lookbackDays),
+    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: p.config,
         RequestUrl: queryBuilder,
+        QueryParams: queryParams,
         PathParams: pathParams,
         AcceptHeader: header,
         Result200: &result,

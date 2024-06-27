@@ -19,14 +19,16 @@ type AwsEnvironmentTagsV1Client interface {
         totalPagesCount *int64, 
         start *string, 
         filter *string, 
-        embed *string)(
+        embed *string, 
+        lookbackDays *int64)(
         *models.ListAwsTagsResponse,  *apiutils.APIError)
     
     // ReadAwsEnvironmentTag Returns a representation of the specified AWS tag in the specified environment.
     ReadAwsEnvironmentTag(
         environmentId string, 
         tagId string, 
-        embed *string)(
+        embed *string, 
+        lookbackDays *int64)(
         *models.ReadAwsTagResponse,  *apiutils.APIError)
     
     // ReadAwsEnvironmentTagEbsVolumesComplianceStats Returns the specified AWS tag's EBS compliance statistics.

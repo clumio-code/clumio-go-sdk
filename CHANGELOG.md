@@ -1,3 +1,6 @@
+## 0.20.0
+New APIs added for Connection Groups.
+lookbackDays request parameter added to list APIs of supported resources.
 ## 0.19.0
 Updates to Clumio AWS connection API response parameters.
 ## 0.18.0

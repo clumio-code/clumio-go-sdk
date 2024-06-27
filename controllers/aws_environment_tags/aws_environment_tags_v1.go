@@ -26,7 +26,8 @@ func (a *AwsEnvironmentTagsV1) ListAwsEnvironmentTags(
     totalPagesCount *int64, 
     start *string, 
     filter *string, 
-    embed *string)(
+    embed *string, 
+    lookbackDays *int64)(
     *models.ListAwsTagsResponse, *apiutils.APIError) {
 
     pathURL := "/datasources/aws/environments/{environment_id}/tags"
@@ -63,6 +64,9 @@ func (a *AwsEnvironmentTagsV1) ListAwsEnvironmentTags(
     if embed == nil {
         embed = &defaultString
     }
+    if lookbackDays == nil {
+        lookbackDays = &defaultInt64
+    }
     
     queryParams := map[string]string{
         "current_count": fmt.Sprintf("%v", *currentCount),
@@ -72,6 +76,7 @@ func (a *AwsEnvironmentTagsV1) ListAwsEnvironmentTags(
         "start": *start,
         "filter": *filter,
         "embed": *embed,
+        "lookback_days": fmt.Sprintf("%v", *lookbackDays),
     }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
@@ -92,7 +97,8 @@ func (a *AwsEnvironmentTagsV1) ListAwsEnvironmentTags(
 func (a *AwsEnvironmentTagsV1) ReadAwsEnvironmentTag(
     environmentId string, 
     tagId string, 
-    embed *string)(
+    embed *string, 
+    lookbackDays *int64)(
     *models.ReadAwsTagResponse, *apiutils.APIError) {
 
     pathURL := "/datasources/aws/environments/{environment_id}/tags/{tag_id}"
@@ -106,14 +112,19 @@ func (a *AwsEnvironmentTagsV1) ReadAwsEnvironmentTag(
     
     header := "application/api.clumio.aws-environment-tags=v1+json"
     result := &models.ReadAwsTagResponse{}
+    defaultInt64 := int64(0)
     defaultString := "" 
     
     if embed == nil {
         embed = &defaultString
     }
+    if lookbackDays == nil {
+        lookbackDays = &defaultInt64
+    }
     
     queryParams := map[string]string{
         "embed": *embed,
+        "lookback_days": fmt.Sprintf("%v", *lookbackDays),
     }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{

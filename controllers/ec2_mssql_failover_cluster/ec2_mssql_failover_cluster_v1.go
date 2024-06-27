@@ -4,6 +4,8 @@
 package ec2mssqlfailovercluster
 
 import (
+    "fmt"
+
     "github.com/clumio-code/clumio-go-sdk/api_utils"
     "github.com/clumio-code/clumio-go-sdk/common"
     "github.com/clumio-code/clumio-go-sdk/config"
@@ -17,7 +19,9 @@ type Ec2MssqlFailoverClusterV1 struct {
 
 // ReadEc2MssqlFailoverCluster Returns a representation of the specified failover cluster.
 func (e *Ec2MssqlFailoverClusterV1) ReadEc2MssqlFailoverCluster(
-    failoverClusterId string)(
+    failoverClusterId string, 
+    embed *string, 
+    lookbackDays *int64)(
     *models.ReadEC2MSSQLFCIResponse, *apiutils.APIError) {
 
     pathURL := "/datasources/aws/ec2-mssql/failover-clusters/{failover_cluster_id}"
@@ -30,10 +34,25 @@ func (e *Ec2MssqlFailoverClusterV1) ReadEc2MssqlFailoverCluster(
     
     header := "application/api.clumio.ec2-mssql-failover-cluster=v1+json"
     result := &models.ReadEC2MSSQLFCIResponse{}
+    defaultInt64 := int64(0)
+    defaultString := "" 
+    
+    if embed == nil {
+        embed = &defaultString
+    }
+    if lookbackDays == nil {
+        lookbackDays = &defaultInt64
+    }
+    
+    queryParams := map[string]string{
+        "embed": *embed,
+        "lookback_days": fmt.Sprintf("%v", *lookbackDays),
+    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: e.config,
         RequestUrl: queryBuilder,
+        QueryParams: queryParams,
         PathParams: pathParams,
         AcceptHeader: header,
         Result200: &result,
