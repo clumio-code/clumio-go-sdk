@@ -96,45 +96,47 @@ type PreviewProtectionGroupResponseWrapper struct {
 // AddBucketToProtectionGroupResponse represents a custom type struct for Success
 type AddBucketToProtectionGroupResponse struct {
     // The AWS-assigned ID of the account associated with the DynamoDB table.
-    AccountNativeId               *string `json:"account_native_id"`
+    AccountNativeId               *string           `json:"account_native_id"`
     // Whether this bucket was added to this protection group by the bucket rule
-    AddedByBucketRule             *bool   `json:"added_by_bucket_rule"`
+    AddedByBucketRule             *bool             `json:"added_by_bucket_rule"`
     // Whether this bucket was added to this protection group by the user
-    AddedByUser                   *bool   `json:"added_by_user"`
+    AddedByUser                   *bool             `json:"added_by_user"`
     // The AWS region associated with the DynamoDB table.
-    AwsRegion                     *string `json:"aws_region"`
+    AwsRegion                     *string           `json:"aws_region"`
     // The backup target AWS region associated with the protection group S3 asset.
-    BackupTargetAwsRegion         *string `json:"backup_target_aws_region"`
+    BackupTargetAwsRegion         *string           `json:"backup_target_aws_region"`
+    // BackupTierStat
+    BackupTierStats               []*BackupTierStat `json:"backup_tier_stats"`
     // The Clumio-assigned ID of the bucket
-    BucketId                      *string `json:"bucket_id"`
+    BucketId                      *string           `json:"bucket_id"`
     // The name of the bucket
-    BucketName                    *string `json:"bucket_name"`
+    BucketName                    *string           `json:"bucket_name"`
     // Creation time of the protection group in RFC-3339 format.
-    CreatedTimestamp              *string `json:"created_timestamp"`
+    CreatedTimestamp              *string           `json:"created_timestamp"`
     // The Clumio-assigned ID of the AWS environment associated with the protection group.
-    EnvironmentId                 *string `json:"environment_id"`
+    EnvironmentId                 *string           `json:"environment_id"`
     // The Clumio-assigned ID of the protection group
-    GroupId                       *string `json:"group_id"`
+    GroupId                       *string           `json:"group_id"`
     // The name of the protection group
-    GroupName                     *string `json:"group_name"`
+    GroupName                     *string           `json:"group_name"`
     // The Clumio-assigned ID that represents the bucket within the protection group.
-    Id                            *string `json:"id"`
+    Id                            *string           `json:"id"`
     // Determines whether the protection group bucket has been deleted
-    IsDeleted                     *bool   `json:"is_deleted"`
+    IsDeleted                     *bool             `json:"is_deleted"`
     // Time of the last backup in RFC-3339 format.
-    LastBackupTimestamp           *string `json:"last_backup_timestamp"`
+    LastBackupTimestamp           *string           `json:"last_backup_timestamp"`
     // Time of the last successful continuous backup in RFC-3339 format.
-    LastContinuousBackupTimestamp *string `json:"last_continuous_backup_timestamp"`
+    LastContinuousBackupTimestamp *string           `json:"last_continuous_backup_timestamp"`
     // The Clumio-assigned ID of the organizational unit associated with the protection group.
-    OrganizationalUnitId          *string `json:"organizational_unit_id"`
+    OrganizationalUnitId          *string           `json:"organizational_unit_id"`
     // Cumulative count of all unexpired objects in each backup (any new or updated since
     // the last backup) that have been backed up as part of this protection group
-    TotalBackedUpObjectCount      *int64  `json:"total_backed_up_object_count"`
+    TotalBackedUpObjectCount      *int64            `json:"total_backed_up_object_count"`
     // Cumulative size of all unexpired objects in each backup (any new or updated since
     // the last backup) that have been backed up as part of this protection group
-    TotalBackedUpSizeBytes        *int64  `json:"total_backed_up_size_bytes"`
+    TotalBackedUpSizeBytes        *int64            `json:"total_backed_up_size_bytes"`
     // The unsupported reason for the S3 bucket.
-    UnsupportedReason             *string `json:"unsupported_reason"`
+    UnsupportedReason             *string           `json:"unsupported_reason"`
 }
 
 // AddS3InstantAccessEndpointRoleResponse represents a custom type struct for Success
@@ -606,6 +608,8 @@ type CreateProtectionGroupResponse struct {
     // The backup target AWS region associated with the protection group, empty if
     // in-region or not configured.
     BackupTargetAwsRegion          *string                      `json:"backup_target_aws_region"`
+    // BackupTierStat
+    BackupTierStats                []*BackupTierStat            `json:"backup_tier_stats"`
     // Number of buckets
     BucketCount                    *int64                       `json:"bucket_count"`
     // The following table describes the possible conditions for a bucket to be
@@ -840,45 +844,47 @@ type CreateWalletResponse struct {
 // DeleteBucketFromProtectionGroupResponse represents a custom type struct for Success
 type DeleteBucketFromProtectionGroupResponse struct {
     // The AWS-assigned ID of the account associated with the DynamoDB table.
-    AccountNativeId               *string `json:"account_native_id"`
+    AccountNativeId               *string           `json:"account_native_id"`
     // Whether this bucket was added to this protection group by the bucket rule
-    AddedByBucketRule             *bool   `json:"added_by_bucket_rule"`
+    AddedByBucketRule             *bool             `json:"added_by_bucket_rule"`
     // Whether this bucket was added to this protection group by the user
-    AddedByUser                   *bool   `json:"added_by_user"`
+    AddedByUser                   *bool             `json:"added_by_user"`
     // The AWS region associated with the DynamoDB table.
-    AwsRegion                     *string `json:"aws_region"`
+    AwsRegion                     *string           `json:"aws_region"`
     // The backup target AWS region associated with the protection group S3 asset.
-    BackupTargetAwsRegion         *string `json:"backup_target_aws_region"`
+    BackupTargetAwsRegion         *string           `json:"backup_target_aws_region"`
+    // BackupTierStat
+    BackupTierStats               []*BackupTierStat `json:"backup_tier_stats"`
     // The Clumio-assigned ID of the bucket
-    BucketId                      *string `json:"bucket_id"`
+    BucketId                      *string           `json:"bucket_id"`
     // The name of the bucket
-    BucketName                    *string `json:"bucket_name"`
+    BucketName                    *string           `json:"bucket_name"`
     // Creation time of the protection group in RFC-3339 format.
-    CreatedTimestamp              *string `json:"created_timestamp"`
+    CreatedTimestamp              *string           `json:"created_timestamp"`
     // The Clumio-assigned ID of the AWS environment associated with the protection group.
-    EnvironmentId                 *string `json:"environment_id"`
+    EnvironmentId                 *string           `json:"environment_id"`
     // The Clumio-assigned ID of the protection group
-    GroupId                       *string `json:"group_id"`
+    GroupId                       *string           `json:"group_id"`
     // The name of the protection group
-    GroupName                     *string `json:"group_name"`
+    GroupName                     *string           `json:"group_name"`
     // The Clumio-assigned ID that represents the bucket within the protection group.
-    Id                            *string `json:"id"`
+    Id                            *string           `json:"id"`
     // Determines whether the protection group bucket has been deleted
-    IsDeleted                     *bool   `json:"is_deleted"`
+    IsDeleted                     *bool             `json:"is_deleted"`
     // Time of the last backup in RFC-3339 format.
-    LastBackupTimestamp           *string `json:"last_backup_timestamp"`
+    LastBackupTimestamp           *string           `json:"last_backup_timestamp"`
     // Time of the last successful continuous backup in RFC-3339 format.
-    LastContinuousBackupTimestamp *string `json:"last_continuous_backup_timestamp"`
+    LastContinuousBackupTimestamp *string           `json:"last_continuous_backup_timestamp"`
     // The Clumio-assigned ID of the organizational unit associated with the protection group.
-    OrganizationalUnitId          *string `json:"organizational_unit_id"`
+    OrganizationalUnitId          *string           `json:"organizational_unit_id"`
     // Cumulative count of all unexpired objects in each backup (any new or updated since
     // the last backup) that have been backed up as part of this protection group
-    TotalBackedUpObjectCount      *int64  `json:"total_backed_up_object_count"`
+    TotalBackedUpObjectCount      *int64            `json:"total_backed_up_object_count"`
     // Cumulative size of all unexpired objects in each backup (any new or updated since
     // the last backup) that have been backed up as part of this protection group
-    TotalBackedUpSizeBytes        *int64  `json:"total_backed_up_size_bytes"`
+    TotalBackedUpSizeBytes        *int64            `json:"total_backed_up_size_bytes"`
     // The unsupported reason for the S3 bucket.
-    UnsupportedReason             *string `json:"unsupported_reason"`
+    UnsupportedReason             *string           `json:"unsupported_reason"`
 }
 
 // DeleteHcmHostResponse represents a custom type struct for Success
@@ -3254,6 +3260,7 @@ type ReadDynamoDBTableResponse struct {
     // For [POST /restores/aws/dynamodb](#operation/restore-aws-dynamodb-table), this is defaulted to the
     // configuration of source table if both 'billing_mode' and 'provisioned_throughput' are empty or `null`.
     BillingMode                                   *string                 `json:"billing_mode"`
+    // [DEPRECATED]
     // The compliance status of the protected DynamoDB table. Possible values include
     // "compliant" and "noncompliant". If the table is not protected, then this field has
     // a value of `null`.
@@ -3533,6 +3540,7 @@ type ReadEC2MSSQLDatabaseResponse struct {
     AwsRegion                               *string                   `json:"aws_region"`
     // The backup status information applied to this resource.
     BackupStatusInfo                        *BackupStatusInfo         `json:"backup_status_info"`
+    // [DEPRECATED]
     // The policy compliance status of the resource. If the database is not protected,
     // then this field has a value of `null`. Refer to
     // 
@@ -3601,6 +3609,7 @@ type ReadEC2MSSQLFCIResponse struct {
     Embedded             *EC2MSSQLFCIEmbedded `json:"_embedded"`
     // URLs to pages related to the resource.
     Links                *EC2MSSQLFCILinks    `json:"_links"`
+    // [DEPRECATED]
     // ComplianceStatus of the resource
     ComplianceStatus     *string              `json:"compliance_status"`
     // The Clumio-assigned ID of the failover cluster.
@@ -3706,19 +3715,21 @@ type ReadEC2MssqlAGResponse struct {
 
 // ReadEbsTagComplianceStatsResponse represents a custom type struct for Success
 type ReadEbsTagComplianceStatsResponse struct {
+    // URLs to pages related to the resource.
+    Links              *ReadEbsTagComplianceStatsLinks `json:"_links"`
     // The total number of compliant entities.
-    CompliantCount     *int64 `json:"compliant_count"`
+    CompliantCount     *int64                          `json:"compliant_count"`
     // The total number of entities associated with deactivated policies.
-    DeactivatedCount   *int64 `json:"deactivated_count"`
+    DeactivatedCount   *int64                          `json:"deactivated_count"`
     // Determines whether one or more entities is currently seeding or waiting for seeding.
     // If set to `true`, at least one entity is currently seeding or waiting for seeding.
-    HasSeedingEntities *bool  `json:"has_seeding_entities"`
+    HasSeedingEntities *bool                           `json:"has_seeding_entities"`
     // The total number of non-compliant entities.
-    NonCompliantCount  *int64 `json:"non_compliant_count"`
+    NonCompliantCount  *int64                          `json:"non_compliant_count"`
     // The number of entities with protection applied.
-    ProtectedCount     *int64 `json:"protected_count"`
+    ProtectedCount     *int64                          `json:"protected_count"`
     // The number of entities without protection applied.
-    UnprotectedCount   *int64 `json:"unprotected_count"`
+    UnprotectedCount   *int64                          `json:"unprotected_count"`
 }
 
 // ReadEbsVolumeResponse represents a custom type struct for Success
@@ -3736,6 +3747,7 @@ type ReadEbsVolumeResponse struct {
     AwsRegion                *string                 `json:"aws_region"`
     // The backup status information applied to this resource.
     BackupStatusInfo         *BackupStatusInfo       `json:"backup_status_info"`
+    // [DEPRECATED]
     // The compliance status of the protected EBS volume. Possible values include
     // "compliant" and "noncompliant". If the volume is not protected, then this field has
     // a value of `null`.
@@ -3812,6 +3824,7 @@ type ReadEc2InstanceResponse struct {
     AwsRegion                *string                 `json:"aws_region"`
     // The backup status information applied to this resource.
     BackupStatusInfo         *BackupStatusInfo       `json:"backup_status_info"`
+    // [DEPRECATED]
     // The compliance status of the protected EC2 instance. Possible values include
     // "compliant" and "noncompliant". If the instance is not protected, then this field
     // has a value of `null`.
@@ -4107,6 +4120,7 @@ type ReadMssqlDatabaseResponse struct {
     AvailabilityGroupName                   *string                `json:"availability_group_name"`
     // The backup status information applied to this resource.
     BackupStatusInfo                        *BackupStatusInfo      `json:"backup_status_info"`
+    // [DEPRECATED]
     // The policy compliance status of the resource. If the database is not protected,
     // then this field has a value of `null`. Refer to
     // 
@@ -4387,6 +4401,8 @@ type ReadProtectionGroupResponse struct {
     // The backup target AWS region associated with the protection group, empty if
     // in-region or not configured.
     BackupTargetAwsRegion          *string                               `json:"backup_target_aws_region"`
+    // BackupTierStat
+    BackupTierStats                []*BackupTierStat                     `json:"backup_tier_stats"`
     // Number of buckets
     BucketCount                    *int64                                `json:"bucket_count"`
     // The following table describes the possible conditions for a bucket to be
@@ -4531,10 +4547,13 @@ type ReadProtectionGroupS3AssetResponse struct {
     BackupStatusInfo              *BackupStatusInfo              `json:"backup_status_info"`
     // The backup target AWS region associated with the protection group S3 asset.
     BackupTargetAwsRegion         *string                        `json:"backup_target_aws_region"`
+    // BackupTierStat
+    BackupTierStats               []*BackupTierStat              `json:"backup_tier_stats"`
     // The Clumio-assigned ID of the bucket
     BucketId                      *string                        `json:"bucket_id"`
     // The name of the bucket
     BucketName                    *string                        `json:"bucket_name"`
+    // [DEPRECATED]
     // The compliance status of the protected protection group. Possible values include
     // "compliant" and "noncompliant". If the table is not protected, then this field has
     // a value of `null`.
@@ -4652,6 +4671,7 @@ type ReadRdsResourceResponse struct {
     AwsRegion                              *string                 `json:"aws_region"`
     // The backup status information applied to this resource.
     BackupStatusInfo                       *BackupStatusInfo       `json:"backup_status_info"`
+    // [DEPRECATED]
     // The compliance status of the protected RDS resource. Possible values include
     // `compliant` and `noncompliant`. If the resource is not protected, then this field has
     // a value of `null`.
@@ -5382,6 +5402,7 @@ type ReadVmResponse struct {
     Embedded              *VmEmbedded                   `json:"_embedded"`
     // URLs to pages related to the resource.
     Links                 *VmLinks                      `json:"_links"`
+    // [DEPRECATED]
     // The policy compliance status of the resource. If the VM is deleted or unprotected, then this field has a value of `null`. Refer to the Compliance Status table for a complete list of compliance statuses.
     ComplianceStatus      *string                       `json:"compliance_status"`
     // The compute resource from which the VM draws. If the VM is deleted, then `compute_resource.id` has a value of `null`.
@@ -6097,6 +6118,8 @@ type UpdateProtectionGroupResponse struct {
     // The backup target AWS region associated with the protection group, empty if
     // in-region or not configured.
     BackupTargetAwsRegion          *string                      `json:"backup_target_aws_region"`
+    // BackupTierStat
+    BackupTierStats                []*BackupTierStat            `json:"backup_tier_stats"`
     // Number of buckets
     BucketCount                    *int64                       `json:"bucket_count"`
     // The following table describes the possible conditions for a bucket to be
