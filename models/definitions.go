@@ -862,6 +862,19 @@ type BackupStatusStats struct {
     SuccessCount        *int64 `json:"success_count"`
 }
 
+// BackupTierStat represents a custom type struct.
+// BackupTierStat
+type BackupTierStat struct {
+    // The backup tier name.
+    BackupTier               *string `json:"backup_tier"`
+    // Cumulative count of all unexpired objects in each backup (any new or updated since
+    // the last backup) that have been backed up as part of this protection group
+    TotalBackedUpObjectCount *int64  `json:"total_backed_up_object_count"`
+    // Cumulative size of all unexpired objects in each backup (any new or updated since
+    // the last backup) that have been backed up as part of this protection group
+    TotalBackedUpSizeBytes   *int64  `json:"total_backed_up_size_bytes"`
+}
+
 // BackupWindow represents a custom type struct.
 // The start and end times of the customized backup window. Use of `backup_window` is deprecated, use `backup_window_tz` instead.
 type BackupWindow struct {
@@ -1924,6 +1937,7 @@ type DynamoDBTable struct {
     // For [POST /restores/aws/dynamodb](#operation/restore-aws-dynamodb-table), this is defaulted to the
     // configuration of source table if both 'billing_mode' and 'provisioned_throughput' are empty or `null`.
     BillingMode                                   *string                 `json:"billing_mode"`
+    // [DEPRECATED]
     // The compliance status of the protected DynamoDB table. Possible values include
     // "compliant" and "noncompliant". If the table is not protected, then this field has
     // a value of `null`.
@@ -2208,6 +2222,7 @@ type EBS struct {
     AwsRegion                *string                 `json:"aws_region"`
     // The backup status information applied to this resource.
     BackupStatusInfo         *BackupStatusInfo       `json:"backup_status_info"`
+    // [DEPRECATED]
     // The compliance status of the protected EBS volume. Possible values include
     // "compliant" and "noncompliant". If the volume is not protected, then this field has
     // a value of `null`.
@@ -2484,6 +2499,7 @@ type EC2 struct {
     AwsRegion                *string                 `json:"aws_region"`
     // The backup status information applied to this resource.
     BackupStatusInfo         *BackupStatusInfo       `json:"backup_status_info"`
+    // [DEPRECATED]
     // The compliance status of the protected EC2 instance. Possible values include
     // "compliant" and "noncompliant". If the instance is not protected, then this field
     // has a value of `null`.
@@ -2792,6 +2808,7 @@ type EC2MSSQLDatabase struct {
     AwsRegion                               *string                   `json:"aws_region"`
     // The backup status information applied to this resource.
     BackupStatusInfo                        *BackupStatusInfo         `json:"backup_status_info"`
+    // [DEPRECATED]
     // The policy compliance status of the resource. If the database is not protected,
     // then this field has a value of `null`. Refer to
     // 
@@ -2995,6 +3012,7 @@ type EC2MSSQLFCI struct {
     Embedded             *EC2MSSQLFCIEmbedded `json:"_embedded"`
     // URLs to pages related to the resource.
     Links                *EC2MSSQLFCILinks    `json:"_links"`
+    // [DEPRECATED]
     // ComplianceStatus of the resource
     ComplianceStatus     *string              `json:"compliance_status"`
     // The Clumio-assigned ID of the failover cluster.
@@ -3211,9 +3229,13 @@ type EC2MSSQLPITROptions struct {
     // The Clumio-assigned ID of the MSSQL database to be restored.
     // Use the [GET /datasources/aws/ec2-mssql/databases](#operation/list-ec2-mssql-databases)
     // endpoint to fetch valid values.
-    DatabaseId *string `json:"database_id"`
+    DatabaseId      *string `json:"database_id"`
+    // If enabled, performs PITR till the latest possible time.
+    // Either timestamp or restore_to_latest must be provided, but not both.
+    RestoreToLatest *bool   `json:"restore_to_latest"`
     // The point in time to be restored in RFC-3339 format.
-    Timestamp  *string `json:"timestamp"`
+    // Either timestamp or restore_to_latest must be provided, but not both.
+    Timestamp       *string `json:"timestamp"`
 }
 
 // EC2MSSQLProtectConfig represents a custom type struct.
@@ -4184,8 +4206,6 @@ type M365GroupingCriteria struct {
     // +=====================+========================+
     // | microsoft365_domain | Microsoft 365 account. |
     // +---------------------+------------------------+
-    // | microsoft365_group  | Microsoft 365 group.   |
-    // +---------------------+------------------------+
     // 
     ClumioType *string `json:"type"`
 }
@@ -4353,6 +4373,7 @@ type MssqlDatabase struct {
     AvailabilityGroupName                   *string                `json:"availability_group_name"`
     // The backup status information applied to this resource.
     BackupStatusInfo                        *BackupStatusInfo      `json:"backup_status_info"`
+    // [DEPRECATED]
     // The policy compliance status of the resource. If the database is not protected,
     // then this field has a value of `null`. Refer to
     // 
@@ -5556,6 +5577,8 @@ type ProtectionGroup struct {
     // The backup target AWS region associated with the protection group, empty if
     // in-region or not configured.
     BackupTargetAwsRegion          *string                               `json:"backup_target_aws_region"`
+    // BackupTierStat
+    BackupTierStats                []*BackupTierStat                     `json:"backup_tier_stats"`
     // Number of buckets
     BucketCount                    *int64                                `json:"bucket_count"`
     // The following table describes the possible conditions for a bucket to be
@@ -5717,10 +5740,13 @@ type ProtectionGroupBucket struct {
     BackupStatusInfo              *BackupStatusInfo              `json:"backup_status_info"`
     // The backup target AWS region associated with the protection group S3 asset.
     BackupTargetAwsRegion         *string                        `json:"backup_target_aws_region"`
+    // BackupTierStat
+    BackupTierStats               []*BackupTierStat              `json:"backup_tier_stats"`
     // The Clumio-assigned ID of the bucket
     BucketId                      *string                        `json:"bucket_id"`
     // The name of the bucket
     BucketName                    *string                        `json:"bucket_name"`
+    // [DEPRECATED]
     // The compliance status of the protected protection group. Possible values include
     // "compliant" and "noncompliant". If the table is not protected, then this field has
     // a value of `null`.
@@ -5823,13 +5849,15 @@ type ProtectionGroupBucketEmbedded struct {
 // URLs to pages related to the resource.
 type ProtectionGroupBucketLinks struct {
     // The HATEOAS link to this resource.
-    Self                        *HateoasSelfLink                 `json:"_self"`
+    Self                              *HateoasSelfLink                 `json:"_self"`
     // A resource-specific HATEOAS link.
-    DeleteBucketProtectionGroup *HateoasLink                     `json:"delete-bucket-protection-group"`
+    DeleteBucketProtectionGroup       *HateoasLink                     `json:"delete-bucket-protection-group"`
     // A resource-specific HATEOAS link.
-    ReadOrganizationalUnit      *HateoasLink                     `json:"read-organizational-unit"`
+    ListBackupProtectionGroupS3Assets *HateoasLink                     `json:"list-backup-protection-group-s3-assets"`
+    // A resource-specific HATEOAS link.
+    ReadOrganizationalUnit            *HateoasLink                     `json:"read-organizational-unit"`
     // A HATEOAS link to the policy protecting this resource. Will be omitted for unprotected entities.
-    ReadPolicyDefinition        *ReadPolicyDefinitionHateoasLink `json:"read-policy-definition"`
+    ReadPolicyDefinition              *ReadPolicyDefinitionHateoasLink `json:"read-policy-definition"`
 }
 
 // ProtectionGroupBucketListEmbedded represents a custom type struct.
@@ -5874,6 +5902,8 @@ type ProtectionGroupLinks struct {
     AddBucketProtectionGroup    *HateoasLink                     `json:"add-bucket-protection-group"`
     // A resource-specific HATEOAS link.
     DeleteBucketProtectionGroup *HateoasLink                     `json:"delete-bucket-protection-group"`
+    // A resource-specific HATEOAS link.
+    ListBackupProtectionGroups  *HateoasLink                     `json:"list-backup-protection-groups"`
     // A resource-specific HATEOAS link.
     ReadOrganizationalUnit      *HateoasLink                     `json:"read-organizational-unit"`
     // A HATEOAS link to the policy protecting this resource. Will be omitted for unprotected entities.
@@ -6418,6 +6448,7 @@ type RdsResource struct {
     AwsRegion                              *string                 `json:"aws_region"`
     // The backup status information applied to this resource.
     BackupStatusInfo                       *BackupStatusInfo       `json:"backup_status_info"`
+    // [DEPRECATED]
     // The compliance status of the protected RDS resource. Possible values include
     // `compliant` and `noncompliant`. If the resource is not protected, then this field has
     // a value of `null`.
@@ -6601,6 +6632,13 @@ type RdsResourceRestoreTarget struct {
 type RdsTemplateInfo struct {
     // The latest available feature version for the asset.
     AvailableTemplateVersion *string `json:"available_template_version"`
+}
+
+// ReadEbsTagComplianceStatsLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type ReadEbsTagComplianceStatsLinks struct {
+    // The HATEOAS link to this resource.
+    Self *HateoasSelfLink `json:"_self"`
 }
 
 // ReadPolicyDefinitionHateoasLink represents a custom type struct.
@@ -9085,6 +9123,7 @@ type Vm struct {
     Embedded              *VmEmbedded                   `json:"_embedded"`
     // URLs to pages related to the resource.
     Links                 *VmLinks                      `json:"_links"`
+    // [DEPRECATED]
     // The policy compliance status of the resource. If the VM is deleted or unprotected, then this field has a value of `null`. Refer to the Compliance Status table for a complete list of compliance statuses.
     ComplianceStatus      *string                       `json:"compliance_status"`
     // The compute resource from which the VM draws. If the VM is deleted, then `compute_resource.id` has a value of `null`.

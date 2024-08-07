@@ -130,6 +130,12 @@ type CreateAwsConnectionGroupV1Request struct {
     // The asset types to be connected via the connection-group.
     // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
     // NOTE - EBS is required for EC2MSSQL.
+    AssetTypes           []*string `json:"asset_types"`
+    // DEPRECATED, use "asset_types" instead.
+    // 
+    // The asset types to be connected via the connection-group.
+    // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
+    // NOTE - EBS is required for EC2MSSQL.
     AssetTypesEnabled    []*string `json:"asset_types_enabled"`
     // The AWS regions to be associated with the Connection Group.
     AwsRegions           []*string `json:"aws_regions"`
@@ -151,6 +157,13 @@ type CreateAwsConnectionGroupV1Request struct {
 
 // UpdateAwsConnectionGroupV1Request represents a custom type struct
 type UpdateAwsConnectionGroupV1Request struct {
+    // The asset types to be connected via the connection-group.
+    // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
+    // NOTE - EBS is required for EC2MSSQL.
+    AssetTypes        []*string `json:"asset_types"`
+    // DEPRECATED, use "asset_types" instead.
+    // 
+    // 
     // The asset types to be connected via the connection-group.
     // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
     // NOTE - EBS is required for EC2MSSQL.
@@ -1506,6 +1519,8 @@ type PostProcessKmsV1Request struct {
     AwsRegion             *string `json:"aws_region"`
     // Whether the CMK was created or an existing CMK was used.
     CreatedMultiRegionCmk *bool   `json:"created_multi_region_cmk"`
+    // Role arn to be assumed before accessing ClumioRole in customer account.
+    IntermediateRoleArn   *string `json:"intermediate_role_arn"`
     // The multi-region CMK Key ID.
     MultiRegionCmkKeyId   *string `json:"multi_region_cmk_key_id"`
     // Indicates whether this is a Create, Update or Delete request.
