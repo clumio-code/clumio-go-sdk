@@ -1,3 +1,6 @@
+## 0.21.0
+New request attribute added to wallets post-process API.
+New response attribute added to ProtectionGroup APIs.
 ## 0.20.0
 New APIs added for Connection Groups.
 lookbackDays request parameter added to list APIs of supported resources.
