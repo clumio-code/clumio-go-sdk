@@ -29,24 +29,17 @@ func (v *VmwareVcentersV1) ListVmwareVcenters(
     
     header := "application/api.clumio.vmware-vcenters=v1+json"
     result := &models.ListVcentersResponse{}
-    defaultInt64 := int64(0)
-    defaultString := "" 
-    
-    if limit == nil {
-        limit = &defaultInt64
+    queryParams := make(map[string]string)
+    if limit != nil {
+        queryParams["limit"] = fmt.Sprintf("%v", *limit)
     }
-    if start == nil {
-        start = &defaultString
+    if start != nil {
+        queryParams["start"] = *start
     }
-    if embed == nil {
-        embed = &defaultString
+    if embed != nil {
+        queryParams["embed"] = *embed
     }
     
-    queryParams := map[string]string{
-        "limit": fmt.Sprintf("%v", *limit),
-        "start": *start,
-        "embed": *embed,
-    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: v.config,
@@ -77,15 +70,11 @@ func (v *VmwareVcentersV1) ReadVmwareVcenter(
     
     header := "application/api.clumio.vmware-vcenters=v1+json"
     result := &models.ReadVcenterResponse{}
-    defaultString := "" 
-    
-    if embed == nil {
-        embed = &defaultString
+    queryParams := make(map[string]string)
+    if embed != nil {
+        queryParams["embed"] = *embed
     }
     
-    queryParams := map[string]string{
-        "embed": *embed,
-    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: v.config,

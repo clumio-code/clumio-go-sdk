@@ -31,28 +31,20 @@ func (b *BackupAwsEc2InstancesV1) ListBackupAwsEc2Instances(
     
     header := "application/api.clumio.backup-aws-ec2-instances=v1+json"
     result := &models.ListEC2BackupsResponse{}
-    defaultInt64 := int64(0)
-    defaultString := "" 
-    
-    if limit == nil {
-        limit = &defaultInt64
+    queryParams := make(map[string]string)
+    if limit != nil {
+        queryParams["limit"] = fmt.Sprintf("%v", *limit)
     }
-    if start == nil {
-        start = &defaultString
+    if start != nil {
+        queryParams["start"] = *start
     }
-    if sort == nil {
-        sort = &defaultString
+    if sort != nil {
+        queryParams["sort"] = *sort
     }
-    if filter == nil {
-        filter = &defaultString
+    if filter != nil {
+        queryParams["filter"] = *filter
     }
     
-    queryParams := map[string]string{
-        "limit": fmt.Sprintf("%v", *limit),
-        "start": *start,
-        "sort": *sort,
-        "filter": *filter,
-    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: b.config,
@@ -86,15 +78,11 @@ func (b *BackupAwsEc2InstancesV1) CreateBackupAwsEc2Instance(
     payload := string(bytes)
     header := "application/api.clumio.backup-aws-ec2-instances=v1+json"
     result := &models.OnDemandEC2BackupResponse{}
-    defaultString := "" 
-    
-    if embed == nil {
-        embed = &defaultString
+    queryParams := make(map[string]string)
+    if embed != nil {
+        queryParams["embed"] = *embed
     }
     
-    queryParams := map[string]string{
-        "embed": *embed,
-    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: b.config,

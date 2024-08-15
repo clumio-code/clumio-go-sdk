@@ -30,24 +30,17 @@ func (a *AwsConnectionGroupsV1) ListAwsConnectionGroups(
     
     header := "application/api.clumio.aws-connection-groups=v1+json"
     result := &models.ListConnectionGroupsResponse{}
-    defaultInt64 := int64(0)
-    defaultString := "" 
-    
-    if limit == nil {
-        limit = &defaultInt64
+    queryParams := make(map[string]string)
+    if limit != nil {
+        queryParams["limit"] = fmt.Sprintf("%v", *limit)
     }
-    if start == nil {
-        start = &defaultString
+    if start != nil {
+        queryParams["start"] = *start
     }
-    if filter == nil {
-        filter = &defaultString
+    if filter != nil {
+        queryParams["filter"] = *filter
     }
     
-    queryParams := map[string]string{
-        "limit": fmt.Sprintf("%v", *limit),
-        "start": *start,
-        "filter": *filter,
-    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: a.config,
@@ -115,19 +108,14 @@ func (a *AwsConnectionGroupsV1) ReadAwsConnectionGroup(
     
     header := "application/api.clumio.aws-connection-groups=v1+json"
     result := &models.ReadConnectionGroupResponse{}
-    defaultString := "" 
+    queryParams := make(map[string]string)
+    if embed != nil {
+        queryParams["embed"] = *embed
+    }
+    if returnExternalId != nil {
+        queryParams["return_external_id"] = fmt.Sprintf("%v", *returnExternalId)
+    }
     
-    if embed == nil {
-        embed = &defaultString
-    }
-    if returnExternalId == nil {
-        returnExternalId = None
-    }
-    
-    queryParams := map[string]string{
-        "embed": *embed,
-        "return_external_id": fmt.Sprintf("%v", *returnExternalId),
-    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: a.config,

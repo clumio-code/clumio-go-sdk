@@ -38,28 +38,20 @@ func (b *BackupAwsRdsResourceDatabaseTablesV1) ListBackupAwsRdsResourceDatabaseT
     
     header := "application/api.clumio.backup-aws-rds-resource-database-tables=v1+json"
     result := &models.ListRDSDatabaseTablesResponse{}
-    defaultInt64 := int64(0)
-    defaultString := "" 
-    
-    if currentCount == nil {
-        currentCount = &defaultInt64
+    queryParams := make(map[string]string)
+    if currentCount != nil {
+        queryParams["current_count"] = fmt.Sprintf("%v", *currentCount)
     }
-    if limit == nil {
-        limit = &defaultInt64
+    if limit != nil {
+        queryParams["limit"] = fmt.Sprintf("%v", *limit)
     }
-    if start == nil {
-        start = &defaultString
+    if start != nil {
+        queryParams["start"] = *start
     }
-    if filter == nil {
-        filter = &defaultString
+    if filter != nil {
+        queryParams["filter"] = *filter
     }
     
-    queryParams := map[string]string{
-        "current_count": fmt.Sprintf("%v", *currentCount),
-        "limit": fmt.Sprintf("%v", *limit),
-        "start": *start,
-        "filter": *filter,
-    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: b.config,
@@ -95,15 +87,11 @@ func (b *BackupAwsRdsResourceDatabaseTablesV1) ReadBackupAwsRdsResourceDatabaseT
     
     header := "application/api.clumio.backup-aws-rds-resource-database-tables=v1+json"
     result := &models.ReadRDSDatabaseTableResponse{}
-    defaultString := "" 
-    
-    if embed == nil {
-        embed = &defaultString
+    queryParams := make(map[string]string)
+    if embed != nil {
+        queryParams["embed"] = *embed
     }
     
-    queryParams := map[string]string{
-        "embed": *embed,
-    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: b.config,

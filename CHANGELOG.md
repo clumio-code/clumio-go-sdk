@@ -1,3 +1,5 @@
+## 0.21.1
+Changes made to the APIs so that default values are not passed for query parameters.
 ## 0.21.0
 New request attribute added to wallets post-process API.
 New response attribute added to ProtectionGroup APIs.

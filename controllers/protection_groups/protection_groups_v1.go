@@ -31,28 +31,20 @@ func (p *ProtectionGroupsV1) ListProtectionGroups(
     
     header := "application/api.clumio.protection-groups=v1+json"
     result := &models.ListProtectionGroupsResponse{}
-    defaultInt64 := int64(0)
-    defaultString := "" 
-    
-    if limit == nil {
-        limit = &defaultInt64
+    queryParams := make(map[string]string)
+    if limit != nil {
+        queryParams["limit"] = fmt.Sprintf("%v", *limit)
     }
-    if start == nil {
-        start = &defaultString
+    if start != nil {
+        queryParams["start"] = *start
     }
-    if filter == nil {
-        filter = &defaultString
+    if filter != nil {
+        queryParams["filter"] = *filter
     }
-    if lookbackDays == nil {
-        lookbackDays = &defaultInt64
+    if lookbackDays != nil {
+        queryParams["lookback_days"] = fmt.Sprintf("%v", *lookbackDays)
     }
     
-    queryParams := map[string]string{
-        "limit": fmt.Sprintf("%v", *limit),
-        "start": *start,
-        "filter": *filter,
-        "lookback_days": fmt.Sprintf("%v", *lookbackDays),
-    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: p.config,
@@ -83,15 +75,11 @@ func (p *ProtectionGroupsV1) ReadProtectionGroup(
     
     header := "application/api.clumio.protection-groups=v1+json"
     result := &models.ReadProtectionGroupResponse{}
-    defaultInt64 := int64(0)
-    
-    if lookbackDays == nil {
-        lookbackDays = &defaultInt64
+    queryParams := make(map[string]string)
+    if lookbackDays != nil {
+        queryParams["lookback_days"] = fmt.Sprintf("%v", *lookbackDays)
     }
     
-    queryParams := map[string]string{
-        "lookback_days": fmt.Sprintf("%v", *lookbackDays),
-    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: p.config,
