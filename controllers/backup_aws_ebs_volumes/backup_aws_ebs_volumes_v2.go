@@ -31,28 +31,20 @@ func (b *BackupAwsEbsVolumesV2) ListBackupAwsEbsVolumes(
     
     header := "application/api.clumio.backup-aws-ebs-volumes=v2+json"
     result := &models.ListEBSBackupsResponse{}
-    defaultInt64 := int64(0)
-    defaultString := "" 
-    
-    if limit == nil {
-        limit = &defaultInt64
+    queryParams := make(map[string]string)
+    if limit != nil {
+        queryParams["limit"] = fmt.Sprintf("%v", *limit)
     }
-    if start == nil {
-        start = &defaultString
+    if start != nil {
+        queryParams["start"] = *start
     }
-    if sort == nil {
-        sort = &defaultString
+    if sort != nil {
+        queryParams["sort"] = *sort
     }
-    if filter == nil {
-        filter = &defaultString
+    if filter != nil {
+        queryParams["filter"] = *filter
     }
     
-    queryParams := map[string]string{
-        "limit": fmt.Sprintf("%v", *limit),
-        "start": *start,
-        "sort": *sort,
-        "filter": *filter,
-    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: b.config,
@@ -86,15 +78,11 @@ func (b *BackupAwsEbsVolumesV2) CreateBackupAwsEbsVolume(
     payload := string(bytes)
     header := "application/api.clumio.backup-aws-ebs-volumes=v2+json"
     result := &models.OnDemandEBSBackupResponse{}
-    defaultString := "" 
-    
-    if embed == nil {
-        embed = &defaultString
+    queryParams := make(map[string]string)
+    if embed != nil {
+        queryParams["embed"] = *embed
     }
     
-    queryParams := map[string]string{
-        "embed": *embed,
-    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: b.config,

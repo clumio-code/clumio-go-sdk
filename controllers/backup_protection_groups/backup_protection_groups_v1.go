@@ -30,28 +30,20 @@ func (b *BackupProtectionGroupsV1) ListBackupProtectionGroups(
     
     header := "application/api.clumio.backup-protection-groups=v1+json"
     result := &models.ListProtectionGroupBackupsResponse{}
-    defaultInt64 := int64(0)
-    defaultString := "" 
-    
-    if limit == nil {
-        limit = &defaultInt64
+    queryParams := make(map[string]string)
+    if limit != nil {
+        queryParams["limit"] = fmt.Sprintf("%v", *limit)
     }
-    if start == nil {
-        start = &defaultString
+    if start != nil {
+        queryParams["start"] = *start
     }
-    if sort == nil {
-        sort = &defaultString
+    if sort != nil {
+        queryParams["sort"] = *sort
     }
-    if filter == nil {
-        filter = &defaultString
+    if filter != nil {
+        queryParams["filter"] = *filter
     }
     
-    queryParams := map[string]string{
-        "limit": fmt.Sprintf("%v", *limit),
-        "start": *start,
-        "sort": *sort,
-        "filter": *filter,
-    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: b.config,
@@ -79,28 +71,20 @@ func (b *BackupProtectionGroupsV1) ListBackupProtectionGroupS3Assets(
     
     header := "application/api.clumio.backup-protection-groups=v1+json"
     result := &models.ListProtectionGroupS3AssetBackupsResponse{}
-    defaultInt64 := int64(0)
-    defaultString := "" 
-    
-    if limit == nil {
-        limit = &defaultInt64
+    queryParams := make(map[string]string)
+    if limit != nil {
+        queryParams["limit"] = fmt.Sprintf("%v", *limit)
     }
-    if start == nil {
-        start = &defaultString
+    if start != nil {
+        queryParams["start"] = *start
     }
-    if sort == nil {
-        sort = &defaultString
+    if sort != nil {
+        queryParams["sort"] = *sort
     }
-    if filter == nil {
-        filter = &defaultString
+    if filter != nil {
+        queryParams["filter"] = *filter
     }
     
-    queryParams := map[string]string{
-        "limit": fmt.Sprintf("%v", *limit),
-        "start": *start,
-        "sort": *sort,
-        "filter": *filter,
-    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: b.config,

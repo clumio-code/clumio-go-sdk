@@ -31,32 +31,23 @@ func (a *AwsRdsResourcesV1) ListAwsRdsResources(
     
     header := "application/api.clumio.aws-rds-resources=v1+json"
     result := &models.ListRdsResourcesResponse{}
-    defaultInt64 := int64(0)
-    defaultString := "" 
-    
-    if limit == nil {
-        limit = &defaultInt64
+    queryParams := make(map[string]string)
+    if limit != nil {
+        queryParams["limit"] = fmt.Sprintf("%v", *limit)
     }
-    if start == nil {
-        start = &defaultString
+    if start != nil {
+        queryParams["start"] = *start
     }
-    if filter == nil {
-        filter = &defaultString
+    if filter != nil {
+        queryParams["filter"] = *filter
     }
-    if embed == nil {
-        embed = &defaultString
+    if embed != nil {
+        queryParams["embed"] = *embed
     }
-    if lookbackDays == nil {
-        lookbackDays = &defaultInt64
+    if lookbackDays != nil {
+        queryParams["lookback_days"] = fmt.Sprintf("%v", *lookbackDays)
     }
     
-    queryParams := map[string]string{
-        "limit": fmt.Sprintf("%v", *limit),
-        "start": *start,
-        "filter": *filter,
-        "embed": *embed,
-        "lookback_days": fmt.Sprintf("%v", *lookbackDays),
-    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: a.config,
@@ -88,20 +79,14 @@ func (a *AwsRdsResourcesV1) ReadAwsRdsResource(
     
     header := "application/api.clumio.aws-rds-resources=v1+json"
     result := &models.ReadRdsResourceResponse{}
-    defaultInt64 := int64(0)
-    defaultString := "" 
-    
-    if lookbackDays == nil {
-        lookbackDays = &defaultInt64
+    queryParams := make(map[string]string)
+    if lookbackDays != nil {
+        queryParams["lookback_days"] = fmt.Sprintf("%v", *lookbackDays)
     }
-    if embed == nil {
-        embed = &defaultString
+    if embed != nil {
+        queryParams["embed"] = *embed
     }
     
-    queryParams := map[string]string{
-        "lookback_days": fmt.Sprintf("%v", *lookbackDays),
-        "embed": *embed,
-    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: a.config,

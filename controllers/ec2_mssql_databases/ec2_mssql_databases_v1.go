@@ -31,32 +31,23 @@ func (e *Ec2MssqlDatabasesV1) ListEc2MssqlDatabases(
     
     header := "application/api.clumio.ec2-mssql-databases=v1+json"
     result := &models.ListEC2MSSQLDatabasesResponse{}
-    defaultInt64 := int64(0)
-    defaultString := "" 
-    
-    if limit == nil {
-        limit = &defaultInt64
+    queryParams := make(map[string]string)
+    if limit != nil {
+        queryParams["limit"] = fmt.Sprintf("%v", *limit)
     }
-    if start == nil {
-        start = &defaultString
+    if start != nil {
+        queryParams["start"] = *start
     }
-    if filter == nil {
-        filter = &defaultString
+    if filter != nil {
+        queryParams["filter"] = *filter
     }
-    if embed == nil {
-        embed = &defaultString
+    if embed != nil {
+        queryParams["embed"] = *embed
     }
-    if lookbackDays == nil {
-        lookbackDays = &defaultInt64
+    if lookbackDays != nil {
+        queryParams["lookback_days"] = fmt.Sprintf("%v", *lookbackDays)
     }
     
-    queryParams := map[string]string{
-        "limit": fmt.Sprintf("%v", *limit),
-        "start": *start,
-        "filter": *filter,
-        "embed": *embed,
-        "lookback_days": fmt.Sprintf("%v", *lookbackDays),
-    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: e.config,
@@ -87,15 +78,11 @@ func (e *Ec2MssqlDatabasesV1) ReadEc2MssqlDatabase(
     
     header := "application/api.clumio.ec2-mssql-databases=v1+json"
     result := &models.ReadEC2MSSQLDatabaseResponse{}
-    defaultInt64 := int64(0)
-    
-    if lookbackDays == nil {
-        lookbackDays = &defaultInt64
+    queryParams := make(map[string]string)
+    if lookbackDays != nil {
+        queryParams["lookback_days"] = fmt.Sprintf("%v", *lookbackDays)
     }
     
-    queryParams := map[string]string{
-        "lookback_days": fmt.Sprintf("%v", *lookbackDays),
-    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: e.config,
@@ -129,24 +116,17 @@ func (e *Ec2MssqlDatabasesV1) ListEc2MssqlDatabasePitrIntervals(
     
     header := "application/api.clumio.ec2-mssql-databases=v1+json"
     result := &models.ListEC2MssqlDatabasePitrIntervalsResponse{}
-    defaultInt64 := int64(0)
-    defaultString := "" 
-    
-    if limit == nil {
-        limit = &defaultInt64
+    queryParams := make(map[string]string)
+    if limit != nil {
+        queryParams["limit"] = fmt.Sprintf("%v", *limit)
     }
-    if start == nil {
-        start = &defaultString
+    if start != nil {
+        queryParams["start"] = *start
     }
-    if filter == nil {
-        filter = &defaultString
+    if filter != nil {
+        queryParams["filter"] = *filter
     }
     
-    queryParams := map[string]string{
-        "limit": fmt.Sprintf("%v", *limit),
-        "start": *start,
-        "filter": *filter,
-    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: e.config,
