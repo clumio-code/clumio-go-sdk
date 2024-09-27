@@ -40,32 +40,44 @@ func (a *AwsEnvironmentTagsV1) ListAwsEnvironmentTags(
     
     header := "application/api.clumio.aws-environment-tags=v1+json"
     result := &models.ListAwsTagsResponse{}
-    queryParams := make(map[string]string)
-    if currentCount != nil {
-        queryParams["current_count"] = fmt.Sprintf("%v", *currentCount)
+    defaultInt64 := int64(0)
+    defaultString := "" 
+    
+    if currentCount == nil {
+        currentCount = &defaultInt64
     }
-    if limit != nil {
-        queryParams["limit"] = fmt.Sprintf("%v", *limit)
+    if limit == nil {
+        limit = &defaultInt64
     }
-    if totalCount != nil {
-        queryParams["total_count"] = fmt.Sprintf("%v", *totalCount)
+    if totalCount == nil {
+        totalCount = &defaultInt64
     }
-    if totalPagesCount != nil {
-        queryParams["total_pages_count"] = fmt.Sprintf("%v", *totalPagesCount)
+    if totalPagesCount == nil {
+        totalPagesCount = &defaultInt64
     }
-    if start != nil {
-        queryParams["start"] = *start
+    if start == nil {
+        start = &defaultString
     }
-    if filter != nil {
-        queryParams["filter"] = *filter
+    if filter == nil {
+        filter = &defaultString
     }
-    if embed != nil {
-        queryParams["embed"] = *embed
+    if embed == nil {
+        embed = &defaultString
     }
-    if lookbackDays != nil {
-        queryParams["lookback_days"] = fmt.Sprintf("%v", *lookbackDays)
+    if lookbackDays == nil {
+        lookbackDays = &defaultInt64
     }
     
+    queryParams := map[string]string{
+        "current_count": fmt.Sprintf("%v", *currentCount),
+        "limit": fmt.Sprintf("%v", *limit),
+        "total_count": fmt.Sprintf("%v", *totalCount),
+        "total_pages_count": fmt.Sprintf("%v", *totalPagesCount),
+        "start": *start,
+        "filter": *filter,
+        "embed": *embed,
+        "lookback_days": fmt.Sprintf("%v", *lookbackDays),
+    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: a.config,
@@ -100,14 +112,20 @@ func (a *AwsEnvironmentTagsV1) ReadAwsEnvironmentTag(
     
     header := "application/api.clumio.aws-environment-tags=v1+json"
     result := &models.ReadAwsTagResponse{}
-    queryParams := make(map[string]string)
-    if embed != nil {
-        queryParams["embed"] = *embed
+    defaultInt64 := int64(0)
+    defaultString := "" 
+    
+    if embed == nil {
+        embed = &defaultString
     }
-    if lookbackDays != nil {
-        queryParams["lookback_days"] = fmt.Sprintf("%v", *lookbackDays)
+    if lookbackDays == nil {
+        lookbackDays = &defaultInt64
     }
     
+    queryParams := map[string]string{
+        "embed": *embed,
+        "lookback_days": fmt.Sprintf("%v", *lookbackDays),
+    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: a.config,

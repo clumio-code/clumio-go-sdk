@@ -30,20 +30,28 @@ func (p *ProtectionGroupsS3AssetsV1) ListProtectionGroupS3Assets(
     
     header := "application/api.clumio.protection-groups-s3-assets=v1+json"
     result := &models.ListProtectionGroupS3AssetsResponse{}
-    queryParams := make(map[string]string)
-    if limit != nil {
-        queryParams["limit"] = fmt.Sprintf("%v", *limit)
+    defaultInt64 := int64(0)
+    defaultString := "" 
+    
+    if limit == nil {
+        limit = &defaultInt64
     }
-    if start != nil {
-        queryParams["start"] = *start
+    if start == nil {
+        start = &defaultString
     }
-    if filter != nil {
-        queryParams["filter"] = *filter
+    if filter == nil {
+        filter = &defaultString
     }
-    if lookbackDays != nil {
-        queryParams["lookback_days"] = fmt.Sprintf("%v", *lookbackDays)
+    if lookbackDays == nil {
+        lookbackDays = &defaultInt64
     }
     
+    queryParams := map[string]string{
+        "limit": fmt.Sprintf("%v", *limit),
+        "start": *start,
+        "filter": *filter,
+        "lookback_days": fmt.Sprintf("%v", *lookbackDays),
+    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: p.config,
@@ -74,11 +82,15 @@ func (p *ProtectionGroupsS3AssetsV1) ReadProtectionGroupS3Asset(
     
     header := "application/api.clumio.protection-groups-s3-assets=v1+json"
     result := &models.ReadProtectionGroupS3AssetResponse{}
-    queryParams := make(map[string]string)
-    if lookbackDays != nil {
-        queryParams["lookback_days"] = fmt.Sprintf("%v", *lookbackDays)
+    defaultInt64 := int64(0)
+    
+    if lookbackDays == nil {
+        lookbackDays = &defaultInt64
     }
     
+    queryParams := map[string]string{
+        "lookback_days": fmt.Sprintf("%v", *lookbackDays),
+    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: p.config,
@@ -114,17 +126,25 @@ func (p *ProtectionGroupsS3AssetsV1) ReadProtectionGroupS3AssetContinuousBackupS
     
     header := "application/api.clumio.protection-groups-s3-assets=v1+json"
     result := &models.ReadProtectionGroupS3AssetContinuousBackupStatsResponse{}
-    queryParams := make(map[string]string)
-    if bucketName != nil {
-        queryParams["bucket_name"] = *bucketName
+    defaultString := "" 
+    
+    if bucketName == nil {
+        bucketName = &defaultString
     }
-    if bucketId != nil {
-        queryParams["bucket_id"] = *bucketId
+    if bucketId == nil {
+        bucketId = &defaultString
     }
-    if interval != nil {
-        queryParams["interval"] = *interval
+    if interval == nil {
+        interval = &defaultString
     }
     
+    queryParams := map[string]string{
+        "bucket_name": *bucketName,
+        "bucket_id": *bucketId,
+        "begin_timestamp": beginTimestamp,
+        "end_timestamp": endTimestamp,
+        "interval": *interval,
+    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: p.config,

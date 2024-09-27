@@ -35,17 +35,24 @@ func (v *VmwareVcenterNetworksV1) ListVmwareVcenterNetworks(
     
     header := "application/api.clumio.vmware-vcenter-networks=v1+json"
     result := &models.ListVMwareVCenterNetworksResponse{}
-    queryParams := make(map[string]string)
-    if limit != nil {
-        queryParams["limit"] = fmt.Sprintf("%v", *limit)
+    defaultInt64 := int64(0)
+    defaultString := "" 
+    
+    if limit == nil {
+        limit = &defaultInt64
     }
-    if start != nil {
-        queryParams["start"] = *start
+    if start == nil {
+        start = &defaultString
     }
-    if filter != nil {
-        queryParams["filter"] = *filter
+    if filter == nil {
+        filter = &defaultString
     }
     
+    queryParams := map[string]string{
+        "limit": fmt.Sprintf("%v", *limit),
+        "start": *start,
+        "filter": *filter,
+    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: v.config,

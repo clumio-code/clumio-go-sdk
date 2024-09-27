@@ -34,14 +34,20 @@ func (e *Ec2MssqlFailoverClusterV1) ReadEc2MssqlFailoverCluster(
     
     header := "application/api.clumio.ec2-mssql-failover-cluster=v1+json"
     result := &models.ReadEC2MSSQLFCIResponse{}
-    queryParams := make(map[string]string)
-    if embed != nil {
-        queryParams["embed"] = *embed
+    defaultInt64 := int64(0)
+    defaultString := "" 
+    
+    if embed == nil {
+        embed = &defaultString
     }
-    if lookbackDays != nil {
-        queryParams["lookback_days"] = fmt.Sprintf("%v", *lookbackDays)
+    if lookbackDays == nil {
+        lookbackDays = &defaultInt64
     }
     
+    queryParams := map[string]string{
+        "embed": *embed,
+        "lookback_days": fmt.Sprintf("%v", *lookbackDays),
+    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: e.config,
