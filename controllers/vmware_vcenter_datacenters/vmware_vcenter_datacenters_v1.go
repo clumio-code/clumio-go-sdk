@@ -36,20 +36,28 @@ func (v *VmwareVcenterDatacentersV1) ListVmwareVcenterDatacenters(
     
     header := "application/api.clumio.vmware-vcenter-datacenters=v1+json"
     result := &models.ListDatacentersResponse{}
-    queryParams := make(map[string]string)
-    if limit != nil {
-        queryParams["limit"] = fmt.Sprintf("%v", *limit)
+    defaultInt64 := int64(0)
+    defaultString := "" 
+    
+    if limit == nil {
+        limit = &defaultInt64
     }
-    if start != nil {
-        queryParams["start"] = *start
+    if start == nil {
+        start = &defaultString
     }
-    if filter != nil {
-        queryParams["filter"] = *filter
+    if filter == nil {
+        filter = &defaultString
     }
-    if Embed != nil {
-        queryParams["_embed"] = *Embed
+    if Embed == nil {
+        Embed = &defaultString
     }
     
+    queryParams := map[string]string{
+        "limit": fmt.Sprintf("%v", *limit),
+        "start": *start,
+        "filter": *filter,
+        "_embed": *Embed,
+    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: v.config,
@@ -83,11 +91,15 @@ func (v *VmwareVcenterDatacentersV1) ReadVmwareVcenterDatacenter(
     
     header := "application/api.clumio.vmware-vcenter-datacenters=v1+json"
     result := &models.ReadDatacenterResponse{}
-    queryParams := make(map[string]string)
-    if embed != nil {
-        queryParams["embed"] = *embed
+    defaultString := "" 
+    
+    if embed == nil {
+        embed = &defaultString
     }
     
+    queryParams := map[string]string{
+        "embed": *embed,
+    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: v.config,

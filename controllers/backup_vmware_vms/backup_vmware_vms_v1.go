@@ -31,20 +31,28 @@ func (b *BackupVmwareVmsV1) ListBackupVmwareVms(
     
     header := "application/api.clumio.backup-vmware-vms=v1+json"
     result := &models.ListVMBackupsResponse{}
-    queryParams := make(map[string]string)
-    if limit != nil {
-        queryParams["limit"] = fmt.Sprintf("%v", *limit)
+    defaultInt64 := int64(0)
+    defaultString := "" 
+    
+    if limit == nil {
+        limit = &defaultInt64
     }
-    if start != nil {
-        queryParams["start"] = *start
+    if start == nil {
+        start = &defaultString
     }
-    if sort != nil {
-        queryParams["sort"] = *sort
+    if sort == nil {
+        sort = &defaultString
     }
-    if filter != nil {
-        queryParams["filter"] = *filter
+    if filter == nil {
+        filter = &defaultString
     }
     
+    queryParams := map[string]string{
+        "limit": fmt.Sprintf("%v", *limit),
+        "start": *start,
+        "sort": *sort,
+        "filter": *filter,
+    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: b.config,

@@ -111,8 +111,11 @@ type CreateAwsConnectionV1Request struct {
     // Organizational-Units documentation.
     OrganizationalUnitId     *string   `json:"organizational_unit_id"`
     // The asset types enabled for protect.
-    // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
-    // NOTE - EBS is required for EC2MSSQL.
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS"].
+    // 
+    // NOTE -
+    // 1. EC2/EBS is required for EC2MSSQL.
+    // 2. EBS as a value is deprecated in favor of EC2/EBS.
     ProtectAssetTypesEnabled []*string `json:"protect_asset_types_enabled"`
     // The services to be enabled for this configuration. Valid values are
     // ["discover"], ["discover", "protect"]. This is only set when the
@@ -128,14 +131,20 @@ type CreateAwsConnectionGroupV1Request struct {
     // The AWS-assigned ID of the account to be associated with the Connection Group.
     AccountNativeId      *string   `json:"account_native_id"`
     // The asset types to be connected via the connection-group.
-    // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
-    // NOTE - EBS is required for EC2MSSQL.
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS"].
+    // 
+    // NOTE -
+    // 1. EC2/EBS is required for EC2MSSQL.
+    // 2. EBS as a value is deprecated in favor of EC2/EBS.
     AssetTypes           []*string `json:"asset_types"`
     // DEPRECATED, use "asset_types" instead.
     // 
     // The asset types to be connected via the connection-group.
-    // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
-    // NOTE - EBS is required for EC2MSSQL.
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS"].
+    // 
+    // NOTE -
+    // 1. EC2/EBS is required for EC2MSSQL.
+    // 2. EBS as a value is deprecated in favor of EC2/EBS.
     AssetTypesEnabled    []*string `json:"asset_types_enabled"`
     // The AWS regions to be associated with the Connection Group.
     AwsRegions           []*string `json:"aws_regions"`
@@ -158,15 +167,21 @@ type CreateAwsConnectionGroupV1Request struct {
 // UpdateAwsConnectionGroupV1Request represents a custom type struct
 type UpdateAwsConnectionGroupV1Request struct {
     // The asset types to be connected via the connection-group.
-    // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
-    // NOTE - EBS is required for EC2MSSQL.
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS"].
+    // 
+    // NOTE -
+    // 1. EC2/EBS is required for EC2MSSQL.
+    // 2. EBS as a value is deprecated in favor of EC2/EBS.
     AssetTypes        []*string `json:"asset_types"`
     // DEPRECATED, use "asset_types" instead.
     // 
     // 
     // The asset types to be connected via the connection-group.
-    // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
-    // NOTE - EBS is required for EC2MSSQL.
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS"].
+    // 
+    // NOTE -
+    // 1. EC2/EBS is required for EC2MSSQL.
+    // 2. EBS as a value is deprecated in favor of EC2/EBS.
     AssetTypesEnabled []*string `json:"asset_types_enabled"`
     // The AWS regions to be associated with the Connection Group.
     AwsRegions        []*string `json:"aws_regions"`
@@ -203,8 +218,12 @@ type PostProcessAwsConnectionV1Request struct {
 
 // CreateConnectionTemplateV1Request represents a custom type struct
 type CreateConnectionTemplateV1Request struct {
-    // The asset types for which the template is to be generated. Possible
-    // asset types are ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
+    // The asset types for which the template is to be generated.
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS"].
+    // 
+    // NOTE -
+    // 1. EC2/EBS is required for EC2MSSQL.
+    // 2. EBS as a value is deprecated in favor of EC2/EBS.
     AssetTypesEnabled   []*string `json:"asset_types_enabled"`
     // Account ID for the AWS environment to be connected
     // Mandatory to pass a 12 digit string if show_manual_resources is set to true
@@ -220,6 +239,11 @@ type CreateConnectionTemplateV1Request struct {
 type UpdateAwsConnectionV1Request struct {
     // Asset types enabled with the given resource ARNs.
     // This field is only applicable to manually configured connections.
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS"].
+    // 
+    // NOTE -
+    // 1. EC2/EBS is required for EC2MSSQL.
+    // 2. EBS as a value is deprecated in favor of EC2/EBS.
     AssetTypesEnabled []*string  `json:"asset_types_enabled"`
     // An optional, user-provided description for this connection.
     Description       *string    `json:"description"`

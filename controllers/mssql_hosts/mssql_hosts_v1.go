@@ -31,20 +31,28 @@ func (m *MssqlHostsV1) ListMssqlHostConnections(
     
     header := "application/api.clumio.mssql-hosts=v1+json"
     result := &models.ListHcmHostsResponse{}
-    queryParams := make(map[string]string)
-    if currentCount != nil {
-        queryParams["current_count"] = fmt.Sprintf("%v", *currentCount)
+    defaultInt64 := int64(0)
+    defaultString := "" 
+    
+    if currentCount == nil {
+        currentCount = &defaultInt64
     }
-    if filter != nil {
-        queryParams["filter"] = *filter
+    if filter == nil {
+        filter = &defaultString
     }
-    if limit != nil {
-        queryParams["limit"] = fmt.Sprintf("%v", *limit)
+    if limit == nil {
+        limit = &defaultInt64
     }
-    if start != nil {
-        queryParams["start"] = *start
+    if start == nil {
+        start = &defaultString
     }
     
+    queryParams := map[string]string{
+        "current_count": fmt.Sprintf("%v", *currentCount),
+        "filter": *filter,
+        "limit": fmt.Sprintf("%v", *limit),
+        "start": *start,
+    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: m.config,
@@ -110,11 +118,15 @@ func (m *MssqlHostsV1) DeleteMssqlHostConnections(
     payload := string(bytes)
     header := "application/api.clumio.mssql-hosts=v1+json"
     result := &models.DeleteHcmHostResponse{}
-    queryParams := make(map[string]string)
-    if embed != nil {
-        queryParams["embed"] = *embed
+    defaultString := "" 
+    
+    if embed == nil {
+        embed = &defaultString
     }
     
+    queryParams := map[string]string{
+        "embed": *embed,
+    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: m.config,
@@ -149,11 +161,15 @@ func (m *MssqlHostsV1) MoveMssqlHostConnections(
     payload := string(bytes)
     header := "application/api.clumio.mssql-hosts=v1+json"
     result := &models.MoveHcmHostsResponse{}
-    queryParams := make(map[string]string)
-    if embed != nil {
-        queryParams["embed"] = *embed
+    defaultString := "" 
+    
+    if embed == nil {
+        embed = &defaultString
     }
     
+    queryParams := map[string]string{
+        "embed": *embed,
+    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: m.config,
@@ -243,20 +259,28 @@ func (m *MssqlHostsV1) ListMssqlHosts(
     
     header := "application/api.clumio.mssql-hosts=v1+json"
     result := &models.ListMssqlHostsResponse{}
-    queryParams := make(map[string]string)
-    if limit != nil {
-        queryParams["limit"] = fmt.Sprintf("%v", *limit)
+    defaultInt64 := int64(0)
+    defaultString := "" 
+    
+    if limit == nil {
+        limit = &defaultInt64
     }
-    if start != nil {
-        queryParams["start"] = *start
+    if start == nil {
+        start = &defaultString
     }
-    if filter != nil {
-        queryParams["filter"] = *filter
+    if filter == nil {
+        filter = &defaultString
     }
-    if embed != nil {
-        queryParams["embed"] = *embed
+    if embed == nil {
+        embed = &defaultString
     }
     
+    queryParams := map[string]string{
+        "limit": fmt.Sprintf("%v", *limit),
+        "start": *start,
+        "filter": *filter,
+        "embed": *embed,
+    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: m.config,

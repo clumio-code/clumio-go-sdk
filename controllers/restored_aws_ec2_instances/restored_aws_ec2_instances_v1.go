@@ -37,11 +37,15 @@ func (r *RestoredAwsEc2InstancesV1) RestoreAwsEc2Instance(
     payload := string(bytes)
     header := "application/api.clumio.restored-aws-ec2-instances=v1+json"
     result := &models.RestoreEC2Response{}
-    queryParams := make(map[string]string)
-    if embed != nil {
-        queryParams["embed"] = *embed
+    defaultString := "" 
+    
+    if embed == nil {
+        embed = &defaultString
     }
     
+    queryParams := map[string]string{
+        "embed": *embed,
+    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: r.config,

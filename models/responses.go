@@ -211,8 +211,11 @@ type CreateAWSConnectionResponse struct {
     // value of `null`.
     Protect                    *ProtectConfig           `json:"protect"`
     // The asset types enabled for protect.
-    // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
-    // NOTE - EBS is required for EC2MSSQL.
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS"].
+    // 
+    // NOTE -
+    // 1. EC2/EBS is required for EC2MSSQL.
+    // 2. EBS as a value is deprecated in favor of EC2/EBS.
     ProtectAssetTypesEnabled   []*string                `json:"protect_asset_types_enabled"`
     // TODO: Add struct field description
     Resources                  *ConnectionResourcesResp `json:"resources"`
@@ -338,7 +341,11 @@ type CreateConnectionGroupResponse struct {
     // The AWS-assigned IDs of the accounts associated with the Connection Group.
     AccountNativeIds         []*string             `json:"account_native_ids"`
     // List of asset types connected via the connection-group.
-    // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS"].
+    // 
+    // NOTE -
+    // 1. EC2/EBS is required for EC2MSSQL.
+    // 2. EBS as a value is deprecated in favor of EC2/EBS.
     AssetTypesEnabled        []*string             `json:"asset_types_enabled"`
     // The AWS regions associated with the with the Connection Group.
     AwsRegions               []*string             `json:"aws_regions"`
@@ -2749,8 +2756,11 @@ type ReadAWSConnectionResponse struct {
     // value of `null`.
     Protect                    *ProtectConfig           `json:"protect"`
     // The asset types enabled for protect.
-    // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
-    // NOTE - EBS is required for EC2MSSQL.
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS"].
+    // 
+    // NOTE -
+    // 1. EC2/EBS is required for EC2MSSQL.
+    // 2. EBS as a value is deprecated in favor of EC2/EBS.
     ProtectAssetTypesEnabled   []*string                `json:"protect_asset_types_enabled"`
     // TODO: Add struct field description
     Resources                  *ConnectionResourcesResp `json:"resources"`
@@ -3063,7 +3073,11 @@ type ReadConnectionGroupResponse struct {
     // The AWS-assigned IDs of the accounts associated with the Connection Group.
     AccountNativeIds         []*string             `json:"account_native_ids"`
     // List of asset types connected via the connection-group.
-    // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS"].
+    // 
+    // NOTE -
+    // 1. EC2/EBS is required for EC2MSSQL.
+    // 2. EBS as a value is deprecated in favor of EC2/EBS.
     AssetTypesEnabled        []*string             `json:"asset_types_enabled"`
     // The AWS regions associated with the with the Connection Group.
     AwsRegions               []*string             `json:"aws_regions"`
@@ -4393,18 +4407,18 @@ type ReadProtectionGroupBackupResponse struct {
 // ReadProtectionGroupResponse represents a custom type struct for Success
 type ReadProtectionGroupResponse struct {
     // Embedded responses related to the resource.
-    Embedded                       *ProtectionGroupEmbedded              `json:"_embedded"`
+    Embedded                         *ProtectionGroupEmbedded              `json:"_embedded"`
     // URLs to pages related to the resource.
-    Links                          *ProtectionGroupLinks                 `json:"_links"`
+    Links                            *ProtectionGroupLinks                 `json:"_links"`
     // Represents the aggregated stats for backup status.
-    BackupStatusStats              *BackupStatusStats                    `json:"backup_status_stats"`
+    BackupStatusStats                *BackupStatusStats                    `json:"backup_status_stats"`
     // The backup target AWS region associated with the protection group, empty if
     // in-region or not configured.
-    BackupTargetAwsRegion          *string                               `json:"backup_target_aws_region"`
+    BackupTargetAwsRegion            *string                               `json:"backup_target_aws_region"`
     // BackupTierStat
-    BackupTierStats                []*BackupTierStat                     `json:"backup_tier_stats"`
+    BackupTierStats                  []*BackupTierStat                     `json:"backup_tier_stats"`
     // Number of buckets
-    BucketCount                    *int64                                `json:"bucket_count"`
+    BucketCount                      *int64                                `json:"bucket_count"`
     // The following table describes the possible conditions for a bucket to be
     // automatically added to a protection group.
     // 
@@ -4435,51 +4449,54 @@ type ReadProtectionGroupResponse struct {
     // |                   |                |                                         |
     // +-------------------+----------------+-----------------------------------------+
     // 
-    BucketRule                     *string                               `json:"bucket_rule"`
+    BucketRule                       *string                               `json:"bucket_rule"`
     // The compliance statistics of workloads associated with this entity.
-    ComplianceStats                *ProtectionComplianceStatsWithSeeding `json:"compliance_stats"`
+    ComplianceStats                  *ProtectionComplianceStatsWithSeeding `json:"compliance_stats"`
     // Creation time of the protection group in RFC-3339 format.
-    CreatedTimestamp               *string                               `json:"created_timestamp"`
+    CreatedTimestamp                 *string                               `json:"created_timestamp"`
     // The user-assigned description of the protection group.
-    Description                    *string                               `json:"description"`
+    Description                      *string                               `json:"description"`
+    // Timestamp of the earliest protection group backup which has not expired yet. Represented in
+    // RFC-3339 format. Only available for Read API.
+    EarliestAvailableBackupTimestamp *string                               `json:"earliest_available_backup_timestamp"`
     // The Clumio-assigned ID of the protection group.
-    Id                             *string                               `json:"id"`
+    Id                               *string                               `json:"id"`
     // Whether the protection group already has a backup target configured by a policy, or
     // is open to be protected by an in-region or out-of-region S3 policy.
-    IsBackupTargetRegionConfigured *bool                                 `json:"is_backup_target_region_configured"`
+    IsBackupTargetRegionConfigured   *bool                                 `json:"is_backup_target_region_configured"`
     // Determines whether the protection group is active or has been deleted. Deleted protection
     // groups may be purged after some time once there are no active backups associated with it.
-    IsDeleted                      *bool                                 `json:"is_deleted"`
+    IsDeleted                        *bool                                 `json:"is_deleted"`
     // Time of the last backup in RFC-3339 format.
-    LastBackupTimestamp            *string                               `json:"last_backup_timestamp"`
+    LastBackupTimestamp              *string                               `json:"last_backup_timestamp"`
     // Time of the last successful continuous backup in RFC-3339 format.
-    LastContinuousBackupTimestamp  *string                               `json:"last_continuous_backup_timestamp"`
+    LastContinuousBackupTimestamp    *string                               `json:"last_continuous_backup_timestamp"`
     // Modified time of the protection group in RFC-3339 format.
-    ModifiedTimestamp              *string                               `json:"modified_timestamp"`
+    ModifiedTimestamp                *string                               `json:"modified_timestamp"`
     // The user-assigned name of the protection group.
-    Name                           *string                               `json:"name"`
+    Name                             *string                               `json:"name"`
     // ObjectFilter
     // defines which objects will be backed up.
-    ObjectFilter                   *ObjectFilter                         `json:"object_filter"`
+    ObjectFilter                     *ObjectFilter                         `json:"object_filter"`
     // The Clumio-assigned ID of the organizational unit associated with the Protection Group.
-    OrganizationalUnitId           *string                               `json:"organizational_unit_id"`
+    OrganizationalUnitId             *string                               `json:"organizational_unit_id"`
     // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
-    ProtectionInfo                 *ProtectionInfoWithRule               `json:"protection_info"`
+    ProtectionInfo                   *ProtectionInfoWithRule               `json:"protection_info"`
     // The protection status of the protection group. Possible values include "protected",
     // "unprotected", and "unsupported". If the protection group does not support backups, then
     // this field has a value of `unsupported`.
-    ProtectionStatus               *string                               `json:"protection_status"`
+    ProtectionStatus                 *string                               `json:"protection_status"`
     // The list of AWS regions that this protection group is linked to
-    Regions                        []*string                             `json:"regions"`
+    Regions                          []*string                             `json:"regions"`
     // Cumulative count of all unexpired objects in each backup (any new or updated since
     // the last backup) that have been backed up as part of this protection group
-    TotalBackedUpObjectCount       *int64                                `json:"total_backed_up_object_count"`
+    TotalBackedUpObjectCount         *int64                                `json:"total_backed_up_object_count"`
     // Cumulative size of all unexpired objects in each backup (any new or updated since
     // the last backup) that have been backed up as part of this protection group
-    TotalBackedUpSizeBytes         *int64                                `json:"total_backed_up_size_bytes"`
+    TotalBackedUpSizeBytes           *int64                                `json:"total_backed_up_size_bytes"`
     // Version of the protection group. The version number is incremented every time
     // a change is made to the protection group.
-    Version                        *int64                                `json:"version"`
+    Version                          *int64                                `json:"version"`
 }
 
 // ReadProtectionGroupS3AssetBackupResponse represents a custom type struct for Success
@@ -4532,64 +4549,67 @@ type ReadProtectionGroupS3AssetContinuousBackupStatsResponse struct {
 // ReadProtectionGroupS3AssetResponse represents a custom type struct for Success
 type ReadProtectionGroupS3AssetResponse struct {
     // Embedded responses related to the resource.
-    Embedded                      *ProtectionGroupBucketEmbedded `json:"_embedded"`
+    Embedded                         *ProtectionGroupBucketEmbedded `json:"_embedded"`
     // URLs to pages related to the resource.
-    Links                         *ProtectionGroupBucketLinks    `json:"_links"`
+    Links                            *ProtectionGroupBucketLinks    `json:"_links"`
     // The AWS-assigned ID of the account associated with the DynamoDB table.
-    AccountNativeId               *string                        `json:"account_native_id"`
+    AccountNativeId                  *string                        `json:"account_native_id"`
     // Whether this bucket was added to this protection group by the bucket rule
-    AddedByBucketRule             *bool                          `json:"added_by_bucket_rule"`
+    AddedByBucketRule                *bool                          `json:"added_by_bucket_rule"`
     // Whether this bucket was added to this protection group by the user
-    AddedByUser                   *bool                          `json:"added_by_user"`
+    AddedByUser                      *bool                          `json:"added_by_user"`
     // The AWS region associated with the DynamoDB table.
-    AwsRegion                     *string                        `json:"aws_region"`
+    AwsRegion                        *string                        `json:"aws_region"`
     // The backup status information applied to this resource.
-    BackupStatusInfo              *BackupStatusInfo              `json:"backup_status_info"`
+    BackupStatusInfo                 *BackupStatusInfo              `json:"backup_status_info"`
     // The backup target AWS region associated with the protection group S3 asset.
-    BackupTargetAwsRegion         *string                        `json:"backup_target_aws_region"`
+    BackupTargetAwsRegion            *string                        `json:"backup_target_aws_region"`
     // BackupTierStat
-    BackupTierStats               []*BackupTierStat              `json:"backup_tier_stats"`
+    BackupTierStats                  []*BackupTierStat              `json:"backup_tier_stats"`
     // The Clumio-assigned ID of the bucket
-    BucketId                      *string                        `json:"bucket_id"`
+    BucketId                         *string                        `json:"bucket_id"`
     // The name of the bucket
-    BucketName                    *string                        `json:"bucket_name"`
+    BucketName                       *string                        `json:"bucket_name"`
     // [DEPRECATED]
     // The compliance status of the protected protection group. Possible values include
     // "compliant" and "noncompliant". If the table is not protected, then this field has
     // a value of `null`.
-    ComplianceStatus              *string                        `json:"compliance_status"`
+    ComplianceStatus                 *string                        `json:"compliance_status"`
     // Creation time of the protection group in RFC-3339 format.
-    CreatedTimestamp              *string                        `json:"created_timestamp"`
+    CreatedTimestamp                 *string                        `json:"created_timestamp"`
+    // Timestamp of the earliest protection group backup which has not expired yet. Represented in
+    // RFC-3339 format. Only available for Read API.
+    EarliestAvailableBackupTimestamp *string                        `json:"earliest_available_backup_timestamp"`
     // The Clumio-assigned ID of the AWS environment associated with the protection group.
-    EnvironmentId                 *string                        `json:"environment_id"`
+    EnvironmentId                    *string                        `json:"environment_id"`
     // The Clumio-assigned ID of the protection group
-    GroupId                       *string                        `json:"group_id"`
+    GroupId                          *string                        `json:"group_id"`
     // The name of the protection group
-    GroupName                     *string                        `json:"group_name"`
+    GroupName                        *string                        `json:"group_name"`
     // The Clumio-assigned ID that represents the bucket within the protection group.
-    Id                            *string                        `json:"id"`
+    Id                               *string                        `json:"id"`
     // Determines whether the protection group bucket has been deleted
-    IsDeleted                     *bool                          `json:"is_deleted"`
+    IsDeleted                        *bool                          `json:"is_deleted"`
     // Time of the last backup in RFC-3339 format.
-    LastBackupTimestamp           *string                        `json:"last_backup_timestamp"`
+    LastBackupTimestamp              *string                        `json:"last_backup_timestamp"`
     // Time of the last successful continuous backup in RFC-3339 format.
-    LastContinuousBackupTimestamp *string                        `json:"last_continuous_backup_timestamp"`
+    LastContinuousBackupTimestamp    *string                        `json:"last_continuous_backup_timestamp"`
     // The Clumio-assigned ID of the organizational unit associated with the protection group.
-    OrganizationalUnitId          *string                        `json:"organizational_unit_id"`
+    OrganizationalUnitId             *string                        `json:"organizational_unit_id"`
     // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
-    ProtectionInfo                *ProtectionInfoWithRule        `json:"protection_info"`
+    ProtectionInfo                   *ProtectionInfoWithRule        `json:"protection_info"`
     // The protection status of the protection group. Possible values include "protected",
     // "unprotected", and "unsupported". If the protection group does not support backups, then
     // this field has a value of `unsupported`.
-    ProtectionStatus              *string                        `json:"protection_status"`
+    ProtectionStatus                 *string                        `json:"protection_status"`
     // Cumulative count of all unexpired objects in each backup (any new or updated since
     // the last backup) that have been backed up as part of this protection group
-    TotalBackedUpObjectCount      *int64                         `json:"total_backed_up_object_count"`
+    TotalBackedUpObjectCount         *int64                         `json:"total_backed_up_object_count"`
     // Cumulative size of all unexpired objects in each backup (any new or updated since
     // the last backup) that have been backed up as part of this protection group
-    TotalBackedUpSizeBytes        *int64                         `json:"total_backed_up_size_bytes"`
+    TotalBackedUpSizeBytes           *int64                         `json:"total_backed_up_size_bytes"`
     // The unsupported reason for the S3 bucket.
-    UnsupportedReason             *string                        `json:"unsupported_reason"`
+    UnsupportedReason                *string                        `json:"unsupported_reason"`
 }
 
 // ReadRDSDatabaseTableColumnsResponse represents a custom type struct for Success
@@ -5701,7 +5721,7 @@ type RestoreVMwareVMResponse struct {
     // Embedded responses related to the resource.
     Embedded *ReadTaskHateoasOuterEmbedded `json:"_embedded"`
     // URLs to pages related to the resource.
-    Links    *ReadTaskHateoasLinks         `json:"_links"`
+    Links    *RestoreVMwareLinks           `json:"_links"`
     // The Clumio-assigned ID of the task created by this restore request. The progress of the task can be monitored using the `GET /tasks/{task_id}` endpoint.
     TaskId   *string                       `json:"task_id"`
 }
@@ -5802,8 +5822,11 @@ type UpdateAWSConnectionResponse struct {
     // value of `null`.
     Protect                    *ProtectConfig           `json:"protect"`
     // The asset types enabled for protect.
-    // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
-    // NOTE - EBS is required for EC2MSSQL.
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS"].
+    // 
+    // NOTE -
+    // 1. EC2/EBS is required for EC2MSSQL.
+    // 2. EBS as a value is deprecated in favor of EC2/EBS.
     ProtectAssetTypesEnabled   []*string                `json:"protect_asset_types_enabled"`
     // TODO: Add struct field description
     Resources                  *ConnectionResourcesResp `json:"resources"`
@@ -5965,7 +5988,11 @@ type UpdateConnectionGroupResponse struct {
     // The AWS-assigned IDs of the accounts associated with the Connection Group.
     AccountNativeIds         []*string             `json:"account_native_ids"`
     // List of asset types connected via the connection-group.
-    // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS"].
+    // 
+    // NOTE -
+    // 1. EC2/EBS is required for EC2MSSQL.
+    // 2. EBS as a value is deprecated in favor of EC2/EBS.
     AssetTypesEnabled        []*string             `json:"asset_types_enabled"`
     // The AWS regions associated with the with the Connection Group.
     AwsRegions               []*string             `json:"aws_regions"`
