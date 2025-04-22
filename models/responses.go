@@ -211,8 +211,11 @@ type CreateAWSConnectionResponse struct {
     // value of `null`.
     Protect                    *ProtectConfig           `json:"protect"`
     // The asset types enabled for protect.
-    // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
-    // NOTE - EBS is required for EC2MSSQL.
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS"].
+    // 
+    // NOTE -
+    // 1. EC2/EBS is required for EC2MSSQL.
+    // 2. EBS as a value is deprecated in favor of EC2/EBS.
     ProtectAssetTypesEnabled   []*string                `json:"protect_asset_types_enabled"`
     // TODO: Add struct field description
     Resources                  *ConnectionResourcesResp `json:"resources"`
@@ -338,7 +341,11 @@ type CreateConnectionGroupResponse struct {
     // The AWS-assigned IDs of the accounts associated with the Connection Group.
     AccountNativeIds         []*string             `json:"account_native_ids"`
     // List of asset types connected via the connection-group.
-    // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS"].
+    // 
+    // NOTE -
+    // 1. EC2/EBS is required for EC2MSSQL.
+    // 2. EBS as a value is deprecated in favor of EC2/EBS.
     AssetTypesEnabled        []*string             `json:"asset_types_enabled"`
     // The AWS regions associated with the with the Connection Group.
     AwsRegions               []*string             `json:"aws_regions"`
@@ -393,46 +400,6 @@ type CreateEC2MSSQLDatabaseRestoreResponse struct {
     // The progress of the task can be monitored using the
     // `GET /tasks/{task_id}` endpoint.
     TaskId   *string                                     `json:"task_id"`
-}
-
-// CreateHcmHostResponse represents a custom type struct for Success
-type CreateHcmHostResponse struct {
-    // HateoasCommonLinks are the common fields for HATEOAS response.
-    Links *HateoasCommonLinks `json:"_links"`
-    // TODO: Add struct field description
-    Hosts []*Host             `json:"hosts"`
-}
-
-// CreateHostECCredentialsResponse represents a custom type struct for Success
-type CreateHostECCredentialsResponse struct {
-    // URLs to pages related to the resource.
-    Links                    *HostLinks `json:"_links"`
-    // The edge connector credentials for the host. This token is required during the installation of the MSI.
-    EdgeConnectorCredentials *string    `json:"edge_connector_credentials"`
-    // The user-provided endpoint used to connect the host.
-    Endpoint                 *string    `json:"endpoint"`
-    // The Clumio-assigned ID of the management group associated with the host.
-    GroupId                  *string    `json:"group_id"`
-    // The Clumio-assigned ID of the Host.
-    Id                       *string    `json:"id"`
-    // The timestamp of the last successful heartbeat of this host. Represented in RFC-3339 format.
-    LastHeartbeatTimestamp   *string    `json:"last_heartbeat_timestamp"`
-    // Name of the Host.
-    Name                     *string    `json:"name"`
-    // The connection status of the Host. Possible values include `connected`, `disconnected`, `connection_pending`, and `invalid_token`.
-    Status                   *string    `json:"status"`
-    // The Clumio-assigned ID of the management subgroup associated with the host.
-    SubgroupId               *string    `json:"subgroup_id"`
-    // The Clumio-assigned UUID of the host. This UUID is used for filtering hosts during list operations.
-    Uuid                     *string    `json:"uuid"`
-}
-
-// CreateMssqlDatabaseRestoreResponse represents a custom type struct for Success
-type CreateMssqlDatabaseRestoreResponse struct {
-    // Embedded responses related to the resource.
-    Embedded *ReadTaskHateoasOuterEmbedded `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links    *ReadTaskHateoasLinks         `json:"_links"`
 }
 
 // CreateOrganizationalUnitNoTaskResponse represents a custom type struct for Success
@@ -615,32 +582,132 @@ type CreateProtectionGroupResponse struct {
     // The following table describes the possible conditions for a bucket to be
     // automatically added to a protection group.
     // 
-    // +-------------------+----------------+-----------------------------------------+
-    // |       Field       | Rule Condition |               Description               |
-    // +===================+================+=========================================+
-    // | aws_tag           | $eq            | Denotes the AWS tag(s) to               |
-    // |                   |                | conditionalize on                       |
-    // |                   |                |                                         |
-    // |                   |                | {"aws_tag":{"$eq":{"key":"Environment", |
-    // |                   |                | "value":"Prod"}}}                       |
-    // |                   |                |                                         |
-    // |                   |                |                                         |
-    // +-------------------+----------------+-----------------------------------------+
-    // | account_native_id | $eq            | Denotes the AWS account to              |
-    // |                   |                | conditionalize on                       |
-    // |                   |                |                                         |
-    // |                   |                | {"account_native_id":{"$eq":"1111111111 |
-    // |                   |                | 11"}}                                   |
-    // |                   |                |                                         |
-    // |                   |                |                                         |
-    // +-------------------+----------------+-----------------------------------------+
-    // | aws_region        | $eq            | Denotes the AWS region to               |
-    // |                   |                | conditionalize on                       |
-    // |                   |                |                                         |
-    // |                   |                | {"aws_region":{"$eq":"us-west-2"}}      |
-    // |                   |                |                                         |
-    // |                   |                |                                         |
-    // +-------------------+----------------+-----------------------------------------+
+    // +-----------------------+----------------+-------------------------------------+
+    // |         Field         | Rule Condition |             Description             |
+    // +=======================+================+=====================================+
+    // | aws_tag               | $eq            | Denotes the AWS tag(s) to be        |
+    // |                       |                | exactly equal to the specified      |
+    // |                       |                | value.                              |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$eq":{"key":"Environme |
+    // |                       |                | nt", "value":"Prod"}}}              |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_tag               | $not_eq        | Denotes the AWS tag(s) to be not    |
+    // |                       |                | equal to the specified value.       |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$not_eq":{"key":"Envir |
+    // |                       |                | onment", "value":"Prod"}}}          |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_tag               | $contains      | Denotes the AWS tag(s) contain a    |
+    // |                       |                | specified substring.                |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$contains":{"key":"Env |
+    // |                       |                | ironment", "value":"Prod"}}}        |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_tag               | $not_contains  | Denotes the AWS tag(s) excludes a   |
+    // |                       |                | specified substring.                |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$not_contains":{"key": |
+    // |                       |                | "Environment", "value":"Prod"}}}    |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_tag               | $all           | Denotes the AWS tag(s) where all    |
+    // |                       |                | elements in the specified list are  |
+    // |                       |                | present.                            |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$all":[{"key":"Environ |
+    // |                       |                | ment", "value":"Prod"}]}}           |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_tag               | $not_all       | Denotes the AWS tag(s) where at     |
+    // |                       |                | least one element from the          |
+    // |                       |                | specified list is missing.          |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$not_all":[{"key":"Env |
+    // |                       |                | ironment", "value":"Prod"}]}}       |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_tag               | $in            | Denotes the AWS tag(s) exist in a   |
+    // |                       |                | specified list.                     |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$in":[{"key":"Environm |
+    // |                       |                | ent", "value":"Prod"}]}}            |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_tag               | $not_in        | Denotes the AWS tag(s) do not exist |
+    // |                       |                | in a specified list.                |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$not_in":[{"key":"Envi |
+    // |                       |                | ronment", "value":"Prod"}]}}        |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_account_native_id | $eq            | Denotes the AWS account to be       |
+    // |                       |                | exactly equal to the specified      |
+    // |                       |                | value.                              |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_account_native_id":{"$eq":"11 |
+    // |                       |                | 1111111111"}}                       |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_account_native_id | $in            | Denotes the AWS account exist in a  |
+    // |                       |                | specified list.                     |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_account_native_id":{"$in":["1 |
+    // |                       |                | 11111111111"]}}                     |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | account_native_id     | $in            |                                     |
+    // |                       |                | This will be deprecated and use     |
+    // |                       |                | aws_account_native_id instead.      |
+    // |                       |                | Denotes the AWS account exist in a  |
+    // |                       |                | specified list.                     |
+    // |                       |                |                                     |
+    // |                       |                | {"account_native_id":{"$in":["11111 |
+    // |                       |                | 1111111"]}}                         |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | account_native_id     | $eq            |                                     |
+    // |                       |                | This will be deprecated and use     |
+    // |                       |                | aws_account_native_id instead.      |
+    // |                       |                | Denotes the AWS account to be       |
+    // |                       |                | exactly equal to the specified      |
+    // |                       |                | value.                              |
+    // |                       |                |                                     |
+    // |                       |                | {"account_native_id":{"$eq":"111111 |
+    // |                       |                | 111111"}}                           |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_region            | $eq            | Denotes the AWS region to be        |
+    // |                       |                | exactly equal to the specified      |
+    // |                       |                | value.                              |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_region":{"$eq":"us-west-2"}}  |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_region            | $in            | Denotes the AWS region exist in a   |
+    // |                       |                | specified list.                     |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_region":{"$in":["us-          |
+    // |                       |                | west-2"]}}                          |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
     // 
     BucketRule                     *string                      `json:"bucket_rule"`
     // Creation time of the protection group in RFC-3339 format.
@@ -885,16 +952,6 @@ type DeleteBucketFromProtectionGroupResponse struct {
     TotalBackedUpSizeBytes        *int64            `json:"total_backed_up_size_bytes"`
     // The unsupported reason for the S3 bucket.
     UnsupportedReason             *string           `json:"unsupported_reason"`
-}
-
-// DeleteHcmHostResponse represents a custom type struct for Success
-type DeleteHcmHostResponse struct {
-    // Embedded responses related to the resource.
-    Embedded *ReadTaskHateoasOuterEmbedded `json:"_embedded"`
-    // DeleteHostResponseLinks describes the Links response for the delete host response
-    Links    *DeleteHostResponseLinks      `json:"_links"`
-    // TaskID for DeleteHostsReq
-    TaskId   *string                       `json:"task_id"`
 }
 
 // DeleteOrganizationalUnitResponse represents a custom type struct.
@@ -1250,14 +1307,6 @@ type ListBucketsResponse struct {
     TotalPagesCount *int64              `json:"total_pages_count"`
 }
 
-// ListComputeResourcesResponse represents a custom type struct for Success
-type ListComputeResourcesResponse struct {
-    // TODO: Add struct field description
-    Computeresourcefolders []*VCenterFolder          `json:"computeResourceFolders"`
-    // TODO: Add struct field description
-    Computeresources       []*VCenterComputeResource `json:"computeResources"`
-}
-
 // ListConnectionGroupsResponse represents a custom type struct for Success
 type ListConnectionGroupsResponse struct {
     // Embedded responses related to the resource.
@@ -1293,27 +1342,6 @@ type ListConsolidatedAlertsResponse struct {
     TotalCount      *int64                         `json:"total_count"`
     // The total number of pages of results.
     TotalPagesCount *int64                         `json:"total_pages_count"`
-}
-
-// ListDatacentersResponse represents a custom type struct for Success
-type ListDatacentersResponse struct {
-    // Embedded responses related to the resource.
-    Embedded        *DatacenterListEmbedded `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links           *DatacenterListLinks    `json:"_links"`
-    // The number of items listed on the current page.
-    CurrentCount    *int64                  `json:"current_count"`
-    // The filter used in the request. The filter includes both manually-specified and system-generated filters.
-    FilterApplied   *string                 `json:"filter_applied"`
-    // The maximum number of items displayed per page in the response.
-    Limit           *int64                  `json:"limit"`
-    // The page number used to get this response.
-    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
-    Start           *string                 `json:"start"`
-    // The total number of items, summed across all pages.
-    TotalCount      *int64                  `json:"total_count"`
-    // The total number of pages of results.
-    TotalPagesCount *int64                  `json:"total_pages_count"`
 }
 
 // ListDynamoDBTableBackupsResponse represents a custom type struct for Success
@@ -1619,64 +1647,6 @@ type ListFileSystemsResponse struct {
     TotalPagesCount *int64                  `json:"total_pages_count"`
 }
 
-// ListFoldersResponse represents a custom type struct for Success
-type ListFoldersResponse struct {
-    // Embedded responses related to the resource.
-    Embedded        *FolderListEmbedded `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links           *FolderListLinks    `json:"_links"`
-    // The number of items listed on the current page.
-    CurrentCount    *int64              `json:"current_count"`
-    // The filter used in the request. The filter includes both manually-specified and system-generated filters.
-    FilterApplied   *string             `json:"filter_applied"`
-    // The maximum number of items displayed per page in the response.
-    Limit           *int64              `json:"limit"`
-    // The page number used to get this response.
-    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
-    Start           *string             `json:"start"`
-    // The total number of items, summed across all pages.
-    TotalCount      *int64              `json:"total_count"`
-    // The total number of pages of results.
-    TotalPagesCount *int64              `json:"total_pages_count"`
-}
-
-// ListHcmHostsResponse represents a custom type struct for Success
-type ListHcmHostsResponse struct {
-    // Embedded responses related to the resource.
-    Embedded      *HostListEmbedded `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links         *HostListLinks    `json:"_links"`
-    // The number of items listed on the current page.
-    CurrentCount  *int64            `json:"current_count"`
-    // The filter used in the request. The filter includes both manually-specified and system-generated filters.
-    FilterApplied *string           `json:"filter_applied"`
-    // The maximum number of items displayed per page in the response.
-    Limit         *int64            `json:"limit"`
-    // The page token used to get this response.
-    Start         *string           `json:"start"`
-}
-
-// ListHostsResponse represents a custom type struct for Success
-type ListHostsResponse struct {
-    // Embedded responses related to the resource.
-    Embedded        *HostListEmbedded `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links           *HostListLinks    `json:"_links"`
-    // The number of items listed on the current page.
-    CurrentCount    *int64            `json:"current_count"`
-    // The filter used in the request. The filter includes both manually-specified and system-generated filters.
-    FilterApplied   *string           `json:"filter_applied"`
-    // The maximum number of items displayed per page in the response.
-    Limit           *int64            `json:"limit"`
-    // The page number used to get this response.
-    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
-    Start           *string           `json:"start"`
-    // The total number of items, summed across all pages.
-    TotalCount      *int64            `json:"total_count"`
-    // The total number of pages of results.
-    TotalPagesCount *int64            `json:"total_pages_count"`
-}
-
 // ListManagementGroupsResponse represents a custom type struct for Success
 type ListManagementGroupsResponse struct {
     // Embedded responses related to the resource.
@@ -1692,128 +1662,6 @@ type ListManagementGroupsResponse struct {
     MinCount     *int64                       `json:"min_count"`
     // The page token used to get this response.
     Start        *string                      `json:"start"`
-}
-
-// ListMssqlAGsResponse represents a custom type struct for Success
-type ListMssqlAGsResponse struct {
-    // Embedded responses related to the resource.
-    Embedded        *MssqlAGListEmbedded `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links           *MssqlAGListLinks    `json:"_links"`
-    // The number of items listed on the current page.
-    CurrentCount    *int64               `json:"current_count"`
-    // The filter used in the request. The filter includes both manually-specified and system-generated filters.
-    FilterApplied   *string              `json:"filter_applied"`
-    // The maximum number of items displayed per page in the response.
-    Limit           *int64               `json:"limit"`
-    // The page number used to get this response.
-    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
-    Start           *string              `json:"start"`
-    // The total number of items, summed across all pages.
-    TotalCount      *int64               `json:"total_count"`
-    // The total number of pages of results.
-    TotalPagesCount *int64               `json:"total_pages_count"`
-}
-
-// ListMssqlDatabaseBackupsResponse represents a custom type struct for Success
-type ListMssqlDatabaseBackupsResponse struct {
-    // Embedded responses related to the resource.
-    Embedded        *MssqlDatabaseBackupListEmbedded `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links           *MssqlDatabaseBackupListLinks    `json:"_links"`
-    // The number of items listed on the current page.
-    CurrentCount    *int64                           `json:"current_count"`
-    // The filter used in the request. The filter includes both manually-specified and system-generated filters.
-    FilterApplied   *string                          `json:"filter_applied"`
-    // The maximum number of items displayed per page in the response.
-    Limit           *int64                           `json:"limit"`
-    // The page number used to get this response.
-    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
-    Start           *string                          `json:"start"`
-    // The total number of items, summed across all pages.
-    TotalCount      *int64                           `json:"total_count"`
-    // The total number of pages of results.
-    TotalPagesCount *int64                           `json:"total_pages_count"`
-}
-
-// ListMssqlDatabasePitrIntervalsResponse represents a custom type struct.
-// ListMssqlDatabasePitrIntervalsResponse represents the success response
-type ListMssqlDatabasePitrIntervalsResponse struct {
-    // Embedded responses related to the resource.
-    Embedded      *MssqlDatabasePitrIntervalListEmbedded `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links         *MssqlDatabasePitrIntervalListLinks    `json:"_links"`
-    // The number of items listed on the current page.
-    CurrentCount  *int64                                 `json:"current_count"`
-    // The filter used in the request. The filter includes both manually-specified and system-generated filters.
-    FilterApplied *string                                `json:"filter_applied"`
-    // The maximum number of items displayed per page in the response.
-    Limit         *int64                                 `json:"limit"`
-    // The page token used to get this response.
-    Start         *string                                `json:"start"`
-}
-
-// ListMssqlDatabasesResponse represents a custom type struct for Success
-type ListMssqlDatabasesResponse struct {
-    // Embedded responses related to the resource.
-    Embedded        *MssqlDatabaseListEmbedded `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links           *MssqlDatabaseListLinks    `json:"_links"`
-    // The number of items listed on the current page.
-    CurrentCount    *int64                     `json:"current_count"`
-    // The filter used in the request. The filter includes both manually-specified and system-generated filters.
-    FilterApplied   *string                    `json:"filter_applied"`
-    // The maximum number of items displayed per page in the response.
-    Limit           *int64                     `json:"limit"`
-    // The page number used to get this response.
-    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
-    Start           *string                    `json:"start"`
-    // The total number of items, summed across all pages.
-    TotalCount      *int64                     `json:"total_count"`
-    // The total number of pages of results.
-    TotalPagesCount *int64                     `json:"total_pages_count"`
-}
-
-// ListMssqlHostsResponse represents a custom type struct for Success
-type ListMssqlHostsResponse struct {
-    // Embedded responses related to the resource.
-    Embedded        *MssqlHostListEmbedded `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links           *MssqlHostListLinks    `json:"_links"`
-    // The number of items listed on the current page.
-    CurrentCount    *int64                 `json:"current_count"`
-    // The filter used in the request. The filter includes both manually-specified and system-generated filters.
-    FilterApplied   *string                `json:"filter_applied"`
-    // The maximum number of items displayed per page in the response.
-    Limit           *int64                 `json:"limit"`
-    // The page number used to get this response.
-    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
-    Start           *string                `json:"start"`
-    // The total number of items, summed across all pages.
-    TotalCount      *int64                 `json:"total_count"`
-    // The total number of pages of results.
-    TotalPagesCount *int64                 `json:"total_pages_count"`
-}
-
-// ListMssqlInstancesResponse represents a custom type struct for Success
-type ListMssqlInstancesResponse struct {
-    // Embedded responses related to the resource.
-    Embedded        *MssqlInstanceListEmbedded `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links           *MssqlInstanceListLinks    `json:"_links"`
-    // The number of items listed on the current page.
-    CurrentCount    *int64                     `json:"current_count"`
-    // The filter used in the request. The filter includes both manually-specified and system-generated filters.
-    FilterApplied   *string                    `json:"filter_applied"`
-    // The maximum number of items displayed per page in the response.
-    Limit           *int64                     `json:"limit"`
-    // The page number used to get this response.
-    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
-    Start           *string                    `json:"start"`
-    // The total number of items, summed across all pages.
-    TotalCount      *int64                     `json:"total_count"`
-    // The total number of pages of results.
-    TotalPagesCount *int64                     `json:"total_pages_count"`
 }
 
 // ListOrganizationalUnitsResponse represents a custom type struct for Success
@@ -1914,6 +1762,23 @@ type ListProtectionGroupS3AssetBackupsResponse struct {
     TotalCount      *int64                                    `json:"total_count"`
     // The total number of pages of results.
     TotalPagesCount *int64                                    `json:"total_pages_count"`
+}
+
+// ListProtectionGroupS3AssetPitrIntervalsResponse represents a custom type struct.
+// ListProtectionGroupS3AssetPitrIntervalsResponse represents the success response
+type ListProtectionGroupS3AssetPitrIntervalsResponse struct {
+    // Embedded responses related to the resource.
+    Embedded      *ProtectionGroupS3AssetPitrIntervalListEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links         *ProtectionGroupS3AssetPitrIntervalListLinks    `json:"_links"`
+    // The number of items listed on the current page.
+    CurrentCount  *int64                                          `json:"current_count"`
+    // The filter used in the request. The filter includes both manually-specified and system-generated filters.
+    FilterApplied *string                                         `json:"filter_applied"`
+    // The maximum number of items displayed per page in the response.
+    Limit         *int64                                          `json:"limit"`
+    // The page token used to get this response.
+    Start         *string                                         `json:"start"`
 }
 
 // ListProtectionGroupS3AssetsResponse represents a custom type struct for Success
@@ -2061,27 +1926,6 @@ type ListReportDownloadsResponse struct {
     TotalPagesCount *int64                      `json:"total_pages_count"`
 }
 
-// ListResourcePoolsResponse represents a custom type struct for Success
-type ListResourcePoolsResponse struct {
-    // Embedded responses related to the resource.
-    Embedded        *ResourcePoolListEmbedded `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links           *ResourcePoolListLinks    `json:"_links"`
-    // The number of items listed on the current page.
-    CurrentCount    *int64                    `json:"current_count"`
-    // The filter used in the request. The filter includes both manually-specified and system-generated filters.
-    FilterApplied   *string                   `json:"filter_applied"`
-    // The maximum number of items displayed per page in the response.
-    Limit           *int64                    `json:"limit"`
-    // The page number used to get this response.
-    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
-    Start           *string                   `json:"start"`
-    // The total number of items, summed across all pages.
-    TotalCount      *int64                    `json:"total_count"`
-    // The total number of pages of results.
-    TotalPagesCount *int64                    `json:"total_pages_count"`
-}
-
 // ListRestoredRecordsResponse represents a custom type struct for Success
 type ListRestoredRecordsResponse struct {
     // Embedded responses related to the resource.
@@ -2150,63 +1994,6 @@ type ListS3InstantAccessEndpointsResponse struct {
     Start        *string                              `json:"start"`
 }
 
-// ListSubgroupsResponse represents a custom type struct for Success
-type ListSubgroupsResponse struct {
-    // Embedded responses related to the resource.
-    Embedded     *SubgroupListEmbedded `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links        *SubgroupListLinks    `json:"_links"`
-    // The number of items listed on the current page.
-    CurrentCount *int64                `json:"current_count"`
-    // The maximum number of items displayed per page in the response.
-    Limit        *int64                `json:"limit"`
-    // The total count of subgroups upto 20. Any number of subgroups beyond 20
-    // will still be returned as 20.
-    MinCount     *int64                `json:"min_count"`
-    // The page token used to get this response.
-    Start        *string               `json:"start"`
-}
-
-// ListTagCategories2Response represents a custom type struct for Success
-type ListTagCategories2Response struct {
-    // Embedded responses related to the resource
-    Embedded        *TagCategory2ListEmbedded `json:"_embedded"`
-    // URLs to pages related to the resource
-    Links           *TagCategory2ListLinks    `json:"_links"`
-    // The number of items listed on the current page.
-    CurrentCount    *int64                    `json:"current_count"`
-    // The maximum number of items displayed per page in the response.
-    Limit           *int64                    `json:"limit"`
-    // The page number used to get this response.
-    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
-    Start           *string                   `json:"start"`
-    // The total number of items, summed across all pages.
-    TotalCount      *int64                    `json:"total_count"`
-    // The total number of pages of results.
-    TotalPagesCount *int64                    `json:"total_pages_count"`
-}
-
-// ListTagsResponse represents a custom type struct for Success
-type ListTagsResponse struct {
-    // Embedded responses related to the resource.
-    Embedded        *Tag2ListEmbedded `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links           *Tag2ListLinks    `json:"_links"`
-    // The number of items listed on the current page.
-    CurrentCount    *int64            `json:"current_count"`
-    // The filter used in the request. The filter includes both manually-specified and system-generated filters.
-    FilterApplied   *string           `json:"filter_applied"`
-    // The maximum number of items displayed per page in the response.
-    Limit           *int64            `json:"limit"`
-    // The page number used to get this response.
-    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
-    Start           *string           `json:"start"`
-    // The total number of items, summed across all pages.
-    TotalCount      *int64            `json:"total_count"`
-    // The total number of pages of results.
-    TotalPagesCount *int64            `json:"total_pages_count"`
-}
-
 // ListTasksResponse represents a custom type struct for Success
 type ListTasksResponse struct {
     // Embedded responses related to the resource.
@@ -2270,109 +2057,6 @@ type ListUsersResponseV1 struct {
     TotalPagesCount *int64                `json:"total_pages_count"`
 }
 
-// ListVMBackupsResponse represents a custom type struct for Success
-type ListVMBackupsResponse struct {
-    // Embedded responses related to the resource.
-    Embedded        *VMBackupListEmbedded     `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links           *VMBackupListHateoasLinks `json:"_links"`
-    // The number of items listed on the current page.
-    CurrentCount    *int64                    `json:"current_count"`
-    // The filter used in the request. The filter includes both manually-specified and system-generated filters.
-    FilterApplied   *string                   `json:"filter_applied"`
-    // The maximum number of items displayed per page in the response.
-    Limit           *int64                    `json:"limit"`
-    // The page number used to get this response.
-    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
-    Start           *string                   `json:"start"`
-    // The total number of items, summed across all pages.
-    TotalCount      *int64                    `json:"total_count"`
-    // The total number of pages of results.
-    TotalPagesCount *int64                    `json:"total_pages_count"`
-}
-
-// ListVMwareDatastoresResponse represents a custom type struct for Success
-type ListVMwareDatastoresResponse struct {
-    // Embedded responses related to the resource.
-    Embedded        *VMwareDatastoreListEmbedded `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links           *VMwareDatastoreListLinks    `json:"_links"`
-    // The number of items listed on the current page.
-    CurrentCount    *int64                       `json:"current_count"`
-    // The filter used in the request. The filter includes both manually-specified and system-generated filters.
-    FilterApplied   *string                      `json:"filter_applied"`
-    // The maximum number of items displayed per page in the response.
-    Limit           *int64                       `json:"limit"`
-    // The page number used to get this response.
-    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
-    Start           *string                      `json:"start"`
-    // The total number of items, summed across all pages.
-    TotalCount      *int64                       `json:"total_count"`
-    // The total number of pages of results.
-    TotalPagesCount *int64                       `json:"total_pages_count"`
-}
-
-// ListVMwareVCenterNetworksResponse represents a custom type struct for Success
-type ListVMwareVCenterNetworksResponse struct {
-    // Embedded responses related to the resource.
-    Embedded        *VMwareVCenterNetworkListEmbedded `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links           *VMwareVCenterNetworkListLinks    `json:"_links"`
-    // The number of items listed on the current page.
-    CurrentCount    *int64                            `json:"current_count"`
-    // The filter used in the request. The filter includes both manually-specified and system-generated filters.
-    FilterApplied   *string                           `json:"filter_applied"`
-    // The maximum number of items displayed per page in the response.
-    Limit           *int64                            `json:"limit"`
-    // The page number used to get this response.
-    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
-    Start           *string                           `json:"start"`
-    // The total number of items, summed across all pages.
-    TotalCount      *int64                            `json:"total_count"`
-    // The total number of pages of results.
-    TotalPagesCount *int64                            `json:"total_pages_count"`
-}
-
-// ListVcentersResponse represents a custom type struct for Success
-type ListVcentersResponse struct {
-    // Embedded responses related to the resource.
-    Embedded        *VcenterListEmbedded `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links           *VcenterListLinks    `json:"_links"`
-    // The number of items listed on the current page.
-    CurrentCount    *int64               `json:"current_count"`
-    // The maximum number of items displayed per page in the response.
-    Limit           *int64               `json:"limit"`
-    // The page number used to get this response.
-    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
-    Start           *string              `json:"start"`
-    // The total number of items, summed across all pages.
-    TotalCount      *int64               `json:"total_count"`
-    // The total number of pages of results.
-    TotalPagesCount *int64               `json:"total_pages_count"`
-}
-
-// ListVmsResponse represents a custom type struct for Success
-type ListVmsResponse struct {
-    // Embedded responses related to the resource.
-    Embedded        *VmListEmbedded `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links           *VmListLinks    `json:"_links"`
-    // The number of items listed on the current page.
-    CurrentCount    *int64          `json:"current_count"`
-    // The filter used in the request. The filter includes both manually-specified and system-generated filters.
-    FilterApplied   *string         `json:"filter_applied"`
-    // The maximum number of items displayed per page in the response.
-    Limit           *int64          `json:"limit"`
-    // The page number used to get this response.
-    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
-    Start           *string         `json:"start"`
-    // The total number of items, summed across all pages.
-    TotalCount      *int64          `json:"total_count"`
-    // The total number of pages of results.
-    TotalPagesCount *int64          `json:"total_pages_count"`
-}
-
 // ListWalletsResponse represents a custom type struct for Success
 type ListWalletsResponse struct {
     // Embedded responses related to the resource.
@@ -2385,16 +2069,6 @@ type ListWalletsResponse struct {
     Limit        *int64              `json:"limit"`
     // The page token used to get this response.
     Start        *string             `json:"start"`
-}
-
-// MoveHcmHostsResponse represents a custom type struct for Success
-type MoveHcmHostsResponse struct {
-    // Embedded responses related to the resource.
-    Embedded *ReadTaskHateoasOuterEmbedded `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links    *MoveHostsLinks               `json:"_links"`
-    // Clumio assigned TaskID for moving the hosts.
-    TaskId   *string                       `json:"task_id"`
 }
 
 // OnDemandDynamoDBBackupResponse represents a custom type struct for Success
@@ -2455,28 +2129,6 @@ type OnDemandEC2MSSQLDatabaseBackupResponse struct {
     Self     *HateoasSelfLink                                   `json:"_self"`
     // Task Id
     TaskId   *string                                            `json:"task_id"`
-}
-
-// OnDemandMssqlBackupResponse represents a custom type struct for Success
-type OnDemandMssqlBackupResponse struct {
-    // Embedded responses related to the resource.
-    Embedded *ReadTaskHateoasOuterEmbedded                   `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links    *CreateOnDemandMSSQLDatabaseBackupResponseLinks `json:"_links"`
-    // Task Id
-    TaskId   *string                                         `json:"task_id"`
-}
-
-// OnDemandVMBackupResponse represents a custom type struct for Success
-type OnDemandVMBackupResponse struct {
-    // Embedded responses related to the resource.
-    Embedded *ReadTaskHateoasOuterEmbedded  `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links    *OnDemandVMBackupResponseLinks `json:"_links"`
-    // The Clumio-assigned ID of the task created for VM backup.
-    // The progress of the task can be monitored using the
-    // `GET /tasks/{task_id}` endpoint.
-    TaskId   *string                        `json:"task_id"`
 }
 
 // PatchGeneralSettingsResponseV2 represents a custom type struct for Success
@@ -2634,6 +2286,14 @@ type PreviewDetailsProtectionGroupResponse struct {
     Objects []*Object                           `json:"objects"`
 }
 
+// PreviewDetailsS3BucketResponse represents a custom type struct for Success
+type PreviewDetailsS3BucketResponse struct {
+    // URLs to pages related to the resource.
+    Links   *PreviewDetailsS3BucketLinks `json:"_links"`
+    // ObjectV2 defines one object to restore
+    Objects []*ObjectV2                  `json:"objects"`
+}
+
 // PreviewProtectionGroupAsyncResponse represents a custom type struct.
 // Success (Async)
 type PreviewProtectionGroupAsyncResponse struct {
@@ -2689,6 +2349,18 @@ type PreviewProtectionGroupSyncResponse struct {
     Links   *PreviewProtectionGroupSyncLinks `json:"_links"`
     // Object defines one object to restore
     Objects []*Object                        `json:"objects"`
+}
+
+// PreviewS3BucketResponse represents a custom type struct for Success
+type PreviewS3BucketResponse struct {
+    // URLs to pages related to the resource.
+    Links     *PreviewS3BucketLinks `json:"_links"`
+    // The identifier for the requested preview which is used to fetch results of the preview.
+    PreviewId *string               `json:"preview_id"`
+    // The Clumio-assigned ID of the task created by this preview request.
+    // The progress of the task can be monitored using the
+    // `GET /tasks/{task_id}` endpoint.
+    TaskId    *string               `json:"task_id"`
 }
 
 // ReadAWSConnectionResponse represents a custom type struct for Success
@@ -2749,8 +2421,11 @@ type ReadAWSConnectionResponse struct {
     // value of `null`.
     Protect                    *ProtectConfig           `json:"protect"`
     // The asset types enabled for protect.
-    // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
-    // NOTE - EBS is required for EC2MSSQL.
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS"].
+    // 
+    // NOTE -
+    // 1. EC2/EBS is required for EC2MSSQL.
+    // 2. EBS as a value is deprecated in favor of EC2/EBS.
     ProtectAssetTypesEnabled   []*string                `json:"protect_asset_types_enabled"`
     // TODO: Add struct field description
     Resources                  *ConnectionResourcesResp `json:"resources"`
@@ -2848,7 +2523,7 @@ type ReadAlertResponse struct {
     Notes               *string                 `json:"notes"`
     // The parent object of the primary entity associated with or affected by the alert. For example, "aws_environment" is the parent entity of primary entity "aws_ebs_volume".
     ParentEntity        *AlertParentEntity      `json:"parent_entity"`
-    // The primary object associated with or affected by the alert. Examples of primary entities include "aws_connection", "aws_ebs_volume" and "vmware_vm".
+    // The primary object associated with or affected by the alert. Examples of primary entities include "aws_connection", "aws_ebs_volume".
     PrimaryEntity       *AlertPrimaryEntity     `json:"primary_entity"`
     // The number of times the alert has recurred for this primary entity.
     RaisedCount         *uint64                 `json:"raised_count"`
@@ -2999,6 +2674,8 @@ type ReadBucketResponse struct {
     IsReplicationEnabled          *bool                                         `json:"is_replication_enabled"`
     // The Versioning enablement state for the S3 bucket.
     IsVersioningEnabled           *bool                                         `json:"is_versioning_enabled"`
+    // Time of the last S3 Backtrack sync in RFC-3339 format.
+    LastBacktrackSyncTimestamp    *string                                       `json:"last_backtrack_sync_timestamp"`
     // Time of the last backup in RFC-3339 format.
     LastBackupTimestamp           *string                                       `json:"last_backup_timestamp"`
     // Time of the last continuous backup in RFC-3339 format.
@@ -3022,34 +2699,6 @@ type ReadBucketResponse struct {
     VersioningSetting             *S3VersioningOutput                           `json:"versioning_setting"`
 }
 
-// ReadComputeResourceResponse represents a custom type struct for Success
-type ReadComputeResourceResponse struct {
-    // Embedded responses related to the resource.
-    Embedded              *ComputeResourceEmbedded                     `json:"_embedded"`
-    // The ETag value.
-    Etag                  *string                                      `json:"_etag"`
-    // URLs to pages related to the resource.
-    Links                 *ComputeResourceLinks                        `json:"_links"`
-    // The compute resource folder in which the compute resource resides.
-    ComputeResourceFolder *VMwareVCenterComputeResourceFolderModel     `json:"compute_resource_folder"`
-    // The data center associated with this compute resource.
-    Datacenter            *VMwareVCenterComputeResourceDatacenterModel `json:"datacenter"`
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the compute resource.
-    Id                    *string                                      `json:"id"`
-    // Determines whether the compute resource is a cluster. If `true`, then the compute resource is a cluster.
-    IsCluster             *bool                                        `json:"is_cluster"`
-    // Determines whether the compute resource has Distributed Resource Scheduler (DRS) enabled. If this field and `"is_cluster":true`, then DRS is enabled in the compute resource cluster.
-    IsDrsEnabled          *bool                                        `json:"is_drs_enabled"`
-    // The VMware-assigned name of the compute resource.
-    Name                  *string                                      `json:"name"`
-    // The Clumio-assigned ID of the organizational unit associated with the compute resource.
-    OrganizationalUnitId  *string                                      `json:"organizational_unit_id"`
-    // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
-    ProtectionInfo        *ProtectionInfo                              `json:"protection_info"`
-    // The protection status of this compute resource. Refer to the Protection Status table for a complete list of protection statuses.
-    ProtectionStatus      *string                                      `json:"protection_status"`
-}
-
 // ReadConnectionGroupResponse represents a custom type struct for Success
 type ReadConnectionGroupResponse struct {
     // Embedded responses related to the resource.
@@ -3063,7 +2712,11 @@ type ReadConnectionGroupResponse struct {
     // The AWS-assigned IDs of the accounts associated with the Connection Group.
     AccountNativeIds         []*string             `json:"account_native_ids"`
     // List of asset types connected via the connection-group.
-    // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS"].
+    // 
+    // NOTE -
+    // 1. EC2/EBS is required for EC2MSSQL.
+    // 2. EBS as a value is deprecated in favor of EC2/EBS.
     AssetTypesEnabled        []*string             `json:"asset_types_enabled"`
     // The AWS regions associated with the with the Connection Group.
     AwsRegions               []*string             `json:"aws_regions"`
@@ -3146,38 +2799,6 @@ type ReadConsolidatedAlertResponse struct {
     UpdatedTimestamp   *string                        `json:"updated_timestamp"`
 }
 
-// ReadDatacenterResponse represents a custom type struct for Success
-type ReadDatacenterResponse struct {
-    // Embedded responses related to the resource.
-    Embedded                  *DatacenterEmbedded                     `json:"_embedded"`
-    // The ETag value.
-    Etag                      *string                                 `json:"_etag"`
-    // URLs to pages related to the resource.
-    Links                     *DatacenterLinks                        `json:"_links"`
-    // TODO: Add struct field description
-    AncestorRefs              []*AncestorRefModel                     `json:"ancestor_refs"`
-    // The data center folder in which the data center resides.
-    DatacenterFolder          *VMwareDatacenterFolderIDModel          `json:"datacenter_folder"`
-    // Determines whether compute resources exist directly under the hidden root compute resource folder. If `true`, then compute resources exist directly under the root compute resource folder.
-    HasComputeResources       *bool                                   `json:"has_compute_resources"`
-    // Determines whether VMs exist directly under the hidden root VM folder. If `true`, then VMs exist directly under the root VM folder.
-    HasVmFolders              *bool                                   `json:"has_vm_folders"`
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the data center.
-    Id                        *string                                 `json:"id"`
-    // The VMware-assigned name of this data center.
-    Name                      *string                                 `json:"name"`
-    // The Clumio-assigned ID of the organizational unit associated with the datacenter.
-    OrganizationalUnitId      *string                                 `json:"organizational_unit_id"`
-    // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
-    ProtectionInfo            *ProtectionInfo                         `json:"protection_info"`
-    // The protection status of this data center. Refer to the Protection Status table for a complete list of protection statuses.
-    ProtectionStatus          *string                                 `json:"protection_status"`
-    // The hidden root compute resource folder of the data center.
-    RootComputeResourceFolder *VMwareRootComputeResourceFolderIDModel `json:"root_compute_resource_folder"`
-    // The hidden root virtual machine folder of the data center.
-    RootVmFolder              *VMwareRootVMFolderIDModel              `json:"root_vm_folder"`
-}
-
 // ReadDirectoryResponse represents a custom type struct for Success
 type ReadDirectoryResponse struct {
     // Embedded responses related to the resource.
@@ -3195,53 +2816,71 @@ type ReadDirectoryResponse struct {
 // ReadDynamoDBTableBackupResponse represents a custom type struct for Success
 type ReadDynamoDBTableBackupResponse struct {
     // The ETag value.
-    Etag                   *string                   `json:"_etag"`
+    Etag                      *string                   `json:"_etag"`
     // URLs to pages related to the resource.
-    Links                  *DynamoDBTableBackupLinks `json:"_links"`
+    Links                     *DynamoDBTableBackupLinks `json:"_links"`
     // The AWS-assigned ID of the account associated with this database at the time of backup.
-    AccountNativeId        *string                   `json:"account_native_id"`
+    AccountNativeId           *string                   `json:"account_native_id"`
     // The AWS region associated with this environment.
-    AwsRegion              *string                   `json:"aws_region"`
+    AwsRegion                 *string                   `json:"aws_region"`
     // The billing mode of the DynamoDB table. Possible values are PROVISIONED or PAY_PER_REQUEST.
     // For [POST /restores/aws/dynamodb](#operation/restore-aws-dynamodb-table), this is defaulted to the
     // configuration of source table if both 'billing_mode' and 'provisioned_throughput' are empty or `null`.
-    BillingMode            *string                   `json:"billing_mode"`
+    BillingMode               *string                   `json:"billing_mode"`
+    // Indicates whether DynamoDB Contributor Insights is enabled (true) or disabled (false)
+    // on the table.
+    // For [POST /restores/aws/dynamodb](#operation/restore-aws-dynamodb-table), this is defaulted to the
+    // value set in backup if `null`.
+    ContributorInsightsStatus *bool                     `json:"contributor_insights_status"`
+    // Indicates whether DynamoDB Deletion Protection is enabled (true) or disabled (false)
+    // on the table.
+    // For [POST /restores/aws/dynamodb](#operation/restore-aws-dynamodb-table), this is defaulted to the
+    // value set in backup if `null`.
+    DeletionProtectionEnabled *bool                     `json:"deletion_protection_enabled"`
     // The timestamp of when this backup expires. Represented in RFC-3339 format.
-    ExpirationTimestamp    *string                   `json:"expiration_timestamp"`
+    ExpirationTimestamp       *string                   `json:"expiration_timestamp"`
     // Represents the properties of a global secondary index.
-    GlobalSecondaryIndexes []*GlobalSecondaryIndex   `json:"global_secondary_indexes"`
+    GlobalSecondaryIndexes    []*GlobalSecondaryIndex   `json:"global_secondary_indexes"`
     // Describes the version of global tables in use, if the table is replicated across AWS Regions. If the table
     // is not a global table, then this field has a value of `null`. Possible values are 2017.11.29 or 2019.11.21.
     // For [POST /restores/aws/dynamodb](#operation/restore-aws-dynamodb-table), the version is defaulted to 2019.11.21.
-    GlobalTableVersion     *string                   `json:"global_table_version"`
+    GlobalTableVersion        *string                   `json:"global_table_version"`
     // The Clumio-assigned ID of the backup.
-    Id                     *string                   `json:"id"`
+    Id                        *string                   `json:"id"`
     // The number of items in DynamoDB table backup.
-    ItemCount              *int64                    `json:"item_count"`
+    ItemCount                 *int64                    `json:"item_count"`
     // Represents the properties of a local secondary index.
-    LocalSecondaryIndexes  []*LocalSecondaryIndex    `json:"local_secondary_indexes"`
+    LocalSecondaryIndexes     []*LocalSecondaryIndex    `json:"local_secondary_indexes"`
+    // Indicates whether DynamoDB Continuous Backup (PITR) is enabled (true) or disabled (false)
+    // on the table.
+    // For [POST /restores/aws/dynamodb](#operation/restore-aws-dynamodb-table), this is defaulted to the
+    // value set in backup if `null`.
+    PitrStatus                *bool                     `json:"pitr_status"`
     // Represents the provisioned throughput settings for a DynamoDB table.
-    ProvisionedThroughput  *ProvisionedThroughput    `json:"provisioned_throughput"`
+    ProvisionedThroughput     *ProvisionedThroughput    `json:"provisioned_throughput"`
     // Contains the details of the replica.
-    Replicas               []*ReplicaDescription     `json:"replicas"`
+    Replicas                  []*ReplicaDescription     `json:"replicas"`
     // The size of the DynamoDB table backup in bytes.
-    Size                   *int64                    `json:"size"`
+    Size                      *int64                    `json:"size"`
     // Represents the server-side encryption settings for a table.
-    SseSpecification       *SSESpecification         `json:"sse_specification"`
+    SseSpecification          *SSESpecification         `json:"sse_specification"`
     // The timestamp of when this backup started. Represented in RFC-3339 format.
-    StartTimestamp         *string                   `json:"start_timestamp"`
+    StartTimestamp            *string                   `json:"start_timestamp"`
+    // Represents the DynamoDB Streams configuration for a table in DynamoDB.
+    // and the data type (`S` for string, `N` for number, `B` for binary).
+    StreamSpecification       *StreamSpecification      `json:"stream_specification"`
     // The table class of the DynamoDB table. Possible values are STANDARD or STANDARD_INFREQUENT_ACCESS.
     // For [POST /restores/aws/dynamodb](#operation/restore-aws-dynamodb-table), this is defaulted to the
     // STANDARD storage class if empty.
-    TableClass             *string                   `json:"table_class"`
+    TableClass                *string                   `json:"table_class"`
     // The Clumio-assigned ID of the DynamoDB table.
-    TableId                *string                   `json:"table_id"`
+    TableId                   *string                   `json:"table_id"`
     // The name of the DynamoDB table.
-    TableName              *string                   `json:"table_name"`
+    TableName                 *string                   `json:"table_name"`
     // A tag created through AWS Console which can be applied to EBS volumes.
-    Tags                   []*AwsTagCommonModel      `json:"tags"`
+    Tags                      []*AwsTagCommonModel      `json:"tags"`
     // The type of backup. Possible values include `clumio_backup` and `aws_snapshot`.
-    ClumioType             *string                   `json:"type"`
+    ClumioType                *string                   `json:"type"`
 }
 
 // ReadDynamoDBTableResponse represents a custom type struct for Success
@@ -3260,11 +2899,16 @@ type ReadDynamoDBTableResponse struct {
     // For [POST /restores/aws/dynamodb](#operation/restore-aws-dynamodb-table), this is defaulted to the
     // configuration of source table if both 'billing_mode' and 'provisioned_throughput' are empty or `null`.
     BillingMode                                   *string                 `json:"billing_mode"`
-    // [DEPRECATED]
-    // The compliance status of the protected DynamoDB table. Possible values include
-    // "compliant" and "noncompliant". If the table is not protected, then this field has
-    // a value of `null`.
-    ComplianceStatus                              *string                 `json:"compliance_status"`
+    // Indicates whether DynamoDB Contributor Insights is enabled (true) or disabled (false)
+    // on the table.
+    // For [POST /restores/aws/dynamodb](#operation/restore-aws-dynamodb-table), this is defaulted to the
+    // value set in backup if `null`.
+    ContributorInsightsStatus                     *bool                   `json:"contributor_insights_status"`
+    // Indicates whether DynamoDB Deletion Protection is enabled (true) or disabled (false)
+    // on the table.
+    // For [POST /restores/aws/dynamodb](#operation/restore-aws-dynamodb-table), this is defaulted to the
+    // value set in backup if `null`.
+    DeletionProtectionEnabled                     *bool                   `json:"deletion_protection_enabled"`
     // The timestamp of when the table was deleted. Represented in RFC-3339 format.
     // If this table has not been deleted, then this field has a value of `null`.
     DeletionTimestamp                             *string                 `json:"deletion_timestamp"`
@@ -3304,6 +2948,11 @@ type ReadDynamoDBTableResponse struct {
     Name                                          *string                 `json:"name"`
     // The Clumio-assigned ID of the organizational unit associated with the DynamoDB table.
     OrganizationalUnitId                          *string                 `json:"organizational_unit_id"`
+    // Indicates whether DynamoDB Continuous Backup (PITR) is enabled (true) or disabled (false)
+    // on the table.
+    // For [POST /restores/aws/dynamodb](#operation/restore-aws-dynamodb-table), this is defaulted to the
+    // value set in backup if `null`.
+    PitrStatus                                    *bool                   `json:"pitr_status"`
     // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
     ProtectionInfo                                *ProtectionInfoWithRule `json:"protection_info"`
     // The protection status of the DynamoDB table. Possible values include "protected",
@@ -3318,6 +2967,9 @@ type ReadDynamoDBTableResponse struct {
     Size                                          *int64                  `json:"size"`
     // Represents the server-side encryption settings for a table.
     SseSpecification                              *SSESpecification       `json:"sse_specification"`
+    // Represents the DynamoDB Streams configuration for a table in DynamoDB.
+    // and the data type (`S` for string, `N` for number, `B` for binary).
+    StreamSpecification                           *StreamSpecification    `json:"stream_specification"`
     // The AWS-assigned ARN of the DynamoDB table.
     TableArn                                      *string                 `json:"table_arn"`
     // The table class of the DynamoDB table. Possible values are STANDARD or STANDARD_INFREQUENT_ACCESS.
@@ -3540,14 +3192,6 @@ type ReadEC2MSSQLDatabaseResponse struct {
     AwsRegion                               *string                   `json:"aws_region"`
     // The backup status information applied to this resource.
     BackupStatusInfo                        *BackupStatusInfo         `json:"backup_status_info"`
-    // [DEPRECATED]
-    // The policy compliance status of the resource. If the database is not protected,
-    // then this field has a value of `null`. Refer to
-    // 
-    // the Compliance Status table
-    // 
-    // for a complete list of compliance statuses.
-    ComplianceStatus                        *string                   `json:"compliance_status"`
     // The Clumio-assigned ID of the AWS environment associated with the EC2 MSSQL database.
     EnvironmentId                           *string                   `json:"environment_id"`
     // The Clumio-assigned ID of the failover cluster.
@@ -3609,9 +3253,6 @@ type ReadEC2MSSQLFCIResponse struct {
     Embedded             *EC2MSSQLFCIEmbedded `json:"_embedded"`
     // URLs to pages related to the resource.
     Links                *EC2MSSQLFCILinks    `json:"_links"`
-    // [DEPRECATED]
-    // ComplianceStatus of the resource
-    ComplianceStatus     *string              `json:"compliance_status"`
     // The Clumio-assigned ID of the failover cluster.
     Id                   *string              `json:"id"`
     // The Microsoft SQL-assigned name of the failover cluster.
@@ -3713,23 +3354,16 @@ type ReadEC2MssqlAGResponse struct {
     Status               *string             `json:"status"`
 }
 
-// ReadEbsTagComplianceStatsResponse represents a custom type struct for Success
-type ReadEbsTagComplianceStatsResponse struct {
+// ReadEbsTagProtectionStatsResponse represents a custom type struct for Success
+type ReadEbsTagProtectionStatsResponse struct {
     // URLs to pages related to the resource.
-    Links              *ReadEbsTagComplianceStatsLinks `json:"_links"`
-    // The total number of compliant entities.
-    CompliantCount     *int64                          `json:"compliant_count"`
+    Links            *ReadEbsTagProtectionStatsLinks `json:"_links"`
     // The total number of entities associated with deactivated policies.
-    DeactivatedCount   *int64                          `json:"deactivated_count"`
-    // Determines whether one or more entities is currently seeding or waiting for seeding.
-    // If set to `true`, at least one entity is currently seeding or waiting for seeding.
-    HasSeedingEntities *bool                           `json:"has_seeding_entities"`
-    // The total number of non-compliant entities.
-    NonCompliantCount  *int64                          `json:"non_compliant_count"`
+    DeactivatedCount *int64                          `json:"deactivated_count"`
     // The number of entities with protection applied.
-    ProtectedCount     *int64                          `json:"protected_count"`
+    ProtectedCount   *int64                          `json:"protected_count"`
     // The number of entities without protection applied.
-    UnprotectedCount   *int64                          `json:"unprotected_count"`
+    UnprotectedCount *int64                          `json:"unprotected_count"`
 }
 
 // ReadEbsVolumeResponse represents a custom type struct for Success
@@ -3747,11 +3381,6 @@ type ReadEbsVolumeResponse struct {
     AwsRegion                *string                 `json:"aws_region"`
     // The backup status information applied to this resource.
     BackupStatusInfo         *BackupStatusInfo       `json:"backup_status_info"`
-    // [DEPRECATED]
-    // The compliance status of the protected EBS volume. Possible values include
-    // "compliant" and "noncompliant". If the volume is not protected, then this field has
-    // a value of `null`.
-    ComplianceStatus         *string                 `json:"compliance_status"`
     // The timestamp of when the volume was deleted. Represented in RFC-3339 format. If
     // this volume has not been deleted, then this field has a value of `null`.
     DeletionTimestamp        *string                 `json:"deletion_timestamp"`
@@ -3824,16 +3453,14 @@ type ReadEc2InstanceResponse struct {
     AwsRegion                *string                 `json:"aws_region"`
     // The backup status information applied to this resource.
     BackupStatusInfo         *BackupStatusInfo       `json:"backup_status_info"`
-    // [DEPRECATED]
-    // The compliance status of the protected EC2 instance. Possible values include
-    // "compliant" and "noncompliant". If the instance is not protected, then this field
-    // has a value of `null`.
-    ComplianceStatus         *string                 `json:"compliance_status"`
     // The timestamp of when the instance was deleted. Represented in RFC-3339 format.
     // If this instance has not been deleted, then this field has a value of `null`.
     DeletionTimestamp        *string                 `json:"deletion_timestamp"`
     // The Clumio-assigned ID of the policy directly assigned to the entity.
     DirectAssignmentPolicyId *string                 `json:"direct_assignment_policy_id"`
+    // EnaSupport indicates whether the Elastic Network Adapter (ENA) is enabled for the
+    // instance.
+    EnaSupport               *bool                   `json:"ena_support"`
     // The Clumio-assigned ID of the AWS environment associated with the EC2 instance.
     EnvironmentId            *string                 `json:"environment_id"`
     // Determines whether the table has a direct assignment.
@@ -3919,40 +3546,6 @@ type ReadFileSystemResponse struct {
     Used                 *uint64             `json:"used"`
 }
 
-// ReadFolderResponse represents a custom type struct for Success
-type ReadFolderResponse struct {
-    // Embedded responses related to the resource.
-    Embedded              *FolderEmbedded                     `json:"_embedded"`
-    // The ETag value.
-    Etag                  *string                             `json:"_etag"`
-    // URLs to pages related to the resource.
-    Links                 *FolderLinks                        `json:"_links"`
-    // The data center associated with this folder.
-    Datacenter            *VMwareVCenterFolderDatacenterModel `json:"datacenter"`
-    // Count of all descendant folders inside this folder
-    DescendantFolderCount *int64                              `json:"descendant_folder_count"`
-    // Determines whether the folder has direct child folders.
-    HasChildFolders       *bool                               `json:"has_child_folders"`
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the folder.
-    Id                    *string                             `json:"id"`
-    // Determines whether the folder is a hidden root folder. If `true`, the folder is a hidden root folder.
-    IsRoot                *bool                               `json:"is_root"`
-    // Determines whether the folder can be used as a restore destination. If `true`, the folder can be used as a restore destination, and backups can be restored to the folder.
-    IsSupported           *bool                               `json:"is_supported"`
-    // The VMware-assigned name of the folder.
-    Name                  *string                             `json:"name"`
-    // The Clumio-assigned ID of the organizational unit associated with the folder.
-    OrganizationalUnitId  *string                             `json:"organizational_unit_id"`
-    // The parent folder under which this folder resides.
-    ParentFolder          *VMwareVCenterParentFolderModel     `json:"parent_folder"`
-    // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
-    ProtectionInfo        *ProtectionInfo                     `json:"protection_info"`
-    // The protection status of this folder. Refer to the Protection Status table for a complete list of protection statuses.
-    ProtectionStatus      *string                             `json:"protection_status"`
-    // The folder type. Examples of folder types include "datacenter_folder" and "vm_folder". Refer to the Folder Type table for a complete list of folder types.
-    ClumioType            *string                             `json:"type"`
-}
-
 // ReadGeneralSettingsResponseV2 represents a custom type struct for Success
 type ReadGeneralSettingsResponseV2 struct {
     // URLs to pages related to the resource.
@@ -3978,62 +3571,6 @@ type ReadGeneralSettingsResponseV2 struct {
     PasswordExpirationDuration   *int64                `json:"password_expiration_duration"`
 }
 
-// ReadHcmHostResponse represents a custom type struct for Success
-type ReadHcmHostResponse struct {
-    // URLs to pages related to the resource.
-    Links                  *HostLinks `json:"_links"`
-    // The endpoints discovered post the host connection of the host.
-    DiscoveredEndpoints    []*string  `json:"discovered_endpoints"`
-    // The Current MSI version of the edge connector installed in the host.
-    EdgeConnectorVersion   *string    `json:"edge_connector_version"`
-    // The user-provided endpoint used to connect the host.
-    Endpoint               *string    `json:"endpoint"`
-    // The Clumio-assigned ID of the management group associated with the host.
-    GroupId                *string    `json:"group_id"`
-    // The Clumio-assigned ID of the Host.
-    Id                     *string    `json:"id"`
-    // The timestamp of the last successful heartbeat of this host. Represented in RFC-3339 format.
-    LastHeartbeatTimestamp *string    `json:"last_heartbeat_timestamp"`
-    // Name of the Host.
-    Name                   *string    `json:"name"`
-    // The operational status of the Host. Possible values include `upgrade_in_progress`, `upgrade_success`, `upgrade_failed`, `delete_in_progress`, `delete_failed`, `move_in_progress`, `move_succeeded` and `move_failed`.
-    OperationalStatus      *string    `json:"operational_status"`
-    // The connection status of the Host. Possible values include `connected`, `disconnected`, `connection_pending`, and `invalid_token`.
-    Status                 *string    `json:"status"`
-    // The Clumio-assigned ID of the subgroup associated with the host.
-    SubgroupId             *string    `json:"subgroup_id"`
-    // The Clumio-assigned UUID of the host. This UUID is used for filtering hosts during list operations.
-    Uuid                   *string    `json:"uuid"`
-}
-
-// ReadHostResponse represents a custom type struct for Success
-type ReadHostResponse struct {
-    // The ETag value.
-    Etag                *string                                `json:"_etag"`
-    // URLs to pages related to the resource.
-    Links               *HostLinks                             `json:"_links"`
-    // The VMware compute resource representing the host.
-    ComputeResource     *VMwareVCenterHostComputeResourceModel `json:"compute_resource"`
-    // The connection state of the host as seen through the vCenter server. Examples include "connected", "disconnected", and "not_responding".
-    ConnectionState     *string                                `json:"connection_state"`
-    // The data center in which the host resides.
-    Datacenter          *VMwareVCenterHostDatacenterModel      `json:"datacenter"`
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the host.
-    Id                  *string                                `json:"id"`
-    // Determines whether the host has been placed in maintenance mode as seen through the vCenter server. If `true`, the host is in maintenance mode.
-    IsInMaintenanceMode *bool                                  `json:"is_in_maintenance_mode"`
-    // Determines whether the host has been placed in quarantine mode as seen through the vCenter server. If `true`, the host is in quarantine mode.
-    IsInQuarantineMode  *bool                                  `json:"is_in_quarantine_mode"`
-    // Determines whether the host is a standalone host. If `true`, the host is a standalone host.
-    IsStandalone        *bool                                  `json:"is_standalone"`
-    // Determines whether the host can be used as a restore destination. If `true`, the host can be used as a restore destination and backups can be restored to the host.
-    IsSupported         *bool                                  `json:"is_supported"`
-    // The VMware-assigned name of the host.
-    Name                *string                                `json:"name"`
-    // The power state of the host as seen through the vCenter server. Examples include "powered_off", "powered_on", and "standby".
-    PowerState          *string                                `json:"power_state"`
-}
-
 // ReadManagementGroupResponse represents a custom type struct for Success
 type ReadManagementGroupResponse struct {
     // Etag
@@ -4051,200 +3588,6 @@ type ReadManagementGroupResponse struct {
     // The Clumio-assigned ID of the vCenter server associated with the management group.
     // All management groups are associated with a vCenter server.
     VcenterId             *string               `json:"vcenter_id"`
-}
-
-// ReadMssqlAGResponse represents a custom type struct for Success
-type ReadMssqlAGResponse struct {
-    // MssqlAGEmbedded is embed of MSSQL Availability Groups
-    // Embedded responses related to the resource.
-    Embedded             *MssqlAGEmbedded `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links                *MssqlAGLinks    `json:"_links"`
-    // The Clumio-assigned ID of the availability group.
-    Id                   *string          `json:"id"`
-    // The Microsoft SQL-assigned name of the availability group.
-    Name                 *string          `json:"name"`
-    // The Clumio-assigned ID of the organizational unit associated with the availability group.
-    OrganizationalUnitId *string          `json:"organizational_unit_id"`
-    // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
-    ProtectionInfo       *ProtectionInfo  `json:"protection_info"`
-    // The status of the availability group, Possible values include 'active' and 'inactive'.
-    Status               *string          `json:"status"`
-}
-
-// ReadMssqlDatabaseBackupResponse represents a custom type struct for Success
-type ReadMssqlDatabaseBackupResponse struct {
-    // Embedded responses related to the resource.
-    Embedded            *MssqlDatabaseBackupEmbedded `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links               *MssqlDatabaseBackupLinks    `json:"_links"`
-    // TODO: Add struct field description
-    DatabaseFiles       []*MssqlDatabaseFile         `json:"database_files"`
-    // The Clumio-assigned ID of the database associated with this backup.
-    DatabaseId          *string                      `json:"database_id"`
-    // The Microsoft SQL database engine at the time of backup.
-    Engine              *string                      `json:"engine"`
-    // The Microsoft SQL database engine version at the time of backup.
-    EngineVersion       *string                      `json:"engine_version"`
-    // The timestamp of when this backup expires. Represented in RFC-3339 format.
-    ExpirationTimestamp *string                      `json:"expiration_timestamp"`
-    // The Clumio-assigned ID of the management group associated with the database at the time of backup.
-    GroupId             *string                      `json:"group_id"`
-    // The user-provided endpoint of the host containing the given database at the time of backup.
-    HostEndpoint        *string                      `json:"host_endpoint"`
-    // The Clumio-assigned ID of the host associated with the database at the time of backup.
-    HostId              *string                      `json:"host_id"`
-    // The Clumio-assigned ID of the backup.
-    Id                  *string                      `json:"id"`
-    // The Clumio-assigned instance id at the time of backup.
-    InstanceId          *string                      `json:"instance_id"`
-    // The instance name at the time of backup.
-    InstanceName        *string                      `json:"instance_name"`
-    // The timestamp of when this backup started. Represented in RFC-3339 format.
-    StartTimestamp      *string                      `json:"start_timestamp"`
-    // The Clumio-assigned ID of the management subgroup associated with the database at the time of backup.
-    SubgroupId          *string                      `json:"subgroup_id"`
-    // The type of backup.
-    ClumioType          *string                      `json:"type"`
-}
-
-// ReadMssqlDatabaseResponse represents a custom type struct for Success
-type ReadMssqlDatabaseResponse struct {
-    // Embedded responses related to the resource.
-    Embedded                                *MssqlDatabaseEmbedded `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links                                   *DatabaseLinks         `json:"_links"`
-    // The Clumio-assigned ID of the availability group. It is null in case of a standalone database.
-    AvailabilityGroupId                     *string                `json:"availability_group_id"`
-    // The Microsoft SQL assigned name of the availability group. It is null in case of a standalone database.
-    AvailabilityGroupName                   *string                `json:"availability_group_name"`
-    // The backup status information applied to this resource.
-    BackupStatusInfo                        *BackupStatusInfo      `json:"backup_status_info"`
-    // [DEPRECATED]
-    // The policy compliance status of the resource. If the database is not protected,
-    // then this field has a value of `null`. Refer to
-    // 
-    // the Compliance Status table
-    // 
-    // for a complete list of compliance statuses.
-    ComplianceStatus                        *string                `json:"compliance_status"`
-    // The Clumio-assigned ID of the failover cluster.
-    FailoverClusterId                       *string                `json:"failover_cluster_id"`
-    // The Microsoft SQL assigned name of the Failover Cluster
-    FailoverClusterName                     *string                `json:"failover_cluster_name"`
-    // Failovercluster Protection Status is used to indicate the fci protection status associated with the
-    // fci database
-    FailoverClusterProtectionStatus         *string                `json:"failover_cluster_protection_status"`
-    // The Clumio-assigned ID of the group to which the standalone database belongs, in case of an
-    // availability group database it will be empty.
-    GroupId                                 *string                `json:"group_id"`
-    // The user-provided endpoint of the host containing the given database.
-    HostEndpoint                            *string                `json:"host_endpoint"`
-    // The Clumio-assigned ID of the host containing the given database.
-    HostId                                  *string                `json:"host_id"`
-    // The Clumio-assigned ID of the Database.
-    Id                                      *string                `json:"id"`
-    // The Clumio-assigned ID of the instance containing the given database.
-    InstanceId                              *string                `json:"instance_id"`
-    // The name of the Microsoft SQL instance containing the given database.
-    InstanceName                            *string                `json:"instance_name"`
-    // is_supported is true if Clumio supports backup of the database.
-    IsSupported                             *bool                  `json:"is_supported"`
-    // The timestamp of the last time this database was full backed up.
-    // Represented in RFC-3339 format. If this database has never been backed up,
-    // this field has a value of `null`.
-    LastBackupTimestamp                     *string                `json:"last_backup_timestamp"`
-    // The timestamp of the last time this database was log backed up in Bulk Recovery Model.
-    // Represented in RFC-3339 format. If this database has never been backed up,
-    // this field has a value of `null`.
-    LastBulkRecoveryModelLogBackupTimestamp *string                `json:"last_bulk_recovery_model_log_backup_timestamp"`
-    // The timestamp of the last time this database was log backed up in Full Recovery Model.
-    // Represented in RFC-3339 format. If this database has never been backed up,
-    // this field has a value of `null`.
-    LastFullRecoveryModelLogBackupTimestamp *string                `json:"last_full_recovery_model_log_backup_timestamp"`
-    // The name of the Database.
-    Name                                    *string                `json:"name"`
-    // The Clumio-assigned ID of the organizational unit associated with the database.
-    OrganizationalUnitId                    *string                `json:"organizational_unit_id"`
-    // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
-    ProtectionInfo                          *ProtectionInfo        `json:"protection_info"`
-    // recovery_model is the recovery model of the database. Possible values include 'simple_recovery_model',
-    // 'bulk_recovery_model', and 'full_recovery_model'.
-    RecoveryModel                           *string                `json:"recovery_model"`
-    // The size of the Database.
-    Size                                    *float64               `json:"size"`
-    // The status of the database, Possible values include 'active' and 'inactive'.
-    Status                                  *string                `json:"status"`
-    // subgroup id is the id of the Subgroup where this database belongs, in case of AG database
-    // it will be empty.
-    SubgroupId                              *string                `json:"subgroup_id"`
-    // The type of the database. Possible values include 'availability_group_database' and 'standalone_database'.
-    ClumioType                              *string                `json:"type"`
-    // unsupported_reason is the reason why Clumio doesn't support backup of such database,
-    // possible values include 'filestream_enabled_database'.
-    UnsupportedReason                       *string                `json:"unsupported_reason"`
-}
-
-// ReadMssqlHostResponse represents a custom type struct for Success
-type ReadMssqlHostResponse struct {
-    // Embedded responses related to the resource.
-    Embedded                       *MssqlHostEmbedded `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links                          *MssqlHostLinks    `json:"_links"`
-    // The user-provided endpoint of the host containing the given database.
-    Endpoint                       *string            `json:"endpoint"`
-    // The Clumio-assigned ID of the management group to which the host belongs.
-    GroupId                        *string            `json:"group_id"`
-    // Determines whether or not an availability group is present in the host.
-    HasAssociatedAvailabilityGroup *bool              `json:"has_associated_availability_group"`
-    // Connection status of MSSQL Host
-    HostConnectionStatus           *string            `json:"host_connection_status"`
-    // The Clumio-assigned ID of the Host.
-    Id                             *string            `json:"id"`
-    // The number of instances present in the host.
-    InstanceCount                  *int64             `json:"instance_count"`
-    // IsPartOfFCI is a boolean field representing if the Host is part of Failover Cluster
-    IsPartOfFci                    *bool              `json:"is_part_of_fci"`
-    // The Clumio-assigned ID of the organizational unit associated with the host.
-    OrganizationalUnitId           *string            `json:"organizational_unit_id"`
-    // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
-    ProtectionInfo                 *ProtectionInfo    `json:"protection_info"`
-    // The status of the Host, Possible values include 'active' and 'inactive'.
-    Status                         *string            `json:"status"`
-    // The Clumio-assigned ID of the management subgroup to which the host belongs.
-    SubgroupId                     *string            `json:"subgroup_id"`
-}
-
-// ReadMssqlInstanceResponse represents a custom type struct for Success
-type ReadMssqlInstanceResponse struct {
-    // Embedded responses related to the resource.
-    Embedded                       *MssqlInstanceEmbedded `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links                          *MssqlInstanceLinks    `json:"_links"`
-    // The Clumio-assigned ID of the management group to which the host belongs.
-    GroupId                        *string                `json:"group_id"`
-    // The boolean value represents if availability group is present in the instance.
-    HasAssociatedAvailabilityGroup *bool                  `json:"has_associated_availability_group"`
-    // The user-provided endpoint of the host containing the given database.
-    HostEndpoint                   *string                `json:"host_endpoint"`
-    // The Clumio-assigned ID of the host, containing the instance.
-    HostId                         *string                `json:"host_id"`
-    // The Clumio-assigned ID of the Instance.
-    Id                             *string                `json:"id"`
-    // The Microsoft SQL assigned name of the instance.
-    Name                           *string                `json:"name"`
-    // The Clumio-assigned ID of the organizational unit associated with the instance.
-    OrganizationalUnitId           *string                `json:"organizational_unit_id"`
-    // Product Version of the instance.
-    ProductVersion                 *string                `json:"product_version"`
-    // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
-    ProtectionInfo                 *ProtectionInfo        `json:"protection_info"`
-    // The Microsoft SQL assigned server name of the instance.
-    ServerName                     *string                `json:"server_name"`
-    // The status of the Instance, Possible values include 'active' and 'inactive'.
-    Status                         *string                `json:"status"`
-    // The Clumio-assigned ID of the management subgroup to which the host belongs.
-    SubgroupId                     *string                `json:"subgroup_id"`
 }
 
 // ReadOrganizationalUnitResponse represents a custom type struct for Success
@@ -4393,93 +3736,197 @@ type ReadProtectionGroupBackupResponse struct {
 // ReadProtectionGroupResponse represents a custom type struct for Success
 type ReadProtectionGroupResponse struct {
     // Embedded responses related to the resource.
-    Embedded                       *ProtectionGroupEmbedded              `json:"_embedded"`
+    Embedded                         *ProtectionGroupEmbedded `json:"_embedded"`
     // URLs to pages related to the resource.
-    Links                          *ProtectionGroupLinks                 `json:"_links"`
+    Links                            *ProtectionGroupLinks    `json:"_links"`
     // Represents the aggregated stats for backup status.
-    BackupStatusStats              *BackupStatusStats                    `json:"backup_status_stats"`
+    BackupStatusStats                *BackupStatusStats       `json:"backup_status_stats"`
     // The backup target AWS region associated with the protection group, empty if
     // in-region or not configured.
-    BackupTargetAwsRegion          *string                               `json:"backup_target_aws_region"`
+    BackupTargetAwsRegion            *string                  `json:"backup_target_aws_region"`
     // BackupTierStat
-    BackupTierStats                []*BackupTierStat                     `json:"backup_tier_stats"`
+    BackupTierStats                  []*BackupTierStat        `json:"backup_tier_stats"`
     // Number of buckets
-    BucketCount                    *int64                                `json:"bucket_count"`
+    BucketCount                      *int64                   `json:"bucket_count"`
     // The following table describes the possible conditions for a bucket to be
     // automatically added to a protection group.
     // 
-    // +-------------------+----------------+-----------------------------------------+
-    // |       Field       | Rule Condition |               Description               |
-    // +===================+================+=========================================+
-    // | aws_tag           | $eq            | Denotes the AWS tag(s) to               |
-    // |                   |                | conditionalize on                       |
-    // |                   |                |                                         |
-    // |                   |                | {"aws_tag":{"$eq":{"key":"Environment", |
-    // |                   |                | "value":"Prod"}}}                       |
-    // |                   |                |                                         |
-    // |                   |                |                                         |
-    // +-------------------+----------------+-----------------------------------------+
-    // | account_native_id | $eq            | Denotes the AWS account to              |
-    // |                   |                | conditionalize on                       |
-    // |                   |                |                                         |
-    // |                   |                | {"account_native_id":{"$eq":"1111111111 |
-    // |                   |                | 11"}}                                   |
-    // |                   |                |                                         |
-    // |                   |                |                                         |
-    // +-------------------+----------------+-----------------------------------------+
-    // | aws_region        | $eq            | Denotes the AWS region to               |
-    // |                   |                | conditionalize on                       |
-    // |                   |                |                                         |
-    // |                   |                | {"aws_region":{"$eq":"us-west-2"}}      |
-    // |                   |                |                                         |
-    // |                   |                |                                         |
-    // +-------------------+----------------+-----------------------------------------+
+    // +-----------------------+----------------+-------------------------------------+
+    // |         Field         | Rule Condition |             Description             |
+    // +=======================+================+=====================================+
+    // | aws_tag               | $eq            | Denotes the AWS tag(s) to be        |
+    // |                       |                | exactly equal to the specified      |
+    // |                       |                | value.                              |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$eq":{"key":"Environme |
+    // |                       |                | nt", "value":"Prod"}}}              |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_tag               | $not_eq        | Denotes the AWS tag(s) to be not    |
+    // |                       |                | equal to the specified value.       |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$not_eq":{"key":"Envir |
+    // |                       |                | onment", "value":"Prod"}}}          |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_tag               | $contains      | Denotes the AWS tag(s) contain a    |
+    // |                       |                | specified substring.                |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$contains":{"key":"Env |
+    // |                       |                | ironment", "value":"Prod"}}}        |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_tag               | $not_contains  | Denotes the AWS tag(s) excludes a   |
+    // |                       |                | specified substring.                |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$not_contains":{"key": |
+    // |                       |                | "Environment", "value":"Prod"}}}    |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_tag               | $all           | Denotes the AWS tag(s) where all    |
+    // |                       |                | elements in the specified list are  |
+    // |                       |                | present.                            |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$all":[{"key":"Environ |
+    // |                       |                | ment", "value":"Prod"}]}}           |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_tag               | $not_all       | Denotes the AWS tag(s) where at     |
+    // |                       |                | least one element from the          |
+    // |                       |                | specified list is missing.          |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$not_all":[{"key":"Env |
+    // |                       |                | ironment", "value":"Prod"}]}}       |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_tag               | $in            | Denotes the AWS tag(s) exist in a   |
+    // |                       |                | specified list.                     |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$in":[{"key":"Environm |
+    // |                       |                | ent", "value":"Prod"}]}}            |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_tag               | $not_in        | Denotes the AWS tag(s) do not exist |
+    // |                       |                | in a specified list.                |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$not_in":[{"key":"Envi |
+    // |                       |                | ronment", "value":"Prod"}]}}        |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_account_native_id | $eq            | Denotes the AWS account to be       |
+    // |                       |                | exactly equal to the specified      |
+    // |                       |                | value.                              |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_account_native_id":{"$eq":"11 |
+    // |                       |                | 1111111111"}}                       |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_account_native_id | $in            | Denotes the AWS account exist in a  |
+    // |                       |                | specified list.                     |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_account_native_id":{"$in":["1 |
+    // |                       |                | 11111111111"]}}                     |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | account_native_id     | $in            |                                     |
+    // |                       |                | This will be deprecated and use     |
+    // |                       |                | aws_account_native_id instead.      |
+    // |                       |                | Denotes the AWS account exist in a  |
+    // |                       |                | specified list.                     |
+    // |                       |                |                                     |
+    // |                       |                | {"account_native_id":{"$in":["11111 |
+    // |                       |                | 1111111"]}}                         |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | account_native_id     | $eq            |                                     |
+    // |                       |                | This will be deprecated and use     |
+    // |                       |                | aws_account_native_id instead.      |
+    // |                       |                | Denotes the AWS account to be       |
+    // |                       |                | exactly equal to the specified      |
+    // |                       |                | value.                              |
+    // |                       |                |                                     |
+    // |                       |                | {"account_native_id":{"$eq":"111111 |
+    // |                       |                | 111111"}}                           |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_region            | $eq            | Denotes the AWS region to be        |
+    // |                       |                | exactly equal to the specified      |
+    // |                       |                | value.                              |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_region":{"$eq":"us-west-2"}}  |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_region            | $in            | Denotes the AWS region exist in a   |
+    // |                       |                | specified list.                     |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_region":{"$in":["us-          |
+    // |                       |                | west-2"]}}                          |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
     // 
-    BucketRule                     *string                               `json:"bucket_rule"`
-    // The compliance statistics of workloads associated with this entity.
-    ComplianceStats                *ProtectionComplianceStatsWithSeeding `json:"compliance_stats"`
+    BucketRule                       *string                  `json:"bucket_rule"`
     // Creation time of the protection group in RFC-3339 format.
-    CreatedTimestamp               *string                               `json:"created_timestamp"`
+    CreatedTimestamp                 *string                  `json:"created_timestamp"`
     // The user-assigned description of the protection group.
-    Description                    *string                               `json:"description"`
+    Description                      *string                  `json:"description"`
+    // Timestamp of the earliest protection group backup which has not expired yet. Represented in
+    // RFC-3339 format. Only available for Read API.
+    EarliestAvailableBackupTimestamp *string                  `json:"earliest_available_backup_timestamp"`
     // The Clumio-assigned ID of the protection group.
-    Id                             *string                               `json:"id"`
+    Id                               *string                  `json:"id"`
     // Whether the protection group already has a backup target configured by a policy, or
     // is open to be protected by an in-region or out-of-region S3 policy.
-    IsBackupTargetRegionConfigured *bool                                 `json:"is_backup_target_region_configured"`
+    IsBackupTargetRegionConfigured   *bool                    `json:"is_backup_target_region_configured"`
     // Determines whether the protection group is active or has been deleted. Deleted protection
     // groups may be purged after some time once there are no active backups associated with it.
-    IsDeleted                      *bool                                 `json:"is_deleted"`
+    IsDeleted                        *bool                    `json:"is_deleted"`
     // Time of the last backup in RFC-3339 format.
-    LastBackupTimestamp            *string                               `json:"last_backup_timestamp"`
+    LastBackupTimestamp              *string                  `json:"last_backup_timestamp"`
     // Time of the last successful continuous backup in RFC-3339 format.
-    LastContinuousBackupTimestamp  *string                               `json:"last_continuous_backup_timestamp"`
+    LastContinuousBackupTimestamp    *string                  `json:"last_continuous_backup_timestamp"`
     // Modified time of the protection group in RFC-3339 format.
-    ModifiedTimestamp              *string                               `json:"modified_timestamp"`
+    ModifiedTimestamp                *string                  `json:"modified_timestamp"`
     // The user-assigned name of the protection group.
-    Name                           *string                               `json:"name"`
+    Name                             *string                  `json:"name"`
     // ObjectFilter
     // defines which objects will be backed up.
-    ObjectFilter                   *ObjectFilter                         `json:"object_filter"`
+    ObjectFilter                     *ObjectFilter            `json:"object_filter"`
     // The Clumio-assigned ID of the organizational unit associated with the Protection Group.
-    OrganizationalUnitId           *string                               `json:"organizational_unit_id"`
+    OrganizationalUnitId             *string                  `json:"organizational_unit_id"`
     // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
-    ProtectionInfo                 *ProtectionInfoWithRule               `json:"protection_info"`
+    ProtectionInfo                   *ProtectionInfoWithRule  `json:"protection_info"`
+    // A substruct that only includes protected_count and unprotected_count which can
+    // be used in common by other structs
+    ProtectionStats                  *ProtectionStats         `json:"protection_stats"`
     // The protection status of the protection group. Possible values include "protected",
     // "unprotected", and "unsupported". If the protection group does not support backups, then
     // this field has a value of `unsupported`.
-    ProtectionStatus               *string                               `json:"protection_status"`
+    ProtectionStatus                 *string                  `json:"protection_status"`
     // The list of AWS regions that this protection group is linked to
-    Regions                        []*string                             `json:"regions"`
+    Regions                          []*string                `json:"regions"`
     // Cumulative count of all unexpired objects in each backup (any new or updated since
     // the last backup) that have been backed up as part of this protection group
-    TotalBackedUpObjectCount       *int64                                `json:"total_backed_up_object_count"`
+    TotalBackedUpObjectCount         *int64                   `json:"total_backed_up_object_count"`
     // Cumulative size of all unexpired objects in each backup (any new or updated since
     // the last backup) that have been backed up as part of this protection group
-    TotalBackedUpSizeBytes         *int64                                `json:"total_backed_up_size_bytes"`
+    TotalBackedUpSizeBytes           *int64                   `json:"total_backed_up_size_bytes"`
     // Version of the protection group. The version number is incremented every time
     // a change is made to the protection group.
-    Version                        *int64                                `json:"version"`
+    Version                          *int64                   `json:"version"`
 }
 
 // ReadProtectionGroupS3AssetBackupResponse represents a custom type struct for Success
@@ -4532,64 +3979,62 @@ type ReadProtectionGroupS3AssetContinuousBackupStatsResponse struct {
 // ReadProtectionGroupS3AssetResponse represents a custom type struct for Success
 type ReadProtectionGroupS3AssetResponse struct {
     // Embedded responses related to the resource.
-    Embedded                      *ProtectionGroupBucketEmbedded `json:"_embedded"`
+    Embedded                         *ProtectionGroupBucketEmbedded `json:"_embedded"`
     // URLs to pages related to the resource.
-    Links                         *ProtectionGroupBucketLinks    `json:"_links"`
+    Links                            *ProtectionGroupBucketLinks    `json:"_links"`
     // The AWS-assigned ID of the account associated with the DynamoDB table.
-    AccountNativeId               *string                        `json:"account_native_id"`
+    AccountNativeId                  *string                        `json:"account_native_id"`
     // Whether this bucket was added to this protection group by the bucket rule
-    AddedByBucketRule             *bool                          `json:"added_by_bucket_rule"`
+    AddedByBucketRule                *bool                          `json:"added_by_bucket_rule"`
     // Whether this bucket was added to this protection group by the user
-    AddedByUser                   *bool                          `json:"added_by_user"`
+    AddedByUser                      *bool                          `json:"added_by_user"`
     // The AWS region associated with the DynamoDB table.
-    AwsRegion                     *string                        `json:"aws_region"`
+    AwsRegion                        *string                        `json:"aws_region"`
     // The backup status information applied to this resource.
-    BackupStatusInfo              *BackupStatusInfo              `json:"backup_status_info"`
+    BackupStatusInfo                 *BackupStatusInfo              `json:"backup_status_info"`
     // The backup target AWS region associated with the protection group S3 asset.
-    BackupTargetAwsRegion         *string                        `json:"backup_target_aws_region"`
+    BackupTargetAwsRegion            *string                        `json:"backup_target_aws_region"`
     // BackupTierStat
-    BackupTierStats               []*BackupTierStat              `json:"backup_tier_stats"`
+    BackupTierStats                  []*BackupTierStat              `json:"backup_tier_stats"`
     // The Clumio-assigned ID of the bucket
-    BucketId                      *string                        `json:"bucket_id"`
+    BucketId                         *string                        `json:"bucket_id"`
     // The name of the bucket
-    BucketName                    *string                        `json:"bucket_name"`
-    // [DEPRECATED]
-    // The compliance status of the protected protection group. Possible values include
-    // "compliant" and "noncompliant". If the table is not protected, then this field has
-    // a value of `null`.
-    ComplianceStatus              *string                        `json:"compliance_status"`
+    BucketName                       *string                        `json:"bucket_name"`
     // Creation time of the protection group in RFC-3339 format.
-    CreatedTimestamp              *string                        `json:"created_timestamp"`
+    CreatedTimestamp                 *string                        `json:"created_timestamp"`
+    // Timestamp of the earliest protection group backup which has not expired yet. Represented in
+    // RFC-3339 format. Only available for Read API.
+    EarliestAvailableBackupTimestamp *string                        `json:"earliest_available_backup_timestamp"`
     // The Clumio-assigned ID of the AWS environment associated with the protection group.
-    EnvironmentId                 *string                        `json:"environment_id"`
+    EnvironmentId                    *string                        `json:"environment_id"`
     // The Clumio-assigned ID of the protection group
-    GroupId                       *string                        `json:"group_id"`
+    GroupId                          *string                        `json:"group_id"`
     // The name of the protection group
-    GroupName                     *string                        `json:"group_name"`
+    GroupName                        *string                        `json:"group_name"`
     // The Clumio-assigned ID that represents the bucket within the protection group.
-    Id                            *string                        `json:"id"`
+    Id                               *string                        `json:"id"`
     // Determines whether the protection group bucket has been deleted
-    IsDeleted                     *bool                          `json:"is_deleted"`
+    IsDeleted                        *bool                          `json:"is_deleted"`
     // Time of the last backup in RFC-3339 format.
-    LastBackupTimestamp           *string                        `json:"last_backup_timestamp"`
+    LastBackupTimestamp              *string                        `json:"last_backup_timestamp"`
     // Time of the last successful continuous backup in RFC-3339 format.
-    LastContinuousBackupTimestamp *string                        `json:"last_continuous_backup_timestamp"`
+    LastContinuousBackupTimestamp    *string                        `json:"last_continuous_backup_timestamp"`
     // The Clumio-assigned ID of the organizational unit associated with the protection group.
-    OrganizationalUnitId          *string                        `json:"organizational_unit_id"`
+    OrganizationalUnitId             *string                        `json:"organizational_unit_id"`
     // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
-    ProtectionInfo                *ProtectionInfoWithRule        `json:"protection_info"`
+    ProtectionInfo                   *ProtectionInfoWithRule        `json:"protection_info"`
     // The protection status of the protection group. Possible values include "protected",
     // "unprotected", and "unsupported". If the protection group does not support backups, then
     // this field has a value of `unsupported`.
-    ProtectionStatus              *string                        `json:"protection_status"`
+    ProtectionStatus                 *string                        `json:"protection_status"`
     // Cumulative count of all unexpired objects in each backup (any new or updated since
     // the last backup) that have been backed up as part of this protection group
-    TotalBackedUpObjectCount      *int64                         `json:"total_backed_up_object_count"`
+    TotalBackedUpObjectCount         *int64                         `json:"total_backed_up_object_count"`
     // Cumulative size of all unexpired objects in each backup (any new or updated since
     // the last backup) that have been backed up as part of this protection group
-    TotalBackedUpSizeBytes        *int64                         `json:"total_backed_up_size_bytes"`
+    TotalBackedUpSizeBytes           *int64                         `json:"total_backed_up_size_bytes"`
     // The unsupported reason for the S3 bucket.
-    UnsupportedReason             *string                        `json:"unsupported_reason"`
+    UnsupportedReason                *string                        `json:"unsupported_reason"`
 }
 
 // ReadRDSDatabaseTableColumnsResponse represents a custom type struct for Success
@@ -4671,11 +4116,6 @@ type ReadRdsResourceResponse struct {
     AwsRegion                              *string                 `json:"aws_region"`
     // The backup status information applied to this resource.
     BackupStatusInfo                       *BackupStatusInfo       `json:"backup_status_info"`
-    // [DEPRECATED]
-    // The compliance status of the protected RDS resource. Possible values include
-    // `compliant` and `noncompliant`. If the resource is not protected, then this field has
-    // a value of `null`.
-    ComplianceStatus                       *string                 `json:"compliance_status"`
     // The timestamp of when the RDS resource was deleted. Represented in RFC-3339 format.
     // If the resource was not deleted, then this field has a value of `null`.
     DeletionTimestamp                      *string                 `json:"deletion_timestamp"`
@@ -4752,28 +4192,6 @@ type ReadRdsResourceResponse struct {
     UnsupportedReason                      *string                 `json:"unsupported_reason"`
 }
 
-// ReadResourcePoolResponse represents a custom type struct for Success
-type ReadResourcePoolResponse struct {
-    // The ETag value.
-    Etag            *string                                 `json:"_etag"`
-    // URLs to pages related to the resource.
-    Links           *ResourcePoolLinks                      `json:"_links"`
-    // The compute resource that the resource pool comprises.
-    ComputeResource *VMwareResourcePoolComputeResourceModel `json:"compute_resource"`
-    // The data center in which the resource pool resides.
-    Datacenter      *ResourcePoolDatacenterModel            `json:"datacenter"`
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the resource pool.
-    Id              *string                                 `json:"id"`
-    // Determines whether the resource pool is the default, hidden resource pool.
-    IsRoot          *bool                                   `json:"is_root"`
-    // Determines whether the resource pool can be used as a restore destination. If `true`, the resource pool can be used as a restore destination and backups can be restored to the resource pool.
-    IsSupported     *bool                                   `json:"is_supported"`
-    // The VMware-assigned name of the resource pool.
-    Name            *string                                 `json:"name"`
-    // The vCenter object that is the parent of the resource pool.
-    Parent          *VMwareResourcePoolParentModel          `json:"parent"`
-}
-
 // ReadRoleResponse represents a custom type struct for Success
 type ReadRoleResponse struct {
     // ETag value
@@ -4831,10 +4249,10 @@ type ReadRuleResponse struct {
     // |                       |                           |                          |
     // |                       |                           |                          |
     // +-----------------------+---------------------------+--------------------------+
-    // | aws_tag               | $eq, $in, $all, $contains | Denotes the AWS tag(s)   |
-    // |                       |                           | to conditionalize on.    |
-    // |                       |                           | Max 100 tags allowed in  |
-    // |                       |                           | each rule                |
+    // | aws_tag               | $eq, $in, $all,           | Denotes the AWS tag(s)   |
+    // |                       | $contains, $not_eq,       | to conditionalize on.    |
+    // |                       | $not_in, $not_all,        | Max 100 tags allowed in  |
+    // |                       | $not_contains             | each rule                |
     // |                       |                           | and tag key can be upto  |
     // |                       |                           | 128 characters and value |
     // |                       |                           | can be upto 256          |
@@ -4862,6 +4280,30 @@ type ReadRuleResponse struct {
     // |                       |                           | {"aws_tag":{"$contains": |
     // |                       |                           | {"key":"Environment",    |
     // |                       |                           | "value":"Prod"}}}        |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"aws_tag":{"$not_eq":{" |
+    // |                       |                           | key":"Environment",      |
+    // |                       |                           | "value":"Prod"}}}        |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"aws_tag":{"$not_in":[{ |
+    // |                       |                           | "key":"Environment",     |
+    // |                       |                           | "value":"Prod"},         |
+    // |                       |                           | {"key":"Hello",          |
+    // |                       |                           | "value":"World"}]}}      |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"aws_tag":{"$not_all":[ |
+    // |                       |                           | {"key":"Environment",    |
+    // |                       |                           | "value":"Prod"},         |
+    // |                       |                           | {"key":"Hello",          |
+    // |                       |                           | "value":"World"}]}}      |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"aws_tag":{"$not_contai |
+    // |                       |                           | ns":{"key":"Environment" |
+    // |                       |                           | , "value":"Prod"}}}      |
     // |                       |                           |                          |
     // |                       |                           |                          |
     // +-----------------------+---------------------------+--------------------------+
@@ -4973,62 +4415,6 @@ type ReadS3InstantAccessEndpointUriResponse struct {
     Region                             *string                          `json:"region"`
 }
 
-// ReadSubgroupResponse represents a custom type struct for Success
-type ReadSubgroupResponse struct {
-    // URLs to pages related to the resource.
-    Links                       *SubgroupLinks               `json:"_links"`
-    // The number of cloud connectors in this subgroup, aggregated by their status.
-    CloudConnectorCountByStatus *CloudConnectorCountByStatus `json:"cloud_connector_count_by_status"`
-    // The overall health of cloud connectors in this subgroup. Possible values include: 'healthy', indicating
-    // that all cloud connectors in the subgroup are connected; 'degraded' indicating that one or more cloud
-    // connectors in the subgroup have connection issues; `none`, indicating that no cloud connectors are in the subgroup.
-    CloudConnectorStatus        *string                      `json:"cloud_connector_status"`
-    // The Clumio-assigned ID of the management group associated with this subgroup.
-    GroupId                     *string                      `json:"group_id"`
-    // The Clumio-assigned ID of the management subgroup.
-    Id                          *string                      `json:"id"`
-    // The name of the management subgroup.
-    Name                        *string                      `json:"name"`
-}
-
-// ReadTagCategory2Response represents a custom type struct for Success
-type ReadTagCategory2Response struct {
-    // The ETag value.
-    Etag                 *string            `json:"_etag"`
-    // URLs to pages related to the resource
-    Links                *TagCategory2Links `json:"_links"`
-    // A description of the tag category.
-    Description          *string            `json:"description"`
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the tag category.
-    Id                   *string            `json:"id"`
-    // The VMware-assigned name of the tag category.
-    Name                 *string            `json:"name"`
-    // The number of tags in the tag category.
-    NumberOfTags         *int32             `json:"number_of_tags"`
-    // The Clumio-assigned ID of the organizational unit associated with the tag category.
-    OrganizationalUnitId *string            `json:"organizational_unit_id"`
-}
-
-// ReadTagResponse represents a custom type struct for Success
-type ReadTagResponse struct {
-    // Embedded responses related to the resource.
-    Embedded             *Tag2Embedded           `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links                *Tag2Links              `json:"_links"`
-    // The tag category associated with the tag.
-    Category             *TagParentCategoryModel `json:"category"`
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the tag.
-    Id                   *string                 `json:"id"`
-    // The VMware-assigned name of the tag.
-    Name                 *string                 `json:"name"`
-    // The Clumio-assigned ID of the organizational unit associated with the tag.
-    OrganizationalUnitId *string                 `json:"organizational_unit_id"`
-    // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
-    ProtectionInfo       *ProtectionInfo         `json:"protection_info"`
-    // The protection status of this tag. Refer to the Protection Status table for a complete list of protection statuses.
-    ProtectionStatus     *string                 `json:"protection_status"`
-}
-
 // ReadTaskResponse represents a custom type struct for Success
 type ReadTaskResponse struct {
     // The ETag value.
@@ -5085,8 +4471,7 @@ type ReadTaskResponse struct {
     Id                 *string            `json:"id"`
     // Determines whether or not this task can be aborted.
     // A task can be aborted if its status is either "queued" or "in_progress".
-    // Tasks of certain types including
-    // "vmware_vm_backup_indexing" and "aws_ebs_volume_backup_indexing" cannot be aborted.
+    // Tasks of certain types including "aws_ebs_volume_backup_indexing" cannot be aborted.
     IsAbortable        *bool              `json:"is_abortable"`
     // The parent entity associated with the task.
     ParentEntity       *TaskParentEntity  `json:"parent_entity"`
@@ -5173,281 +4558,6 @@ type ReadUserResponseV1 struct {
     LastActivityTimestamp         *string         `json:"last_activity_timestamp"`
     // The number of organizational units accessible to the user.
     OrganizationalUnitCount       *int64          `json:"organizational_unit_count"`
-}
-
-// ReadVMBackupResponse represents a custom type struct for Success
-type ReadVMBackupResponse struct {
-    // URLs to pages related to the resource.
-    Links                *VMBackupHateoasLinks     `json:"_links"`
-    // The reason that browsing is unavailable for the backup. Possible values include "file_limit_exceeded" and
-    // "browsing_unavailable". If browse indexing is successful, then this field has a value of `null`.
-    BrowsingFailedReason *string                   `json:"browsing_failed_reason"`
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the data center
-    // associated with this backup.
-    DatacenterId         *string                   `json:"datacenter_id"`
-    // The timestamp of when this backup expires. Represented in RFC-3339 format.
-    ExpirationTimestamp  *string                   `json:"expiration_timestamp"`
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the
-    // host associated with this backup.
-    HostId               *string                   `json:"host_id"`
-    // The Clumio-assigned ID of the backup.
-    Id                   *string                   `json:"id"`
-    // Determines whether browsing is available for the backup. If `true`, then browsing is available for the backup.
-    IsBrowsable          *bool                     `json:"is_browsable"`
-    // TODO: Add struct field description
-    Nics                 []*VMNicBackupModel       `json:"nics"`
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the resource pool
-    // associated with this backup.
-    ResourcePoolId       *string                   `json:"resource_pool_id"`
-    // The timestamp of when this backup started. Represented in RFC-3339 format.
-    StartTimestamp       *string                   `json:"start_timestamp"`
-    // VMTagWithCategoryModel
-    // A tag associated with the VM.
-    Tags                 []*VMTagWithCategoryModel `json:"tags"`
-    // The IP address or FQDN of the vCenter server associated with this backup.
-    // If a backup was initiated before 2020-06-30, when this field was introduced,
-    // then this field has a value of `null`.
-    VcenterEndpoint      *string                   `json:"vcenter_endpoint"`
-    // The Clumio-assigned ID of the vCenter associated with this backup.
-    VcenterId            *string                   `json:"vcenter_id"`
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the
-    // VM folder associated with this backup.
-    VmFolderId           *string                   `json:"vm_folder_id"`
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the
-    // VM associated with this backup.
-    VmId                 *string                   `json:"vm_id"`
-    // The name of the virtual machine associated with this backup.
-    VmName               *string                   `json:"vm_name"`
-}
-
-// ReadVMwareComputeResourceStatsResponse represents a custom type struct for Success
-type ReadVMwareComputeResourceStatsResponse struct {
-    // The ETag value.
-    Etag               *string                                    `json:"_etag"`
-    // URLs to pages related to the resource.
-    Links              *VMwareComputeResourceComplianceStatsLinks `json:"_links"`
-    // The total number of compliant entities.
-    CompliantCount     *int64                                     `json:"compliant_count"`
-    // The total number of entities associated with deactivated policies.
-    DeactivatedCount   *int64                                     `json:"deactivated_count"`
-    // Determines whether one or more entities is currently seeding or waiting for seeding.
-    // If set to `true`, at least one entity is currently seeding or waiting for seeding.
-    HasSeedingEntities *bool                                      `json:"has_seeding_entities"`
-    // The total number of non-compliant entities.
-    NonCompliantCount  *int64                                     `json:"non_compliant_count"`
-    // The number of entities with protection applied.
-    ProtectedCount     *int64                                     `json:"protected_count"`
-    // The number of entities without protection applied.
-    UnprotectedCount   *int64                                     `json:"unprotected_count"`
-}
-
-// ReadVMwareDatacenterStatsResponse represents a custom type struct for Success
-type ReadVMwareDatacenterStatsResponse struct {
-    // The ETag value.
-    Etag               *string                     `json:"_etag"`
-    // URLs to pages related to the resource.
-    Links              *VMwareDatacenterStatsLinks `json:"_links"`
-    // The total number of compliant entities.
-    CompliantCount     *int64                      `json:"compliant_count"`
-    // The total number of entities associated with deactivated policies.
-    DeactivatedCount   *int64                      `json:"deactivated_count"`
-    // Determines whether one or more entities is currently seeding or waiting for seeding.
-    // If set to `true`, at least one entity is currently seeding or waiting for seeding.
-    HasSeedingEntities *bool                       `json:"has_seeding_entities"`
-    // The total number of non-compliant entities.
-    NonCompliantCount  *int64                      `json:"non_compliant_count"`
-    // The number of entities with protection applied.
-    ProtectedCount     *int64                      `json:"protected_count"`
-    // The number of entities without protection applied.
-    UnprotectedCount   *int64                      `json:"unprotected_count"`
-}
-
-// ReadVMwareDatastoreResponse represents a custom type struct for Success
-type ReadVMwareDatastoreResponse struct {
-    // The ETag value.
-    Etag             *string                                `json:"_etag"`
-    // URLs to pages related to the resource.
-    Links            *VMwareDatastoreLinks                  `json:"_links"`
-    // TODO: Add struct field description
-    ComputeResources []*ComputeResourceIDModel              `json:"compute_resources"`
-    // The data center in which this datastore resides.
-    Datacenter       *VMwareVCenterDatastoreDatacenterModel `json:"datacenter"`
-    // VMwareVCenterDatastoreFolderModel
-    // The datastore folder in which this datastore resides.
-    DatastoreFolder  *VMwareVCenterDatastoreFolderModel     `json:"datastore_folder"`
-    // The file system format used for the datastore. Refer to the Supported Datastore Types section for a complete list of datastore types.
-    DatastoreType    *string                                `json:"datastore_type"`
-    // TODO: Add struct field description
-    Hosts            []*HostIDModel                         `json:"hosts"`
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the datastore.
-    Id               *string                                `json:"id"`
-    // Determines whether the datastore is shared across multiple hosts. If `true`, the datastore is a multi-host datastore.
-    IsMultiHost      *bool                                  `json:"is_multi_host"`
-    // Determines whether the datastore can be used as a restore destination. If `true`, the datastore can be used as a restore destination and backups can be restored to the datastore.
-    IsSupported      *bool                                  `json:"is_supported"`
-    // The VMware-assigned name of this datastore.
-    Name             *string                                `json:"name"`
-}
-
-// ReadVMwareFolderStatsResponse represents a custom type struct for Success
-type ReadVMwareFolderStatsResponse struct {
-    // The ETag value.
-    Etag               *string                 `json:"_etag"`
-    // URLs to pages related to the resource.
-    Links              *VMwareFolderStatsLinks `json:"_links"`
-    // The total number of compliant entities.
-    CompliantCount     *int64                  `json:"compliant_count"`
-    // The total number of entities associated with deactivated policies.
-    DeactivatedCount   *int64                  `json:"deactivated_count"`
-    // Determines whether one or more entities is currently seeding or waiting for seeding.
-    // If set to `true`, at least one entity is currently seeding or waiting for seeding.
-    HasSeedingEntities *bool                   `json:"has_seeding_entities"`
-    // The total number of non-compliant entities.
-    NonCompliantCount  *int64                  `json:"non_compliant_count"`
-    // The number of entities with protection applied.
-    ProtectedCount     *int64                  `json:"protected_count"`
-    // The number of entities without protection applied.
-    UnprotectedCount   *int64                  `json:"unprotected_count"`
-}
-
-// ReadVMwareTagStatsResponse represents a custom type struct for Success
-type ReadVMwareTagStatsResponse struct {
-    // The ETag value.
-    Etag               *string              `json:"_etag"`
-    // URLs to pages related to the resource.
-    Links              *VMwareTagStatsLinks `json:"_links"`
-    // The total number of compliant entities.
-    CompliantCount     *int64               `json:"compliant_count"`
-    // The total number of entities associated with deactivated policies.
-    DeactivatedCount   *int64               `json:"deactivated_count"`
-    // Determines whether one or more entities is currently seeding or waiting for seeding.
-    // If set to `true`, at least one entity is currently seeding or waiting for seeding.
-    HasSeedingEntities *bool                `json:"has_seeding_entities"`
-    // The total number of non-compliant entities.
-    NonCompliantCount  *int64               `json:"non_compliant_count"`
-    // The number of entities with protection applied.
-    ProtectedCount     *int64               `json:"protected_count"`
-    // The number of entities without protection applied.
-    UnprotectedCount   *int64               `json:"unprotected_count"`
-}
-
-// ReadVMwareVCenterNetworkResponse represents a custom type struct for Success
-type ReadVMwareVCenterNetworkResponse struct {
-    // The ETag value.
-    Etag          *string                              `json:"_etag"`
-    // URLs to pages related to the resource.
-    Links         *VMwareVCenterNetworkLinks           `json:"_links"`
-    // The data center associated with this network.
-    Datacenter    *VMwareVCenterNetworkDatacenterModel `json:"datacenter"`
-    // The VMware-assigned ID of this network.
-    Id            *string                              `json:"id"`
-    // Determines whether VMs can be connected to the network. If `true`, VMs can be connected to the network.
-    IsSupported   *bool                                `json:"is_supported"`
-    // The name of this network.
-    Name          *string                              `json:"name"`
-    // The network folder associated with this network.
-    NetworkFolder *VMwareVCenterNetworkFolderModel     `json:"network_folder"`
-}
-
-// ReadVMwareVCenterProtectionStatsResponse represents a custom type struct for Success
-type ReadVMwareVCenterProtectionStatsResponse struct {
-    // URLs to pages related to the resource.
-    Links              *ReadVMwareVCenterProtectionStatsLinks `json:"_links"`
-    // The total number of compliant entities.
-    CompliantCount     *int64                                 `json:"compliant_count"`
-    // The total number of entities associated with deactivated policies.
-    DeactivatedCount   *int64                                 `json:"deactivated_count"`
-    // Determines whether one or more entities is currently seeding or waiting for seeding.
-    // If set to `true`, at least one entity is currently seeding or waiting for seeding.
-    HasSeedingEntities *bool                                  `json:"has_seeding_entities"`
-    // The total number of non-compliant entities.
-    NonCompliantCount  *int64                                 `json:"non_compliant_count"`
-    // The number of entities with protection applied.
-    ProtectedCount     *int64                                 `json:"protected_count"`
-    // The number of entities without protection applied.
-    UnprotectedCount   *int64                                 `json:"unprotected_count"`
-}
-
-// ReadVcenterResponse represents a custom type struct for Success
-type ReadVcenterResponse struct {
-    // Embedded responses related to the resource.
-    Embedded                  *VcenterEmbedded `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links                     *VcenterLinks    `json:"_links"`
-    // The region to which data is backed-up to for the vCenter server. If the vCenter server's back up region is unavailable, this field has a value of `unavailable`. Refer to the Back up Regions table for a complete list of back up regions.
-    BackupRegion              *string          `json:"backup_region"`
-    // The URL at which the Clumio Cloud Connector for this vCenter server can be downloaded.
-    CloudConnectorDownloadUrl *string          `json:"cloud_connector_download_url"`
-    // The IP address or FQDN of the vCenter server.
-    Endpoint                  *string          `json:"endpoint"`
-    // The Clumio-assigned ID of the vCenter server.
-    Id                        *string          `json:"id"`
-    // The IP address or FQDN of the vCenter server.
-    // This field has been replaced by the `endpoint` field
-    // and is being retained for backward compatibility reasons.
-    IpAddress                 *string          `json:"ip_address"`
-    // The Clumio-assigned ID of the organizational unit associated with the vCenter.
-    OrganizationalUnitId      *string          `json:"organizational_unit_id"`
-    // The connection status of the Clumio Cloud Connector. Examples include "pending", "connected", "disconnected", "invalid_credentials", "partial", and "unavailable".
-    Status                    *string          `json:"status"`
-    // The type of vCenter server. If the vCenter server's type is unavailable, this field has a value of `unavailable`. Refer to the vCenter Types table for a complete list of vCenter types.
-    ClumioType                *string          `json:"type"`
-    // The token given to the Clumio Cloud Connectors to identify the vCenter server.
-    VcenterToken              *string          `json:"vcenter_token"`
-}
-
-// ReadVmResponse represents a custom type struct for Success
-type ReadVmResponse struct {
-    // Embedded responses related to the resource.
-    Embedded              *VmEmbedded                   `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links                 *VmLinks                      `json:"_links"`
-    // [DEPRECATED]
-    // The policy compliance status of the resource. If the VM is deleted or unprotected, then this field has a value of `null`. Refer to the Compliance Status table for a complete list of compliance statuses.
-    ComplianceStatus      *string                       `json:"compliance_status"`
-    // The compute resource from which the VM draws. If the VM is deleted, then `compute_resource.id` has a value of `null`.
-    ComputeResource       *VMComputeResourceModel       `json:"compute_resource"`
-    // The compute resource folder associated with this VM. If the VM is deleted, then this field has a value of `null`.
-    ComputeResourceFolder *VMComputeResourceFolderModel `json:"compute_resource_folder"`
-    // The data center in which the VM resides. If the VM is deleted, then `datacenter.id` has a value of `null`.
-    Datacenter            *VMDatacenterModel            `json:"datacenter"`
-    // The data center folder associated with this VM. If the VM is deleted, then this field has a value of `null`.
-    DatacenterFolder      *VMDatacenterFolderModel      `json:"datacenter_folder"`
-    // The host on which the VM resides. If the VM is deleted, then `host.id` and `host.is_standalone` have values of `null`. The `host.name` field may also have a value of `null`.
-    Host                  *VMHostModel                  `json:"host"`
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the VM.
-    // VMs from different vCenters may have the same VMware-assigned ID.
-    Id                    *string                       `json:"id"`
-    // Determines whether the VM is deleted. If `true`, the VM is deleted.
-    IsDeleted             *bool                         `json:"is_deleted"`
-    // Determines whether the VM is supported for backups. If `true`, the VM is supported for backups.
-    IsSupported           *bool                         `json:"is_supported"`
-    // The timestamp of when the VM was last
-    // backed up. If this VM has not been backed up, then this field has a value of `null`.
-    LastBackupTimestamp   *string                       `json:"last_backup_timestamp"`
-    // The name of the virtual machine.
-    Name                  *string                       `json:"name"`
-    // The network interface card (NIC) attached to the VM.
-    Nics                  []*VMNicModel                 `json:"nics"`
-    // The Clumio-assigned ID of the organizational unit associated with the VM.
-    OrganizationalUnitId  *string                       `json:"organizational_unit_id"`
-    // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
-    ProtectionInfo        *ProtectionInfo               `json:"protection_info"`
-    // The protection status of the resource. If the VM has been deleted, then this field has a value of `null`. Refer to the Protection Status table for a complete list of protection statuses.
-    ProtectionStatus      *string                       `json:"protection_status"`
-    // The resource pool from which the VM draws. If the VM is deleted, then `resource_pool.id` and `resource_pool.is_root` have values of `null`.
-    ResourcePool          *VMResourcePoolModel          `json:"resource_pool"`
-    // VMTagWithCategoryModel
-    // A tag associated with the VM.
-    Tags                  []*VMTagWithCategoryModel     `json:"tags"`
-    // The reason why the VM cannot be supported. If the VM is supported, then this field has a value of `null`.
-    UnsupportedReason     *string                       `json:"unsupported_reason"`
-    // The Clumio-assigned ID of the VM.
-    // Use this parameter in the [GET /backups/files/search](#operation/list-files) endpoint
-    // to search for files in backups of this VM.
-    Uuid                  *string                       `json:"uuid"`
-    // The VM folder containing the VM. If the VM is deleted, then `vm_folder.id` has a value of `null`.
-    VmFolder              *VMFolderModel                `json:"vm_folder"`
 }
 
 // ReadWalletResponse represents a custom type struct for Success
@@ -5696,13 +4806,15 @@ type RestoreRecordsResponseSync struct {
     PreviewResult *DynamoDBQueryPreviewResult `json:"preview_result"`
 }
 
-// RestoreVMwareVMResponse represents a custom type struct for Success
-type RestoreVMwareVMResponse struct {
+// RestoreS3BucketResponse represents a custom type struct for Success
+type RestoreS3BucketResponse struct {
     // Embedded responses related to the resource.
     Embedded *ReadTaskHateoasOuterEmbedded `json:"_embedded"`
     // URLs to pages related to the resource.
-    Links    *ReadTaskHateoasLinks         `json:"_links"`
-    // The Clumio-assigned ID of the task created by this restore request. The progress of the task can be monitored using the `GET /tasks/{task_id}` endpoint.
+    Links    *RestoreS3BucketLinks         `json:"_links"`
+    // The Clumio-assigned ID of the task created by this restore request.
+    // The progress of the task can be monitored using the
+    // `GET /tasks/{task_id}` endpoint.
     TaskId   *string                       `json:"task_id"`
 }
 
@@ -5802,8 +4914,11 @@ type UpdateAWSConnectionResponse struct {
     // value of `null`.
     Protect                    *ProtectConfig           `json:"protect"`
     // The asset types enabled for protect.
-    // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
-    // NOTE - EBS is required for EC2MSSQL.
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS"].
+    // 
+    // NOTE -
+    // 1. EC2/EBS is required for EC2MSSQL.
+    // 2. EBS as a value is deprecated in favor of EC2/EBS.
     ProtectAssetTypesEnabled   []*string                `json:"protect_asset_types_enabled"`
     // TODO: Add struct field description
     Resources                  *ConnectionResourcesResp `json:"resources"`
@@ -5855,7 +4970,7 @@ type UpdateAlertResponse struct {
     Notes               *string                 `json:"notes"`
     // The parent object of the primary entity associated with or affected by the alert. For example, "aws_environment" is the parent entity of primary entity "aws_ebs_volume".
     ParentEntity        *AlertParentEntity      `json:"parent_entity"`
-    // The primary object associated with or affected by the alert. Examples of primary entities include "aws_connection", "aws_ebs_volume" and "vmware_vm".
+    // The primary object associated with or affected by the alert. Examples of primary entities include "aws_connection", "aws_ebs_volume".
     PrimaryEntity       *AlertPrimaryEntity     `json:"primary_entity"`
     // The number of times the alert has recurred for this primary entity.
     RaisedCount         *uint64                 `json:"raised_count"`
@@ -5965,7 +5080,11 @@ type UpdateConnectionGroupResponse struct {
     // The AWS-assigned IDs of the accounts associated with the Connection Group.
     AccountNativeIds         []*string             `json:"account_native_ids"`
     // List of asset types connected via the connection-group.
-    // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS"].
+    // 
+    // NOTE -
+    // 1. EC2/EBS is required for EC2MSSQL.
+    // 2. EBS as a value is deprecated in favor of EC2/EBS.
     AssetTypesEnabled        []*string             `json:"asset_types_enabled"`
     // The AWS regions associated with the with the Connection Group.
     AwsRegions               []*string             `json:"aws_regions"`
@@ -6125,32 +5244,132 @@ type UpdateProtectionGroupResponse struct {
     // The following table describes the possible conditions for a bucket to be
     // automatically added to a protection group.
     // 
-    // +-------------------+----------------+-----------------------------------------+
-    // |       Field       | Rule Condition |               Description               |
-    // +===================+================+=========================================+
-    // | aws_tag           | $eq            | Denotes the AWS tag(s) to               |
-    // |                   |                | conditionalize on                       |
-    // |                   |                |                                         |
-    // |                   |                | {"aws_tag":{"$eq":{"key":"Environment", |
-    // |                   |                | "value":"Prod"}}}                       |
-    // |                   |                |                                         |
-    // |                   |                |                                         |
-    // +-------------------+----------------+-----------------------------------------+
-    // | account_native_id | $eq            | Denotes the AWS account to              |
-    // |                   |                | conditionalize on                       |
-    // |                   |                |                                         |
-    // |                   |                | {"account_native_id":{"$eq":"1111111111 |
-    // |                   |                | 11"}}                                   |
-    // |                   |                |                                         |
-    // |                   |                |                                         |
-    // +-------------------+----------------+-----------------------------------------+
-    // | aws_region        | $eq            | Denotes the AWS region to               |
-    // |                   |                | conditionalize on                       |
-    // |                   |                |                                         |
-    // |                   |                | {"aws_region":{"$eq":"us-west-2"}}      |
-    // |                   |                |                                         |
-    // |                   |                |                                         |
-    // +-------------------+----------------+-----------------------------------------+
+    // +-----------------------+----------------+-------------------------------------+
+    // |         Field         | Rule Condition |             Description             |
+    // +=======================+================+=====================================+
+    // | aws_tag               | $eq            | Denotes the AWS tag(s) to be        |
+    // |                       |                | exactly equal to the specified      |
+    // |                       |                | value.                              |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$eq":{"key":"Environme |
+    // |                       |                | nt", "value":"Prod"}}}              |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_tag               | $not_eq        | Denotes the AWS tag(s) to be not    |
+    // |                       |                | equal to the specified value.       |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$not_eq":{"key":"Envir |
+    // |                       |                | onment", "value":"Prod"}}}          |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_tag               | $contains      | Denotes the AWS tag(s) contain a    |
+    // |                       |                | specified substring.                |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$contains":{"key":"Env |
+    // |                       |                | ironment", "value":"Prod"}}}        |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_tag               | $not_contains  | Denotes the AWS tag(s) excludes a   |
+    // |                       |                | specified substring.                |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$not_contains":{"key": |
+    // |                       |                | "Environment", "value":"Prod"}}}    |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_tag               | $all           | Denotes the AWS tag(s) where all    |
+    // |                       |                | elements in the specified list are  |
+    // |                       |                | present.                            |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$all":[{"key":"Environ |
+    // |                       |                | ment", "value":"Prod"}]}}           |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_tag               | $not_all       | Denotes the AWS tag(s) where at     |
+    // |                       |                | least one element from the          |
+    // |                       |                | specified list is missing.          |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$not_all":[{"key":"Env |
+    // |                       |                | ironment", "value":"Prod"}]}}       |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_tag               | $in            | Denotes the AWS tag(s) exist in a   |
+    // |                       |                | specified list.                     |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$in":[{"key":"Environm |
+    // |                       |                | ent", "value":"Prod"}]}}            |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_tag               | $not_in        | Denotes the AWS tag(s) do not exist |
+    // |                       |                | in a specified list.                |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$not_in":[{"key":"Envi |
+    // |                       |                | ronment", "value":"Prod"}]}}        |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_account_native_id | $eq            | Denotes the AWS account to be       |
+    // |                       |                | exactly equal to the specified      |
+    // |                       |                | value.                              |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_account_native_id":{"$eq":"11 |
+    // |                       |                | 1111111111"}}                       |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_account_native_id | $in            | Denotes the AWS account exist in a  |
+    // |                       |                | specified list.                     |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_account_native_id":{"$in":["1 |
+    // |                       |                | 11111111111"]}}                     |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | account_native_id     | $in            |                                     |
+    // |                       |                | This will be deprecated and use     |
+    // |                       |                | aws_account_native_id instead.      |
+    // |                       |                | Denotes the AWS account exist in a  |
+    // |                       |                | specified list.                     |
+    // |                       |                |                                     |
+    // |                       |                | {"account_native_id":{"$in":["11111 |
+    // |                       |                | 1111111"]}}                         |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | account_native_id     | $eq            |                                     |
+    // |                       |                | This will be deprecated and use     |
+    // |                       |                | aws_account_native_id instead.      |
+    // |                       |                | Denotes the AWS account to be       |
+    // |                       |                | exactly equal to the specified      |
+    // |                       |                | value.                              |
+    // |                       |                |                                     |
+    // |                       |                | {"account_native_id":{"$eq":"111111 |
+    // |                       |                | 111111"}}                           |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_region            | $eq            | Denotes the AWS region to be        |
+    // |                       |                | exactly equal to the specified      |
+    // |                       |                | value.                              |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_region":{"$eq":"us-west-2"}}  |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_region            | $in            | Denotes the AWS region exist in a   |
+    // |                       |                | specified list.                     |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_region":{"$in":["us-          |
+    // |                       |                | west-2"]}}                          |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
     // 
     BucketRule                     *string                      `json:"bucket_rule"`
     // Creation time of the protection group in RFC-3339 format.
@@ -6307,8 +5526,7 @@ type UpdateTaskResponse struct {
     Id                 *string            `json:"id"`
     // Determines whether or not this task can be aborted.
     // A task can be aborted if its status is either "queued" or "in_progress".
-    // Tasks of certain types including
-    // "vmware_vm_backup_indexing" and "aws_ebs_volume_backup_indexing" cannot be aborted.
+    // Tasks of certain types including "aws_ebs_volume_backup_indexing" cannot be aborted.
     IsAbortable        *bool              `json:"is_abortable"`
     // The parent entity associated with the task.
     ParentEntity       *TaskParentEntity  `json:"parent_entity"`

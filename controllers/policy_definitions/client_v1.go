@@ -17,8 +17,6 @@ type PolicyDefinitionsV1Client interface {
     //  +----------------------------------+-------------------------------------------+
     //  |            Operation             |                Description                |
     //  +==================================+===========================================+
-    //  | vmware_vm_backup                 | VMware VM backup.                         |
-    //  +----------------------------------+-------------------------------------------+
     //  | aws_ebs_volume_backup            | AWS EBS volume backup.                    |
     //  +----------------------------------+-------------------------------------------+
     //  | aws_ebs_volume_snapshot          | AWS EBS volume snapshot stored in         |
@@ -56,11 +54,6 @@ type PolicyDefinitionsV1Client interface {
     //  +----------------------------------+-------------------------------------------+
     //  | microsoft365_teams_backup        | Microsoft365 team backup.                 |
     //  +----------------------------------+-------------------------------------------+
-    //  | mssql_database_backup            | VMC MSSQL database backup stored in       |
-    //  |                                  | Clumio.                                   |
-    //  +----------------------------------+-------------------------------------------+
-    //  | mssql_log_backup                 | VMC MSSQL log backup stored in Clumio.    |
-    //  +----------------------------------+-------------------------------------------+
     //  
     //  
     //  The following table describes the supported policy activation statuses.
@@ -74,7 +67,7 @@ type PolicyDefinitionsV1Client interface {
     //  | deactivated       |                                                          |
     //  |                   | Backups will not begin until the policy is reactivated.  |
     //  |                   | The assets associated with the policy will have their    |
-    //  |                   | compliance status set to "deactivated".                  |
+    //  |                   | protection status set to "deactivated".                  |
     //  |                   |                                                          |
     //  +-------------------+----------------------------------------------------------+
     //  
@@ -94,7 +87,7 @@ type PolicyDefinitionsV1Client interface {
         embed *string)(
         *models.ReadPolicyResponse,  *apiutils.APIError)
     
-    // UpdatePolicyDefinition Updates an existing policy by modifying its backup seed setting, backup service level agreement (SLA), and backup window. If a policy is updated while a backup is in progress, the policy changes will take effect after the backup completes.
+    // UpdatePolicyDefinition Updates an existing policy by modifying its backup seed setting, backup service level agreement (SLA), and backup window. The policy is updated asynchronously, and the response will include the existing policy. If a policy is updated while a backup is in progress, the policy changes will take effect after the backup is completed.
     UpdatePolicyDefinition(
         policyId string, 
         embed *string, 

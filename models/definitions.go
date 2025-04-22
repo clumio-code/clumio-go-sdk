@@ -59,8 +59,11 @@ type AWSConnection struct {
     // value of `null`.
     Protect                    *ProtectConfig           `json:"protect"`
     // The asset types enabled for protect.
-    // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
-    // NOTE - EBS is required for EC2MSSQL.
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS"].
+    // 
+    // NOTE -
+    // 1. EC2/EBS is required for EC2MSSQL.
+    // 2. EBS as a value is deprecated in favor of EC2/EBS.
     ProtectAssetTypesEnabled   []*string                `json:"protect_asset_types_enabled"`
     // TODO: Add struct field description
     Resources                  *ConnectionResourcesResp `json:"resources"`
@@ -168,10 +171,8 @@ type AWSEnvironment struct {
 // AWSEnvironmentEmbedded represents a custom type struct.
 // Embedded responses related to the resource.
 type AWSEnvironmentEmbedded struct {
-    // TODO: Add struct field description
-    ReadAwsEnvironmentEbsVolumesComplianceStats interface{} `json:"read-aws-environment-ebs-volumes-compliance-stats"`
     // Backup statistics for each AWS environment.
-    ReadAwsEnvironmentsBackupStatusStats        interface{} `json:"read-aws-environments-backup-status-stats"`
+    ReadAwsEnvironmentsBackupStatusStats interface{} `json:"read-aws-environments-backup-status-stats"`
 }
 
 // AWSEnvironmentLinks represents a custom type struct.
@@ -247,21 +248,21 @@ type AlertParentEntity struct {
     // A system-generated ID assigned to this entity.
     Id         *string `json:"id"`
     // Type is mostly an asset type or the type of Entity. Some examples are
-    // "restored_file", "vmware_vm",  etc.
+    // "restored_file", "aws_ebs_volume",  etc.
     ClumioType *string `json:"type"`
-    // A system-generated value assigned to the entity. For example, if the primary entity type is "vmware_vm" for a virtual machine, then the value is the name of the VM.
+    // A system-generated value assigned to the entity. For example, if the primary entity type is "aws_ebs_volume", then the value is the name of the EBS.
     Value      *string `json:"value"`
 }
 
 // AlertPrimaryEntity represents a custom type struct.
-// The primary object associated with or affected by the alert. Examples of primary entities include "aws_connection", "aws_ebs_volume" and "vmware_vm".
+// The primary object associated with or affected by the alert. Examples of primary entities include "aws_connection", "aws_ebs_volume".
 type AlertPrimaryEntity struct {
     // A system-generated ID assigned to this entity.
     Id         *string `json:"id"`
     // Type is mostly an asset type or the type of Entity. Some examples are
-    // "restored_file", "vmware_vm",  etc.
+    // "restored_file", "aws_ebs_volume",  etc.
     ClumioType *string `json:"type"`
-    // A system-generated value assigned to the entity. For example, if the primary entity type is "vmware_vm" for a virtual machine, then the value is the name of the VM.
+    // A system-generated value assigned to the entity. For example, if the primary entity type is "aws_ebs_volume", then the value is the name of the EBS.
     Value      *string `json:"value"`
 }
 
@@ -300,18 +301,6 @@ type AmiModel struct {
     SriovNetSupport          *string `json:"sriov_net_support"`
     // The type of virtualization of the AMI. Possible values include 'hvm' and 'paravirtual.'
     VirtualizationType       *string `json:"virtualization_type"`
-}
-
-// AncestorRefModel represents a custom type struct
-type AncestorRefModel struct {
-    // A VMware-assigned ID for this ancestor.
-    Id         *string `json:"id"`
-    // Determines whether this ancestor is a hidden root object. If `true`, this ancestor is a hidden root object.
-    IsRoot     *bool   `json:"is_root"`
-    // The name of the ancestor.
-    Name       *string `json:"name"`
-    // The type of vCenter object that this ancestor represents. For example, a data center can be an ancestor of a data center folder.
-    ClumioType *string `json:"type"`
 }
 
 // AssignPolicyAction represents a custom type struct.
@@ -529,11 +518,9 @@ type AuditTrails struct {
     // The IP address from which the activity was requested.
     IpAddress       *string             `json:"ip_address"`
     // The parent object of the primary entity associated with or affected by the audit.
-    // If the primary entity is not a vmware entity, this field will have a value of null
-    // For example, "vmware_vcenter" is the parent entity of primary entity "vmware_vm".
     ParentEntity    *AuditParentEntity  `json:"parent_entity"`
     // The primary object associated with the audit event. Examples of primary entities
-    // include "aws_connection", "aws_ebs_volume" and "vmware_vm". In some cases like
+    // include "aws_connection", "aws_ebs_volume" and "aws_ec2_instance". In some cases like
     // global settings, the primary entity may be null.
     PrimaryEntity   *AuditPrimaryEntity `json:"primary_entity"`
     // The status of the performed action. 'success', 'failure', 'partial_success'
@@ -546,29 +533,27 @@ type AuditTrails struct {
 
 // AuditParentEntity represents a custom type struct.
 // The parent object of the primary entity associated with or affected by the audit.
-// If the primary entity is not a vmware entity, this field will have a value of null
-// For example, "vmware_vcenter" is the parent entity of primary entity "vmware_vm".
 type AuditParentEntity struct {
     // A system-generated ID assigned to this entity.
     Id         *string `json:"id"`
     // Type is mostly an asset type or the type of Entity. Some examples are
-    // "restored_file", "vmware_vm",  etc.
+    // "restored_file", "aws_ebs_volume",  etc.
     ClumioType *string `json:"type"`
-    // A system-generated value assigned to the entity. For example, if the primary entity type is "vmware_vm" for a virtual machine, then the value is the name of the VM.
+    // A system-generated value assigned to the entity. For example, if the primary entity type is "aws_ebs_volume", then the value is the name of the EBS.
     Value      *string `json:"value"`
 }
 
 // AuditPrimaryEntity represents a custom type struct.
 // The primary object associated with the audit event. Examples of primary entities
-// include "aws_connection", "aws_ebs_volume" and "vmware_vm". In some cases like
+// include "aws_connection", "aws_ebs_volume" and "aws_ec2_instance". In some cases like
 // global settings, the primary entity may be null.
 type AuditPrimaryEntity struct {
     // A system-generated ID assigned to this entity.
     Id         *string `json:"id"`
     // Type is mostly an asset type or the type of Entity. Some examples are
-    // "restored_file", "vmware_vm",  etc.
+    // "restored_file", "aws_ebs_volume",  etc.
     ClumioType *string `json:"type"`
-    // A system-generated value assigned to the entity. For example, if the primary entity type is "vmware_vm" for a virtual machine, then the value is the name of the VM.
+    // A system-generated value assigned to the entity. For example, if the primary entity type is "aws_ebs_volume", then the value is the name of the EBS.
     Value      *string `json:"value"`
 }
 
@@ -767,7 +752,7 @@ type AwsTagEmbedded struct {
     // Backup statistics for each tag.
     ReadAwsEnvironmentTagBackupStatusStats         interface{} `json:"read-aws-environment-tag-backup-status-stats"`
     // TODO: Add struct field description
-    ReadAwsEnvironmentTagEbsVolumesComplianceStats interface{} `json:"read-aws-environment-tag-ebs-volumes-compliance-stats"`
+    ReadAwsEnvironmentTagEbsVolumesProtectionStats interface{} `json:"read-aws-environment-tag-ebs-volumes-protection-stats"`
     // Embeds the associated policy of a protected resource in the response if requested using the `embed` query parameter. Unprotected resources will not have an associated policy.
     ReadPolicyDefinition                           interface{} `json:"read-policy-definition"`
 }
@@ -780,7 +765,7 @@ type AwsTagLinks struct {
     // A HATEOAS link to protect the entities.
     ProtectEntities                                *ProtectEntitiesHateoasLink      `json:"protect-entities"`
     // A resource-specific HATEOAS link.
-    ReadAwsEnvironmentTagEbsVolumesComplianceStats *HateoasLink                     `json:"read-aws-environment-tag-ebs-volumes-compliance-stats"`
+    ReadAwsEnvironmentTagEbsVolumesProtectionStats *HateoasLink                     `json:"read-aws-environment-tag-ebs-volumes-protection-stats"`
     // A HATEOAS link to the policy protecting this resource. Will be omitted for unprotected entities.
     ReadPolicyDefinition                           *ReadPolicyDefinitionHateoasLink `json:"read-policy-definition"`
     // A HATEOAS link to unprotect the entities.
@@ -914,6 +899,8 @@ type Bucket struct {
     IsReplicationEnabled          *bool                                         `json:"is_replication_enabled"`
     // The Versioning enablement state for the S3 bucket.
     IsVersioningEnabled           *bool                                         `json:"is_versioning_enabled"`
+    // Time of the last S3 Backtrack sync in RFC-3339 format.
+    LastBacktrackSyncTimestamp    *string                                       `json:"last_backtrack_sync_timestamp"`
     // Time of the last backup in RFC-3339 format.
     LastBackupTimestamp           *string                                       `json:"last_backup_timestamp"`
     // Time of the last continuous backup in RFC-3339 format.
@@ -979,15 +966,6 @@ type CategorisedResources struct {
     SsmDocuments map[string]*ClumioSsmDocumentResource `json:"ssm_documents"`
     // Details for the SNS Topic
     Topics       map[string]*ClumioTopicResource       `json:"topics"`
-}
-
-// CloudConnectorCountByStatus represents a custom type struct.
-// The number of cloud connectors in this subgroup, aggregated by their status.
-type CloudConnectorCountByStatus struct {
-    // The number of degraded cloud connectors in this subgroup.
-    Degraded *int64 `json:"degraded"`
-    // The number of healthy cloud connectors in this subgroup.
-    Healthy  *int64 `json:"healthy"`
 }
 
 // ClumioRoleResource represents a custom type struct.
@@ -1075,55 +1053,6 @@ type ClumioTopicResource struct {
     Steps    *string          `json:"steps"`
 }
 
-// ComplianceStatsDeprecated represents a custom type struct.
-// ComplianceStatsDeprecated denotes compliance metrics for all entities associated with a given type
-type ComplianceStatsDeprecated struct {
-    // Compliant count.
-    Compliant      *uint32 `json:"COMPLIANT"`
-    // Deactivated count.
-    Deactivated    *uint32 `json:"DEACTIVATED"`
-    // Non-Compliant count.
-    NonCompliant   *uint32 `json:"NON_COMPLIANT"`
-    // Seeding count.
-    Seeding        *uint32 `json:"SEEDING"`
-    // Wait-for-seeding count.
-    WaitForSeeding *uint32 `json:"WAIT_FOR_SEEDING"`
-}
-
-// ComputeResourceEmbedded represents a custom type struct.
-// Embedded responses related to the resource.
-type ComputeResourceEmbedded struct {
-    // Embeds the associated policy of a protected resource in the response if requested using the `embed` query parameter. Unprotected resources will not have an associated policy.
-    ReadPolicyDefinition                            interface{} `json:"read-policy-definition"`
-    // Embeds the compliance statistics of VMs into each vCenter resource in the response, if requested using the `_embed` query parameter.
-    ReadVmwareVcenterComputeResourceComplianceStats interface{} `json:"read-vmware-vcenter-compute-resource-compliance-stats"`
-    // TODO: Add struct field description
-    ReadVmwareVcenterComputeResourceConnectionStats interface{} `json:"read-vmware-vcenter-compute-resource-connection-stats"`
-}
-
-// ComputeResourceIDModel represents a custom type struct
-type ComputeResourceIDModel struct {
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the compute resource.
-    Id *string `json:"id"`
-}
-
-// ComputeResourceLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type ComputeResourceLinks struct {
-    // The HATEOAS link to this resource.
-    Self                                            *HateoasSelfLink                             `json:"_self"`
-    // A HATEOAS link to protect the entities.
-    ProtectEntities                                 *ProtectEntitiesHateoasLink                  `json:"protect-entities"`
-    // A HATEOAS link to the policy protecting this resource. Will be omitted for unprotected entities.
-    ReadPolicyDefinition                            *ReadPolicyDefinitionHateoasLink             `json:"read-policy-definition"`
-    // A HATEOAS link to the compliance statistics of VMs in the folders and subfolders of this vCenter resource.
-    ReadVmwareVcenterComputeResourceComplianceStats *ReadVCenterObjectProtectionStatsHateoasLink `json:"read-vmware-vcenter-compute-resource-compliance-stats"`
-    // A resource-specific HATEOAS link.
-    ReadVmwareVcenterComputeResourceConnectionStats *HateoasLink                                 `json:"read-vmware-vcenter-compute-resource-connection-stats"`
-    // A HATEOAS link to unprotect the entities.
-    UnprotectEntities                               *UnprotectEntitiesHateoasLink                `json:"unprotect-entities"`
-}
-
 // ConnectionGroupLinks represents a custom type struct.
 // URLs to pages related to the resource.
 type ConnectionGroupLinks struct {
@@ -1161,7 +1090,11 @@ type ConnectionGroupWithETag struct {
     // The AWS-assigned IDs of the accounts associated with the Connection Group.
     AccountNativeIds         []*string             `json:"account_native_ids"`
     // List of asset types connected via the connection-group.
-    // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS"].
+    // 
+    // NOTE -
+    // 1. EC2/EBS is required for EC2MSSQL.
+    // 2. EBS as a value is deprecated in favor of EC2/EBS.
     AssetTypesEnabled        []*string             `json:"asset_types_enabled"`
     // The AWS regions associated with the with the Connection Group.
     AwsRegions               []*string             `json:"aws_regions"`
@@ -1294,9 +1227,9 @@ type ConsolidatedAlertParentEntity struct {
     // A system-generated ID assigned to this entity.
     Id         *string `json:"id"`
     // Type is mostly an asset type or the type of Entity. Some examples are
-    // "restored_file", "vmware_vm",  etc.
+    // "restored_file", "aws_ebs_volume",  etc.
     ClumioType *string `json:"type"`
-    // A system-generated value assigned to the entity. For example, if the primary entity type is "vmware_vm" for a virtual machine, then the value is the name of the VM.
+    // A system-generated value assigned to the entity. For example, if the primary entity type is "aws_ebs_volume", then the value is the name of the EBS.
     Value      *string `json:"value"`
 }
 
@@ -1351,9 +1284,15 @@ type ConsolidatedConfig struct {
     // EbsAssetInfo
     // The installed information for the EBS feature.
     Ebs                      *EbsAssetInfo          `json:"ebs"`
+    // Ec2AssetInfo
+    // The installed information for the EC2 feature.
+    Ec2                      *Ec2AssetInfo          `json:"ec2"`
     // EC2MSSQLProtectConfig
     // The installed information for the EC2_MSSQL feature.
     Ec2Mssql                 *EC2MSSQLProtectConfig `json:"ec2_mssql"`
+    // IcebergAssetInfo
+    // The installed information for the Iceberg feature.
+    Iceberg                  *IcebergAssetInfo      `json:"iceberg"`
     // The current version of the feature.
     InstalledTemplateVersion *string                `json:"installed_template_version"`
     // RdsAssetInfo
@@ -1378,15 +1317,6 @@ type CreateEC2MSSQLDatabaseRestoreResponseLinks struct {
 // CreateOnDemandEC2MSSQLDatabaseBackupResponseLinks represents a custom type struct.
 // URLs to pages related to the resource.
 type CreateOnDemandEC2MSSQLDatabaseBackupResponseLinks struct {
-    // The HATEOAS link to this resource.
-    Self     *HateoasSelfLink     `json:"_self"`
-    // A HATEOAS link to the task associated with this resource.
-    ReadTask *ReadTaskHateoasLink `json:"read-task"`
-}
-
-// CreateOnDemandMSSQLDatabaseBackupResponseLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type CreateOnDemandMSSQLDatabaseBackupResponseLinks struct {
     // The HATEOAS link to this resource.
     Self     *HateoasSelfLink     `json:"_self"`
     // A HATEOAS link to the task associated with this resource.
@@ -1450,109 +1380,6 @@ type DataAccessObject struct {
     // restored file was shared by direct download (and not email), then this field has a
     // value of `null`.
     Email          *EmailDownloadDataAccessObject  `json:"email"`
-}
-
-// DatabaseLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type DatabaseLinks struct {
-    // The HATEOAS link to this resource.
-    Self                      *HateoasSelfLink `json:"_self"`
-    // A resource-specific HATEOAS link.
-    CreateBackupMssqlDatabase *HateoasLink     `json:"create-backup-mssql-database"`
-    // A resource-specific HATEOAS link.
-    ListBackupMssqlDatabases  *HateoasLink     `json:"list-backup-mssql-databases"`
-    // A resource-specific HATEOAS link.
-    ReadManagementGroup       *HateoasLink     `json:"read-management-group"`
-    // A resource-specific HATEOAS link.
-    ReadManagementSubgroup    *HateoasLink     `json:"read-management-subgroup"`
-}
-
-// DatacenterEmbedded represents a custom type struct.
-// Embedded responses related to the resource.
-type DatacenterEmbedded struct {
-    // Embeds the associated policy of a protected resource in the response if requested using the `embed` query parameter. Unprotected resources will not have an associated policy.
-    ReadPolicyDefinition                       interface{} `json:"read-policy-definition"`
-    // Embeds the compliance statistics of VMs into each vCenter resource in the response, if requested using the `_embed` query parameter.
-    ReadVmwareVcenterDatacenterComplianceStats interface{} `json:"read-vmware-vcenter-datacenter-compliance-stats"`
-}
-
-// DatacenterLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type DatacenterLinks struct {
-    // The HATEOAS link to this resource.
-    Self                                       *HateoasSelfLink                             `json:"_self"`
-    // A HATEOAS link to protect the entities.
-    ProtectEntities                            *ProtectEntitiesHateoasLink                  `json:"protect-entities"`
-    // A HATEOAS link to the policy protecting this resource. Will be omitted for unprotected entities.
-    ReadPolicyDefinition                       *ReadPolicyDefinitionHateoasLink             `json:"read-policy-definition"`
-    // A HATEOAS link to the compliance statistics of VMs in the folders and subfolders of this vCenter resource.
-    ReadVmwareVcenterDatacenterComplianceStats *ReadVCenterObjectProtectionStatsHateoasLink `json:"read-vmware-vcenter-datacenter-compliance-stats"`
-    // A HATEOAS link to unprotect the entities.
-    UnprotectEntities                          *UnprotectEntitiesHateoasLink                `json:"unprotect-entities"`
-}
-
-// DatacenterListEmbedded represents a custom type struct.
-// Embedded responses related to the resource.
-type DatacenterListEmbedded struct {
-    // DatacenterWithETag to support etag string to be calculated
-    Items []*DatacenterWithETag `json:"items"`
-}
-
-// DatacenterListLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type DatacenterListLinks struct {
-    // The HATEOAS link to the first page of results.
-    First *HateoasFirstLink `json:"_first"`
-    // The HATEOAS link to the last page of results.
-    Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
-    Next  *HateoasNextLink  `json:"_next"`
-    // The HATEOAS link to the previous page of results.
-    Prev  *HateoasPrevLink  `json:"_prev"`
-    // The HATEOAS link to this resource.
-    Self  *HateoasSelfLink  `json:"_self"`
-}
-
-// DatacenterWithETag represents a custom type struct.
-// DatacenterWithETag to support etag string to be calculated
-type DatacenterWithETag struct {
-    // Embedded responses related to the resource.
-    Embedded                  *DatacenterEmbedded                     `json:"_embedded"`
-    // The ETag value.
-    Etag                      *string                                 `json:"_etag"`
-    // URLs to pages related to the resource.
-    Links                     *DatacenterLinks                        `json:"_links"`
-    // TODO: Add struct field description
-    AncestorRefs              []*AncestorRefModel                     `json:"ancestor_refs"`
-    // The data center folder in which the data center resides.
-    DatacenterFolder          *VMwareDatacenterFolderIDModel          `json:"datacenter_folder"`
-    // Determines whether compute resources exist directly under the hidden root compute resource folder. If `true`, then compute resources exist directly under the root compute resource folder.
-    HasComputeResources       *bool                                   `json:"has_compute_resources"`
-    // Determines whether VMs exist directly under the hidden root VM folder. If `true`, then VMs exist directly under the root VM folder.
-    HasVmFolders              *bool                                   `json:"has_vm_folders"`
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the data center.
-    Id                        *string                                 `json:"id"`
-    // The VMware-assigned name of this data center.
-    Name                      *string                                 `json:"name"`
-    // The Clumio-assigned ID of the organizational unit associated with the datacenter.
-    OrganizationalUnitId      *string                                 `json:"organizational_unit_id"`
-    // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
-    ProtectionInfo            *ProtectionInfo                         `json:"protection_info"`
-    // The protection status of this data center. Refer to the Protection Status table for a complete list of protection statuses.
-    ProtectionStatus          *string                                 `json:"protection_status"`
-    // The hidden root compute resource folder of the data center.
-    RootComputeResourceFolder *VMwareRootComputeResourceFolderIDModel `json:"root_compute_resource_folder"`
-    // The hidden root virtual machine folder of the data center.
-    RootVmFolder              *VMwareRootVMFolderIDModel              `json:"root_vm_folder"`
-}
-
-// DeleteHostResponseLinks represents a custom type struct.
-// DeleteHostResponseLinks describes the Links response for the delete host response
-type DeleteHostResponseLinks struct {
-    // The HATEOAS link to this resource.
-    Self     *HateoasSelfLink     `json:"_self"`
-    // A HATEOAS link to the task associated with this resource.
-    ReadTask *ReadTaskHateoasLink `json:"read-task"`
 }
 
 // DeletePolicyResponseLinks represents a custom type struct.
@@ -1755,17 +1582,51 @@ type DynamoDBGRRAttributeFilter struct {
 // Filters based on which DynamoDB backup records are filtered in the query.
 type DynamoDBGRRQueryFilter struct {
     // TODO: Add struct field description
-    AttributeFilters []*DynamoDBGRRAttributeFilter `json:"attribute_filters"`
+    AttributeFilters   []*DynamoDBGRRAttributeFilter `json:"attribute_filters"`
     // Partition Key value of the DynamoDB table.
-    PartitionKey     *string                       `json:"partition_key"`
-    // Sort Key filter of the DynamoDB table.
-    SortKeyFilter    *DynamoDBGRRSortKeyFilter     `json:"sort_key_filter"`
+    // Deprecated: Use PartitionKeyFilter instead.
+    PartitionKey       *string                       `json:"partition_key"`
+    // Key filter of the DynamoDB table.
+    PartitionKeyFilter *DynamoDBKeyFilter            `json:"partition_key_filter"`
+    // Key filter of the DynamoDB table.
+    SortKeyFilter      *DynamoDBKeyFilter            `json:"sort_key_filter"`
 }
 
-// DynamoDBGRRSortKeyFilter represents a custom type struct.
-// Sort Key filter of the DynamoDB table.
-type DynamoDBGRRSortKeyFilter struct {
-    // Filter condition on the DynamoDB sort key.
+// DynamoDBGrrSource represents a custom type struct.
+// The parameters for initiating a DynamoDB table backup query from a backup.
+type DynamoDBGrrSource struct {
+    // Performs the operation on a DynamoDB table within the specified backup.
+    // Use the [GET /backups/aws/dynamodb-tables](#operation/list-backup-aws-dynamodb-tables)
+    // endpoint to fetch valid values.
+    BackupId *string `json:"backup_id"`
+}
+
+// DynamoDBGrrTarget represents a custom type struct.
+// The destination information for the operation, representing the access option
+// for the query results. Users can access the query results by direct download or by
+// email. The direct download (`direct_download`) option allows users to directly download
+// the restored file from the Clumio UI. The email (`email`) option allows users to access
+// the restored file using a downloadable link they receive by email. If a target is not
+// specified, then `target` defaults to `direct_download`.
+type DynamoDBGrrTarget struct {
+    // Specifies the Clumio UI as the restore target for direct download. Optionally set
+    // `direct_download: {}`. If a target is not specified, then `target` defaults to
+    // `direct_download`.
+    DirectDownload interface{}                      `json:"direct_download"`
+    // Specifies a download link (accessible via emails) as the restore target. If not
+    // specified, `target` defaults to `direct_download`.
+    Email          *EmailRecipientsDataAccessOption `json:"email"`
+    // Determines whether the query is preview only. If `true`, a preview of the
+    // query results will be provided in the response immediately.
+    // If `false` or omitted, a task will be queued to make results
+    // of the query available for asynchronous download.
+    Preview        *bool                            `json:"preview"`
+}
+
+// DynamoDBKeyFilter represents a custom type struct.
+// Key filter of the DynamoDB table.
+type DynamoDBKeyFilter struct {
+    // Filter condition on the DynamoDB key.
     // 
     // +----------------------+-------------------------------------------------------+
     // |      Condition       |                         Usage                         |
@@ -1846,37 +1707,6 @@ type DynamoDBGRRSortKeyFilter struct {
     Values    []*string `json:"values"`
 }
 
-// DynamoDBGrrSource represents a custom type struct.
-// The parameters for initiating a DynamoDB table backup query from a backup.
-type DynamoDBGrrSource struct {
-    // Performs the operation on a DynamoDB table within the specified backup.
-    // Use the [GET /backups/aws/dynamodb-tables](#operation/list-backup-aws-dynamodb-tables)
-    // endpoint to fetch valid values.
-    BackupId *string `json:"backup_id"`
-}
-
-// DynamoDBGrrTarget represents a custom type struct.
-// The destination information for the operation, representing the access option
-// for the query results. Users can access the query results by direct download or by
-// email. The direct download (`direct_download`) option allows users to directly download
-// the restored file from the Clumio UI. The email (`email`) option allows users to access
-// the restored file using a downloadable link they receive by email. If a target is not
-// specified, then `target` defaults to `direct_download`.
-type DynamoDBGrrTarget struct {
-    // Specifies the Clumio UI as the restore target for direct download. Optionally set
-    // `direct_download: {}`. If a target is not specified, then `target` defaults to
-    // `direct_download`.
-    DirectDownload interface{}                      `json:"direct_download"`
-    // Specifies a download link (accessible via emails) as the restore target. If not
-    // specified, `target` defaults to `direct_download`.
-    Email          *EmailRecipientsDataAccessOption `json:"email"`
-    // Determines whether the query is preview only. If `true`, a preview of the
-    // query results will be provided in the response immediately.
-    // If `false` or omitted, a task will be queued to make results
-    // of the query available for asynchronous download.
-    Preview        *bool                            `json:"preview"`
-}
-
 // DynamoDBKeys represents a custom type struct.
 // Represents the DynamoDB table keys.
 type DynamoDBKeys struct {
@@ -1917,6 +1747,9 @@ type DynamoDBRestoreSourcePitrOptions struct {
     TableId                 *string `json:"table_id"`
     // A point in time to be restored in RFC-3339 format.
     Timestamp               *string `json:"timestamp"`
+    // The type of the backup. Possible values - `clumio_pitr`, `aws_pitr`. The
+    // type will be assumed as `aws_pitr` if the field is left empty.
+    ClumioType              *string `json:"type"`
     // Restore the table to the latest possible time.
     UseLatestRestorableTime *bool   `json:"use_latest_restorable_time"`
 }
@@ -1937,11 +1770,16 @@ type DynamoDBTable struct {
     // For [POST /restores/aws/dynamodb](#operation/restore-aws-dynamodb-table), this is defaulted to the
     // configuration of source table if both 'billing_mode' and 'provisioned_throughput' are empty or `null`.
     BillingMode                                   *string                 `json:"billing_mode"`
-    // [DEPRECATED]
-    // The compliance status of the protected DynamoDB table. Possible values include
-    // "compliant" and "noncompliant". If the table is not protected, then this field has
-    // a value of `null`.
-    ComplianceStatus                              *string                 `json:"compliance_status"`
+    // Indicates whether DynamoDB Contributor Insights is enabled (true) or disabled (false)
+    // on the table.
+    // For [POST /restores/aws/dynamodb](#operation/restore-aws-dynamodb-table), this is defaulted to the
+    // value set in backup if `null`.
+    ContributorInsightsStatus                     *bool                   `json:"contributor_insights_status"`
+    // Indicates whether DynamoDB Deletion Protection is enabled (true) or disabled (false)
+    // on the table.
+    // For [POST /restores/aws/dynamodb](#operation/restore-aws-dynamodb-table), this is defaulted to the
+    // value set in backup if `null`.
+    DeletionProtectionEnabled                     *bool                   `json:"deletion_protection_enabled"`
     // The timestamp of when the table was deleted. Represented in RFC-3339 format.
     // If this table has not been deleted, then this field has a value of `null`.
     DeletionTimestamp                             *string                 `json:"deletion_timestamp"`
@@ -1981,6 +1819,11 @@ type DynamoDBTable struct {
     Name                                          *string                 `json:"name"`
     // The Clumio-assigned ID of the organizational unit associated with the DynamoDB table.
     OrganizationalUnitId                          *string                 `json:"organizational_unit_id"`
+    // Indicates whether DynamoDB Continuous Backup (PITR) is enabled (true) or disabled (false)
+    // on the table.
+    // For [POST /restores/aws/dynamodb](#operation/restore-aws-dynamodb-table), this is defaulted to the
+    // value set in backup if `null`.
+    PitrStatus                                    *bool                   `json:"pitr_status"`
     // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
     ProtectionInfo                                *ProtectionInfoWithRule `json:"protection_info"`
     // The protection status of the DynamoDB table. Possible values include "protected",
@@ -1995,6 +1838,9 @@ type DynamoDBTable struct {
     Size                                          *int64                  `json:"size"`
     // Represents the server-side encryption settings for a table.
     SseSpecification                              *SSESpecification       `json:"sse_specification"`
+    // Represents the DynamoDB Streams configuration for a table in DynamoDB.
+    // and the data type (`S` for string, `N` for number, `B` for binary).
+    StreamSpecification                           *StreamSpecification    `json:"stream_specification"`
     // The AWS-assigned ARN of the DynamoDB table.
     TableArn                                      *string                 `json:"table_arn"`
     // The table class of the DynamoDB table. Possible values are STANDARD or STANDARD_INFREQUENT_ACCESS.
@@ -2050,53 +1896,71 @@ type DynamoDBTableBackupListLinks struct {
 // DynamoDBTableBackupWithETag represents a custom type struct
 type DynamoDBTableBackupWithETag struct {
     // The ETag value.
-    Etag                   *string                   `json:"_etag"`
+    Etag                      *string                   `json:"_etag"`
     // URLs to pages related to the resource.
-    Links                  *DynamoDBTableBackupLinks `json:"_links"`
+    Links                     *DynamoDBTableBackupLinks `json:"_links"`
     // The AWS-assigned ID of the account associated with this database at the time of backup.
-    AccountNativeId        *string                   `json:"account_native_id"`
+    AccountNativeId           *string                   `json:"account_native_id"`
     // The AWS region associated with this environment.
-    AwsRegion              *string                   `json:"aws_region"`
+    AwsRegion                 *string                   `json:"aws_region"`
     // The billing mode of the DynamoDB table. Possible values are PROVISIONED or PAY_PER_REQUEST.
     // For [POST /restores/aws/dynamodb](#operation/restore-aws-dynamodb-table), this is defaulted to the
     // configuration of source table if both 'billing_mode' and 'provisioned_throughput' are empty or `null`.
-    BillingMode            *string                   `json:"billing_mode"`
+    BillingMode               *string                   `json:"billing_mode"`
+    // Indicates whether DynamoDB Contributor Insights is enabled (true) or disabled (false)
+    // on the table.
+    // For [POST /restores/aws/dynamodb](#operation/restore-aws-dynamodb-table), this is defaulted to the
+    // value set in backup if `null`.
+    ContributorInsightsStatus *bool                     `json:"contributor_insights_status"`
+    // Indicates whether DynamoDB Deletion Protection is enabled (true) or disabled (false)
+    // on the table.
+    // For [POST /restores/aws/dynamodb](#operation/restore-aws-dynamodb-table), this is defaulted to the
+    // value set in backup if `null`.
+    DeletionProtectionEnabled *bool                     `json:"deletion_protection_enabled"`
     // The timestamp of when this backup expires. Represented in RFC-3339 format.
-    ExpirationTimestamp    *string                   `json:"expiration_timestamp"`
+    ExpirationTimestamp       *string                   `json:"expiration_timestamp"`
     // Represents the properties of a global secondary index.
-    GlobalSecondaryIndexes []*GlobalSecondaryIndex   `json:"global_secondary_indexes"`
+    GlobalSecondaryIndexes    []*GlobalSecondaryIndex   `json:"global_secondary_indexes"`
     // Describes the version of global tables in use, if the table is replicated across AWS Regions. If the table
     // is not a global table, then this field has a value of `null`. Possible values are 2017.11.29 or 2019.11.21.
     // For [POST /restores/aws/dynamodb](#operation/restore-aws-dynamodb-table), the version is defaulted to 2019.11.21.
-    GlobalTableVersion     *string                   `json:"global_table_version"`
+    GlobalTableVersion        *string                   `json:"global_table_version"`
     // The Clumio-assigned ID of the backup.
-    Id                     *string                   `json:"id"`
+    Id                        *string                   `json:"id"`
     // The number of items in DynamoDB table backup.
-    ItemCount              *int64                    `json:"item_count"`
+    ItemCount                 *int64                    `json:"item_count"`
     // Represents the properties of a local secondary index.
-    LocalSecondaryIndexes  []*LocalSecondaryIndex    `json:"local_secondary_indexes"`
+    LocalSecondaryIndexes     []*LocalSecondaryIndex    `json:"local_secondary_indexes"`
+    // Indicates whether DynamoDB Continuous Backup (PITR) is enabled (true) or disabled (false)
+    // on the table.
+    // For [POST /restores/aws/dynamodb](#operation/restore-aws-dynamodb-table), this is defaulted to the
+    // value set in backup if `null`.
+    PitrStatus                *bool                     `json:"pitr_status"`
     // Represents the provisioned throughput settings for a DynamoDB table.
-    ProvisionedThroughput  *ProvisionedThroughput    `json:"provisioned_throughput"`
+    ProvisionedThroughput     *ProvisionedThroughput    `json:"provisioned_throughput"`
     // Contains the details of the replica.
-    Replicas               []*ReplicaDescription     `json:"replicas"`
+    Replicas                  []*ReplicaDescription     `json:"replicas"`
     // The size of the DynamoDB table backup in bytes.
-    Size                   *int64                    `json:"size"`
+    Size                      *int64                    `json:"size"`
     // Represents the server-side encryption settings for a table.
-    SseSpecification       *SSESpecification         `json:"sse_specification"`
+    SseSpecification          *SSESpecification         `json:"sse_specification"`
     // The timestamp of when this backup started. Represented in RFC-3339 format.
-    StartTimestamp         *string                   `json:"start_timestamp"`
+    StartTimestamp            *string                   `json:"start_timestamp"`
+    // Represents the DynamoDB Streams configuration for a table in DynamoDB.
+    // and the data type (`S` for string, `N` for number, `B` for binary).
+    StreamSpecification       *StreamSpecification      `json:"stream_specification"`
     // The table class of the DynamoDB table. Possible values are STANDARD or STANDARD_INFREQUENT_ACCESS.
     // For [POST /restores/aws/dynamodb](#operation/restore-aws-dynamodb-table), this is defaulted to the
     // STANDARD storage class if empty.
-    TableClass             *string                   `json:"table_class"`
+    TableClass                *string                   `json:"table_class"`
     // The Clumio-assigned ID of the DynamoDB table.
-    TableId                *string                   `json:"table_id"`
+    TableId                   *string                   `json:"table_id"`
     // The name of the DynamoDB table.
-    TableName              *string                   `json:"table_name"`
+    TableName                 *string                   `json:"table_name"`
     // A tag created through AWS Console which can be applied to EBS volumes.
-    Tags                   []*AwsTagCommonModel      `json:"tags"`
+    Tags                      []*AwsTagCommonModel      `json:"tags"`
     // The type of backup. Possible values include `clumio_backup` and `aws_snapshot`.
-    ClumioType             *string                   `json:"type"`
+    ClumioType                *string                   `json:"type"`
 }
 
 // DynamoDBTableEmbedded represents a custom type struct.
@@ -2163,33 +2027,51 @@ type DynamoDBTableRestoreTarget struct {
     // The billing mode of the DynamoDB table. Possible values are PROVISIONED or PAY_PER_REQUEST.
     // For [POST /restores/aws/dynamodb](#operation/restore-aws-dynamodb-table), this is defaulted to the
     // configuration of source table if both 'billing_mode' and 'provisioned_throughput' are empty or `null`.
-    BillingMode            *string                 `json:"billing_mode"`
+    BillingMode               *string                 `json:"billing_mode"`
+    // Indicates whether DynamoDB Contributor Insights is enabled (true) or disabled (false)
+    // on the table.
+    // For [POST /restores/aws/dynamodb](#operation/restore-aws-dynamodb-table), this is defaulted to the
+    // value set in backup if `null`.
+    ContributorInsightsStatus *bool                   `json:"contributor_insights_status"`
+    // Indicates whether DynamoDB Deletion Protection is enabled (true) or disabled (false)
+    // on the table.
+    // For [POST /restores/aws/dynamodb](#operation/restore-aws-dynamodb-table), this is defaulted to the
+    // value set in backup if `null`.
+    DeletionProtectionEnabled *bool                   `json:"deletion_protection_enabled"`
     // The Clumio-assigned ID of the AWS environment to be used as the restore destination.
     // Use the [GET /datasources/aws/environments](#operation/list-aws-environments) endpoint
     // to fetch valid values.
-    EnvironmentId          *string                 `json:"environment_id"`
+    EnvironmentId             *string                 `json:"environment_id"`
     // Represents the properties of a global secondary index.
-    GlobalSecondaryIndexes []*GlobalSecondaryIndex `json:"global_secondary_indexes"`
+    GlobalSecondaryIndexes    []*GlobalSecondaryIndex `json:"global_secondary_indexes"`
     // Describes the version of global tables in use, if the table is replicated across AWS Regions. If the table
     // is not a global table, then this field has a value of `null`. Possible values are 2017.11.29 or 2019.11.21.
     // For [POST /restores/aws/dynamodb](#operation/restore-aws-dynamodb-table), the version is defaulted to 2019.11.21.
-    GlobalTableVersion     *string                 `json:"global_table_version"`
+    GlobalTableVersion        *string                 `json:"global_table_version"`
     // Represents the properties of a local secondary index.
-    LocalSecondaryIndexes  []*LocalSecondaryIndex  `json:"local_secondary_indexes"`
+    LocalSecondaryIndexes     []*LocalSecondaryIndex  `json:"local_secondary_indexes"`
+    // Indicates whether DynamoDB Continuous Backup (PITR) is enabled (true) or disabled (false)
+    // on the table.
+    // For [POST /restores/aws/dynamodb](#operation/restore-aws-dynamodb-table), this is defaulted to the
+    // value set in backup if `null`.
+    PitrStatus                *bool                   `json:"pitr_status"`
     // Represents the provisioned throughput settings for a DynamoDB table.
-    ProvisionedThroughput  *ProvisionedThroughput  `json:"provisioned_throughput"`
+    ProvisionedThroughput     *ProvisionedThroughput  `json:"provisioned_throughput"`
     // Contains the details of the replica.
-    Replicas               []*ReplicaDescription   `json:"replicas"`
+    Replicas                  []*ReplicaDescription   `json:"replicas"`
     // Represents the server-side encryption settings for a table.
-    SseSpecification       *SSESpecification       `json:"sse_specification"`
+    SseSpecification          *SSESpecification       `json:"sse_specification"`
+    // Represents the DynamoDB Streams configuration for a table in DynamoDB.
+    // and the data type (`S` for string, `N` for number, `B` for binary).
+    StreamSpecification       *StreamSpecification    `json:"stream_specification"`
     // The table class of the DynamoDB table. Possible values are STANDARD or STANDARD_INFREQUENT_ACCESS.
     // For [POST /restores/aws/dynamodb](#operation/restore-aws-dynamodb-table), this is defaulted to the
     // STANDARD storage class if empty.
-    TableClass             *string                 `json:"table_class"`
+    TableClass                *string                 `json:"table_class"`
     // The name of the new table to which the backup must be restored.
-    TableName              *string                 `json:"table_name"`
+    TableName                 *string                 `json:"table_name"`
     // A tag created through AWS Console which can be applied to EBS volumes.
-    Tags                   []*AwsTagCommonModel    `json:"tags"`
+    Tags                      []*AwsTagCommonModel    `json:"tags"`
 }
 
 // DynamodbAssetInfo represents a custom type struct.
@@ -2222,11 +2104,6 @@ type EBS struct {
     AwsRegion                *string                 `json:"aws_region"`
     // The backup status information applied to this resource.
     BackupStatusInfo         *BackupStatusInfo       `json:"backup_status_info"`
-    // [DEPRECATED]
-    // The compliance status of the protected EBS volume. Possible values include
-    // "compliant" and "noncompliant". If the volume is not protected, then this field has
-    // a value of `null`.
-    ComplianceStatus         *string                 `json:"compliance_status"`
     // The timestamp of when the volume was deleted. Represented in RFC-3339 format. If
     // this volume has not been deleted, then this field has a value of `null`.
     DeletionTimestamp        *string                 `json:"deletion_timestamp"`
@@ -2499,16 +2376,14 @@ type EC2 struct {
     AwsRegion                *string                 `json:"aws_region"`
     // The backup status information applied to this resource.
     BackupStatusInfo         *BackupStatusInfo       `json:"backup_status_info"`
-    // [DEPRECATED]
-    // The compliance status of the protected EC2 instance. Possible values include
-    // "compliant" and "noncompliant". If the instance is not protected, then this field
-    // has a value of `null`.
-    ComplianceStatus         *string                 `json:"compliance_status"`
     // The timestamp of when the instance was deleted. Represented in RFC-3339 format.
     // If this instance has not been deleted, then this field has a value of `null`.
     DeletionTimestamp        *string                 `json:"deletion_timestamp"`
     // The Clumio-assigned ID of the policy directly assigned to the entity.
     DirectAssignmentPolicyId *string                 `json:"direct_assignment_policy_id"`
+    // EnaSupport indicates whether the Elastic Network Adapter (ENA) is enabled for the
+    // instance.
+    EnaSupport               *bool                   `json:"ena_support"`
     // The Clumio-assigned ID of the AWS environment associated with the EC2 instance.
     EnvironmentId            *string                 `json:"environment_id"`
     // Determines whether the table has a direct assignment.
@@ -2808,14 +2683,6 @@ type EC2MSSQLDatabase struct {
     AwsRegion                               *string                   `json:"aws_region"`
     // The backup status information applied to this resource.
     BackupStatusInfo                        *BackupStatusInfo         `json:"backup_status_info"`
-    // [DEPRECATED]
-    // The policy compliance status of the resource. If the database is not protected,
-    // then this field has a value of `null`. Refer to
-    // 
-    // the Compliance Status table
-    // 
-    // for a complete list of compliance statuses.
-    ComplianceStatus                        *string                   `json:"compliance_status"`
     // The Clumio-assigned ID of the AWS environment associated with the EC2 MSSQL database.
     EnvironmentId                           *string                   `json:"environment_id"`
     // The Clumio-assigned ID of the failover cluster.
@@ -3012,9 +2879,6 @@ type EC2MSSQLFCI struct {
     Embedded             *EC2MSSQLFCIEmbedded `json:"_embedded"`
     // URLs to pages related to the resource.
     Links                *EC2MSSQLFCILinks    `json:"_links"`
-    // [DEPRECATED]
-    // ComplianceStatus of the resource
-    ComplianceStatus     *string              `json:"compliance_status"`
     // The Clumio-assigned ID of the failover cluster.
     Id                   *string              `json:"id"`
     // The Microsoft SQL-assigned name of the failover cluster.
@@ -3474,6 +3338,14 @@ type EbsVolumeListLinks struct {
     Self  *HateoasSelfLink  `json:"_self"`
 }
 
+// Ec2AssetInfo represents a custom type struct.
+// Ec2AssetInfo
+// The installed information for the EC2 feature.
+type Ec2AssetInfo struct {
+    // The current version of the feature.
+    InstalledTemplateVersion *string `json:"installed_template_version"`
+}
+
 // Ec2InstanceEmbedded represents a custom type struct.
 // Embedded responses related to the resource.
 type Ec2InstanceEmbedded struct {
@@ -3495,6 +3367,12 @@ type Ec2InstanceLinks struct {
 type Ec2InstanceListEmbedded struct {
     // TODO: Add struct field description
     Items []*EC2 `json:"items"`
+}
+
+// Ec2TemplateInfo represents a custom type struct
+type Ec2TemplateInfo struct {
+    // The latest available feature version for the asset.
+    AvailableTemplateVersion *string `json:"available_template_version"`
 }
 
 // EmailDownloadDataAccessObject represents a custom type struct.
@@ -3562,10 +3440,10 @@ type EntityGroupEmbedded struct {
 // EntityModel represents a custom type struct.
 // entityModel denotes the entityModel
 type EntityModel struct {
-    // The parent object of the primary entity associated with the organizational unit. For example, "vmware_vcenter" is the parent entity of primary entity "vmware_vm_folder".
-    // The parent object is necessary for VMware entities and can be omitted for other data sources.
+    // The parent object of the primary entity associated with the organizational unit.
+    // The parent object is optional and can be omitted.
     ParentEntity  *OrganizationalUnitParentEntity  `json:"parent_entity"`
-    // The primary object associated with the organizational unit. Examples of primary entities include "aws_environment" and "vmware_vm".
+    // The primary object associated with the organizational unit. Examples of primary entities include "aws_environment".
     PrimaryEntity *OrganizationalUnitPrimaryEntity `json:"primary_entity"`
 }
 
@@ -3792,87 +3670,6 @@ type FileVersionsListLinks struct {
     Self  *HateoasSelfLink  `json:"_self"`
 }
 
-// FolderEmbedded represents a custom type struct.
-// Embedded responses related to the resource.
-type FolderEmbedded struct {
-    // Embeds the associated policy of a protected resource in the response if requested using the `embed` query parameter. Unprotected resources will not have an associated policy.
-    ReadPolicyDefinition                   interface{} `json:"read-policy-definition"`
-    // Embeds the compliance statistics of VMs into each vCenter resource in the response, if requested using the `_embed` query parameter.
-    ReadVmwareVcenterFolderComplianceStats interface{} `json:"read-vmware-vcenter-folder-compliance-stats"`
-}
-
-// FolderLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type FolderLinks struct {
-    // The HATEOAS link to this resource.
-    Self                                   *HateoasSelfLink                             `json:"_self"`
-    // A HATEOAS link to protect the entities.
-    ProtectEntities                        *ProtectEntitiesHateoasLink                  `json:"protect-entities"`
-    // A HATEOAS link to the policy protecting this resource. Will be omitted for unprotected entities.
-    ReadPolicyDefinition                   *ReadPolicyDefinitionHateoasLink             `json:"read-policy-definition"`
-    // A HATEOAS link to the compliance statistics of VMs in the folders and subfolders of this vCenter resource.
-    ReadVmwareVcenterFolderComplianceStats *ReadVCenterObjectProtectionStatsHateoasLink `json:"read-vmware-vcenter-folder-compliance-stats"`
-    // A HATEOAS link to unprotect the entities.
-    UnprotectEntities                      *UnprotectEntitiesHateoasLink                `json:"unprotect-entities"`
-}
-
-// FolderListEmbedded represents a custom type struct.
-// Embedded responses related to the resource.
-type FolderListEmbedded struct {
-    // FolderWithETag to support etag string to be calculated
-    Items []*FolderWithETag `json:"items"`
-}
-
-// FolderListLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type FolderListLinks struct {
-    // The HATEOAS link to the first page of results.
-    First *HateoasFirstLink `json:"_first"`
-    // The HATEOAS link to the last page of results.
-    Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
-    Next  *HateoasNextLink  `json:"_next"`
-    // The HATEOAS link to the previous page of results.
-    Prev  *HateoasPrevLink  `json:"_prev"`
-    // The HATEOAS link to this resource.
-    Self  *HateoasSelfLink  `json:"_self"`
-}
-
-// FolderWithETag represents a custom type struct.
-// FolderWithETag to support etag string to be calculated
-type FolderWithETag struct {
-    // Embedded responses related to the resource.
-    Embedded              *FolderEmbedded                     `json:"_embedded"`
-    // The ETag value.
-    Etag                  *string                             `json:"_etag"`
-    // URLs to pages related to the resource.
-    Links                 *FolderLinks                        `json:"_links"`
-    // The data center associated with this folder.
-    Datacenter            *VMwareVCenterFolderDatacenterModel `json:"datacenter"`
-    // Count of all descendant folders inside this folder
-    DescendantFolderCount *int64                              `json:"descendant_folder_count"`
-    // Determines whether the folder has direct child folders.
-    HasChildFolders       *bool                               `json:"has_child_folders"`
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the folder.
-    Id                    *string                             `json:"id"`
-    // Determines whether the folder is a hidden root folder. If `true`, the folder is a hidden root folder.
-    IsRoot                *bool                               `json:"is_root"`
-    // Determines whether the folder can be used as a restore destination. If `true`, the folder can be used as a restore destination, and backups can be restored to the folder.
-    IsSupported           *bool                               `json:"is_supported"`
-    // The VMware-assigned name of the folder.
-    Name                  *string                             `json:"name"`
-    // The Clumio-assigned ID of the organizational unit associated with the folder.
-    OrganizationalUnitId  *string                             `json:"organizational_unit_id"`
-    // The parent folder under which this folder resides.
-    ParentFolder          *VMwareVCenterParentFolderModel     `json:"parent_folder"`
-    // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
-    ProtectionInfo        *ProtectionInfo                     `json:"protection_info"`
-    // The protection status of this folder. Refer to the Protection Status table for a complete list of protection statuses.
-    ProtectionStatus      *string                             `json:"protection_status"`
-    // The folder type. Examples of folder types include "datacenter_folder" and "vm_folder". Refer to the Folder Type table for a complete list of folder types.
-    ClumioType            *string                             `json:"type"`
-}
-
 // GeneralSettingsLinks represents a custom type struct.
 // URLs to pages related to the resource.
 type GeneralSettingsLinks struct {
@@ -3892,16 +3689,21 @@ type GenerateRestoredFilePasscodeLinks struct {
 // GlobalSecondaryIndex represents a custom type struct.
 // Represents the properties of a global secondary index.
 type GlobalSecondaryIndex struct {
+    // Indicates whether DynamoDB Contributor Insights is enabled (true) or disabled (false)
+    // on the index.
+    // For [POST /restores/aws/dynamodb](#operation/restore-aws-dynamodb-table), this is defaulted to the
+    // value set in backup if `null`.
+    ContributorInsightsStatus *bool                  `json:"contributor_insights_status"`
     // The name of the global secondary index.
-    IndexName             *string                `json:"index_name"`
+    IndexName                 *string                `json:"index_name"`
     // Represents a single element of a key schema. A key schema specifies the attributes that make up the primary key
     // of a table, or the key attributes of an index.
-    KeySchema             []*KeySchemaElement    `json:"key_schema"`
+    KeySchema                 []*KeySchemaElement    `json:"key_schema"`
     // Represents attributes that are copied (projected) from the table into an index. These are in addition to the
     // primary key attributes and index key attributes, which are automatically projected.
-    Projection            *Projection            `json:"projection"`
+    Projection                *Projection            `json:"projection"`
     // Represents the provisioned throughput settings for a DynamoDB table.
-    ProvisionedThroughput *ProvisionedThroughput `json:"provisioned_throughput"`
+    ProvisionedThroughput     *ProvisionedThroughput `json:"provisioned_throughput"`
 }
 
 // GrrSource represents a custom type struct.
@@ -4003,98 +3805,6 @@ type HateoasSelfLink struct {
     ClumioType *string `json:"type"`
 }
 
-// Host represents a custom type struct
-type Host struct {
-    // URLs to pages related to the resource.
-    Links                  *HostLinks `json:"_links"`
-    // The endpoints discovered post the host connection of the host.
-    DiscoveredEndpoints    []*string  `json:"discovered_endpoints"`
-    // The Current MSI version of the edge connector installed in the host.
-    EdgeConnectorVersion   *string    `json:"edge_connector_version"`
-    // The user-provided endpoint used to connect the host.
-    Endpoint               *string    `json:"endpoint"`
-    // The Clumio-assigned ID of the management group associated with the host.
-    GroupId                *string    `json:"group_id"`
-    // The Clumio-assigned ID of the Host.
-    Id                     *string    `json:"id"`
-    // The timestamp of the last successful heartbeat of this host. Represented in RFC-3339 format.
-    LastHeartbeatTimestamp *string    `json:"last_heartbeat_timestamp"`
-    // Name of the Host.
-    Name                   *string    `json:"name"`
-    // The operational status of the Host. Possible values include `upgrade_in_progress`, `upgrade_success`, `upgrade_failed`, `delete_in_progress`, `delete_failed`, `move_in_progress`, `move_succeeded` and `move_failed`.
-    OperationalStatus      *string    `json:"operational_status"`
-    // The connection status of the Host. Possible values include `connected`, `disconnected`, `connection_pending`, and `invalid_token`.
-    Status                 *string    `json:"status"`
-    // The Clumio-assigned ID of the subgroup associated with the host.
-    SubgroupId             *string    `json:"subgroup_id"`
-    // The Clumio-assigned UUID of the host. This UUID is used for filtering hosts during list operations.
-    Uuid                   *string    `json:"uuid"`
-}
-
-// HostIDModel represents a custom type struct
-type HostIDModel struct {
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the host.
-    Id *string `json:"id"`
-}
-
-// HostLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type HostLinks struct {
-    // The HATEOAS link to this resource.
-    Self *HateoasSelfLink `json:"_self"`
-}
-
-// HostListEmbedded represents a custom type struct.
-// Embedded responses related to the resource.
-type HostListEmbedded struct {
-    // HostWithETag to support etag string to be calculated
-    Items []*HostWithETag `json:"items"`
-}
-
-// HostListLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type HostListLinks struct {
-    // The HATEOAS link to the first page of results.
-    First *HateoasFirstLink `json:"_first"`
-    // The HATEOAS link to the last page of results.
-    Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
-    Next  *HateoasNextLink  `json:"_next"`
-    // The HATEOAS link to the previous page of results.
-    Prev  *HateoasPrevLink  `json:"_prev"`
-    // The HATEOAS link to this resource.
-    Self  *HateoasSelfLink  `json:"_self"`
-}
-
-// HostWithETag represents a custom type struct.
-// HostWithETag to support etag string to be calculated
-type HostWithETag struct {
-    // The ETag value.
-    Etag                *string                                `json:"_etag"`
-    // URLs to pages related to the resource.
-    Links               *HostLinks                             `json:"_links"`
-    // The VMware compute resource representing the host.
-    ComputeResource     *VMwareVCenterHostComputeResourceModel `json:"compute_resource"`
-    // The connection state of the host as seen through the vCenter server. Examples include "connected", "disconnected", and "not_responding".
-    ConnectionState     *string                                `json:"connection_state"`
-    // The data center in which the host resides.
-    Datacenter          *VMwareVCenterHostDatacenterModel      `json:"datacenter"`
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the host.
-    Id                  *string                                `json:"id"`
-    // Determines whether the host has been placed in maintenance mode as seen through the vCenter server. If `true`, the host is in maintenance mode.
-    IsInMaintenanceMode *bool                                  `json:"is_in_maintenance_mode"`
-    // Determines whether the host has been placed in quarantine mode as seen through the vCenter server. If `true`, the host is in quarantine mode.
-    IsInQuarantineMode  *bool                                  `json:"is_in_quarantine_mode"`
-    // Determines whether the host is a standalone host. If `true`, the host is a standalone host.
-    IsStandalone        *bool                                  `json:"is_standalone"`
-    // Determines whether the host can be used as a restore destination. If `true`, the host can be used as a restore destination and backups can be restored to the host.
-    IsSupported         *bool                                  `json:"is_supported"`
-    // The VMware-assigned name of the host.
-    Name                *string                                `json:"name"`
-    // The power state of the host as seen through the vCenter server. Examples include "powered_off", "powered_on", and "standby".
-    PowerState          *string                                `json:"power_state"`
-}
-
 // IamInstanceProfileModel represents a custom type struct.
 // Denotes an IAM instance profile. An instance profile is a container for an
 // IAM role that you can use to pass role information to an EC2 instance when
@@ -4106,6 +3816,21 @@ type IamInstanceProfileModel struct {
     Name     *string `json:"name"`
     // The AWS-assigned ID of the IAM instance profile.
     NativeId *string `json:"native_id"`
+}
+
+// IcebergAssetInfo represents a custom type struct.
+// IcebergAssetInfo
+// The installed information for the Iceberg feature.
+type IcebergAssetInfo struct {
+    // The current version of the feature.
+    InstalledTemplateVersion *string `json:"installed_template_version"`
+}
+
+// IcebergTemplateInfo represents a custom type struct.
+// IcebergTemplateInfo is the latest available information for the Iceberg feature.
+type IcebergTemplateInfo struct {
+    // The latest available feature version for the asset.
+    AvailableTemplateVersion *string `json:"available_template_version"`
 }
 
 // IndividualAlertDetails represents a custom type struct.
@@ -4121,16 +3846,6 @@ type IndividualAlertDetails struct {
     // Data specific to the alert generated. If the alert has no variables, then this
     // field has a value of `null`.
     Variables   map[string]*string `json:"variables"`
-}
-
-// InheritedFrom represents a custom type struct
-type InheritedFrom struct {
-    // The Clumio-assigned ID of the item.
-    Id         *string `json:"id"`
-    // Name of the folder.
-    Name       *string `json:"name"`
-    // VCenterObjectType denotes the VCenter object type
-    Objecttype *string `json:"objectType"`
 }
 
 // InstanceStoreBlockDeviceMapping represents a custom type struct
@@ -4247,11 +3962,9 @@ type ManagementGroup struct {
 // URLs to pages related to the resource.
 type ManagementGroupLinks struct {
     // The HATEOAS link to this resource.
-    Self                    *HateoasSelfLink `json:"_self"`
+    Self                  *HateoasSelfLink `json:"_self"`
     // A resource-specific HATEOAS link.
-    ListManagementSubgroups *HateoasLink     `json:"list-management-subgroups"`
-    // A resource-specific HATEOAS link.
-    UpdateManagementGroup   *HateoasLink     `json:"update-management-group"`
+    UpdateManagementGroup *HateoasLink     `json:"update-management-group"`
 }
 
 // ManagementGroupListEmbedded represents a custom type struct.
@@ -4272,263 +3985,6 @@ type ManagementGroupListLinks struct {
     Self  *HateoasSelfLink  `json:"_self"`
 }
 
-// MoveHostsLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type MoveHostsLinks struct {
-    // The HATEOAS link to this resource.
-    Self     *HateoasSelfLink     `json:"_self"`
-    // A HATEOAS link to the task associated with this resource.
-    ReadTask *ReadTaskHateoasLink `json:"read-task"`
-}
-
-// MoveHostsSource represents a custom type struct.
-// The hosts to be moved to a different management subgroup.
-type MoveHostsSource struct {
-    // Endpoints of hosts to be deleted
-    Endpoints  []*string `json:"endpoints"`
-    // TODO: Add struct field description
-    GroupId    *string   `json:"group_id"`
-    // Performs the operation on a host within the specified subgroup id.
-    SubgroupId *string   `json:"subgroup_id"`
-}
-
-// MoveHostsTarget represents a custom type struct.
-// The target configuration of the hosts to be moved.
-type MoveHostsTarget struct {
-    // TODO: Add struct field description
-    GroupId    *string `json:"group_id"`
-    // Performs the operation on a host within the specified subgroup id.
-    SubgroupId *string `json:"subgroup_id"`
-}
-
-// MssqlAG represents a custom type struct
-type MssqlAG struct {
-    // MssqlAGEmbedded is embed of MSSQL Availability Groups
-    // Embedded responses related to the resource.
-    Embedded             *MssqlAGEmbedded `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links                *MssqlAGLinks    `json:"_links"`
-    // The Clumio-assigned ID of the availability group.
-    Id                   *string          `json:"id"`
-    // The Microsoft SQL-assigned name of the availability group.
-    Name                 *string          `json:"name"`
-    // The Clumio-assigned ID of the organizational unit associated with the availability group.
-    OrganizationalUnitId *string          `json:"organizational_unit_id"`
-    // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
-    ProtectionInfo       *ProtectionInfo  `json:"protection_info"`
-    // The status of the availability group, Possible values include 'active' and 'inactive'.
-    Status               *string          `json:"status"`
-}
-
-// MssqlAGEmbedded represents a custom type struct.
-// MssqlAGEmbedded is embed of MSSQL Availability Groups
-// Embedded responses related to the resource.
-type MssqlAGEmbedded struct {
-    // availability group level stats contains compliant database stats
-    GetMssqlAvailabilityGroupStats interface{} `json:"get-mssql-availability-group-stats"`
-    // Embeds the associated policy of a protected resource in the response if requested using the `embed` query parameter. Unprotected resources will not have an associated policy.
-    ReadPolicyDefinition           interface{} `json:"read-policy-definition"`
-}
-
-// MssqlAGLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type MssqlAGLinks struct {
-    // The HATEOAS link to this resource.
-    Self                 *HateoasSelfLink                 `json:"_self"`
-    // A HATEOAS link to the policy protecting this resource. Will be omitted for unprotected entities.
-    ReadPolicyDefinition *ReadPolicyDefinitionHateoasLink `json:"read-policy-definition"`
-}
-
-// MssqlAGListEmbedded represents a custom type struct.
-// Embedded responses related to the resource.
-type MssqlAGListEmbedded struct {
-    // TODO: Add struct field description
-    Items []*MssqlAG `json:"items"`
-}
-
-// MssqlAGListLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type MssqlAGListLinks struct {
-    // The HATEOAS link to the first page of results.
-    First *HateoasFirstLink `json:"_first"`
-    // The HATEOAS link to the last page of results.
-    Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
-    Next  *HateoasNextLink  `json:"_next"`
-    // The HATEOAS link to the previous page of results.
-    Prev  *HateoasPrevLink  `json:"_prev"`
-    // The HATEOAS link to this resource.
-    Self  *HateoasSelfLink  `json:"_self"`
-}
-
-// MssqlDatabase represents a custom type struct
-type MssqlDatabase struct {
-    // Embedded responses related to the resource.
-    Embedded                                *MssqlDatabaseEmbedded `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links                                   *DatabaseLinks         `json:"_links"`
-    // The Clumio-assigned ID of the availability group. It is null in case of a standalone database.
-    AvailabilityGroupId                     *string                `json:"availability_group_id"`
-    // The Microsoft SQL assigned name of the availability group. It is null in case of a standalone database.
-    AvailabilityGroupName                   *string                `json:"availability_group_name"`
-    // The backup status information applied to this resource.
-    BackupStatusInfo                        *BackupStatusInfo      `json:"backup_status_info"`
-    // [DEPRECATED]
-    // The policy compliance status of the resource. If the database is not protected,
-    // then this field has a value of `null`. Refer to
-    // 
-    // the Compliance Status table
-    // 
-    // for a complete list of compliance statuses.
-    ComplianceStatus                        *string                `json:"compliance_status"`
-    // The Clumio-assigned ID of the failover cluster.
-    FailoverClusterId                       *string                `json:"failover_cluster_id"`
-    // The Microsoft SQL assigned name of the Failover Cluster
-    FailoverClusterName                     *string                `json:"failover_cluster_name"`
-    // Failovercluster Protection Status is used to indicate the fci protection status associated with the
-    // fci database
-    FailoverClusterProtectionStatus         *string                `json:"failover_cluster_protection_status"`
-    // The Clumio-assigned ID of the group to which the standalone database belongs, in case of an
-    // availability group database it will be empty.
-    GroupId                                 *string                `json:"group_id"`
-    // The user-provided endpoint of the host containing the given database.
-    HostEndpoint                            *string                `json:"host_endpoint"`
-    // The Clumio-assigned ID of the host containing the given database.
-    HostId                                  *string                `json:"host_id"`
-    // The Clumio-assigned ID of the Database.
-    Id                                      *string                `json:"id"`
-    // The Clumio-assigned ID of the instance containing the given database.
-    InstanceId                              *string                `json:"instance_id"`
-    // The name of the Microsoft SQL instance containing the given database.
-    InstanceName                            *string                `json:"instance_name"`
-    // is_supported is true if Clumio supports backup of the database.
-    IsSupported                             *bool                  `json:"is_supported"`
-    // The timestamp of the last time this database was full backed up.
-    // Represented in RFC-3339 format. If this database has never been backed up,
-    // this field has a value of `null`.
-    LastBackupTimestamp                     *string                `json:"last_backup_timestamp"`
-    // The timestamp of the last time this database was log backed up in Bulk Recovery Model.
-    // Represented in RFC-3339 format. If this database has never been backed up,
-    // this field has a value of `null`.
-    LastBulkRecoveryModelLogBackupTimestamp *string                `json:"last_bulk_recovery_model_log_backup_timestamp"`
-    // The timestamp of the last time this database was log backed up in Full Recovery Model.
-    // Represented in RFC-3339 format. If this database has never been backed up,
-    // this field has a value of `null`.
-    LastFullRecoveryModelLogBackupTimestamp *string                `json:"last_full_recovery_model_log_backup_timestamp"`
-    // The name of the Database.
-    Name                                    *string                `json:"name"`
-    // The Clumio-assigned ID of the organizational unit associated with the database.
-    OrganizationalUnitId                    *string                `json:"organizational_unit_id"`
-    // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
-    ProtectionInfo                          *ProtectionInfo        `json:"protection_info"`
-    // recovery_model is the recovery model of the database. Possible values include 'simple_recovery_model',
-    // 'bulk_recovery_model', and 'full_recovery_model'.
-    RecoveryModel                           *string                `json:"recovery_model"`
-    // The size of the Database.
-    Size                                    *float64               `json:"size"`
-    // The status of the database, Possible values include 'active' and 'inactive'.
-    Status                                  *string                `json:"status"`
-    // subgroup id is the id of the Subgroup where this database belongs, in case of AG database
-    // it will be empty.
-    SubgroupId                              *string                `json:"subgroup_id"`
-    // The type of the database. Possible values include 'availability_group_database' and 'standalone_database'.
-    ClumioType                              *string                `json:"type"`
-    // unsupported_reason is the reason why Clumio doesn't support backup of such database,
-    // possible values include 'filestream_enabled_database'.
-    UnsupportedReason                       *string                `json:"unsupported_reason"`
-}
-
-// MssqlDatabaseBackup represents a custom type struct
-type MssqlDatabaseBackup struct {
-    // Embedded responses related to the resource.
-    Embedded            *MssqlDatabaseBackupEmbedded `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links               *MssqlDatabaseBackupLinks    `json:"_links"`
-    // TODO: Add struct field description
-    DatabaseFiles       []*MssqlDatabaseFile         `json:"database_files"`
-    // The Clumio-assigned ID of the database associated with this backup.
-    DatabaseId          *string                      `json:"database_id"`
-    // The Microsoft SQL database engine at the time of backup.
-    Engine              *string                      `json:"engine"`
-    // The Microsoft SQL database engine version at the time of backup.
-    EngineVersion       *string                      `json:"engine_version"`
-    // The timestamp of when this backup expires. Represented in RFC-3339 format.
-    ExpirationTimestamp *string                      `json:"expiration_timestamp"`
-    // The Clumio-assigned ID of the management group associated with the database at the time of backup.
-    GroupId             *string                      `json:"group_id"`
-    // The user-provided endpoint of the host containing the given database at the time of backup.
-    HostEndpoint        *string                      `json:"host_endpoint"`
-    // The Clumio-assigned ID of the host associated with the database at the time of backup.
-    HostId              *string                      `json:"host_id"`
-    // The Clumio-assigned ID of the backup.
-    Id                  *string                      `json:"id"`
-    // The Clumio-assigned instance id at the time of backup.
-    InstanceId          *string                      `json:"instance_id"`
-    // The instance name at the time of backup.
-    InstanceName        *string                      `json:"instance_name"`
-    // The timestamp of when this backup started. Represented in RFC-3339 format.
-    StartTimestamp      *string                      `json:"start_timestamp"`
-    // The Clumio-assigned ID of the management subgroup associated with the database at the time of backup.
-    SubgroupId          *string                      `json:"subgroup_id"`
-    // The type of backup.
-    ClumioType          *string                      `json:"type"`
-}
-
-// MssqlDatabaseBackupEmbedded represents a custom type struct.
-// Embedded responses related to the resource.
-type MssqlDatabaseBackupEmbedded struct {
-    // Embeds details about the management group if requested using the `embed` query.
-    ReadManagementGroup    interface{} `json:"read-management-group"`
-    // Embeds details about the management subgroup if requested using the `embed` query.
-    ReadManagementSubgroup interface{} `json:"read-management-subgroup"`
-}
-
-// MssqlDatabaseBackupLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type MssqlDatabaseBackupLinks struct {
-    // The HATEOAS link to this resource.
-    Self                   *HateoasSelfLink `json:"_self"`
-    // A resource-specific HATEOAS link.
-    ReadManagementGroup    *HateoasLink     `json:"read-management-group"`
-    // A resource-specific HATEOAS link.
-    ReadManagementSubgroup *HateoasLink     `json:"read-management-subgroup"`
-    // A resource-specific HATEOAS link.
-    RestoreMssqlDatabase   *HateoasLink     `json:"restore-mssql-database"`
-}
-
-// MssqlDatabaseBackupListEmbedded represents a custom type struct.
-// Embedded responses related to the resource.
-type MssqlDatabaseBackupListEmbedded struct {
-    // TODO: Add struct field description
-    Items []*MssqlDatabaseBackup `json:"items"`
-}
-
-// MssqlDatabaseBackupListLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type MssqlDatabaseBackupListLinks struct {
-    // The HATEOAS link to the first page of results.
-    First *HateoasFirstLink `json:"_first"`
-    // The HATEOAS link to the last page of results.
-    Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
-    Next  *HateoasNextLink  `json:"_next"`
-    // The HATEOAS link to the previous page of results.
-    Prev  *HateoasPrevLink  `json:"_prev"`
-    // The HATEOAS link to this resource.
-    Self  *HateoasSelfLink  `json:"_self"`
-}
-
-// MssqlDatabaseEmbedded represents a custom type struct.
-// Embedded responses related to the resource.
-type MssqlDatabaseEmbedded struct {
-    // Embeds details about the management group if requested using the `embed` query.
-    ReadManagementGroup    interface{} `json:"read-management-group"`
-    // Embeds details about the management subgroup if requested using the `embed` query.
-    ReadManagementSubgroup interface{} `json:"read-management-subgroup"`
-    // Embeds the associated policy of a protected resource in the response if requested using the `embed` query parameter. Unprotected resources will not have an associated policy.
-    ReadPolicyDefinition   interface{} `json:"read-policy-definition"`
-}
-
 // MssqlDatabaseFile represents a custom type struct
 type MssqlDatabaseFile struct {
     // The name of the database file.
@@ -4537,278 +3993,10 @@ type MssqlDatabaseFile struct {
     ClumioType *string `json:"type"`
 }
 
-// MssqlDatabaseListEmbedded represents a custom type struct.
-// Embedded responses related to the resource.
-type MssqlDatabaseListEmbedded struct {
-    // TODO: Add struct field description
-    Items []*MssqlDatabase `json:"items"`
-}
-
-// MssqlDatabaseListLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type MssqlDatabaseListLinks struct {
-    // The HATEOAS link to the first page of results.
-    First                      *HateoasFirstLink `json:"_first"`
-    // The HATEOAS link to the last page of results.
-    Last                       *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
-    Next                       *HateoasNextLink  `json:"_next"`
-    // The HATEOAS link to the previous page of results.
-    Prev                       *HateoasPrevLink  `json:"_prev"`
-    // The HATEOAS link to this resource.
-    Self                       *HateoasSelfLink  `json:"_self"`
-    // A resource-specific HATEOAS link.
-    CreateMssqlHostConnections *HateoasLink      `json:"create-mssql-host-connections"`
-}
-
-// MssqlDatabasePitrInterval represents a custom type struct
-type MssqlDatabasePitrInterval struct {
-    // End timestamp of the interval. Represented in RFC-3339 format.
-    EndTimestamp   *string `json:"end_timestamp"`
-    // Start timestamp of the interval. Represented in RFC-3339 format.
-    StartTimestamp *string `json:"start_timestamp"`
-}
-
-// MssqlDatabasePitrIntervalListEmbedded represents a custom type struct.
-// Embedded responses related to the resource.
-type MssqlDatabasePitrIntervalListEmbedded struct {
-    // TODO: Add struct field description
-    Items []*MssqlDatabasePitrInterval `json:"items"`
-}
-
-// MssqlDatabasePitrIntervalListLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type MssqlDatabasePitrIntervalListLinks struct {
-    // The HATEOAS link to the first page of results.
-    First *HateoasFirstLink `json:"_first"`
-    // The HATEOAS link to the next page of results.
-    Next  *HateoasNextLink  `json:"_next"`
-    // The HATEOAS link to this resource.
-    Self  *HateoasSelfLink  `json:"_self"`
-}
-
-// MssqlHost represents a custom type struct
-type MssqlHost struct {
-    // Embedded responses related to the resource.
-    Embedded                       *MssqlHostEmbedded `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links                          *MssqlHostLinks    `json:"_links"`
-    // The user-provided endpoint of the host containing the given database.
-    Endpoint                       *string            `json:"endpoint"`
-    // The Clumio-assigned ID of the management group to which the host belongs.
-    GroupId                        *string            `json:"group_id"`
-    // Determines whether or not an availability group is present in the host.
-    HasAssociatedAvailabilityGroup *bool              `json:"has_associated_availability_group"`
-    // Connection status of MSSQL Host
-    HostConnectionStatus           *string            `json:"host_connection_status"`
-    // The Clumio-assigned ID of the Host.
-    Id                             *string            `json:"id"`
-    // The number of instances present in the host.
-    InstanceCount                  *int64             `json:"instance_count"`
-    // IsPartOfFCI is a boolean field representing if the Host is part of Failover Cluster
-    IsPartOfFci                    *bool              `json:"is_part_of_fci"`
-    // The Clumio-assigned ID of the organizational unit associated with the host.
-    OrganizationalUnitId           *string            `json:"organizational_unit_id"`
-    // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
-    ProtectionInfo                 *ProtectionInfo    `json:"protection_info"`
-    // The status of the Host, Possible values include 'active' and 'inactive'.
-    Status                         *string            `json:"status"`
-    // The Clumio-assigned ID of the management subgroup to which the host belongs.
-    SubgroupId                     *string            `json:"subgroup_id"`
-}
-
-// MssqlHostEmbedded represents a custom type struct.
-// Embedded responses related to the resource.
-type MssqlHostEmbedded struct {
-    // host level stats
-    GetMssqlHostStats      interface{} `json:"get-mssql-host-stats"`
-    // Embeds details about the management group if requested using the `embed` query.
-    ReadManagementGroup    interface{} `json:"read-management-group"`
-    // Embeds details about the management subgroup if requested using the `embed` query.
-    ReadManagementSubgroup interface{} `json:"read-management-subgroup"`
-    // Embeds the associated policy of a protected resource in the response if requested using the `embed` query parameter. Unprotected resources will not have an associated policy.
-    ReadPolicyDefinition   interface{} `json:"read-policy-definition"`
-}
-
-// MssqlHostLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type MssqlHostLinks struct {
-    // The HATEOAS link to this resource.
-    Self                   *HateoasSelfLink                 `json:"_self"`
-    // A resource-specific HATEOAS link.
-    GetMssqlHostStats      *HateoasLink                     `json:"get-mssql-host-stats"`
-    // A HATEOAS link to protect the entities.
-    ProtectEntities        *ProtectEntitiesHateoasLink      `json:"protect-entities"`
-    // A resource-specific HATEOAS link.
-    ReadManagementGroup    *HateoasLink                     `json:"read-management-group"`
-    // A resource-specific HATEOAS link.
-    ReadManagementSubgroup *HateoasLink                     `json:"read-management-subgroup"`
-    // A HATEOAS link to the policy protecting this resource. Will be omitted for unprotected entities.
-    ReadPolicyDefinition   *ReadPolicyDefinitionHateoasLink `json:"read-policy-definition"`
-    // A HATEOAS link to unprotect the entities.
-    UnprotectEntities      *UnprotectEntitiesHateoasLink    `json:"unprotect-entities"`
-}
-
-// MssqlHostListEmbedded represents a custom type struct.
-// Embedded responses related to the resource.
-type MssqlHostListEmbedded struct {
-    // TODO: Add struct field description
-    Items []*MssqlHost `json:"items"`
-}
-
-// MssqlHostListLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type MssqlHostListLinks struct {
-    // The HATEOAS link to the first page of results.
-    First                      *HateoasFirstLink `json:"_first"`
-    // The HATEOAS link to the last page of results.
-    Last                       *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
-    Next                       *HateoasNextLink  `json:"_next"`
-    // The HATEOAS link to the previous page of results.
-    Prev                       *HateoasPrevLink  `json:"_prev"`
-    // The HATEOAS link to this resource.
-    Self                       *HateoasSelfLink  `json:"_self"`
-    // A resource-specific HATEOAS link.
-    CreateMssqlHostConnections *HateoasLink      `json:"create-mssql-host-connections"`
-}
-
-// MssqlInstance represents a custom type struct
-type MssqlInstance struct {
-    // Embedded responses related to the resource.
-    Embedded                       *MssqlInstanceEmbedded `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links                          *MssqlInstanceLinks    `json:"_links"`
-    // The Clumio-assigned ID of the management group to which the host belongs.
-    GroupId                        *string                `json:"group_id"`
-    // The boolean value represents if availability group is present in the instance.
-    HasAssociatedAvailabilityGroup *bool                  `json:"has_associated_availability_group"`
-    // The user-provided endpoint of the host containing the given database.
-    HostEndpoint                   *string                `json:"host_endpoint"`
-    // The Clumio-assigned ID of the host, containing the instance.
-    HostId                         *string                `json:"host_id"`
-    // The Clumio-assigned ID of the Instance.
-    Id                             *string                `json:"id"`
-    // The Microsoft SQL assigned name of the instance.
-    Name                           *string                `json:"name"`
-    // The Clumio-assigned ID of the organizational unit associated with the instance.
-    OrganizationalUnitId           *string                `json:"organizational_unit_id"`
-    // Product Version of the instance.
-    ProductVersion                 *string                `json:"product_version"`
-    // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
-    ProtectionInfo                 *ProtectionInfo        `json:"protection_info"`
-    // The Microsoft SQL assigned server name of the instance.
-    ServerName                     *string                `json:"server_name"`
-    // The status of the Instance, Possible values include 'active' and 'inactive'.
-    Status                         *string                `json:"status"`
-    // The Clumio-assigned ID of the management subgroup to which the host belongs.
-    SubgroupId                     *string                `json:"subgroup_id"`
-}
-
-// MssqlInstanceEmbedded represents a custom type struct.
-// Embedded responses related to the resource.
-type MssqlInstanceEmbedded struct {
-    // TODO: Add struct field description
-    GetMssqlInstanceStats  interface{} `json:"get-mssql-instance-stats"`
-    // Embeds details about the management group if requested using the `embed` query.
-    ReadManagementGroup    interface{} `json:"read-management-group"`
-    // Embeds details about the management subgroup if requested using the `embed` query.
-    ReadManagementSubgroup interface{} `json:"read-management-subgroup"`
-    // Embeds the associated policy of a protected resource in the response if requested using the `embed` query parameter. Unprotected resources will not have an associated policy.
-    ReadPolicyDefinition   interface{} `json:"read-policy-definition"`
-}
-
-// MssqlInstanceLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type MssqlInstanceLinks struct {
-    // The HATEOAS link to this resource.
-    Self                   *HateoasSelfLink                 `json:"_self"`
-    // A resource-specific HATEOAS link.
-    GetMssqlInstanceStats  *HateoasLink                     `json:"get-mssql-instance-stats"`
-    // A HATEOAS link to protect the entities.
-    ProtectEntities        *ProtectEntitiesHateoasLink      `json:"protect-entities"`
-    // A resource-specific HATEOAS link.
-    ReadManagementGroup    *HateoasLink                     `json:"read-management-group"`
-    // A resource-specific HATEOAS link.
-    ReadManagementSubgroup *HateoasLink                     `json:"read-management-subgroup"`
-    // A HATEOAS link to the policy protecting this resource. Will be omitted for unprotected entities.
-    ReadPolicyDefinition   *ReadPolicyDefinitionHateoasLink `json:"read-policy-definition"`
-    // A HATEOAS link to unprotect the entities.
-    UnprotectEntities      *UnprotectEntitiesHateoasLink    `json:"unprotect-entities"`
-}
-
-// MssqlInstanceListEmbedded represents a custom type struct.
-// Embedded responses related to the resource.
-type MssqlInstanceListEmbedded struct {
-    // TODO: Add struct field description
-    Items []*MssqlInstance `json:"items"`
-}
-
-// MssqlInstanceListLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type MssqlInstanceListLinks struct {
-    // The HATEOAS link to the first page of results.
-    First *HateoasFirstLink `json:"_first"`
-    // The HATEOAS link to the last page of results.
-    Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
-    Next  *HateoasNextLink  `json:"_next"`
-    // The HATEOAS link to the previous page of results.
-    Prev  *HateoasPrevLink  `json:"_prev"`
-    // The HATEOAS link to this resource.
-    Self  *HateoasSelfLink  `json:"_self"`
-}
-
-// MssqlPITROptions represents a custom type struct.
-// A database and a point-in-time to be restored. Only one of `backup` or
-// `pitr` should be specified.
-type MssqlPITROptions struct {
-    // The Clumio-assigned ID of the MSSQL database to be restored.
-    // Use the [GET /datasources/mssql/databases](#operation/list-mssql-databases)
-    // endpoint to fetch valid values.
-    DatabaseId *string `json:"database_id"`
-    // The point in time to be restored in RFC-3339 format.
-    Timestamp  *string `json:"timestamp"`
-}
-
-// MssqlRestoreFromBackupOptions represents a custom type struct.
-// The MSSQL database backup to be restored. Only one of `backup` or `pitr`
-// should be specified.
-type MssqlRestoreFromBackupOptions struct {
-    // The Clumio-assigned ID of the backup to be restored.
-    // Use the [GET /backups/mssql/databases](#operation/list-backup-mssql-databases)
-    // endpoint to fetch valid values.
-    BackupId *string `json:"backup_id"`
-}
-
-// MssqlRestoreSource represents a custom type struct.
-// The MSSQL database backup to be restored. Only one of `backup` or `pitr`
-// should be set.
-type MssqlRestoreSource struct {
-    // The MSSQL database backup to be restored. Only one of `backup` or `pitr`
-    // should be specified.
-    Backup *MssqlRestoreFromBackupOptions `json:"backup"`
-    // A database and a point-in-time to be restored. Only one of `backup` or
-    // `pitr` should be specified.
-    Pitr   *MssqlPITROptions              `json:"pitr"`
-}
-
-// MssqlRestoreTarget represents a custom type struct.
-// The configuration of the MSSQL database to which the data has to be restored.
-type MssqlRestoreTarget struct {
-    // The target location within the instance to restore data files. For example,
-    // `C:\\Programe Files\clumio\restored-data-files\`. If this field is empty, we
-    // will restore data files into the same location as the source database.
-    DataFilesPath *string `json:"data_files_path"`
-    // The user-assigned name of the database.
-    DatabaseName  *string `json:"database_name"`
-    // The Clumio-assigned ID of the instance to restore the database into.
-    // Use the [GET /datasources/mssql/instances](#operation/list-mssql-instances) to fetch valid values.
-    InstanceId    *string `json:"instance_id"`
-    // The target location within the instance to restore log files. For example,
-    // `C:\\Programe Files\clumio\restored-log-files\`. If this field is empty, we
-    // will restore log files into the same location as the source database.
-    LogFilesPath  *string `json:"log_files_path"`
+// MssqlServiceInstanceProfiles represents a custom type struct
+type MssqlServiceInstanceProfiles struct {
+    // Policy created for ec2 instance profile role
+    Ec2SsmInstanceProfileArn *string `json:"ec2_ssm_instance_profile_arn"`
 }
 
 // MssqlServiceRoles represents a custom type struct
@@ -4843,11 +4031,9 @@ type NetworkInterface struct {
 // organizational units configured.
 type OUGroupingCriteria struct {
     // The entity type used to group organizational units for AWS resources.
-    Aws          *AwsDsGroupingCriteria    `json:"aws"`
+    Aws          *AwsDsGroupingCriteria `json:"aws"`
     // The entity type used to group organizational units for Microsoft 365 resources.
-    Microsoft365 *M365GroupingCriteria     `json:"microsoft365"`
-    // The entity type used to group organizational units for VMware resources.
-    Vmware       *VMwareDsGroupingCriteria `json:"vmware"`
+    Microsoft365 *M365GroupingCriteria  `json:"microsoft365"`
 }
 
 // OULinks represents a custom type struct.
@@ -4896,28 +4082,50 @@ type Object struct {
 // ObjectFilter
 // defines which objects will be backed up.
 type ObjectFilter struct {
-    // A list of desired object prefixes to exclude in this protection group's backups.
-    // An object that matches any of these prefixes will not be in the backup, even if it
-    // matches an include expression. A wildcard * can be used to match any number of
-    // characters, except for the / character that is used as a folder separator, and must
-    // be matched explicitly. If an asterisk * needs to be matched explicitly, escape the
-    // asterisk with \\*.
-    ExcludePrefixExpressions []*string       `json:"exclude_prefix_expressions"`
-    // A list of desired object prefixes to include in this protection group's backups.
-    // If this input is non-empty, an object must match one of the given prefixes to be
-    // included in the backup. A wildcard * can be used to match any number of characters,
-    // except for the / character that is used as a folder separator, and must be matched
-    // explicitly. If an asterisk * needs to be matched explicitly, escape the asterisk
-    // with \\*.
-    IncludePrefixExpressions []*string       `json:"include_prefix_expressions"`
+    // The cutoff date for inclusion objects from the backup. Any object with a last modified
+    // date after or equal  than this value will  be included in the backup. This is useful for
+    // filtering out old or irrelevant objects based on their modification timestamps.
+    // EarliestLastModifiedTimeStamp support RFC-3339 format.
+    EarliestLastModifiedTimestamp *string         `json:"earliest_last_modified_timestamp"`
     // Whether to back up only the latest object version.
-    LatestVersionOnly        *bool           `json:"latest_version_only"`
+    LatestVersionOnly             *bool           `json:"latest_version_only"`
     // PrefixFilter
-    PrefixFilters            []*PrefixFilter `json:"prefix_filters"`
+    PrefixFilters                 []*PrefixFilter `json:"prefix_filters"`
     // Storage class to include in the backup. If not specified, then all objects across all storage
     // classes will be backed up. Valid values are: `S3 Standard`, `S3 Standard-IA`,
     // `S3 Intelligent-Tiering`, and `S3 One Zone-IA`.
-    StorageClasses           []*string       `json:"storage_classes"`
+    StorageClasses                []*string       `json:"storage_classes"`
+}
+
+// ObjectV2 represents a custom type struct.
+// ObjectV2 defines one object to restore
+type ObjectV2 struct {
+    // Bucket the object belongs to
+    Bucket                 *string `json:"bucket"`
+    // Etag of the contents of the object.
+    Etag                   *string `json:"etag"`
+    // Last time the object was backed up as an RFC3339 string.
+    LastBackupTimestamp    *string `json:"last_backup_timestamp"`
+    // Last modified time of the object as an RFC3339 string.
+    LastModifiedTimestamp  *string `json:"last_modified_timestamp"`
+    // Object key
+    ObjectKey              *string `json:"object_key"`
+    // The Clumio-assigned ID of a protection group S3 asset,
+    // which represents the bucket within the protection group to restore from.
+    ProtectionGroupAssetId *string `json:"protection_group_asset_id"`
+    // region of the backup object
+    Region                 *string `json:"region"`
+    // Encrypted metadata for the object to be restored 
+    // You can get `restore_cookie` via
+    // [POST /restores/protection-groups/{protection_group_id}/previews](#operation/preview-protection-group)
+    RestoreCookie          *string `json:"restore_cookie"`
+    // Size in Bytes
+    SizeInBytes            *int64  `json:"size_in_bytes"`
+    // Storage class. Valid values are: `S3 Standard`, `S3 Standard-IA`, `S3 Intelligent-Tiering`,
+    // and `S3 One Zone-IA`.
+    StorageClass           *string `json:"storage_class"`
+    // Version ID
+    VersionId              *string `json:"version_id"`
 }
 
 // OnDemandDynamoDBBackupLinks represents a custom type struct.
@@ -4958,13 +4166,11 @@ type OnDemandSetting struct {
     RetentionDuration *RetentionBackupSLAParam `json:"retention_duration"`
 }
 
-// OnDemandVMBackupResponseLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type OnDemandVMBackupResponseLinks struct {
-    // The HATEOAS link to this resource.
-    Self     *HateoasSelfLink     `json:"_self"`
-    // A HATEOAS link to the task associated with this resource.
-    ReadTask *ReadTaskHateoasLink `json:"read-task"`
+// OnDemandThroughputOverride represents a custom type struct.
+// Replica-specific ondemand throughput settings. If not specified, uses the source table's ondemand throughput settings.
+type OnDemandThroughputOverride struct {
+    // The maximum number of strongly consistent reads consumed per second.
+    MaxReadRequestUnits *int64 `json:"max_read_request_units"`
 }
 
 // OperationInfo represents a custom type struct
@@ -5140,8 +4346,8 @@ type OrganizationalUnitListLinks struct {
 }
 
 // OrganizationalUnitParentEntity represents a custom type struct.
-// The parent object of the primary entity associated with the organizational unit. For example, "vmware_vcenter" is the parent entity of primary entity "vmware_vm_folder".
-// The parent object is necessary for VMware entities and can be omitted for other data sources.
+// The parent object of the primary entity associated with the organizational unit.
+// The parent object is optional and can be omitted.
 type OrganizationalUnitParentEntity struct {
     // The Clumio assigned ID of the entity.
     Id         *string `json:"id"`
@@ -5150,7 +4356,7 @@ type OrganizationalUnitParentEntity struct {
 }
 
 // OrganizationalUnitPrimaryEntity represents a custom type struct.
-// The primary object associated with the organizational unit. Examples of primary entities include "aws_environment" and "vmware_vm".
+// The primary object associated with the organizational unit. Examples of primary entities include "aws_environment".
 type OrganizationalUnitPrimaryEntity struct {
     // The Clumio assigned ID of the entity.
     Id         *string `json:"id"`
@@ -5312,27 +4518,29 @@ type Policy struct {
 // Additional operation-specific policy settings. For operation types which do not support additional settings, this field is `null`.
 type PolicyAdvancedSettings struct {
     // Advanced settings for EBS backup.
-    AwsEbsVolumeBackup           *EBSBackupAdvancedSetting              `json:"aws_ebs_volume_backup"`
+    AwsEbsVolumeBackup              *EBSBackupAdvancedSetting                       `json:"aws_ebs_volume_backup"`
     // Advanced settings for EC2 backup.
-    AwsEc2InstanceBackup         *EC2BackupAdvancedSetting              `json:"aws_ec2_instance_backup"`
+    AwsEc2InstanceBackup            *EC2BackupAdvancedSetting                       `json:"aws_ec2_instance_backup"`
     // Advanced settings for RDS PITR configuration sync.
-    AwsRdsConfigSync             *RDSConfigSyncAdvancedSetting          `json:"aws_rds_config_sync"`
-    // Settings for determining if a RDS policy is created with standard or frozen tier.
-    AwsRdsResourceGranularBackup *RDSLogicalBackupAdvancedSetting       `json:"aws_rds_resource_granular_backup"`
+    AwsRdsConfigSync                *RDSConfigSyncAdvancedSetting                   `json:"aws_rds_config_sync"`
+    // Settings for determining if a RDS policy is created with standard or archive tier.
+    AwsRdsResourceGranularBackup    *RDSLogicalBackupAdvancedSetting                `json:"aws_rds_resource_granular_backup"`
     // Additional policy configuration settings for the `ec2_mssql_database_backup` operation. If this operation is not of type `ec2_mssql_database_backup`, then this field is omitted from the response.
-    Ec2MssqlDatabaseBackup       *EC2MSSQLDatabaseBackupAdvancedSetting `json:"ec2_mssql_database_backup"`
+    Ec2MssqlDatabaseBackup          *EC2MSSQLDatabaseBackupAdvancedSetting          `json:"ec2_mssql_database_backup"`
     // Additional policy configuration settings for the `ec2_mssql_log_backup` operation. If this operation is not of type `ec2_mssql_log_backup`, then this field is omitted from the response.
-    Ec2MssqlLogBackup            *EC2MSSQLLogBackupAdvancedSetting      `json:"ec2_mssql_log_backup"`
+    Ec2MssqlLogBackup               *EC2MSSQLLogBackupAdvancedSetting               `json:"ec2_mssql_log_backup"`
     // Additional policy configuration settings for the `mssql_database_backup` operation. If this operation is not of type `mssql_database_backup`, then this field is omitted from the response.
-    MssqlDatabaseBackup          *MSSQLDatabaseBackupAdvancedSetting    `json:"mssql_database_backup"`
+    MssqlDatabaseBackup             *MSSQLDatabaseBackupAdvancedSetting             `json:"mssql_database_backup"`
     // Additional policy configuration settings for the `mssql_log_backup` operation. If this operation is not of type `mssql_log_backup`, then this field is omitted from the response.
-    MssqlLogBackup               *MSSQLLogBackupAdvancedSetting         `json:"mssql_log_backup"`
+    MssqlLogBackup                  *MSSQLLogBackupAdvancedSetting                  `json:"mssql_log_backup"`
     // Additional policy configuration settings for the `oracle_database_backup` operation. If this operation is not of type `oracle_database_backup`, then this field is omitted from the response.
-    OracleDatabaseBackup         *OracleDatabaseBackupAdvancedSetting   `json:"oracle_database_backup"`
+    OracleDatabaseBackup            *OracleDatabaseBackupAdvancedSetting            `json:"oracle_database_backup"`
     // Additional policy configuration settings for the `oracle_log_backup` operation. If this operation is not of type `oracle_log_backup`, then this field is omitted from the response.
-    OracleLogBackup              *OracleLogBackupAdvancedSetting        `json:"oracle_log_backup"`
+    OracleLogBackup                 *OracleLogBackupAdvancedSetting                 `json:"oracle_log_backup"`
     // Additional policy configuration settings for the `protection_group_backup` operation. If this operation is not of type `protection_group_backup`, then this field is omitted from the response.
-    ProtectionGroupBackup        *ProtectionGroupBackupAdvancedSetting  `json:"protection_group_backup"`
+    ProtectionGroupBackup           *ProtectionGroupBackupAdvancedSetting           `json:"protection_group_backup"`
+    // Additional policy configuration settings for the `protection_group_continuous_backup` operation. If this operation is not of type `protection_group_continuous_backup`, then this field is omitted from the response.
+    ProtectionGroupContinuousBackup *ProtectionGroupContinuousBackupAdvancedSetting `json:"protection_group_continuous_backup"`
 }
 
 // PolicyDetails represents a custom type struct
@@ -5350,10 +4558,8 @@ type PolicyDetails struct {
 // If the `embed` query parameter is set, displays the responses of the related resource,
 // as defined by the embeddable link specified.
 type PolicyEmbedded struct {
-    // Embeds the EBS compliance statistics into the response.
-    ReadPolicyAwsEbsVolumesComplianceStats interface{} `json:"read-policy-aws-ebs-volumes-compliance-stats"`
-    // Embeds the VM compliance statisticss into the response.
-    ReadPolicyVmwareVmsComplianceStats     interface{} `json:"read-policy-vmware-vms-compliance-stats"`
+    // Embeds the EBS protection statistics into the response.
+    ReadPolicyAwsEbsVolumesProtectionStats interface{} `json:"read-policy-aws-ebs-volumes-protection-stats"`
 }
 
 // PolicyLinks represents a custom type struct.
@@ -5459,6 +4665,13 @@ type PreviewDetailsProtectionGroupLinks struct {
     Self *HateoasSelfLink `json:"_self"`
 }
 
+// PreviewDetailsS3BucketLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type PreviewDetailsS3BucketLinks struct {
+    // The HATEOAS link to this resource.
+    Self *HateoasSelfLink `json:"_self"`
+}
+
 // PreviewProtectionGroupAsyncLinks represents a custom type struct.
 // URLs to pages related to the resource.
 type PreviewProtectionGroupAsyncLinks struct {
@@ -5496,6 +4709,15 @@ type PreviewProtectionGroupS3AssetSyncLinks struct {
 type PreviewProtectionGroupSyncLinks struct {
     // The HATEOAS link to this resource.
     Self *HateoasSelfLink `json:"_self"`
+}
+
+// PreviewS3BucketLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type PreviewS3BucketLinks struct {
+    // The HATEOAS link to this resource.
+    Self     *HateoasSelfLink     `json:"_self"`
+    // A HATEOAS link to the task associated with this resource.
+    ReadTask *ReadTaskHateoasLink `json:"read-task"`
 }
 
 // Projection represents a custom type struct.
@@ -5538,122 +4760,198 @@ type ProtectEntitiesHateoasLink struct {
     ClumioType *string `json:"type"`
 }
 
-// ProtectedStatsDeprecated represents a custom type struct.
-// ProtectedStatsDeprecated contains the compliance stats for policies which are protected along with
-// the unprotected policies count
-type ProtectedStatsDeprecated struct {
-    // ComplianceStatsDeprecated denotes compliance metrics for all entities associated with a given type
-    Protected   *ComplianceStatsDeprecated `json:"protected"`
-    // Unprotected count.
-    Unprotected *uint32                    `json:"unprotected"`
-}
-
-// ProtectionComplianceStatsWithSeeding represents a custom type struct.
-// The compliance statistics of workloads associated with this entity.
-type ProtectionComplianceStatsWithSeeding struct {
-    // The total number of compliant entities.
-    CompliantCount     *int64 `json:"compliant_count"`
-    // The total number of entities associated with deactivated policies.
-    DeactivatedCount   *int64 `json:"deactivated_count"`
-    // Determines whether one or more entities is currently seeding or waiting for seeding.
-    // If set to `true`, at least one entity is currently seeding or waiting for seeding.
-    HasSeedingEntities *bool  `json:"has_seeding_entities"`
-    // The total number of non-compliant entities.
-    NonCompliantCount  *int64 `json:"non_compliant_count"`
-    // The number of entities with protection applied.
-    ProtectedCount     *int64 `json:"protected_count"`
-    // The number of entities without protection applied.
-    UnprotectedCount   *int64 `json:"unprotected_count"`
-}
-
 // ProtectionGroup represents a custom type struct
 type ProtectionGroup struct {
     // Embedded responses related to the resource.
-    Embedded                       *ProtectionGroupEmbedded              `json:"_embedded"`
+    Embedded                         *ProtectionGroupEmbedded `json:"_embedded"`
     // URLs to pages related to the resource.
-    Links                          *ProtectionGroupLinks                 `json:"_links"`
+    Links                            *ProtectionGroupLinks    `json:"_links"`
     // Represents the aggregated stats for backup status.
-    BackupStatusStats              *BackupStatusStats                    `json:"backup_status_stats"`
+    BackupStatusStats                *BackupStatusStats       `json:"backup_status_stats"`
     // The backup target AWS region associated with the protection group, empty if
     // in-region or not configured.
-    BackupTargetAwsRegion          *string                               `json:"backup_target_aws_region"`
+    BackupTargetAwsRegion            *string                  `json:"backup_target_aws_region"`
     // BackupTierStat
-    BackupTierStats                []*BackupTierStat                     `json:"backup_tier_stats"`
+    BackupTierStats                  []*BackupTierStat        `json:"backup_tier_stats"`
     // Number of buckets
-    BucketCount                    *int64                                `json:"bucket_count"`
+    BucketCount                      *int64                   `json:"bucket_count"`
     // The following table describes the possible conditions for a bucket to be
     // automatically added to a protection group.
     // 
-    // +-------------------+----------------+-----------------------------------------+
-    // |       Field       | Rule Condition |               Description               |
-    // +===================+================+=========================================+
-    // | aws_tag           | $eq            | Denotes the AWS tag(s) to               |
-    // |                   |                | conditionalize on                       |
-    // |                   |                |                                         |
-    // |                   |                | {"aws_tag":{"$eq":{"key":"Environment", |
-    // |                   |                | "value":"Prod"}}}                       |
-    // |                   |                |                                         |
-    // |                   |                |                                         |
-    // +-------------------+----------------+-----------------------------------------+
-    // | account_native_id | $eq            | Denotes the AWS account to              |
-    // |                   |                | conditionalize on                       |
-    // |                   |                |                                         |
-    // |                   |                | {"account_native_id":{"$eq":"1111111111 |
-    // |                   |                | 11"}}                                   |
-    // |                   |                |                                         |
-    // |                   |                |                                         |
-    // +-------------------+----------------+-----------------------------------------+
-    // | aws_region        | $eq            | Denotes the AWS region to               |
-    // |                   |                | conditionalize on                       |
-    // |                   |                |                                         |
-    // |                   |                | {"aws_region":{"$eq":"us-west-2"}}      |
-    // |                   |                |                                         |
-    // |                   |                |                                         |
-    // +-------------------+----------------+-----------------------------------------+
+    // +-----------------------+----------------+-------------------------------------+
+    // |         Field         | Rule Condition |             Description             |
+    // +=======================+================+=====================================+
+    // | aws_tag               | $eq            | Denotes the AWS tag(s) to be        |
+    // |                       |                | exactly equal to the specified      |
+    // |                       |                | value.                              |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$eq":{"key":"Environme |
+    // |                       |                | nt", "value":"Prod"}}}              |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_tag               | $not_eq        | Denotes the AWS tag(s) to be not    |
+    // |                       |                | equal to the specified value.       |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$not_eq":{"key":"Envir |
+    // |                       |                | onment", "value":"Prod"}}}          |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_tag               | $contains      | Denotes the AWS tag(s) contain a    |
+    // |                       |                | specified substring.                |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$contains":{"key":"Env |
+    // |                       |                | ironment", "value":"Prod"}}}        |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_tag               | $not_contains  | Denotes the AWS tag(s) excludes a   |
+    // |                       |                | specified substring.                |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$not_contains":{"key": |
+    // |                       |                | "Environment", "value":"Prod"}}}    |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_tag               | $all           | Denotes the AWS tag(s) where all    |
+    // |                       |                | elements in the specified list are  |
+    // |                       |                | present.                            |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$all":[{"key":"Environ |
+    // |                       |                | ment", "value":"Prod"}]}}           |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_tag               | $not_all       | Denotes the AWS tag(s) where at     |
+    // |                       |                | least one element from the          |
+    // |                       |                | specified list is missing.          |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$not_all":[{"key":"Env |
+    // |                       |                | ironment", "value":"Prod"}]}}       |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_tag               | $in            | Denotes the AWS tag(s) exist in a   |
+    // |                       |                | specified list.                     |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$in":[{"key":"Environm |
+    // |                       |                | ent", "value":"Prod"}]}}            |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_tag               | $not_in        | Denotes the AWS tag(s) do not exist |
+    // |                       |                | in a specified list.                |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$not_in":[{"key":"Envi |
+    // |                       |                | ronment", "value":"Prod"}]}}        |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_account_native_id | $eq            | Denotes the AWS account to be       |
+    // |                       |                | exactly equal to the specified      |
+    // |                       |                | value.                              |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_account_native_id":{"$eq":"11 |
+    // |                       |                | 1111111111"}}                       |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_account_native_id | $in            | Denotes the AWS account exist in a  |
+    // |                       |                | specified list.                     |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_account_native_id":{"$in":["1 |
+    // |                       |                | 11111111111"]}}                     |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | account_native_id     | $in            |                                     |
+    // |                       |                | This will be deprecated and use     |
+    // |                       |                | aws_account_native_id instead.      |
+    // |                       |                | Denotes the AWS account exist in a  |
+    // |                       |                | specified list.                     |
+    // |                       |                |                                     |
+    // |                       |                | {"account_native_id":{"$in":["11111 |
+    // |                       |                | 1111111"]}}                         |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | account_native_id     | $eq            |                                     |
+    // |                       |                | This will be deprecated and use     |
+    // |                       |                | aws_account_native_id instead.      |
+    // |                       |                | Denotes the AWS account to be       |
+    // |                       |                | exactly equal to the specified      |
+    // |                       |                | value.                              |
+    // |                       |                |                                     |
+    // |                       |                | {"account_native_id":{"$eq":"111111 |
+    // |                       |                | 111111"}}                           |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_region            | $eq            | Denotes the AWS region to be        |
+    // |                       |                | exactly equal to the specified      |
+    // |                       |                | value.                              |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_region":{"$eq":"us-west-2"}}  |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_region            | $in            | Denotes the AWS region exist in a   |
+    // |                       |                | specified list.                     |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_region":{"$in":["us-          |
+    // |                       |                | west-2"]}}                          |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
     // 
-    BucketRule                     *string                               `json:"bucket_rule"`
-    // The compliance statistics of workloads associated with this entity.
-    ComplianceStats                *ProtectionComplianceStatsWithSeeding `json:"compliance_stats"`
+    BucketRule                       *string                  `json:"bucket_rule"`
     // Creation time of the protection group in RFC-3339 format.
-    CreatedTimestamp               *string                               `json:"created_timestamp"`
+    CreatedTimestamp                 *string                  `json:"created_timestamp"`
     // The user-assigned description of the protection group.
-    Description                    *string                               `json:"description"`
+    Description                      *string                  `json:"description"`
+    // Timestamp of the earliest protection group backup which has not expired yet. Represented in
+    // RFC-3339 format. Only available for Read API.
+    EarliestAvailableBackupTimestamp *string                  `json:"earliest_available_backup_timestamp"`
     // The Clumio-assigned ID of the protection group.
-    Id                             *string                               `json:"id"`
+    Id                               *string                  `json:"id"`
     // Whether the protection group already has a backup target configured by a policy, or
     // is open to be protected by an in-region or out-of-region S3 policy.
-    IsBackupTargetRegionConfigured *bool                                 `json:"is_backup_target_region_configured"`
+    IsBackupTargetRegionConfigured   *bool                    `json:"is_backup_target_region_configured"`
     // Determines whether the protection group is active or has been deleted. Deleted protection
     // groups may be purged after some time once there are no active backups associated with it.
-    IsDeleted                      *bool                                 `json:"is_deleted"`
+    IsDeleted                        *bool                    `json:"is_deleted"`
     // Time of the last backup in RFC-3339 format.
-    LastBackupTimestamp            *string                               `json:"last_backup_timestamp"`
+    LastBackupTimestamp              *string                  `json:"last_backup_timestamp"`
     // Time of the last successful continuous backup in RFC-3339 format.
-    LastContinuousBackupTimestamp  *string                               `json:"last_continuous_backup_timestamp"`
+    LastContinuousBackupTimestamp    *string                  `json:"last_continuous_backup_timestamp"`
     // Modified time of the protection group in RFC-3339 format.
-    ModifiedTimestamp              *string                               `json:"modified_timestamp"`
+    ModifiedTimestamp                *string                  `json:"modified_timestamp"`
     // The user-assigned name of the protection group.
-    Name                           *string                               `json:"name"`
+    Name                             *string                  `json:"name"`
     // ObjectFilter
     // defines which objects will be backed up.
-    ObjectFilter                   *ObjectFilter                         `json:"object_filter"`
+    ObjectFilter                     *ObjectFilter            `json:"object_filter"`
     // The Clumio-assigned ID of the organizational unit associated with the Protection Group.
-    OrganizationalUnitId           *string                               `json:"organizational_unit_id"`
+    OrganizationalUnitId             *string                  `json:"organizational_unit_id"`
     // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
-    ProtectionInfo                 *ProtectionInfoWithRule               `json:"protection_info"`
+    ProtectionInfo                   *ProtectionInfoWithRule  `json:"protection_info"`
+    // A substruct that only includes protected_count and unprotected_count which can
+    // be used in common by other structs
+    ProtectionStats                  *ProtectionStats         `json:"protection_stats"`
     // The protection status of the protection group. Possible values include "protected",
     // "unprotected", and "unsupported". If the protection group does not support backups, then
     // this field has a value of `unsupported`.
-    ProtectionStatus               *string                               `json:"protection_status"`
+    ProtectionStatus                 *string                  `json:"protection_status"`
     // Cumulative count of all unexpired objects in each backup (any new or updated since
     // the last backup) that have been backed up as part of this protection group
-    TotalBackedUpObjectCount       *int64                                `json:"total_backed_up_object_count"`
+    TotalBackedUpObjectCount         *int64                   `json:"total_backed_up_object_count"`
     // Cumulative size of all unexpired objects in each backup (any new or updated since
     // the last backup) that have been backed up as part of this protection group
-    TotalBackedUpSizeBytes         *int64                                `json:"total_backed_up_size_bytes"`
+    TotalBackedUpSizeBytes           *int64                   `json:"total_backed_up_size_bytes"`
     // Version of the protection group. The version number is incremented every time
     // a change is made to the protection group.
-    Version                        *int64                                `json:"version"`
+    Version                          *int64                   `json:"version"`
 }
 
 // ProtectionGroupBackup represents a custom type struct
@@ -5689,7 +4987,7 @@ type ProtectionGroupBackup struct {
 // ProtectionGroupBackupAdvancedSetting represents a custom type struct.
 // Additional policy configuration settings for the `protection_group_backup` operation. If this operation is not of type `protection_group_backup`, then this field is omitted from the response.
 type ProtectionGroupBackupAdvancedSetting struct {
-    // Backup tier to store the backup in. Valid values are: `cold`, `frozen`
+    // Backup tier to store the backup in. Valid values are: `standard`, `archive`
     BackupTier *string `json:"backup_tier"`
 }
 
@@ -5725,64 +5023,62 @@ type ProtectionGroupBackupListLinks struct {
 // ProtectionGroupBucket represents a custom type struct
 type ProtectionGroupBucket struct {
     // Embedded responses related to the resource.
-    Embedded                      *ProtectionGroupBucketEmbedded `json:"_embedded"`
+    Embedded                         *ProtectionGroupBucketEmbedded `json:"_embedded"`
     // URLs to pages related to the resource.
-    Links                         *ProtectionGroupBucketLinks    `json:"_links"`
+    Links                            *ProtectionGroupBucketLinks    `json:"_links"`
     // The AWS-assigned ID of the account associated with the DynamoDB table.
-    AccountNativeId               *string                        `json:"account_native_id"`
+    AccountNativeId                  *string                        `json:"account_native_id"`
     // Whether this bucket was added to this protection group by the bucket rule
-    AddedByBucketRule             *bool                          `json:"added_by_bucket_rule"`
+    AddedByBucketRule                *bool                          `json:"added_by_bucket_rule"`
     // Whether this bucket was added to this protection group by the user
-    AddedByUser                   *bool                          `json:"added_by_user"`
+    AddedByUser                      *bool                          `json:"added_by_user"`
     // The AWS region associated with the DynamoDB table.
-    AwsRegion                     *string                        `json:"aws_region"`
+    AwsRegion                        *string                        `json:"aws_region"`
     // The backup status information applied to this resource.
-    BackupStatusInfo              *BackupStatusInfo              `json:"backup_status_info"`
+    BackupStatusInfo                 *BackupStatusInfo              `json:"backup_status_info"`
     // The backup target AWS region associated with the protection group S3 asset.
-    BackupTargetAwsRegion         *string                        `json:"backup_target_aws_region"`
+    BackupTargetAwsRegion            *string                        `json:"backup_target_aws_region"`
     // BackupTierStat
-    BackupTierStats               []*BackupTierStat              `json:"backup_tier_stats"`
+    BackupTierStats                  []*BackupTierStat              `json:"backup_tier_stats"`
     // The Clumio-assigned ID of the bucket
-    BucketId                      *string                        `json:"bucket_id"`
+    BucketId                         *string                        `json:"bucket_id"`
     // The name of the bucket
-    BucketName                    *string                        `json:"bucket_name"`
-    // [DEPRECATED]
-    // The compliance status of the protected protection group. Possible values include
-    // "compliant" and "noncompliant". If the table is not protected, then this field has
-    // a value of `null`.
-    ComplianceStatus              *string                        `json:"compliance_status"`
+    BucketName                       *string                        `json:"bucket_name"`
     // Creation time of the protection group in RFC-3339 format.
-    CreatedTimestamp              *string                        `json:"created_timestamp"`
+    CreatedTimestamp                 *string                        `json:"created_timestamp"`
+    // Timestamp of the earliest protection group backup which has not expired yet. Represented in
+    // RFC-3339 format. Only available for Read API.
+    EarliestAvailableBackupTimestamp *string                        `json:"earliest_available_backup_timestamp"`
     // The Clumio-assigned ID of the AWS environment associated with the protection group.
-    EnvironmentId                 *string                        `json:"environment_id"`
+    EnvironmentId                    *string                        `json:"environment_id"`
     // The Clumio-assigned ID of the protection group
-    GroupId                       *string                        `json:"group_id"`
+    GroupId                          *string                        `json:"group_id"`
     // The name of the protection group
-    GroupName                     *string                        `json:"group_name"`
+    GroupName                        *string                        `json:"group_name"`
     // The Clumio-assigned ID that represents the bucket within the protection group.
-    Id                            *string                        `json:"id"`
+    Id                               *string                        `json:"id"`
     // Determines whether the protection group bucket has been deleted
-    IsDeleted                     *bool                          `json:"is_deleted"`
+    IsDeleted                        *bool                          `json:"is_deleted"`
     // Time of the last backup in RFC-3339 format.
-    LastBackupTimestamp           *string                        `json:"last_backup_timestamp"`
+    LastBackupTimestamp              *string                        `json:"last_backup_timestamp"`
     // Time of the last successful continuous backup in RFC-3339 format.
-    LastContinuousBackupTimestamp *string                        `json:"last_continuous_backup_timestamp"`
+    LastContinuousBackupTimestamp    *string                        `json:"last_continuous_backup_timestamp"`
     // The Clumio-assigned ID of the organizational unit associated with the protection group.
-    OrganizationalUnitId          *string                        `json:"organizational_unit_id"`
+    OrganizationalUnitId             *string                        `json:"organizational_unit_id"`
     // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
-    ProtectionInfo                *ProtectionInfoWithRule        `json:"protection_info"`
+    ProtectionInfo                   *ProtectionInfoWithRule        `json:"protection_info"`
     // The protection status of the protection group. Possible values include "protected",
     // "unprotected", and "unsupported". If the protection group does not support backups, then
     // this field has a value of `unsupported`.
-    ProtectionStatus              *string                        `json:"protection_status"`
+    ProtectionStatus                 *string                        `json:"protection_status"`
     // Cumulative count of all unexpired objects in each backup (any new or updated since
     // the last backup) that have been backed up as part of this protection group
-    TotalBackedUpObjectCount      *int64                         `json:"total_backed_up_object_count"`
+    TotalBackedUpObjectCount         *int64                         `json:"total_backed_up_object_count"`
     // Cumulative size of all unexpired objects in each backup (any new or updated since
     // the last backup) that have been backed up as part of this protection group
-    TotalBackedUpSizeBytes        *int64                         `json:"total_backed_up_size_bytes"`
+    TotalBackedUpSizeBytes           *int64                         `json:"total_backed_up_size_bytes"`
     // The unsupported reason for the S3 bucket.
-    UnsupportedReason             *string                        `json:"unsupported_reason"`
+    UnsupportedReason                *string                        `json:"unsupported_reason"`
 }
 
 // ProtectionGroupBucketContinuousBackupStats represents a custom type struct.
@@ -5880,6 +5176,15 @@ type ProtectionGroupBucketListLinks struct {
     Prev  *HateoasPrevLink  `json:"_prev"`
     // The HATEOAS link to this resource.
     Self  *HateoasSelfLink  `json:"_self"`
+}
+
+// ProtectionGroupContinuousBackupAdvancedSetting represents a custom type struct.
+// Additional policy configuration settings for the `protection_group_continuous_backup` operation. If this operation is not of type `protection_group_continuous_backup`, then this field is omitted from the response.
+type ProtectionGroupContinuousBackupAdvancedSetting struct {
+    // If true, tries to disable EventBridge notification for the given bucket, when continuous backup no longer conducts.
+    // It may override the existing bucket notification configuration in the customer's account.
+    // This takes effect only when `event_bridge_enabled` is set to `false`.
+    DisableEventbridgeNotification *bool `json:"disable_eventbridge_notification"`
 }
 
 // ProtectionGroupEmbedded represents a custom type struct.
@@ -6067,6 +5372,32 @@ type ProtectionGroupS3AssetBackupListLinks struct {
     Self  *HateoasSelfLink  `json:"_self"`
 }
 
+// ProtectionGroupS3AssetPitrInterval represents a custom type struct
+type ProtectionGroupS3AssetPitrInterval struct {
+    // The end time of the interval, represented in RFC3339 format.
+    EndTimestamp   *string `json:"end_timestamp"`
+    // The start time of the interval, represented in RFC3339 format.
+    StartTimestamp *string `json:"start_timestamp"`
+}
+
+// ProtectionGroupS3AssetPitrIntervalListEmbedded represents a custom type struct.
+// Embedded responses related to the resource.
+type ProtectionGroupS3AssetPitrIntervalListEmbedded struct {
+    // TODO: Add struct field description
+    Items []*ProtectionGroupS3AssetPitrInterval `json:"items"`
+}
+
+// ProtectionGroupS3AssetPitrIntervalListLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type ProtectionGroupS3AssetPitrIntervalListLinks struct {
+    // The HATEOAS link to the first page of results.
+    First *HateoasFirstLink `json:"_first"`
+    // The HATEOAS link to the next page of results.
+    Next  *HateoasNextLink  `json:"_next"`
+    // The HATEOAS link to this resource.
+    Self  *HateoasSelfLink  `json:"_self"`
+}
+
 // ProtectionGroupS3AssetRestoreSource represents a custom type struct.
 // The parameters for initiating a protection group S3 asset restore
 // or creation of an instant access endpoint from a backup.
@@ -6119,37 +5450,15 @@ type ProtectionInfo struct {
     // If protection was not inherited, then this field has a value of `null`.
     // Entities from which protection can be inherited include the following:
     // 
-    // +--------------------------------+---------------------------------+
-    // |     Inheriting Entity Type     |             Details             |
-    // +================================+=================================+
-    // | aws_tag                        | AWS tag.                        |
-    // +--------------------------------+---------------------------------+
-    // | vmware_vm_folder               | VMware VM folder.               |
-    // +--------------------------------+---------------------------------+
-    // | vmware_datacenter              | VMware data center.             |
-    // +--------------------------------+---------------------------------+
-    // | vmware_datacenter_folder       | VMware data center folder.      |
-    // +--------------------------------+---------------------------------+
-    // | vmware_tag                     | VMware tag.                     |
-    // +--------------------------------+---------------------------------+
-    // | vmware_category                | VMware tag category.            |
-    // +--------------------------------+---------------------------------+
-    // | vmware_compute_resource        | VMware compute resource.        |
-    // +--------------------------------+---------------------------------+
-    // | vmware_compute_resource_folder | VMware compute resource folder. |
-    // +--------------------------------+---------------------------------+
+    // +------------------------+----------+
+    // | Inheriting Entity Type | Details  |
+    // +========================+==========+
+    // | aws_tag                | AWS tag. |
+    // +------------------------+----------+
     // 
     InheritingEntityType *string `json:"inheriting_entity_type"`
     // A system-generated ID assigned to the policy protecting this resource.
     PolicyId             *string `json:"policy_id"`
-}
-
-// ProtectionInfoDeprecated represents a custom type struct
-type ProtectionInfoDeprecated struct {
-    // TODO: Add struct field description
-    Inheritedfrom *InheritedFrom `json:"inheritedFrom"`
-    // PolicyID for the policy.
-    Policyid      *string        `json:"policyId"`
 }
 
 // ProtectionInfoWithRule represents a custom type struct.
@@ -6162,29 +5471,27 @@ type ProtectionInfoWithRule struct {
     // If protection was not inherited, then this field has a value of `null`.
     // Entities from which protection can be inherited include the following:
     // 
-    // +--------------------------------+---------------------------------+
-    // |     Inheriting Entity Type     |             Details             |
-    // +================================+=================================+
-    // | aws_tag                        | AWS tag.                        |
-    // +--------------------------------+---------------------------------+
-    // | vmware_vm_folder               | VMware VM folder.               |
-    // +--------------------------------+---------------------------------+
-    // | vmware_datacenter              | VMware data center.             |
-    // +--------------------------------+---------------------------------+
-    // | vmware_datacenter_folder       | VMware data center folder.      |
-    // +--------------------------------+---------------------------------+
-    // | vmware_tag                     | VMware tag.                     |
-    // +--------------------------------+---------------------------------+
-    // | vmware_category                | VMware tag category.            |
-    // +--------------------------------+---------------------------------+
-    // | vmware_compute_resource        | VMware compute resource.        |
-    // +--------------------------------+---------------------------------+
-    // | vmware_compute_resource_folder | VMware compute resource folder. |
-    // +--------------------------------+---------------------------------+
+    // +------------------------+----------+
+    // | Inheriting Entity Type | Details  |
+    // +========================+==========+
+    // | aws_tag                | AWS tag. |
+    // +------------------------+----------+
     // 
     InheritingEntityType *string `json:"inheriting_entity_type"`
     // A system-generated ID assigned to the policy protecting this resource.
     PolicyId             *string `json:"policy_id"`
+}
+
+// ProtectionStats represents a custom type struct.
+// A substruct that only includes protected_count and unprotected_count which can
+// be used in common by other structs
+type ProtectionStats struct {
+    // The total number of entities associated with deactivated policies.
+    DeactivatedCount *int64 `json:"deactivated_count"`
+    // The number of entities with protection applied.
+    ProtectedCount   *int64 `json:"protected_count"`
+    // The number of entities without protection applied.
+    UnprotectedCount *int64 `json:"unprotected_count"`
 }
 
 // ProvisionedThroughput represents a custom type struct.
@@ -6300,9 +5607,9 @@ type RDSDatabaseTableListLinks struct {
 }
 
 // RDSLogicalBackupAdvancedSetting represents a custom type struct.
-// Settings for determining if a RDS policy is created with standard or frozen tier.
+// Settings for determining if a RDS policy is created with standard or archive tier.
 type RDSLogicalBackupAdvancedSetting struct {
-    // Backup tier to store the backup in. Valid values are: `standard`, `frozen`
+    // Backup tier to store the backup in. Valid values are: `standard`, `archive`
     BackupTier *string `json:"backup_tier"`
 }
 
@@ -6448,11 +5755,6 @@ type RdsResource struct {
     AwsRegion                              *string                 `json:"aws_region"`
     // The backup status information applied to this resource.
     BackupStatusInfo                       *BackupStatusInfo       `json:"backup_status_info"`
-    // [DEPRECATED]
-    // The compliance status of the protected RDS resource. Possible values include
-    // `compliant` and `noncompliant`. If the resource is not protected, then this field has
-    // a value of `null`.
-    ComplianceStatus                       *string                 `json:"compliance_status"`
     // The timestamp of when the RDS resource was deleted. Represented in RFC-3339 format.
     // If the resource was not deleted, then this field has a value of `null`.
     DeletionTimestamp                      *string                 `json:"deletion_timestamp"`
@@ -6634,9 +5936,9 @@ type RdsTemplateInfo struct {
     AvailableTemplateVersion *string `json:"available_template_version"`
 }
 
-// ReadEbsTagComplianceStatsLinks represents a custom type struct.
+// ReadEbsTagProtectionStatsLinks represents a custom type struct.
 // URLs to pages related to the resource.
-type ReadEbsTagComplianceStatsLinks struct {
+type ReadEbsTagProtectionStatsLinks struct {
     // The HATEOAS link to this resource.
     Self *HateoasSelfLink `json:"_self"`
 }
@@ -6663,36 +5965,11 @@ type ReadTaskHateoasLink struct {
     ClumioType *string `json:"type"`
 }
 
-// ReadTaskHateoasLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type ReadTaskHateoasLinks struct {
-    // A HATEOAS link to the task associated with this resource.
-    ReadTask *ReadTaskHateoasLink `json:"read-task"`
-}
-
 // ReadTaskHateoasOuterEmbedded represents a custom type struct.
 // Embedded responses related to the resource.
 type ReadTaskHateoasOuterEmbedded struct {
     // Embeds the associated task of a resource in the response if requested using the `embed` query parameter.
     ReadTask interface{} `json:"read-task"`
-}
-
-// ReadVCenterObjectProtectionStatsHateoasLink represents a custom type struct.
-// A HATEOAS link to the compliance statistics of VMs in the folders and subfolders of this vCenter resource.
-type ReadVCenterObjectProtectionStatsHateoasLink struct {
-    // The URI for the referenced operation.
-    Href       *string `json:"href"`
-    // Determines whether the "href" link is a URI template. If set to `true`, the "href" link is a URI template.
-    Templated  *bool   `json:"templated"`
-    // The HTTP method to be used with the "href" link for the referenced operation.
-    ClumioType *string `json:"type"`
-}
-
-// ReadVMwareVCenterProtectionStatsLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type ReadVMwareVCenterProtectionStatsLinks struct {
-    // The HATEOAS link to this resource.
-    Self *HateoasSelfLink `json:"_self"`
 }
 
 // ReplicaDescription represents a custom type struct.
@@ -6702,10 +5979,16 @@ type ReplicaDescription struct {
     GlobalSecondaryIndexes        []*ReplicaGlobalSecondaryIndexDescription `json:"global_secondary_indexes"`
     // The AWS KMS key of the replica that will be used for AWS KMS encryption.
     KmsMasterKeyId                *string                                   `json:"kms_master_key_id"`
+    // Replica-specific ondemand throughput settings. If not specified, uses the source table's ondemand throughput settings.
+    OnDemandThroughputOverride    *OnDemandThroughputOverride               `json:"on_demand_throughput_override"`
     // Replica-specific provisioned throughput settings. If not specified, uses the source table's provisioned throughput settings.
     ProvisionedThroughputOverride *ProvisionedThroughputOverride            `json:"provisioned_throughput_override"`
     // The name of the Region.
     RegionName                    *string                                   `json:"region_name"`
+    // Replica-specific table class summary.
+    // Possible values are `STANDARD` or `STANDARD_INFREQUENT_ACCESS`. This is defaulted to the
+    // `STANDARD` storage class if empty.
+    ReplicaTableClass             *string                                   `json:"replica_table_class"`
 }
 
 // ReplicaGlobalSecondaryIndexDescription represents a custom type struct.
@@ -6713,6 +5996,8 @@ type ReplicaDescription struct {
 type ReplicaGlobalSecondaryIndexDescription struct {
     // The name of the global secondary index.
     IndexName                     *string                        `json:"index_name"`
+    // Replica-specific ondemand throughput settings. If not specified, uses the source table's ondemand throughput settings.
+    OnDemandThroughputOverride    *OnDemandThroughputOverride    `json:"on_demand_throughput_override"`
     // Replica-specific provisioned throughput settings. If not specified, uses the source table's provisioned throughput settings.
     ProvisionedThroughputOverride *ProvisionedThroughputOverride `json:"provisioned_throughput_override"`
 }
@@ -6736,7 +6021,7 @@ type ReportDownload struct {
     // The Clumio-assigned ID of the task which generated the restored file.
     TaskId              *string `json:"task_id"`
     // The type of report this CSV Download is associated with.
-    // The possible values include "activity" and "compliance".
+    // The possible values: ["activity"].
     ClumioType          *string `json:"type"`
 }
 
@@ -6771,79 +6056,22 @@ type ReportDownloadListLinks struct {
     Self  *HateoasSelfLink  `json:"_self"`
 }
 
-// ResourcePoolDatacenterModel represents a custom type struct.
-// The data center in which the resource pool resides.
-type ResourcePoolDatacenterModel struct {
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the data center.
-    Id *string `json:"id"`
-}
-
-// ResourcePoolLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type ResourcePoolLinks struct {
-    // The HATEOAS link to this resource.
-    Self *HateoasSelfLink `json:"_self"`
-}
-
-// ResourcePoolListEmbedded represents a custom type struct.
-// Embedded responses related to the resource.
-type ResourcePoolListEmbedded struct {
-    // ResourcePoolWithETag to support etag string to be calculated
-    Items []*ResourcePoolWithETag `json:"items"`
-}
-
-// ResourcePoolListLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type ResourcePoolListLinks struct {
-    // The HATEOAS link to the first page of results.
-    First *HateoasFirstLink `json:"_first"`
-    // The HATEOAS link to the last page of results.
-    Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
-    Next  *HateoasNextLink  `json:"_next"`
-    // The HATEOAS link to the previous page of results.
-    Prev  *HateoasPrevLink  `json:"_prev"`
-    // The HATEOAS link to this resource.
-    Self  *HateoasSelfLink  `json:"_self"`
-}
-
-// ResourcePoolWithETag represents a custom type struct.
-// ResourcePoolWithETag to support etag string to be calculated
-type ResourcePoolWithETag struct {
-    // The ETag value.
-    Etag            *string                                 `json:"_etag"`
-    // URLs to pages related to the resource.
-    Links           *ResourcePoolLinks                      `json:"_links"`
-    // The compute resource that the resource pool comprises.
-    ComputeResource *VMwareResourcePoolComputeResourceModel `json:"compute_resource"`
-    // The data center in which the resource pool resides.
-    Datacenter      *ResourcePoolDatacenterModel            `json:"datacenter"`
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the resource pool.
-    Id              *string                                 `json:"id"`
-    // Determines whether the resource pool is the default, hidden resource pool.
-    IsRoot          *bool                                   `json:"is_root"`
-    // Determines whether the resource pool can be used as a restore destination. If `true`, the resource pool can be used as a restore destination and backups can be restored to the resource pool.
-    IsSupported     *bool                                   `json:"is_supported"`
-    // The VMware-assigned name of the resource pool.
-    Name            *string                                 `json:"name"`
-    // The vCenter object that is the parent of the resource pool.
-    Parent          *VMwareResourcePoolParentModel          `json:"parent"`
-}
-
 // Resources represents a custom type struct.
 // Partial updates are not supported, therefore you must provide ARNs for all configured resources,
 // including those for resources that are not being updated.
 type Resources struct {
     // SNS topic created in the account to receive relevant events.
-    ClumioEventPubArn    *string       `json:"clumio_event_pub_arn"`
+    ClumioEventPubArn       *string                  `json:"clumio_event_pub_arn"`
     // ARN of the IAM role created in the account, which will be assumed by Clumio.
-    ClumioIamRoleArn     *string       `json:"clumio_iam_role_arn"`
+    ClumioIamRoleArn        *string                  `json:"clumio_iam_role_arn"`
     // ARN of the support role which will be used by the Clumio support team.
-    ClumioSupportRoleArn *string       `json:"clumio_support_role_arn"`
+    ClumioSupportRoleArn    *string                  `json:"clumio_support_role_arn"`
     // TODO: Add struct field description
-    EventRules           *EventRules   `json:"event_rules"`
+    EventRules              *EventRules              `json:"event_rules"`
     // TODO: Add struct field description
-    ServiceRoles         *ServiceRoles `json:"service_roles"`
+    ServiceInstanceProfiles *ServiceInstanceProfiles `json:"service_instance_profiles"`
+    // TODO: Add struct field description
+    ServiceRoles            *ServiceRoles            `json:"service_roles"`
 }
 
 // RestEntity represents a custom type struct
@@ -6851,9 +6079,9 @@ type RestEntity struct {
     // A system-generated ID assigned to this entity.
     Id         *string `json:"id"`
     // Type is mostly an asset type or the type of Entity. Some examples are
-    // "restored_file", "vmware_vm",  etc.
+    // "restored_file", "aws_ebs_volume",  etc.
     ClumioType *string `json:"type"`
-    // A system-generated value assigned to the entity. For example, if the primary entity type is "vmware_vm" for a virtual machine, then the value is the name of the VM.
+    // A system-generated value assigned to the entity. For example, if the primary entity type is "aws_ebs_volume", then the value is the name of the EBS.
     Value      *string `json:"value"`
 }
 
@@ -6934,6 +6162,65 @@ type RestoreRecordsLinksAsync struct {
 type RestoreRecordsLinksSync struct {
     // The HATEOAS link to this resource.
     Self *HateoasSelfLink `json:"_self"`
+}
+
+// RestoreS3BucketLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type RestoreS3BucketLinks struct {
+    // The HATEOAS link to this resource.
+    Self     *HateoasSelfLink     `json:"_self"`
+    // A HATEOAS link to the task associated with this resource.
+    ReadTask *ReadTaskHateoasLink `json:"read-task"`
+}
+
+// RestoreS3BucketSource represents a custom type struct.
+// The parameters for initiating an S3 bucket restore.
+type RestoreS3BucketSource struct {
+    // The Clumio-assigned ID of the bucket to be restored. Use the
+    // [GET /datasources/aws/s3-buckets](#operation/list-aws-s3-buckets) endpoint
+    // to fetch valid values.
+    BucketId                *string                                       `json:"bucket_id"`
+    // Search for or restore only objects that pass the source object filter.
+    ObjectFilters           *SourceObjectFiltersV2                        `json:"object_filters"`
+    // This field is required when the request type is 'Rollback'. The parameters for initiating a point in time restore.
+    PointInTimeRecovery     *RestoreS3BucketSourcePitrOptions             `json:"point_in_time_recovery"`
+    // This field is required when the request type is 'Undo delete marker'.
+    UndoDeleteMarkerOptions *RestoreS3BucketSourceUndoDeleteMarkerOptions `json:"undo_delete_marker_options"`
+}
+
+// RestoreS3BucketSourcePitrOptions represents a custom type struct.
+// This field is required when the request type is 'Rollback'. The parameters for initiating a point in time restore.
+type RestoreS3BucketSourcePitrOptions struct {
+    // The end timestamp to be restored in RFC-3339 format.
+    // Clumio restores objects modified before the given timestamp.
+    RestoreEndTimestamp *string `json:"restore_end_timestamp"`
+}
+
+// RestoreS3BucketSourceUndoDeleteMarkerOptions represents a custom type struct.
+// This field is required when the request type is 'Undo delete marker'.
+type RestoreS3BucketSourceUndoDeleteMarkerOptions struct {
+    // The start timestamp for undo delete marker in RFC-3339 format.
+    // Clumio undoes the delete markers created after the given timestamp.
+    StartTimestamp *string `json:"start_timestamp"`
+}
+
+// RestoreS3BucketTarget represents a custom type struct.
+// The destination where the S3 bucket will be restored.
+type RestoreS3BucketTarget struct {
+    // The name of the destination bucket.
+    BucketName    *string              `json:"bucket_name"`
+    // The Clumio-assigned ID of the AWS environment to be used as the restore destination. Use the
+    // [GET /datasources/aws/s3-buckets/{bucket_id}](#operation/read-aws-s3-bucket) endpoint
+    // to fetch the environment ID for a bucket.
+    EnvironmentId *string              `json:"environment_id"`
+    // Prefix to restore the objects under.
+    Prefix        *string              `json:"prefix"`
+    // Storage class for restored objects. Valid values are: `S3 Standard`, `S3 Standard-IA`,
+    // `S3 Intelligent-Tiering` and `S3 One Zone-IA`. 
+    // If not given or empty, objects are restored with their original storage classes.
+    StorageClass  *string              `json:"storage_class"`
+    // A tag created through AWS Console which can be applied to EBS volumes.
+    Tags          []*AwsTagCommonModel `json:"tags"`
 }
 
 // RestoredFileInfo represents a custom type struct
@@ -7163,10 +6450,10 @@ type Rule struct {
     // |                       |                           |                          |
     // |                       |                           |                          |
     // +-----------------------+---------------------------+--------------------------+
-    // | aws_tag               | $eq, $in, $all, $contains | Denotes the AWS tag(s)   |
-    // |                       |                           | to conditionalize on.    |
-    // |                       |                           | Max 100 tags allowed in  |
-    // |                       |                           | each rule                |
+    // | aws_tag               | $eq, $in, $all,           | Denotes the AWS tag(s)   |
+    // |                       | $contains, $not_eq,       | to conditionalize on.    |
+    // |                       | $not_in, $not_all,        | Max 100 tags allowed in  |
+    // |                       | $not_contains             | each rule                |
     // |                       |                           | and tag key can be upto  |
     // |                       |                           | 128 characters and value |
     // |                       |                           | can be upto 256          |
@@ -7194,6 +6481,30 @@ type Rule struct {
     // |                       |                           | {"aws_tag":{"$contains": |
     // |                       |                           | {"key":"Environment",    |
     // |                       |                           | "value":"Prod"}}}        |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"aws_tag":{"$not_eq":{" |
+    // |                       |                           | key":"Environment",      |
+    // |                       |                           | "value":"Prod"}}}        |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"aws_tag":{"$not_in":[{ |
+    // |                       |                           | "key":"Environment",     |
+    // |                       |                           | "value":"Prod"},         |
+    // |                       |                           | {"key":"Hello",          |
+    // |                       |                           | "value":"World"}]}}      |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"aws_tag":{"$not_all":[ |
+    // |                       |                           | {"key":"Environment",    |
+    // |                       |                           | "value":"Prod"},         |
+    // |                       |                           | {"key":"Hello",          |
+    // |                       |                           | "value":"World"}]}}      |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"aws_tag":{"$not_contai |
+    // |                       |                           | ns":{"key":"Environment" |
+    // |                       |                           | , "value":"Prod"}}}      |
     // |                       |                           |                          |
     // |                       |                           |                          |
     // +-----------------------+---------------------------+--------------------------+
@@ -7837,6 +7148,12 @@ type SSESpecification struct {
     KmsMasterKeyId *string `json:"kms_master_key_id"`
 }
 
+// ServiceInstanceProfiles represents a custom type struct
+type ServiceInstanceProfiles struct {
+    // TODO: Add struct field description
+    Mssql *MssqlServiceInstanceProfiles `json:"mssql"`
+}
+
 // ServiceRoles represents a custom type struct
 type ServiceRoles struct {
     // TODO: Add struct field description
@@ -7904,174 +7221,57 @@ type SourceObjectFilters struct {
     VersionId          *string   `json:"version_id"`
 }
 
-// Subgroup represents a custom type struct
-type Subgroup struct {
-    // URLs to pages related to the resource.
-    Links                       *SubgroupLinks               `json:"_links"`
-    // The number of cloud connectors in this subgroup, aggregated by their status.
-    CloudConnectorCountByStatus *CloudConnectorCountByStatus `json:"cloud_connector_count_by_status"`
-    // The overall health of cloud connectors in this subgroup. Possible values include: 'healthy', indicating
-    // that all cloud connectors in the subgroup are connected; 'degraded' indicating that one or more cloud
-    // connectors in the subgroup have connection issues; `none`, indicating that no cloud connectors are in the subgroup.
-    CloudConnectorStatus        *string                      `json:"cloud_connector_status"`
-    // The Clumio-assigned ID of the management group associated with this subgroup.
-    GroupId                     *string                      `json:"group_id"`
-    // The Clumio-assigned ID of the management subgroup.
-    Id                          *string                      `json:"id"`
-    // The name of the management subgroup.
-    Name                        *string                      `json:"name"`
+// SourceObjectFiltersV2 represents a custom type struct.
+// Search for or restore only objects that pass the source object filter.
+type SourceObjectFiltersV2 struct {
+    // Filter for objects with this etag.
+    Etag                *string   `json:"etag"`
+    // If set to true, filter for latest versions only. Otherwise, all versions will
+    // be returned.
+    IsLatestVersionOnly *bool     `json:"is_latest_version_only"`
+    // Filter for objects with at most this size in bytes.
+    MaxObjectSizeBytes  *int64    `json:"max_object_size_bytes"`
+    // Filter for objects with at least this size in bytes.
+    MinObjectSizeBytes  *int64    `json:"min_object_size_bytes"`
+    // Filter for objects whose key contains this string.
+    ObjectKeyContains   *string   `json:"object_key_contains"`
+    // Filter for objects whose key matches this string.
+    ObjectKeyMatches    *string   `json:"object_key_matches"`
+    // Filter for objects that start with this key prefix.
+    ObjectKeyPrefix     *string   `json:"object_key_prefix"`
+    // Filter for objects that end with this key suffix.
+    ObjectKeySuffix     *string   `json:"object_key_suffix"`
+    // Storage class to include in the restore. If not specified, then all objects across all storage
+    // classes will be restored. Valid values are: `S3 Standard`, `S3 Standard-IA`, `S3 Intelligent-Tiering`
+    // and `S3 One Zone-IA`.
+    StorageClasses      []*string `json:"storage_classes"`
+    // Filter for objects with this version ID.
+    VersionId           *string   `json:"version_id"`
 }
 
-// SubgroupLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type SubgroupLinks struct {
-    // The HATEOAS link to this resource.
-    Self                     *HateoasSelfLink `json:"_self"`
-    // A resource-specific HATEOAS link.
-    ListMssqlHostConnections *HateoasLink     `json:"list-mssql-host-connections"`
-}
-
-// SubgroupListEmbedded represents a custom type struct.
-// Embedded responses related to the resource.
-type SubgroupListEmbedded struct {
-    // TODO: Add struct field description
-    Items []*Subgroup `json:"items"`
-}
-
-// SubgroupListLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type SubgroupListLinks struct {
-    // The HATEOAS link to the first page of results.
-    First *HateoasFirstLink `json:"_first"`
-    // The HATEOAS link to the next page of results.
-    Next  *HateoasNextLink  `json:"_next"`
-    // The HATEOAS link to this resource.
-    Self  *HateoasSelfLink  `json:"_self"`
-}
-
-// Tag2 represents a custom type struct
-type Tag2 struct {
-    // Embedded responses related to the resource.
-    Embedded             *Tag2Embedded           `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links                *Tag2Links              `json:"_links"`
-    // The tag category associated with the tag.
-    Category             *TagParentCategoryModel `json:"category"`
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the tag.
-    Id                   *string                 `json:"id"`
-    // The VMware-assigned name of the tag.
-    Name                 *string                 `json:"name"`
-    // The Clumio-assigned ID of the organizational unit associated with the tag.
-    OrganizationalUnitId *string                 `json:"organizational_unit_id"`
-    // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
-    ProtectionInfo       *ProtectionInfo         `json:"protection_info"`
-    // The protection status of this tag. Refer to the Protection Status table for a complete list of protection statuses.
-    ProtectionStatus     *string                 `json:"protection_status"`
-}
-
-// Tag2Embedded represents a custom type struct.
-// Embedded responses related to the resource.
-type Tag2Embedded struct {
-    // Embeds the associated policy of a protected resource in the response if requested using the `embed` query parameter. Unprotected resources will not have an associated policy.
-    ReadPolicyDefinition                interface{} `json:"read-policy-definition"`
-    // Embeds the compliance statistics of VMs into each vCenter resource in the response, if requested using the `_embed` query parameter.
-    ReadVmwareVcenterTagComplianceStats interface{} `json:"read-vmware-vcenter-tag-compliance-stats"`
-}
-
-// Tag2Links represents a custom type struct.
-// URLs to pages related to the resource.
-type Tag2Links struct {
-    // The HATEOAS link to this resource.
-    Self                                *HateoasSelfLink                             `json:"_self"`
-    // A HATEOAS link to protect the entities.
-    ProtectEntities                     *ProtectEntitiesHateoasLink                  `json:"protect-entities"`
-    // A HATEOAS link to the policy protecting this resource. Will be omitted for unprotected entities.
-    ReadPolicyDefinition                *ReadPolicyDefinitionHateoasLink             `json:"read-policy-definition"`
-    // A HATEOAS link to the compliance statistics of VMs in the folders and subfolders of this vCenter resource.
-    ReadVmwareVcenterTagComplianceStats *ReadVCenterObjectProtectionStatsHateoasLink `json:"read-vmware-vcenter-tag-compliance-stats"`
-    // A HATEOAS link to unprotect the entities.
-    UnprotectEntities                   *UnprotectEntitiesHateoasLink                `json:"unprotect-entities"`
-}
-
-// Tag2ListEmbedded represents a custom type struct.
-// Embedded responses related to the resource.
-type Tag2ListEmbedded struct {
-    // TODO: Add struct field description
-    Items []*Tag2 `json:"items"`
-}
-
-// Tag2ListLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type Tag2ListLinks struct {
-    // The HATEOAS link to the first page of results.
-    First *HateoasFirstLink `json:"_first"`
-    // The HATEOAS link to the last page of results.
-    Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
-    Next  *HateoasNextLink  `json:"_next"`
-    // The HATEOAS link to the previous page of results.
-    Prev  *HateoasPrevLink  `json:"_prev"`
-    // The HATEOAS link to this resource.
-    Self  *HateoasSelfLink  `json:"_self"`
-}
-
-// TagCategory2Links represents a custom type struct.
-// URLs to pages related to the resource
-type TagCategory2Links struct {
-    // The HATEOAS link to this resource.
-    Self *HateoasSelfLink `json:"_self"`
-}
-
-// TagCategory2ListEmbedded represents a custom type struct.
-// Embedded responses related to the resource
-type TagCategory2ListEmbedded struct {
-    // TagCategory2WithETag to support etag string to be calculated
-    Items []*TagCategory2WithETag `json:"items"`
-}
-
-// TagCategory2ListLinks represents a custom type struct.
-// URLs to pages related to the resource
-type TagCategory2ListLinks struct {
-    // The HATEOAS link to the first page of results.
-    First *HateoasFirstLink `json:"_first"`
-    // The HATEOAS link to the last page of results.
-    Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
-    Next  *HateoasNextLink  `json:"_next"`
-    // The HATEOAS link to the previous page of results.
-    Prev  *HateoasPrevLink  `json:"_prev"`
-    // The HATEOAS link to this resource.
-    Self  *HateoasSelfLink  `json:"_self"`
-}
-
-// TagCategory2WithETag represents a custom type struct.
-// TagCategory2WithETag to support etag string to be calculated
-type TagCategory2WithETag struct {
-    // The ETag value.
-    Etag                 *string            `json:"_etag"`
-    // URLs to pages related to the resource
-    Links                *TagCategory2Links `json:"_links"`
-    // A description of the tag category.
-    Description          *string            `json:"description"`
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the tag category.
-    Id                   *string            `json:"id"`
-    // The VMware-assigned name of the tag category.
-    Name                 *string            `json:"name"`
-    // The number of tags in the tag category.
-    NumberOfTags         *int32             `json:"number_of_tags"`
-    // The Clumio-assigned ID of the organizational unit associated with the tag category.
-    OrganizationalUnitId *string            `json:"organizational_unit_id"`
-}
-
-// TagParentCategoryModel represents a custom type struct.
-// The tag category associated with the tag.
-type TagParentCategoryModel struct {
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the tag category.
-    Id                   *string `json:"id"`
-    // The VMware-assigned name of the tag category.
-    Name                 *string `json:"name"`
-    // The Clumio-assigned ID of the organizational unit associated with the tag category.
-    OrganizationalUnitId *string `json:"organizational_unit_id"`
+// StreamSpecification represents a custom type struct.
+// Represents the DynamoDB Streams configuration for a table in DynamoDB.
+// and the data type (`S` for string, `N` for number, `B` for binary).
+type StreamSpecification struct {
+    // Indicates whether DynamoDB Streams is enabled (true) or disabled (false)
+    // on the table.
+    Enabled  *bool   `json:"enabled"`
+    // When an item in the table is modified, ViewType determines what information
+    // is written to the stream for this table. Valid values for ViewType
+    // are:
+    // 
+    // KEYS_ONLY - Only the key attributes of the modified item are written
+    // to the stream.
+    // 
+    // NEW_IMAGE - The entire item, as it appears after it was modified, is
+    // written to the stream.
+    // 
+    // OLD_IMAGE - The entire item, as it appeared before it was modified,
+    // is written to the stream.
+    // 
+    // NEW_AND_OLD_IMAGES - Both the new and the old item images of the item
+    // are written to the stream.
+    ViewType *string `json:"view_type"`
 }
 
 // TaskLinks represents a custom type struct.
@@ -8113,9 +7313,9 @@ type TaskParentEntity struct {
     // A system-generated ID assigned to this entity.
     Id         *string `json:"id"`
     // Type is mostly an asset type or the type of Entity. Some examples are
-    // "restored_file", "vmware_vm",  etc.
+    // "restored_file", "aws_ebs_volume",  etc.
     ClumioType *string `json:"type"`
-    // A system-generated value assigned to the entity. For example, if the primary entity type is "vmware_vm" for a virtual machine, then the value is the name of the VM.
+    // A system-generated value assigned to the entity. For example, if the primary entity type is "aws_ebs_volume", then the value is the name of the EBS.
     Value      *string `json:"value"`
 }
 
@@ -8125,9 +7325,9 @@ type TaskPrimaryEntity struct {
     // A system-generated ID assigned to this entity.
     Id         *string `json:"id"`
     // Type is mostly an asset type or the type of Entity. Some examples are
-    // "restored_file", "vmware_vm",  etc.
+    // "restored_file", "aws_ebs_volume",  etc.
     ClumioType *string `json:"type"`
-    // A system-generated value assigned to the entity. For example, if the primary entity type is "vmware_vm" for a virtual machine, then the value is the name of the VM.
+    // A system-generated value assigned to the entity. For example, if the primary entity type is "aws_ebs_volume", then the value is the name of the EBS.
     Value      *string `json:"value"`
 }
 
@@ -8187,8 +7387,7 @@ type TaskWithETag struct {
     Id                 *string            `json:"id"`
     // Determines whether or not this task can be aborted.
     // A task can be aborted if its status is either "queued" or "in_progress".
-    // Tasks of certain types including
-    // "vmware_vm_backup_indexing" and "aws_ebs_volume_backup_indexing" cannot be aborted.
+    // Tasks of certain types including "aws_ebs_volume_backup_indexing" cannot be aborted.
     IsAbortable        *bool              `json:"is_abortable"`
     // The parent entity associated with the task.
     ParentEntity       *TaskParentEntity  `json:"parent_entity"`
@@ -8217,8 +7416,12 @@ type TemplateConfigurationV2 struct {
     Dynamodb                 *DynamodbTemplateInfo        `json:"dynamodb"`
     // TODO: Add struct field description
     Ebs                      *EbsTemplateInfo             `json:"ebs"`
+    // TODO: Add struct field description
+    Ec2                      *Ec2TemplateInfo             `json:"ec2"`
     // The latest available information for the EC2 MSSQL feature.
     Ec2Mssql                 *EC2MSSQLTemplateInfo        `json:"ec2_mssql"`
+    // IcebergTemplateInfo is the latest available information for the Iceberg feature.
+    Iceberg                  *IcebergTemplateInfo         `json:"iceberg"`
     // TODO: Add struct field description
     Rds                      *RdsTemplateInfo             `json:"rds"`
     // The latest available information for the S3 feature.
@@ -8440,822 +7643,6 @@ type UserWithRole struct {
     AssignedRole *string `json:"assigned_role"`
     // The ID of the user.
     UserId       *string `json:"user_id"`
-}
-
-// VCenterComputeResource represents a custom type struct
-type VCenterComputeResource struct {
-    // URLs to pages related to the resource.
-    Links                *VCenterComputeResourceLinks `json:"_links"`
-    // The Clumio-assigned ID of the item.
-    Id                   *string                      `json:"id"`
-    // IsCluster denotes whether the compute resource is a cluster.
-    Iscluster            *bool                        `json:"isCluster"`
-    // IsDrsEnabled denotes whether the compute resource has DRS enabled.
-    // NOTE: This is only applicable if "IsCluster" is true.
-    Isdrsenabled         *bool                        `json:"isDrsEnabled"`
-    // The name of the compute resource.
-    Name                 *string                      `json:"name"`
-    // The Clumio-assigned ID of the organizational unit associated with the compute resource.
-    OrganizationalUnitId *string                      `json:"organizational_unit_id"`
-    // TODO: Add struct field description
-    Protectioninfo       *ProtectionInfoDeprecated    `json:"protectionInfo"`
-    // ProtectedStatsDeprecated contains the compliance stats for policies which are protected along with
-    // the unprotected policies count
-    Vmstats              *ProtectedStatsDeprecated    `json:"vmStats"`
-}
-
-// VCenterComputeResourceLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type VCenterComputeResourceLinks struct {
-    // A HATEOAS link to protect the entities.
-    ProtectEntities   *ProtectEntitiesHateoasLink   `json:"protect-entities"`
-    // A HATEOAS link to unprotect the entities.
-    UnprotectEntities *UnprotectEntitiesHateoasLink `json:"unprotect-entities"`
-}
-
-// VCenterFolder represents a custom type struct
-type VCenterFolder struct {
-    // URLs to pages related to the resource.
-    Links                *VCenterFolderLinks       `json:"_links"`
-    // HasChildGroups denotes whether direct child folders exist.
-    Haschildgroups       *bool                     `json:"hasChildGroups"`
-    // The Clumio-assigned ID of the item.
-    Id                   *string                   `json:"id"`
-    // IsRoot denotes whether this folder is a root (hidden) folder.
-    Isroot               *bool                     `json:"isRoot"`
-    // Name of the folder.
-    Name                 *string                   `json:"name"`
-    // The Clumio-assigned ID of the organizational unit associated with the folder.
-    OrganizationalUnitId *string                   `json:"organizational_unit_id"`
-    // TODO: Add struct field description
-    Protectioninfo       *ProtectionInfoDeprecated `json:"protectionInfo"`
-    // ProtectedStatsDeprecated contains the compliance stats for policies which are protected along with
-    // the unprotected policies count
-    Vmstats              *ProtectedStatsDeprecated `json:"vmStats"`
-}
-
-// VCenterFolderLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type VCenterFolderLinks struct {
-    // A HATEOAS link to protect the entities.
-    ProtectEntities   *ProtectEntitiesHateoasLink   `json:"protect-entities"`
-    // A HATEOAS link to unprotect the entities.
-    UnprotectEntities *UnprotectEntitiesHateoasLink `json:"unprotect-entities"`
-}
-
-// VMBackupHateoas represents a custom type struct
-type VMBackupHateoas struct {
-    // URLs to pages related to the resource.
-    Links                *VMBackupHateoasLinks     `json:"_links"`
-    // The reason that browsing is unavailable for the backup. Possible values include "file_limit_exceeded" and
-    // "browsing_unavailable". If browse indexing is successful, then this field has a value of `null`.
-    BrowsingFailedReason *string                   `json:"browsing_failed_reason"`
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the data center
-    // associated with this backup.
-    DatacenterId         *string                   `json:"datacenter_id"`
-    // The timestamp of when this backup expires. Represented in RFC-3339 format.
-    ExpirationTimestamp  *string                   `json:"expiration_timestamp"`
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the
-    // host associated with this backup.
-    HostId               *string                   `json:"host_id"`
-    // The Clumio-assigned ID of the backup.
-    Id                   *string                   `json:"id"`
-    // Determines whether browsing is available for the backup. If `true`, then browsing is available for the backup.
-    IsBrowsable          *bool                     `json:"is_browsable"`
-    // TODO: Add struct field description
-    Nics                 []*VMNicBackupModel       `json:"nics"`
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the resource pool
-    // associated with this backup.
-    ResourcePoolId       *string                   `json:"resource_pool_id"`
-    // The timestamp of when this backup started. Represented in RFC-3339 format.
-    StartTimestamp       *string                   `json:"start_timestamp"`
-    // VMTagWithCategoryModel
-    // A tag associated with the VM.
-    Tags                 []*VMTagWithCategoryModel `json:"tags"`
-    // The IP address or FQDN of the vCenter server associated with this backup.
-    // If a backup was initiated before 2020-06-30, when this field was introduced,
-    // then this field has a value of `null`.
-    VcenterEndpoint      *string                   `json:"vcenter_endpoint"`
-    // The Clumio-assigned ID of the vCenter associated with this backup.
-    VcenterId            *string                   `json:"vcenter_id"`
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the
-    // VM folder associated with this backup.
-    VmFolderId           *string                   `json:"vm_folder_id"`
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the
-    // VM associated with this backup.
-    VmId                 *string                   `json:"vm_id"`
-    // The name of the virtual machine associated with this backup.
-    VmName               *string                   `json:"vm_name"`
-}
-
-// VMBackupHateoasLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type VMBackupHateoasLinks struct {
-    // The HATEOAS link to this resource.
-    Self            *HateoasSelfLink `json:"_self"`
-    // A resource-specific HATEOAS link.
-    RestoreVmwareVm *HateoasLink     `json:"restore-vmware-vm"`
-}
-
-// VMBackupListEmbedded represents a custom type struct.
-// Embedded responses related to the resource.
-type VMBackupListEmbedded struct {
-    // TODO: Add struct field description
-    Items []*VMBackupHateoas `json:"items"`
-}
-
-// VMBackupListHateoasLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type VMBackupListHateoasLinks struct {
-    // The HATEOAS link to the first page of results.
-    First *HateoasFirstLink `json:"_first"`
-    // The HATEOAS link to the last page of results.
-    Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
-    Next  *HateoasNextLink  `json:"_next"`
-    // The HATEOAS link to the previous page of results.
-    Prev  *HateoasPrevLink  `json:"_prev"`
-    // The HATEOAS link to this resource.
-    Self  *HateoasSelfLink  `json:"_self"`
-}
-
-// VMComputeResourceFolderModel represents a custom type struct.
-// The compute resource folder associated with this VM. If the VM is deleted, then this field has a value of `null`.
-type VMComputeResourceFolderModel struct {
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the folder.
-    Id *string `json:"id"`
-}
-
-// VMComputeResourceModel represents a custom type struct.
-// The compute resource from which the VM draws. If the VM is deleted, then `compute_resource.id` has a value of `null`.
-type VMComputeResourceModel struct {
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the compute resource.
-    Id   *string `json:"id"`
-    // The VMware-assigned name of the compute resource.
-    Name *string `json:"name"`
-}
-
-// VMDatacenterFolderModel represents a custom type struct.
-// The data center folder associated with this VM. If the VM is deleted, then this field has a value of `null`.
-type VMDatacenterFolderModel struct {
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the folder.
-    Id *string `json:"id"`
-}
-
-// VMDatacenterModel represents a custom type struct.
-// The data center in which the VM resides. If the VM is deleted, then `datacenter.id` has a value of `null`.
-type VMDatacenterModel struct {
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the data center.
-    Id   *string `json:"id"`
-    // The VMware-assigned name of this data center.
-    Name *string `json:"name"`
-}
-
-// VMFolderModel represents a custom type struct.
-// The VM folder containing the VM. If the VM is deleted, then `vm_folder.id` has a value of `null`.
-type VMFolderModel struct {
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the folder.
-    Id   *string `json:"id"`
-    // The VMware-assigned name of the folder.
-    Name *string `json:"name"`
-}
-
-// VMHostModel represents a custom type struct.
-// The host on which the VM resides. If the VM is deleted, then `host.id` and `host.is_standalone` have values of `null`. The `host.name` field may also have a value of `null`.
-type VMHostModel struct {
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the host.
-    Id           *string `json:"id"`
-    // Determines whether the host is a standalone host. If `true`, the host is a standalone host.
-    IsStandalone *bool   `json:"is_standalone"`
-    // The VMware-assigned name of the host.
-    Name         *string `json:"name"`
-}
-
-// VMNicBackupModel represents a custom type struct
-type VMNicBackupModel struct {
-    // Determines whether the NIC was connected to the network at the time of backup. If `true`, the NIC was connected to the network at the time of backup.
-    IsConnected *bool   `json:"is_connected"`
-    // The media access control (MAC) address assigned to the NIC. The MAC address is assigned through the vSphere client.
-    MacAddress  *string `json:"mac_address"`
-    // The network to which the NIC was attached.
-    NetworkId   *string `json:"network_id"`
-}
-
-// VMNicModel represents a custom type struct.
-// The network interface card (NIC) attached to the VM.
-type VMNicModel struct {
-    // The MAC address of the NIC.
-    MacAddress *string            `json:"mac_address"`
-    // The network associated with this NIC.
-    Network    *VMNicNetworkModel `json:"network"`
-}
-
-// VMNicNetworkModel represents a custom type struct.
-// The network associated with this NIC.
-type VMNicNetworkModel struct {
-    // The VMware-assigned ID of this network.
-    Id *string `json:"id"`
-}
-
-// VMNicRestore represents a custom type struct
-type VMNicRestore struct {
-    // The unique media access control (MAC) address assigned to the network interface card (NIC). The MAC address is assigned through the vSphere client.
-    MacAddress    *string `json:"mac_address"`
-    // The network connection for the virtual NIC. The NIC is configured in the vSphere client. Use the [GET /datasources/vmware/vcenters/{vcenter_id}/networks](#operation/list-vmware-vcenter-networks) endpoint to fetch valid values.
-    NetworkId     *string `json:"network_id"`
-    // Determines whether the restored VM should automatically connect to the specified network after a restore.
-    // If `true`, the restored VM will automatically connect to the specified network after a restore.
-    ShouldConnect *bool   `json:"should_connect"`
-}
-
-// VMResourcePoolModel represents a custom type struct.
-// The resource pool from which the VM draws. If the VM is deleted, then `resource_pool.id` and `resource_pool.is_root` have values of `null`.
-type VMResourcePoolModel struct {
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the resource pool.
-    Id     *string `json:"id"`
-    // Determines whether the resource pool is the default, hidden resource pool.
-    IsRoot *bool   `json:"is_root"`
-    // The VMware-assigned name of the resource pool.
-    Name   *string `json:"name"`
-}
-
-// VMRestoreOptions represents a custom type struct.
-// Additional VM restore options.
-type VMRestoreOptions struct {
-    // Determines whether a VM rapid recovery should be attempted or not.
-    // As a part of the rapid recovery, by default the Clumio backup service
-    // attempts the following Reverse Change Block Tracking (RCBT) operation. It
-    // retrieves the blocks changed since the backup was taken and applies them
-    // into a clone of the original VM to rollback the VM to the previous point
-    // in time. As a result typically it is much faster to restore a VM using
-    // rapid recovery RCBT. However if the clone operation is not desired to be
-    // performed for some reason, then rapid recovery RCBT can be turned off
-    // using this field.
-    // It is applicable to both in-place restore and restore to a new VM.
-    // If it is not set, then the behavior is same as setting it to true.
-    // If true or unset, rapid recovery is attempted first. If rapid recovery
-    // fails, then a full VM restore is performed.
-    // If false, rapid recovery is not attempted.
-    AttemptRapidRecovery *bool   `json:"attempt_rapid_recovery"`
-    // Determines whether to preserve the original data by cloning the existing
-    // VM before performing an in-place restore.
-    // If `"restore_in_place":false`, then this parameter is ignored.
-    // If true, the original data is preserved by creating a clone of the VM.
-    // If false, a clone is not created. The original data in the source VM may
-    // get over-written by the restored data.
-    CloneSourceVm        *bool   `json:"clone_source_vm"`
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the VMFS
-    // datastore to be used as the destination for the cloned VM.
-    // Use the [GET /datasources/vmware/vcenters/{vcenter_id}/datastores](#operation/list-vmware-vcenter-datastores) endpoint to fetch valid values.
-    // This field is required only if `"clone_source_vm":true`.
-    ClonedVmDatastoreId  *string `json:"cloned_vm_datastore_id"`
-    // The name given to the cloned VM (see clone_source_vm parameter).
-    // The VM name cannot exceed 80 characters in length and must follow VMware
-    // VM naming conventions.
-    // This field is required only if `"clone_source_vm":true`.
-    ClonedVmName         *string `json:"cloned_vm_name"`
-    // Determines whether the restore should overwrite the existing VM i.e.
-    // perform an in-place restore or create a new VM for restore.
-    // If true, the existing VM is used for the restore. In this case if the VM
-    // is already deleted, the restore will fail.
-    // If false, a new VM is created for the restore. In this case if the VM
-    // is already deleted, the restore will still proceed.
-    RestoreInPlace       *bool   `json:"restore_in_place"`
-}
-
-// VMRestoreSource represents a custom type struct.
-// The VM backup to be restored.
-type VMRestoreSource struct {
-    // The Clumio-assigned ID of the backup to be restored. Use the [GET /backups/vmware/vms](#operation/list-backup-vmware-vms) endpoint to fetch valid values.
-    BackupId *string `json:"backup_id"`
-}
-
-// VMRestoreTag represents a custom type struct
-type VMRestoreTag struct {
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the tag.
-    TagId *string `json:"tag_id"`
-}
-
-// VMRestoreTarget represents a custom type struct.
-// The configuration of the VM to be restored.
-type VMRestoreTarget struct {
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the data center to be used as the restore destination. Use the [GET /datasources/vmware/vcenters/{vcenter_id}/datacenters](#operation/list-vmware-vcenter-datacenters) endpoint to fetch valid values.
-    DatacenterId     *string         `json:"datacenter_id"`
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the VMFS datastore to be used as the restore destination. Use the [GET /datasources/vmware/vcenters/{vcenter_id}/datastores](#operation/list-vmware-vcenter-datastores) endpoint to fetch valid values.
-    // While performing an in-place restore, this parameter is optional.
-    // If `"options.restore_in_place":false`, then this parameter is required.
-    DatastoreId      *string         `json:"datastore_id"`
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the vSphere host to be used as the restore destination. Use the [GET /datasources/vmware/vcenters/{vcenter_id}/hosts](#operation/list-vmware-vcenter-hosts) endpoint to fetch valid values.
-    // If provided, the specified host (`host_id`) must belong to a compute resource that is the parent of the specified resource pool (`resource_pool_id`).
-    // If not provided, the VMware Distributed Resource Scheduler (DRS) will automatically select a host that belongs to a compute resource that is the parent of the specified resource pool (`resource_pool_id`).
-    HostId           *string         `json:"host_id"`
-    // TODO: Add struct field description
-    NetworkOptions   []*VMNicRestore `json:"network_options"`
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the VM folder to be used as the restore destination. Use the [GET /datasources/vmware/vcenters/{vcenter_id}/folders](#operation/list-vmware-vcenter-folders) endpoint to fetch valid values.
-    ParentVmFolderId *string         `json:"parent_vm_folder_id"`
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the resource pool to be used as the restore destination. Use the [GET /datasources/vmware/vcenters/{vcenter_id}/resource-pools](#operation/list-vmware-vcenter-resource-pools) endpoint to fetch valid values.
-    ResourcePoolId   *string         `json:"resource_pool_id"`
-    // Determines whether the VM should remain powered on after the restore. If `true`, the VM will remain powered on after the restore. Users may choose to power off a VM to change the network configurations.
-    ShouldPowerOn    *bool           `json:"should_power_on"`
-    // TODO: Add struct field description
-    Tags             []*VMRestoreTag `json:"tags"`
-    // The Clumio-assigned ID of the vCenter to be used as the restore destination.
-    VcenterId        *string         `json:"vcenter_id"`
-    // The name given to the restored VM. The VM name cannot exceed 80 characters in length and must follow VMware VM naming conventions.
-    VmName           *string         `json:"vm_name"`
-}
-
-// VMTagWithCategoryModel represents a custom type struct.
-// VMTagWithCategoryModel
-// A tag associated with the VM.
-type VMTagWithCategoryModel struct {
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the tag category.
-    CategoryId           *string `json:"category_id"`
-    // The VMware-assigned name of the tag category.
-    CategoryName         *string `json:"category_name"`
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the tag.
-    Id                   *string `json:"id"`
-    // The VMware-assigned name of the tag.
-    Name                 *string `json:"name"`
-    // The Clumio-assigned ID of the organizational unit associated with the tag.
-    OrganizationalUnitId *string `json:"organizational_unit_id"`
-}
-
-// VMwareComputeResourceComplianceStatsLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type VMwareComputeResourceComplianceStatsLinks struct {
-    // The HATEOAS link to this resource.
-    Self *HateoasSelfLink `json:"_self"`
-}
-
-// VMwareDatacenterFolderIDModel represents a custom type struct.
-// The data center folder in which the data center resides.
-type VMwareDatacenterFolderIDModel struct {
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the folder.
-    Id *string `json:"id"`
-}
-
-// VMwareDatacenterStatsLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type VMwareDatacenterStatsLinks struct {
-    // The HATEOAS link to this resource.
-    Self *HateoasSelfLink `json:"_self"`
-}
-
-// VMwareDatastoreLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type VMwareDatastoreLinks struct {
-    // The HATEOAS link to this resource.
-    Self *HateoasSelfLink `json:"_self"`
-}
-
-// VMwareDatastoreListEmbedded represents a custom type struct.
-// Embedded responses related to the resource.
-type VMwareDatastoreListEmbedded struct {
-    // VMwareDatastoreWithETag to support etag string to be calculated
-    Items []*VMwareDatastoreWithETag `json:"items"`
-}
-
-// VMwareDatastoreListLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type VMwareDatastoreListLinks struct {
-    // The HATEOAS link to the first page of results.
-    First *HateoasFirstLink `json:"_first"`
-    // The HATEOAS link to the last page of results.
-    Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
-    Next  *HateoasNextLink  `json:"_next"`
-    // The HATEOAS link to the previous page of results.
-    Prev  *HateoasPrevLink  `json:"_prev"`
-    // The HATEOAS link to this resource.
-    Self  *HateoasSelfLink  `json:"_self"`
-}
-
-// VMwareDatastoreWithETag represents a custom type struct.
-// VMwareDatastoreWithETag to support etag string to be calculated
-type VMwareDatastoreWithETag struct {
-    // The ETag value.
-    Etag             *string                                `json:"_etag"`
-    // URLs to pages related to the resource.
-    Links            *VMwareDatastoreLinks                  `json:"_links"`
-    // TODO: Add struct field description
-    ComputeResources []*ComputeResourceIDModel              `json:"compute_resources"`
-    // The data center in which this datastore resides.
-    Datacenter       *VMwareVCenterDatastoreDatacenterModel `json:"datacenter"`
-    // VMwareVCenterDatastoreFolderModel
-    // The datastore folder in which this datastore resides.
-    DatastoreFolder  *VMwareVCenterDatastoreFolderModel     `json:"datastore_folder"`
-    // The file system format used for the datastore. Refer to the Supported Datastore Types section for a complete list of datastore types.
-    DatastoreType    *string                                `json:"datastore_type"`
-    // TODO: Add struct field description
-    Hosts            []*HostIDModel                         `json:"hosts"`
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the datastore.
-    Id               *string                                `json:"id"`
-    // Determines whether the datastore is shared across multiple hosts. If `true`, the datastore is a multi-host datastore.
-    IsMultiHost      *bool                                  `json:"is_multi_host"`
-    // Determines whether the datastore can be used as a restore destination. If `true`, the datastore can be used as a restore destination and backups can be restored to the datastore.
-    IsSupported      *bool                                  `json:"is_supported"`
-    // The VMware-assigned name of this datastore.
-    Name             *string                                `json:"name"`
-}
-
-// VMwareDsGroupingCriteria represents a custom type struct.
-// The entity type used to group organizational units for VMware resources.
-type VMwareDsGroupingCriteria struct {
-    // Determines whether or not this data group is editable. If false, then an
-    // organizational unit uses this data group.
-    // To edit this data group, all organizational units using it must be deleted.
-    IsEditable *bool   `json:"is_editable"`
-    // 
-    // +--------------------------------+---------------------------------+
-    // |         vmware_vcenter         |         VMware vCenter.         |
-    // +================================+=================================+
-    // | vmware_vm_folder               | VMware VM folder.               |
-    // +--------------------------------+---------------------------------+
-    // | vmware_datacenter_folder       | VMware datacenter folder.       |
-    // +--------------------------------+---------------------------------+
-    // | vmware_compute_resource_folder | VMware compute resource folder. |
-    // +--------------------------------+---------------------------------+
-    // | vmware_datacenter              | VMware datacenter.              |
-    // +--------------------------------+---------------------------------+
-    // | vmware_compute_resource        | VMware compute resource.        |
-    // +--------------------------------+---------------------------------+
-    // | vmware_vm                      | VMware VM.                      |
-    // +--------------------------------+---------------------------------+
-    // | vmware_tag                     | VMware tag.                     |
-    // +--------------------------------+---------------------------------+
-    // 
-    ClumioType *string `json:"type"`
-}
-
-// VMwareFolderStatsLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type VMwareFolderStatsLinks struct {
-    // The HATEOAS link to this resource.
-    Self *HateoasSelfLink `json:"_self"`
-}
-
-// VMwareResourcePoolComputeResourceModel represents a custom type struct.
-// The compute resource that the resource pool comprises.
-type VMwareResourcePoolComputeResourceModel struct {
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the compute resource.
-    Id *string `json:"id"`
-}
-
-// VMwareResourcePoolParentModel represents a custom type struct.
-// The vCenter object that is the parent of the resource pool.
-type VMwareResourcePoolParentModel struct {
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the vCenter object.
-    Id *string `json:"id"`
-}
-
-// VMwareRootComputeResourceFolderIDModel represents a custom type struct.
-// The hidden root compute resource folder of the data center.
-type VMwareRootComputeResourceFolderIDModel struct {
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the folder.
-    Id *string `json:"id"`
-}
-
-// VMwareRootVMFolderIDModel represents a custom type struct.
-// The hidden root virtual machine folder of the data center.
-type VMwareRootVMFolderIDModel struct {
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the folder.
-    Id *string `json:"id"`
-}
-
-// VMwareTagStatsLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type VMwareTagStatsLinks struct {
-    // The HATEOAS link to this resource.
-    Self *HateoasSelfLink `json:"_self"`
-}
-
-// VMwareVCenterComputeResourceDatacenterModel represents a custom type struct.
-// The data center associated with this compute resource.
-type VMwareVCenterComputeResourceDatacenterModel struct {
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the data center.
-    Id   *string `json:"id"`
-    // The VMware-assigned name of this data center.
-    Name *string `json:"name"`
-}
-
-// VMwareVCenterComputeResourceFolderModel represents a custom type struct.
-// The compute resource folder in which the compute resource resides.
-type VMwareVCenterComputeResourceFolderModel struct {
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the folder.
-    Id *string `json:"id"`
-}
-
-// VMwareVCenterDatastoreDatacenterModel represents a custom type struct.
-// The data center in which this datastore resides.
-type VMwareVCenterDatastoreDatacenterModel struct {
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the data center.
-    Id *string `json:"id"`
-}
-
-// VMwareVCenterDatastoreFolderModel represents a custom type struct.
-// VMwareVCenterDatastoreFolderModel
-// The datastore folder in which this datastore resides.
-type VMwareVCenterDatastoreFolderModel struct {
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the folder.
-    Id *string `json:"id"`
-}
-
-// VMwareVCenterFolderDatacenterModel represents a custom type struct.
-// The data center associated with this folder.
-type VMwareVCenterFolderDatacenterModel struct {
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the data center.
-    Id *string `json:"id"`
-}
-
-// VMwareVCenterHostComputeResourceModel represents a custom type struct.
-// The VMware compute resource representing the host.
-type VMwareVCenterHostComputeResourceModel struct {
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the compute resource.
-    Id *string `json:"id"`
-}
-
-// VMwareVCenterHostDatacenterModel represents a custom type struct.
-// The data center in which the host resides.
-type VMwareVCenterHostDatacenterModel struct {
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the data center.
-    Id *string `json:"id"`
-}
-
-// VMwareVCenterNetworkDatacenterModel represents a custom type struct.
-// The data center associated with this network.
-type VMwareVCenterNetworkDatacenterModel struct {
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the data center.
-    Id *string `json:"id"`
-}
-
-// VMwareVCenterNetworkFolderModel represents a custom type struct.
-// The network folder associated with this network.
-type VMwareVCenterNetworkFolderModel struct {
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the folder.
-    Id *string `json:"id"`
-}
-
-// VMwareVCenterNetworkLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type VMwareVCenterNetworkLinks struct {
-    // The HATEOAS link to this resource.
-    Self *HateoasSelfLink `json:"_self"`
-}
-
-// VMwareVCenterNetworkListEmbedded represents a custom type struct.
-// Embedded responses related to the resource.
-type VMwareVCenterNetworkListEmbedded struct {
-    // VMwareVCenterNetworkWithETag to support etag string to be calculated.
-    Items []*VMwareVCenterNetworkWithETag `json:"items"`
-}
-
-// VMwareVCenterNetworkListLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type VMwareVCenterNetworkListLinks struct {
-    // The HATEOAS link to the first page of results.
-    First *HateoasFirstLink `json:"_first"`
-    // The HATEOAS link to the last page of results.
-    Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
-    Next  *HateoasNextLink  `json:"_next"`
-    // The HATEOAS link to the previous page of results.
-    Prev  *HateoasPrevLink  `json:"_prev"`
-    // The HATEOAS link to this resource.
-    Self  *HateoasSelfLink  `json:"_self"`
-}
-
-// VMwareVCenterNetworkWithETag represents a custom type struct.
-// VMwareVCenterNetworkWithETag to support etag string to be calculated.
-type VMwareVCenterNetworkWithETag struct {
-    // The ETag value.
-    Etag          *string                              `json:"_etag"`
-    // URLs to pages related to the resource.
-    Links         *VMwareVCenterNetworkLinks           `json:"_links"`
-    // The data center associated with this network.
-    Datacenter    *VMwareVCenterNetworkDatacenterModel `json:"datacenter"`
-    // The VMware-assigned ID of this network.
-    Id            *string                              `json:"id"`
-    // Determines whether VMs can be connected to the network. If `true`, VMs can be connected to the network.
-    IsSupported   *bool                                `json:"is_supported"`
-    // The name of this network.
-    Name          *string                              `json:"name"`
-    // The network folder associated with this network.
-    NetworkFolder *VMwareVCenterNetworkFolderModel     `json:"network_folder"`
-}
-
-// VMwareVCenterParentFolderModel represents a custom type struct.
-// The parent folder under which this folder resides.
-type VMwareVCenterParentFolderModel struct {
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the folder.
-    Id *string `json:"id"`
-}
-
-// Vcenter represents a custom type struct
-type Vcenter struct {
-    // Embedded responses related to the resource.
-    Embedded                  *VcenterEmbedded `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links                     *VcenterLinks    `json:"_links"`
-    // The region to which data is backed-up to for the vCenter server. If the vCenter server's back up region is unavailable, this field has a value of `unavailable`. Refer to the Back up Regions table for a complete list of back up regions.
-    BackupRegion              *string          `json:"backup_region"`
-    // The URL at which the Clumio Cloud Connector for this vCenter server can be downloaded.
-    CloudConnectorDownloadUrl *string          `json:"cloud_connector_download_url"`
-    // The IP address or FQDN of the vCenter server.
-    Endpoint                  *string          `json:"endpoint"`
-    // The Clumio-assigned ID of the vCenter server.
-    Id                        *string          `json:"id"`
-    // The IP address or FQDN of the vCenter server.
-    // This field has been replaced by the `endpoint` field
-    // and is being retained for backward compatibility reasons.
-    IpAddress                 *string          `json:"ip_address"`
-    // The Clumio-assigned ID of the organizational unit associated with the vCenter.
-    OrganizationalUnitId      *string          `json:"organizational_unit_id"`
-    // The connection status of the Clumio Cloud Connector. Examples include "pending", "connected", "disconnected", "invalid_credentials", "partial", and "unavailable".
-    Status                    *string          `json:"status"`
-    // The type of vCenter server. If the vCenter server's type is unavailable, this field has a value of `unavailable`. Refer to the vCenter Types table for a complete list of vCenter types.
-    ClumioType                *string          `json:"type"`
-    // The token given to the Clumio Cloud Connectors to identify the vCenter server.
-    VcenterToken              *string          `json:"vcenter_token"`
-}
-
-// VcenterEmbedded represents a custom type struct.
-// Embedded responses related to the resource.
-type VcenterEmbedded struct {
-    // Embeds the compliance statistics of VMs into each vCenter resource in the response, if requested using the `_embed` query parameter.
-    ReadVmwareVcenterComplianceStats interface{} `json:"read-vmware-vcenter-compliance-stats"`
-}
-
-// VcenterLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type VcenterLinks struct {
-    // The HATEOAS link to this resource.
-    Self                             *HateoasSelfLink                             `json:"_self"`
-    // A HATEOAS link to the compliance statistics of VMs in the folders and subfolders of this vCenter resource.
-    ReadVmwareVcenterComplianceStats *ReadVCenterObjectProtectionStatsHateoasLink `json:"read-vmware-vcenter-compliance-stats"`
-}
-
-// VcenterListEmbedded represents a custom type struct.
-// Embedded responses related to the resource.
-type VcenterListEmbedded struct {
-    // TODO: Add struct field description
-    Items []*Vcenter `json:"items"`
-}
-
-// VcenterListLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type VcenterListLinks struct {
-    // The HATEOAS link to the first page of results.
-    First *HateoasFirstLink `json:"_first"`
-    // The HATEOAS link to the last page of results.
-    Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
-    Next  *HateoasNextLink  `json:"_next"`
-    // The HATEOAS link to the previous page of results.
-    Prev  *HateoasPrevLink  `json:"_prev"`
-    // The HATEOAS link to this resource.
-    Self  *HateoasSelfLink  `json:"_self"`
-}
-
-// Vm represents a custom type struct
-type Vm struct {
-    // Embedded responses related to the resource.
-    Embedded              *VmEmbedded                   `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links                 *VmLinks                      `json:"_links"`
-    // [DEPRECATED]
-    // The policy compliance status of the resource. If the VM is deleted or unprotected, then this field has a value of `null`. Refer to the Compliance Status table for a complete list of compliance statuses.
-    ComplianceStatus      *string                       `json:"compliance_status"`
-    // The compute resource from which the VM draws. If the VM is deleted, then `compute_resource.id` has a value of `null`.
-    ComputeResource       *VMComputeResourceModel       `json:"compute_resource"`
-    // The compute resource folder associated with this VM. If the VM is deleted, then this field has a value of `null`.
-    ComputeResourceFolder *VMComputeResourceFolderModel `json:"compute_resource_folder"`
-    // The data center in which the VM resides. If the VM is deleted, then `datacenter.id` has a value of `null`.
-    Datacenter            *VMDatacenterModel            `json:"datacenter"`
-    // The data center folder associated with this VM. If the VM is deleted, then this field has a value of `null`.
-    DatacenterFolder      *VMDatacenterFolderModel      `json:"datacenter_folder"`
-    // The host on which the VM resides. If the VM is deleted, then `host.id` and `host.is_standalone` have values of `null`. The `host.name` field may also have a value of `null`.
-    Host                  *VMHostModel                  `json:"host"`
-    // The VMware-assigned Managed Object Reference (MoRef) ID of the VM.
-    // VMs from different vCenters may have the same VMware-assigned ID.
-    Id                    *string                       `json:"id"`
-    // Determines whether the VM is deleted. If `true`, the VM is deleted.
-    IsDeleted             *bool                         `json:"is_deleted"`
-    // Determines whether the VM is supported for backups. If `true`, the VM is supported for backups.
-    IsSupported           *bool                         `json:"is_supported"`
-    // The timestamp of when the VM was last
-    // backed up. If this VM has not been backed up, then this field has a value of `null`.
-    LastBackupTimestamp   *string                       `json:"last_backup_timestamp"`
-    // The name of the virtual machine.
-    Name                  *string                       `json:"name"`
-    // The network interface card (NIC) attached to the VM.
-    Nics                  []*VMNicModel                 `json:"nics"`
-    // The Clumio-assigned ID of the organizational unit associated with the VM.
-    OrganizationalUnitId  *string                       `json:"organizational_unit_id"`
-    // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
-    ProtectionInfo        *ProtectionInfo               `json:"protection_info"`
-    // The protection status of the resource. If the VM has been deleted, then this field has a value of `null`. Refer to the Protection Status table for a complete list of protection statuses.
-    ProtectionStatus      *string                       `json:"protection_status"`
-    // The resource pool from which the VM draws. If the VM is deleted, then `resource_pool.id` and `resource_pool.is_root` have values of `null`.
-    ResourcePool          *VMResourcePoolModel          `json:"resource_pool"`
-    // VMTagWithCategoryModel
-    // A tag associated with the VM.
-    Tags                  []*VMTagWithCategoryModel     `json:"tags"`
-    // The reason why the VM cannot be supported. If the VM is supported, then this field has a value of `null`.
-    UnsupportedReason     *string                       `json:"unsupported_reason"`
-    // The Clumio-assigned ID of the VM.
-    // Use this parameter in the [GET /backups/files/search](#operation/list-files) endpoint
-    // to search for files in backups of this VM.
-    Uuid                  *string                       `json:"uuid"`
-    // The VM folder containing the VM. If the VM is deleted, then `vm_folder.id` has a value of `null`.
-    VmFolder              *VMFolderModel                `json:"vm_folder"`
-}
-
-// VmComputeResourceLink represents a custom type struct.
-// A HATEOAS link to the compute resource from which this VM draws from. Will be omitted for deleted VMs.
-type VmComputeResourceLink struct {
-    // The URI for the referenced operation.
-    Href       *string `json:"href"`
-    // Determines whether the "href" link is a URI template. If set to `true`, the "href" link is a URI template.
-    Templated  *bool   `json:"templated"`
-    // The HTTP method to be used with the "href" link for the referenced operation.
-    ClumioType *string `json:"type"`
-}
-
-// VmDatacenterLink represents a custom type struct.
-// A HATEOAS link to the data center in which this VM resides. Will be omitted for deleted VMs.
-type VmDatacenterLink struct {
-    // The URI for the referenced operation.
-    Href       *string `json:"href"`
-    // Determines whether the "href" link is a URI template. If set to `true`, the "href" link is a URI template.
-    Templated  *bool   `json:"templated"`
-    // The HTTP method to be used with the "href" link for the referenced operation.
-    ClumioType *string `json:"type"`
-}
-
-// VmEmbedded represents a custom type struct.
-// Embedded responses related to the resource.
-type VmEmbedded struct {
-    // Embeds the associated policy of a protected resource in the response if requested using the `embed` query parameter. Unprotected resources will not have an associated policy.
-    ReadPolicyDefinition interface{} `json:"read-policy-definition"`
-}
-
-// VmFolderLink represents a custom type struct.
-// A HATEOAS link to the VM folder in which this VM resides. Will be omitted for deleted VMs.
-type VmFolderLink struct {
-    // The URI for the referenced operation.
-    Href       *string `json:"href"`
-    // Determines whether the "href" link is a URI template. If set to `true`, the "href" link is a URI template.
-    Templated  *bool   `json:"templated"`
-    // The HTTP method to be used with the "href" link for the referenced operation.
-    ClumioType *string `json:"type"`
-}
-
-// VmLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type VmLinks struct {
-    // The HATEOAS link to this resource.
-    Self                             *HateoasSelfLink                 `json:"_self"`
-    // A resource-specific HATEOAS link.
-    CreateBackupVmwareVm             *HateoasLink                     `json:"create-backup-vmware-vm"`
-    // A resource-specific HATEOAS link.
-    ListBackupVmwareVms              *HateoasLink                     `json:"list-backup-vmware-vms"`
-    // A resource-specific HATEOAS link.
-    ListRestoredFiles                *HateoasLink                     `json:"list-restored-files"`
-    // A HATEOAS link to protect the entities.
-    ProtectEntities                  *ProtectEntitiesHateoasLink      `json:"protect-entities"`
-    // A HATEOAS link to the policy protecting this resource. Will be omitted for unprotected entities.
-    ReadPolicyDefinition             *ReadPolicyDefinitionHateoasLink `json:"read-policy-definition"`
-    // A HATEOAS link to the compute resource from which this VM draws from. Will be omitted for deleted VMs.
-    ReadVmwareVcenterComputeResource *VmComputeResourceLink           `json:"read-vmware-vcenter-compute-resource"`
-    // A HATEOAS link to the data center in which this VM resides. Will be omitted for deleted VMs.
-    ReadVmwareVcenterDatacenter      *VmDatacenterLink                `json:"read-vmware-vcenter-datacenter"`
-    // A HATEOAS link to the VM folder in which this VM resides. Will be omitted for deleted VMs.
-    ReadVmwareVcenterFolder          *VmFolderLink                    `json:"read-vmware-vcenter-folder"`
-    // A HATEOAS link to unprotect the entities.
-    UnprotectEntities                *UnprotectEntitiesHateoasLink    `json:"unprotect-entities"`
-}
-
-// VmListEmbedded represents a custom type struct.
-// Embedded responses related to the resource.
-type VmListEmbedded struct {
-    // TODO: Add struct field description
-    Items []*Vm `json:"items"`
-}
-
-// VmListLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type VmListLinks struct {
-    // The HATEOAS link to the first page of results.
-    First *HateoasFirstLink `json:"_first"`
-    // The HATEOAS link to the last page of results.
-    Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
-    Next  *HateoasNextLink  `json:"_next"`
-    // The HATEOAS link to the previous page of results.
-    Prev  *HateoasPrevLink  `json:"_prev"`
-    // The HATEOAS link to this resource.
-    Self  *HateoasSelfLink  `json:"_self"`
 }
 
 // Wallet represents a custom type struct

@@ -31,23 +31,32 @@ func (e *Ec2MssqlFailoverClustersV1) ListEc2MssqlFailoverClusters(
     
     header := "application/api.clumio.ec2-mssql-failover-clusters=v1+json"
     result := &models.ListEC2MSSQLFCIsResponse{}
-    queryParams := make(map[string]string)
-    if limit != nil {
-        queryParams["limit"] = fmt.Sprintf("%v", *limit)
+    defaultInt64 := int64(0)
+    defaultString := "" 
+    
+    if limit == nil {
+        limit = &defaultInt64
     }
-    if start != nil {
-        queryParams["start"] = *start
+    if start == nil {
+        start = &defaultString
     }
-    if filter != nil {
-        queryParams["filter"] = *filter
+    if filter == nil {
+        filter = &defaultString
     }
-    if embed != nil {
-        queryParams["embed"] = *embed
+    if embed == nil {
+        embed = &defaultString
     }
-    if lookbackDays != nil {
-        queryParams["lookback_days"] = fmt.Sprintf("%v", *lookbackDays)
+    if lookbackDays == nil {
+        lookbackDays = &defaultInt64
     }
     
+    queryParams := map[string]string{
+        "limit": fmt.Sprintf("%v", *limit),
+        "start": *start,
+        "filter": *filter,
+        "embed": *embed,
+        "lookback_days": fmt.Sprintf("%v", *lookbackDays),
+    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: e.config,
