@@ -34,14 +34,20 @@ func (b *BackupFilesystemsV1) ListBackupFilesystems(
     
     header := "application/api.clumio.backup-filesystems=v1+json"
     result := &models.ListFileSystemsResponse{}
-    queryParams := make(map[string]string)
-    if limit != nil {
-        queryParams["limit"] = fmt.Sprintf("%v", *limit)
+    defaultInt64 := int64(0)
+    defaultString := "" 
+    
+    if limit == nil {
+        limit = &defaultInt64
     }
-    if start != nil {
-        queryParams["start"] = *start
+    if start == nil {
+        start = &defaultString
     }
     
+    queryParams := map[string]string{
+        "limit": fmt.Sprintf("%v", *limit),
+        "start": *start,
+    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: b.config,

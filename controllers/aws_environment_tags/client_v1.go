@@ -31,11 +31,11 @@ type AwsEnvironmentTagsV1Client interface {
         lookbackDays *int64)(
         *models.ReadAwsTagResponse,  *apiutils.APIError)
     
-    // ReadAwsEnvironmentTagEbsVolumesComplianceStats Returns the specified AWS tag's EBS compliance statistics.
-    ReadAwsEnvironmentTagEbsVolumesComplianceStats(
+    // ReadAwsEnvironmentTagEbsVolumesProtectionStats Returns the specified AWS tag's EBS protection statistics.
+    ReadAwsEnvironmentTagEbsVolumesProtectionStats(
         environmentId string, 
         tagId string)(
-        *models.ReadEbsTagComplianceStatsResponse,  *apiutils.APIError)
+        *models.ReadEbsTagProtectionStatsResponse,  *apiutils.APIError)
     
 }
 

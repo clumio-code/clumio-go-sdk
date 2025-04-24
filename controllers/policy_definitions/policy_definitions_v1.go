@@ -25,8 +25,6 @@ type PolicyDefinitionsV1 struct {
 //  +----------------------------------+-------------------------------------------+
 //  |            Operation             |                Description                |
 //  +==================================+===========================================+
-//  | vmware_vm_backup                 | VMware VM backup.                         |
-//  +----------------------------------+-------------------------------------------+
 //  | aws_ebs_volume_backup            | AWS EBS volume backup.                    |
 //  +----------------------------------+-------------------------------------------+
 //  | aws_ebs_volume_snapshot          | AWS EBS volume snapshot stored in         |
@@ -64,11 +62,6 @@ type PolicyDefinitionsV1 struct {
 //  +----------------------------------+-------------------------------------------+
 //  | microsoft365_teams_backup        | Microsoft365 team backup.                 |
 //  +----------------------------------+-------------------------------------------+
-//  | mssql_database_backup            | VMC MSSQL database backup stored in       |
-//  |                                  | Clumio.                                   |
-//  +----------------------------------+-------------------------------------------+
-//  | mssql_log_backup                 | VMC MSSQL log backup stored in Clumio.    |
-//  +----------------------------------+-------------------------------------------+
 //  
 //  
 //  The following table describes the supported policy activation statuses.
@@ -82,7 +75,7 @@ type PolicyDefinitionsV1 struct {
 //  | deactivated       |                                                          |
 //  |                   | Backups will not begin until the policy is reactivated.  |
 //  |                   | The assets associated with the policy will have their    |
-//  |                   | compliance status set to "deactivated".                  |
+//  |                   | protection status set to "deactivated".                  |
 //  |                   |                                                          |
 //  +-------------------+----------------------------------------------------------+
 //  
@@ -96,14 +89,19 @@ func (p *PolicyDefinitionsV1) ListPolicyDefinitions(
     
     header := "application/api.clumio.policy-definitions=v1+json"
     result := &models.ListPoliciesResponse{}
-    queryParams := make(map[string]string)
-    if filter != nil {
-        queryParams["filter"] = *filter
+    defaultString := "" 
+    
+    if filter == nil {
+        filter = &defaultString
     }
-    if embed != nil {
-        queryParams["embed"] = *embed
+    if embed == nil {
+        embed = &defaultString
     }
     
+    queryParams := map[string]string{
+        "filter": *filter,
+        "embed": *embed,
+    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: p.config,
@@ -166,11 +164,15 @@ func (p *PolicyDefinitionsV1) ReadPolicyDefinition(
     
     header := "application/api.clumio.policy-definitions=v1+json"
     result := &models.ReadPolicyResponse{}
-    queryParams := make(map[string]string)
-    if embed != nil {
-        queryParams["embed"] = *embed
+    defaultString := "" 
+    
+    if embed == nil {
+        embed = &defaultString
     }
     
+    queryParams := map[string]string{
+        "embed": *embed,
+    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: p.config,
@@ -186,7 +188,7 @@ func (p *PolicyDefinitionsV1) ReadPolicyDefinition(
 }
 
 
-// UpdatePolicyDefinition Updates an existing policy by modifying its backup seed setting, backup service level agreement (SLA), and backup window. If a policy is updated while a backup is in progress, the policy changes will take effect after the backup completes.
+// UpdatePolicyDefinition Updates an existing policy by modifying its backup seed setting, backup service level agreement (SLA), and backup window. The policy is updated asynchronously, and the response will include the existing policy. If a policy is updated while a backup is in progress, the policy changes will take effect after the backup is completed.
 func (p *PolicyDefinitionsV1) UpdatePolicyDefinition(
     policyId string, 
     embed *string, 
@@ -211,11 +213,15 @@ func (p *PolicyDefinitionsV1) UpdatePolicyDefinition(
     payload := string(bytes)
     header := "application/api.clumio.policy-definitions=v1+json"
     result := &models.UpdatePolicyResponse{}
-    queryParams := make(map[string]string)
-    if embed != nil {
-        queryParams["embed"] = *embed
+    defaultString := "" 
+    
+    if embed == nil {
+        embed = &defaultString
     }
     
+    queryParams := map[string]string{
+        "embed": *embed,
+    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: p.config,

@@ -37,11 +37,15 @@ func (r *RestoredRecordsAwsDynamodbTablesV1) RestoreRecordsAwsDynamodbTable(
     payload := string(bytes)
     header := "application/api.clumio.restored-records-aws-dynamodb-tables=v1+json"
     result := &models.RestoreRecordsAwsDynamodbTableResponseWrapper{}
-    queryParams := make(map[string]string)
-    if embed != nil {
-        queryParams["embed"] = *embed
+    defaultString := "" 
+    
+    if embed == nil {
+        embed = &defaultString
     }
     
+    queryParams := map[string]string{
+        "embed": *embed,
+    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: r.config,

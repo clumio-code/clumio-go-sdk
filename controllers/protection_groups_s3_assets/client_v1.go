@@ -34,6 +34,14 @@ type ProtectionGroupsS3AssetsV1Client interface {
         interval *string)(
         *models.ReadProtectionGroupS3AssetContinuousBackupStatsResponse,  *apiutils.APIError)
     
+    // ListProtectionGroupS3AssetPitrIntervals Returns a list of time intervals (start timestamp and end timestamp) in which the protection group S3 asset can be restored.
+    ListProtectionGroupS3AssetPitrIntervals(
+        protectionGroupS3AssetId string, 
+        limit *int64, 
+        start *string, 
+        filter *string)(
+        *models.ListProtectionGroupS3AssetPitrIntervalsResponse,  *apiutils.APIError)
+    
 }
 
 // NewProtectionGroupsS3AssetsV1 returns ProtectionGroupsS3AssetsV1Client

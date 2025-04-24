@@ -31,23 +31,32 @@ func (a *AwsDynamodbTablesV1) ListAwsDynamodbTables(
     
     header := "application/api.clumio.aws-dynamodb-tables=v1+json"
     result := &models.ListDynamoDBTableResponse{}
-    queryParams := make(map[string]string)
-    if limit != nil {
-        queryParams["limit"] = fmt.Sprintf("%v", *limit)
+    defaultInt64 := int64(0)
+    defaultString := "" 
+    
+    if limit == nil {
+        limit = &defaultInt64
     }
-    if start != nil {
-        queryParams["start"] = *start
+    if start == nil {
+        start = &defaultString
     }
-    if filter != nil {
-        queryParams["filter"] = *filter
+    if filter == nil {
+        filter = &defaultString
     }
-    if embed != nil {
-        queryParams["embed"] = *embed
+    if embed == nil {
+        embed = &defaultString
     }
-    if lookbackDays != nil {
-        queryParams["lookback_days"] = fmt.Sprintf("%v", *lookbackDays)
+    if lookbackDays == nil {
+        lookbackDays = &defaultInt64
     }
     
+    queryParams := map[string]string{
+        "limit": fmt.Sprintf("%v", *limit),
+        "start": *start,
+        "filter": *filter,
+        "embed": *embed,
+        "lookback_days": fmt.Sprintf("%v", *lookbackDays),
+    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: a.config,
@@ -79,14 +88,20 @@ func (a *AwsDynamodbTablesV1) ReadAwsDynamodbTable(
     
     header := "application/api.clumio.aws-dynamodb-tables=v1+json"
     result := &models.ReadDynamoDBTableResponse{}
-    queryParams := make(map[string]string)
-    if lookbackDays != nil {
-        queryParams["lookback_days"] = fmt.Sprintf("%v", *lookbackDays)
+    defaultInt64 := int64(0)
+    defaultString := "" 
+    
+    if lookbackDays == nil {
+        lookbackDays = &defaultInt64
     }
-    if embed != nil {
-        queryParams["embed"] = *embed
+    if embed == nil {
+        embed = &defaultString
     }
     
+    queryParams := map[string]string{
+        "lookback_days": fmt.Sprintf("%v", *lookbackDays),
+        "embed": *embed,
+    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: a.config,

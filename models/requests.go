@@ -76,26 +76,6 @@ type CreateBackupEc2MssqlDatabaseV1Request struct {
     ClumioType *string          `json:"type"`
 }
 
-// CreateBackupMssqlDatabaseV1Request represents a custom type struct
-type CreateBackupMssqlDatabaseV1Request struct {
-    // Performs the operation on the Mssql asset with the specified Clumio-assigned ID.
-    AssetId    *string          `json:"asset_id"`
-    // Settings for requesting on-demand backup directly.
-    Settings   *OnDemandSetting `json:"settings"`
-    // The type of the backup. Possible values - `mssql_database_backup`, `mssql_log_backup`.
-    ClumioType *string          `json:"type"`
-}
-
-// CreateBackupVmwareVmV1Request represents a custom type struct
-type CreateBackupVmwareVmV1Request struct {
-    // Settings for requesting on-demand backup directly.
-    Settings  *OnDemandSetting `json:"settings"`
-    // Performs the operation on a VM within the specified vCenter server.
-    VcenterId *string          `json:"vcenter_id"`
-    // Performs the operation on the VM with the specified VMware-assigned Managed Object Reference (MoRef) ID.
-    VmId      *string          `json:"vm_id"`
-}
-
 // CreateAwsConnectionV1Request represents a custom type struct
 type CreateAwsConnectionV1Request struct {
     // The AWS-assigned ID of the account associated with the connection.
@@ -111,8 +91,11 @@ type CreateAwsConnectionV1Request struct {
     // Organizational-Units documentation.
     OrganizationalUnitId     *string   `json:"organizational_unit_id"`
     // The asset types enabled for protect.
-    // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
-    // NOTE - EBS is required for EC2MSSQL.
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS"].
+    // 
+    // NOTE -
+    // 1. EC2/EBS is required for EC2MSSQL.
+    // 2. EBS as a value is deprecated in favor of EC2/EBS.
     ProtectAssetTypesEnabled []*string `json:"protect_asset_types_enabled"`
     // The services to be enabled for this configuration. Valid values are
     // ["discover"], ["discover", "protect"]. This is only set when the
@@ -128,14 +111,20 @@ type CreateAwsConnectionGroupV1Request struct {
     // The AWS-assigned ID of the account to be associated with the Connection Group.
     AccountNativeId      *string   `json:"account_native_id"`
     // The asset types to be connected via the connection-group.
-    // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
-    // NOTE - EBS is required for EC2MSSQL.
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS"].
+    // 
+    // NOTE -
+    // 1. EC2/EBS is required for EC2MSSQL.
+    // 2. EBS as a value is deprecated in favor of EC2/EBS.
     AssetTypes           []*string `json:"asset_types"`
     // DEPRECATED, use "asset_types" instead.
     // 
     // The asset types to be connected via the connection-group.
-    // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
-    // NOTE - EBS is required for EC2MSSQL.
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS"].
+    // 
+    // NOTE -
+    // 1. EC2/EBS is required for EC2MSSQL.
+    // 2. EBS as a value is deprecated in favor of EC2/EBS.
     AssetTypesEnabled    []*string `json:"asset_types_enabled"`
     // The AWS regions to be associated with the Connection Group.
     AwsRegions           []*string `json:"aws_regions"`
@@ -158,15 +147,21 @@ type CreateAwsConnectionGroupV1Request struct {
 // UpdateAwsConnectionGroupV1Request represents a custom type struct
 type UpdateAwsConnectionGroupV1Request struct {
     // The asset types to be connected via the connection-group.
-    // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
-    // NOTE - EBS is required for EC2MSSQL.
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS"].
+    // 
+    // NOTE -
+    // 1. EC2/EBS is required for EC2MSSQL.
+    // 2. EBS as a value is deprecated in favor of EC2/EBS.
     AssetTypes        []*string `json:"asset_types"`
     // DEPRECATED, use "asset_types" instead.
     // 
     // 
     // The asset types to be connected via the connection-group.
-    // Valid values are any of ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
-    // NOTE - EBS is required for EC2MSSQL.
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS"].
+    // 
+    // NOTE -
+    // 1. EC2/EBS is required for EC2MSSQL.
+    // 2. EBS as a value is deprecated in favor of EC2/EBS.
     AssetTypesEnabled []*string `json:"asset_types_enabled"`
     // The AWS regions to be associated with the Connection Group.
     AwsRegions        []*string `json:"aws_regions"`
@@ -203,8 +198,12 @@ type PostProcessAwsConnectionV1Request struct {
 
 // CreateConnectionTemplateV1Request represents a custom type struct
 type CreateConnectionTemplateV1Request struct {
-    // The asset types for which the template is to be generated. Possible
-    // asset types are ["EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3"].
+    // The asset types for which the template is to be generated.
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS", "Iceberg"].
+    // 
+    // NOTE -
+    // 1. EC2/EBS is required for EC2MSSQL.
+    // 2. EBS as a value is deprecated in favor of EC2/EBS.
     AssetTypesEnabled   []*string `json:"asset_types_enabled"`
     // Account ID for the AWS environment to be connected
     // Mandatory to pass a 12 digit string if show_manual_resources is set to true
@@ -220,52 +219,17 @@ type CreateConnectionTemplateV1Request struct {
 type UpdateAwsConnectionV1Request struct {
     // Asset types enabled with the given resource ARNs.
     // This field is only applicable to manually configured connections.
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS"].
+    // 
+    // NOTE -
+    // 1. EC2/EBS is required for EC2MSSQL.
+    // 2. EBS as a value is deprecated in favor of EC2/EBS.
     AssetTypesEnabled []*string  `json:"asset_types_enabled"`
     // An optional, user-provided description for this connection.
     Description       *string    `json:"description"`
     // Partial updates are not supported, therefore you must provide ARNs for all configured resources,
     // including those for resources that are not being updated.
     Resources         *Resources `json:"resources"`
-}
-
-// CreateMssqlHostConnectionsV1Request represents a custom type struct
-type CreateMssqlHostConnectionsV1Request struct {
-    // The fully-qualified domain names or IP addresses of hosts to be connected.
-    Endpoints            []*string `json:"endpoints"`
-    // TODO: Add struct field description
-    GroupId              *string   `json:"group_id"`
-    // The Clumio-assigned ID of the organizational unit associated with the host.
-    OrganizationalUnitId *string   `json:"organizational_unit_id"`
-    // Performs the operation on a host within the specified management subgroup.
-    SubgroupId           *string   `json:"subgroup_id"`
-}
-
-// DeleteMssqlHostConnectionsV1Request represents a custom type struct
-type DeleteMssqlHostConnectionsV1Request struct {
-    // The endpoints of hosts to be deleted.
-    Endpoints  []*string `json:"endpoints"`
-    // TODO: Add struct field description
-    GroupId    *string   `json:"group_id"`
-    // Performs the operation on a host within the specified management subgroup.
-    SubgroupId *string   `json:"subgroup_id"`
-}
-
-// MoveMssqlHostConnectionsV1Request represents a custom type struct
-type MoveMssqlHostConnectionsV1Request struct {
-    // The hosts to be moved to a different management subgroup.
-    Source *MoveHostsSource `json:"source"`
-    // The target configuration of the hosts to be moved.
-    Target *MoveHostsTarget `json:"target"`
-}
-
-// CreateMssqlHostConnectionCredentialsV1Request represents a custom type struct
-type CreateMssqlHostConnectionCredentialsV1Request struct {
-    // Performs the operation on a host within the specified endpoint.
-    Endpoint   *string `json:"endpoint"`
-    // TODO: Add struct field description
-    GroupId    *string `json:"group_id"`
-    // Performs the operation on a host within the specified subgroup.
-    SubgroupId *string `json:"subgroup_id"`
 }
 
 // SetBucketPropertiesV1Request represents a custom type struct.
@@ -428,10 +392,10 @@ type CreatePolicyRuleV1Request struct {
     // |                       |                           |                          |
     // |                       |                           |                          |
     // +-----------------------+---------------------------+--------------------------+
-    // | aws_tag               | $eq, $in, $all, $contains | Denotes the AWS tag(s)   |
-    // |                       |                           | to conditionalize on.    |
-    // |                       |                           | Max 100 tags allowed in  |
-    // |                       |                           | each rule                |
+    // | aws_tag               | $eq, $in, $all,           | Denotes the AWS tag(s)   |
+    // |                       | $contains, $not_eq,       | to conditionalize on.    |
+    // |                       | $not_in, $not_all,        | Max 100 tags allowed in  |
+    // |                       | $not_contains             | each rule                |
     // |                       |                           | and tag key can be upto  |
     // |                       |                           | 128 characters and value |
     // |                       |                           | can be upto 256          |
@@ -459,6 +423,30 @@ type CreatePolicyRuleV1Request struct {
     // |                       |                           | {"aws_tag":{"$contains": |
     // |                       |                           | {"key":"Environment",    |
     // |                       |                           | "value":"Prod"}}}        |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"aws_tag":{"$not_eq":{" |
+    // |                       |                           | key":"Environment",      |
+    // |                       |                           | "value":"Prod"}}}        |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"aws_tag":{"$not_in":[{ |
+    // |                       |                           | "key":"Environment",     |
+    // |                       |                           | "value":"Prod"},         |
+    // |                       |                           | {"key":"Hello",          |
+    // |                       |                           | "value":"World"}]}}      |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"aws_tag":{"$not_all":[ |
+    // |                       |                           | {"key":"Environment",    |
+    // |                       |                           | "value":"Prod"},         |
+    // |                       |                           | {"key":"Hello",          |
+    // |                       |                           | "value":"World"}]}}      |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"aws_tag":{"$not_contai |
+    // |                       |                           | ns":{"key":"Environment" |
+    // |                       |                           | , "value":"Prod"}}}      |
     // |                       |                           |                          |
     // |                       |                           |                          |
     // +-----------------------+---------------------------+--------------------------+
@@ -522,10 +510,10 @@ type UpdatePolicyRuleV1Request struct {
     // |                       |                           |                          |
     // |                       |                           |                          |
     // +-----------------------+---------------------------+--------------------------+
-    // | aws_tag               | $eq, $in, $all, $contains | Denotes the AWS tag(s)   |
-    // |                       |                           | to conditionalize on.    |
-    // |                       |                           | Max 100 tags allowed in  |
-    // |                       |                           | each rule                |
+    // | aws_tag               | $eq, $in, $all,           | Denotes the AWS tag(s)   |
+    // |                       | $contains, $not_eq,       | to conditionalize on.    |
+    // |                       | $not_in, $not_all,        | Max 100 tags allowed in  |
+    // |                       | $not_contains             | each rule                |
     // |                       |                           | and tag key can be upto  |
     // |                       |                           | 128 characters and value |
     // |                       |                           | can be upto 256          |
@@ -553,6 +541,30 @@ type UpdatePolicyRuleV1Request struct {
     // |                       |                           | {"aws_tag":{"$contains": |
     // |                       |                           | {"key":"Environment",    |
     // |                       |                           | "value":"Prod"}}}        |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"aws_tag":{"$not_eq":{" |
+    // |                       |                           | key":"Environment",      |
+    // |                       |                           | "value":"Prod"}}}        |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"aws_tag":{"$not_in":[{ |
+    // |                       |                           | "key":"Environment",     |
+    // |                       |                           | "value":"Prod"},         |
+    // |                       |                           | {"key":"Hello",          |
+    // |                       |                           | "value":"World"}]}}      |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"aws_tag":{"$not_all":[ |
+    // |                       |                           | {"key":"Environment",    |
+    // |                       |                           | "value":"Prod"},         |
+    // |                       |                           | {"key":"Hello",          |
+    // |                       |                           | "value":"World"}]}}      |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"aws_tag":{"$not_contai |
+    // |                       |                           | ns":{"key":"Environment" |
+    // |                       |                           | , "value":"Prod"}}}      |
     // |                       |                           |                          |
     // |                       |                           |                          |
     // +-----------------------+---------------------------+--------------------------+
@@ -586,32 +598,132 @@ type CreateProtectionGroupV1Request struct {
     // The following table describes the possible conditions for a bucket to be
     // automatically added to a protection group.
     // 
-    // +-------------------+----------------+-----------------------------------------+
-    // |       Field       | Rule Condition |               Description               |
-    // +===================+================+=========================================+
-    // | aws_tag           | $eq            | Denotes the AWS tag(s) to               |
-    // |                   |                | conditionalize on                       |
-    // |                   |                |                                         |
-    // |                   |                | {"aws_tag":{"$eq":{"key":"Environment", |
-    // |                   |                | "value":"Prod"}}}                       |
-    // |                   |                |                                         |
-    // |                   |                |                                         |
-    // +-------------------+----------------+-----------------------------------------+
-    // | account_native_id | $eq            | Denotes the AWS account to              |
-    // |                   |                | conditionalize on                       |
-    // |                   |                |                                         |
-    // |                   |                | {"account_native_id":{"$eq":"1111111111 |
-    // |                   |                | 11"}}                                   |
-    // |                   |                |                                         |
-    // |                   |                |                                         |
-    // +-------------------+----------------+-----------------------------------------+
-    // | aws_region        | $eq            | Denotes the AWS region to               |
-    // |                   |                | conditionalize on                       |
-    // |                   |                |                                         |
-    // |                   |                | {"aws_region":{"$eq":"us-west-2"}}      |
-    // |                   |                |                                         |
-    // |                   |                |                                         |
-    // +-------------------+----------------+-----------------------------------------+
+    // +-----------------------+----------------+-------------------------------------+
+    // |         Field         | Rule Condition |             Description             |
+    // +=======================+================+=====================================+
+    // | aws_tag               | $eq            | Denotes the AWS tag(s) to be        |
+    // |                       |                | exactly equal to the specified      |
+    // |                       |                | value.                              |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$eq":{"key":"Environme |
+    // |                       |                | nt", "value":"Prod"}}}              |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_tag               | $not_eq        | Denotes the AWS tag(s) to be not    |
+    // |                       |                | equal to the specified value.       |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$not_eq":{"key":"Envir |
+    // |                       |                | onment", "value":"Prod"}}}          |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_tag               | $contains      | Denotes the AWS tag(s) contain a    |
+    // |                       |                | specified substring.                |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$contains":{"key":"Env |
+    // |                       |                | ironment", "value":"Prod"}}}        |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_tag               | $not_contains  | Denotes the AWS tag(s) excludes a   |
+    // |                       |                | specified substring.                |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$not_contains":{"key": |
+    // |                       |                | "Environment", "value":"Prod"}}}    |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_tag               | $all           | Denotes the AWS tag(s) where all    |
+    // |                       |                | elements in the specified list are  |
+    // |                       |                | present.                            |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$all":[{"key":"Environ |
+    // |                       |                | ment", "value":"Prod"}]}}           |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_tag               | $not_all       | Denotes the AWS tag(s) where at     |
+    // |                       |                | least one element from the          |
+    // |                       |                | specified list is missing.          |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$not_all":[{"key":"Env |
+    // |                       |                | ironment", "value":"Prod"}]}}       |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_tag               | $in            | Denotes the AWS tag(s) exist in a   |
+    // |                       |                | specified list.                     |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$in":[{"key":"Environm |
+    // |                       |                | ent", "value":"Prod"}]}}            |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_tag               | $not_in        | Denotes the AWS tag(s) do not exist |
+    // |                       |                | in a specified list.                |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$not_in":[{"key":"Envi |
+    // |                       |                | ronment", "value":"Prod"}]}}        |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_account_native_id | $eq            | Denotes the AWS account to be       |
+    // |                       |                | exactly equal to the specified      |
+    // |                       |                | value.                              |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_account_native_id":{"$eq":"11 |
+    // |                       |                | 1111111111"}}                       |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_account_native_id | $in            | Denotes the AWS account exist in a  |
+    // |                       |                | specified list.                     |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_account_native_id":{"$in":["1 |
+    // |                       |                | 11111111111"]}}                     |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | account_native_id     | $in            |                                     |
+    // |                       |                | This will be deprecated and use     |
+    // |                       |                | aws_account_native_id instead.      |
+    // |                       |                | Denotes the AWS account exist in a  |
+    // |                       |                | specified list.                     |
+    // |                       |                |                                     |
+    // |                       |                | {"account_native_id":{"$in":["11111 |
+    // |                       |                | 1111111"]}}                         |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | account_native_id     | $eq            |                                     |
+    // |                       |                | This will be deprecated and use     |
+    // |                       |                | aws_account_native_id instead.      |
+    // |                       |                | Denotes the AWS account to be       |
+    // |                       |                | exactly equal to the specified      |
+    // |                       |                | value.                              |
+    // |                       |                |                                     |
+    // |                       |                | {"account_native_id":{"$eq":"111111 |
+    // |                       |                | 111111"}}                           |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_region            | $eq            | Denotes the AWS region to be        |
+    // |                       |                | exactly equal to the specified      |
+    // |                       |                | value.                              |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_region":{"$eq":"us-west-2"}}  |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_region            | $in            | Denotes the AWS region exist in a   |
+    // |                       |                | specified list.                     |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_region":{"$in":["us-          |
+    // |                       |                | west-2"]}}                          |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
     // 
     BucketRule   *string       `json:"bucket_rule"`
     // The user-assigned description of the protection group.
@@ -628,32 +740,132 @@ type UpdateProtectionGroupV1Request struct {
     // The following table describes the possible conditions for a bucket to be
     // automatically added to a protection group.
     // 
-    // +-------------------+----------------+-----------------------------------------+
-    // |       Field       | Rule Condition |               Description               |
-    // +===================+================+=========================================+
-    // | aws_tag           | $eq            | Denotes the AWS tag(s) to               |
-    // |                   |                | conditionalize on                       |
-    // |                   |                |                                         |
-    // |                   |                | {"aws_tag":{"$eq":{"key":"Environment", |
-    // |                   |                | "value":"Prod"}}}                       |
-    // |                   |                |                                         |
-    // |                   |                |                                         |
-    // +-------------------+----------------+-----------------------------------------+
-    // | account_native_id | $eq            | Denotes the AWS account to              |
-    // |                   |                | conditionalize on                       |
-    // |                   |                |                                         |
-    // |                   |                | {"account_native_id":{"$eq":"1111111111 |
-    // |                   |                | 11"}}                                   |
-    // |                   |                |                                         |
-    // |                   |                |                                         |
-    // +-------------------+----------------+-----------------------------------------+
-    // | aws_region        | $eq            | Denotes the AWS region to               |
-    // |                   |                | conditionalize on                       |
-    // |                   |                |                                         |
-    // |                   |                | {"aws_region":{"$eq":"us-west-2"}}      |
-    // |                   |                |                                         |
-    // |                   |                |                                         |
-    // +-------------------+----------------+-----------------------------------------+
+    // +-----------------------+----------------+-------------------------------------+
+    // |         Field         | Rule Condition |             Description             |
+    // +=======================+================+=====================================+
+    // | aws_tag               | $eq            | Denotes the AWS tag(s) to be        |
+    // |                       |                | exactly equal to the specified      |
+    // |                       |                | value.                              |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$eq":{"key":"Environme |
+    // |                       |                | nt", "value":"Prod"}}}              |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_tag               | $not_eq        | Denotes the AWS tag(s) to be not    |
+    // |                       |                | equal to the specified value.       |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$not_eq":{"key":"Envir |
+    // |                       |                | onment", "value":"Prod"}}}          |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_tag               | $contains      | Denotes the AWS tag(s) contain a    |
+    // |                       |                | specified substring.                |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$contains":{"key":"Env |
+    // |                       |                | ironment", "value":"Prod"}}}        |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_tag               | $not_contains  | Denotes the AWS tag(s) excludes a   |
+    // |                       |                | specified substring.                |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$not_contains":{"key": |
+    // |                       |                | "Environment", "value":"Prod"}}}    |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_tag               | $all           | Denotes the AWS tag(s) where all    |
+    // |                       |                | elements in the specified list are  |
+    // |                       |                | present.                            |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$all":[{"key":"Environ |
+    // |                       |                | ment", "value":"Prod"}]}}           |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_tag               | $not_all       | Denotes the AWS tag(s) where at     |
+    // |                       |                | least one element from the          |
+    // |                       |                | specified list is missing.          |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$not_all":[{"key":"Env |
+    // |                       |                | ironment", "value":"Prod"}]}}       |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_tag               | $in            | Denotes the AWS tag(s) exist in a   |
+    // |                       |                | specified list.                     |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$in":[{"key":"Environm |
+    // |                       |                | ent", "value":"Prod"}]}}            |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_tag               | $not_in        | Denotes the AWS tag(s) do not exist |
+    // |                       |                | in a specified list.                |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_tag":{"$not_in":[{"key":"Envi |
+    // |                       |                | ronment", "value":"Prod"}]}}        |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_account_native_id | $eq            | Denotes the AWS account to be       |
+    // |                       |                | exactly equal to the specified      |
+    // |                       |                | value.                              |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_account_native_id":{"$eq":"11 |
+    // |                       |                | 1111111111"}}                       |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_account_native_id | $in            | Denotes the AWS account exist in a  |
+    // |                       |                | specified list.                     |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_account_native_id":{"$in":["1 |
+    // |                       |                | 11111111111"]}}                     |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | account_native_id     | $in            |                                     |
+    // |                       |                | This will be deprecated and use     |
+    // |                       |                | aws_account_native_id instead.      |
+    // |                       |                | Denotes the AWS account exist in a  |
+    // |                       |                | specified list.                     |
+    // |                       |                |                                     |
+    // |                       |                | {"account_native_id":{"$in":["11111 |
+    // |                       |                | 1111111"]}}                         |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | account_native_id     | $eq            |                                     |
+    // |                       |                | This will be deprecated and use     |
+    // |                       |                | aws_account_native_id instead.      |
+    // |                       |                | Denotes the AWS account to be       |
+    // |                       |                | exactly equal to the specified      |
+    // |                       |                | value.                              |
+    // |                       |                |                                     |
+    // |                       |                | {"account_native_id":{"$eq":"111111 |
+    // |                       |                | 111111"}}                           |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_region            | $eq            | Denotes the AWS region to be        |
+    // |                       |                | exactly equal to the specified      |
+    // |                       |                | value.                              |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_region":{"$eq":"us-west-2"}}  |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
+    // | aws_region            | $in            | Denotes the AWS region exist in a   |
+    // |                       |                | specified list.                     |
+    // |                       |                |                                     |
+    // |                       |                | {"aws_region":{"$in":["us-          |
+    // |                       |                | west-2"]}}                          |
+    // |                       |                |                                     |
+    // |                       |                |                                     |
+    // +-----------------------+----------------+-------------------------------------+
     // 
     BucketRule   *string       `json:"bucket_rule"`
     // The user-assigned description of the protection group.
@@ -676,304 +888,229 @@ type CreateReportDownloadV1Request struct {
     // The name of the report. Field cannot be empty.
     FileName   *string `json:"file_name"`
     // 
-    // +-------------------+------------------+-------------------+-------------------+
-    // |       Field       | Filter Condition |    Report Type    |    Description    |
-    // +===================+==================+===================+===================+
-    // | backup_timestamp  | $gte, $lt, $eq   | Compliance        | Backup timestamp  |
-    // |                   |                  |                   | denotes the time  |
-    // |                   |                  |                   | filter for        |
-    // |                   |                  |                   | Compliance        |
-    // |                   |                  |                   | reports.          |
-    // |                   |                  |                   | $gte and $lt      |
-    // |                   |                  |                   | accept RFC-3339   |
-    // |                   |                  |                   | timestamps and    |
-    // |                   |                  |                   | $eq accepts a     |
-    // |                   |                  |                   | unix timestamp    |
-    // |                   |                  |                   | denoting the      |
-    // |                   |                  |                   | offset from the   |
-    // |                   |                  |                   | current time. $eq |
-    // |                   |                  |                   | takes precedence  |
-    // |                   |                  |                   | over both         |
-    // |                   |                  |                   | $gte and $lt so   |
-    // |                   |                  |                   | if $eq is used,   |
-    // |                   |                  |                   | the backend will  |
-    // |                   |                  |                   | use the relative  |
-    // |                   |                  |                   | time              |
-    // |                   |                  |                   | filter instead of |
-    // |                   |                  |                   | absolute time     |
-    // |                   |                  |                   | filters. For      |
-    // |                   |                  |                   | example,          |
-    // |                   |                  |                   |                   |
-    // |                   |                  |                   | "filter":"{"backu |
-    // |                   |                  |                   | p_timestamp":{"$e |
-    // |                   |                  |                   | q":86400}}"       |
-    // |                   |                  |                   |                   |
-    // |                   |                  |                   |                   |
-    // +-------------------+------------------+-------------------+-------------------+
-    // | activity_start_ti | $gte, $lt, $eq   | Activity          | Activity start    |
-    // | mestamp           |                  |                   | timestamp denotes |
-    // |                   |                  |                   | the time filter   |
-    // |                   |                  |                   | for Activity      |
-    // |                   |                  |                   | reports.          |
-    // |                   |                  |                   | $gte and $lt      |
-    // |                   |                  |                   | accept RFC-3339   |
-    // |                   |                  |                   | timestamps and    |
-    // |                   |                  |                   | $eq accepts a     |
-    // |                   |                  |                   | unix timestamp    |
-    // |                   |                  |                   | denoting the      |
-    // |                   |                  |                   | offset from the   |
-    // |                   |                  |                   | current time. $eq |
-    // |                   |                  |                   | takes precedence  |
-    // |                   |                  |                   | over both         |
-    // |                   |                  |                   | $gte and $lt so   |
-    // |                   |                  |                   | if $eq is used,   |
-    // |                   |                  |                   | the backend will  |
-    // |                   |                  |                   | use the relative  |
-    // |                   |                  |                   | time filter       |
-    // |                   |                  |                   | instead of        |
-    // |                   |                  |                   | absolute time     |
-    // |                   |                  |                   | filters.For       |
-    // |                   |                  |                   | example,          |
-    // |                   |                  |                   |                   |
-    // |                   |                  |                   | "filter":"{"activ |
-    // |                   |                  |                   | ity_start_timesta |
-    // |                   |                  |                   | mp":{"$eq":86400} |
-    // |                   |                  |                   | }"                |
-    // |                   |                  |                   |                   |
-    // |                   |                  |                   |                   |
-    // +-------------------+------------------+-------------------+-------------------+
-    // | timestamp         | $gte, $lte, $eq  | Consumption       | timestamp denotes |
-    // |                   |                  |                   | the time filter   |
-    // |                   |                  |                   | for Consumption   |
-    // |                   |                  |                   | reports.          |
-    // |                   |                  |                   | $gte and $lte     |
-    // |                   |                  |                   | accept RFC-3339   |
-    // |                   |                  |                   | timestamps and    |
-    // |                   |                  |                   | $eq accepts a     |
-    // |                   |                  |                   | duration in       |
-    // |                   |                  |                   | seconds           |
-    // |                   |                  |                   | denoting the      |
-    // |                   |                  |                   | offset from the   |
-    // |                   |                  |                   | current time. $eq |
-    // |                   |                  |                   | takes precedence  |
-    // |                   |                  |                   | over both         |
-    // |                   |                  |                   | $gte and $lte so  |
-    // |                   |                  |                   | if $eq is used,   |
-    // |                   |                  |                   | the backend will  |
-    // |                   |                  |                   | use the relative  |
-    // |                   |                  |                   | time filter       |
-    // |                   |                  |                   | instead of        |
-    // |                   |                  |                   | absolute time     |
-    // |                   |                  |                   | filters.          |
-    // |                   |                  |                   |                   |
-    // |                   |                  |                   | "filter": "{\"tim |
-    // |                   |                  |                   | estamp\":{\"$gte\ |
-    // |                   |                  |                   | ":\"2022-07-      |
-    // |                   |                  |                   | 27T14:35:33.735Z\ |
-    // |                   |                  |                   | ",\"$lte\":\"2022 |
-    // |                   |                  |                   | -08-              |
-    // |                   |                  |                   | 03T14:35:33.735Z\ |
-    // |                   |                  |                   | "}}"              |
-    // |                   |                  |                   |                   |
-    // |                   |                  |                   |                   |
-    // +-------------------+------------------+-------------------+-------------------+
-    // | organizational_un | $in              | Consumption       | Organizational    |
-    // | it_id             |                  |                   | Unit ID (OU ID)   |
-    // |                   |                  |                   | filters the       |
-    // |                   |                  |                   | consumption data  |
-    // |                   |                  |                   | generated for the |
-    // |                   |                  |                   | report to the     |
-    // |                   |                  |                   | given OU IDs and  |
-    // |                   |                  |                   | its children.     |
-    // |                   |                  |                   |                   |
-    // |                   |                  |                   | "filter": "{\"org |
-    // |                   |                  |                   | anizational_unit_ |
-    // |                   |                  |                   | id\":{\"$in\":[\" |
-    // |                   |                  |                   | 00000000-0000-    |
-    // |                   |                  |                   | 0000-0000-        |
-    // |                   |                  |                   | 000000000000\"]}} |
-    // |                   |                  |                   | "                 |
-    // |                   |                  |                   |                   |
-    // |                   |                  |                   |                   |
-    // +-------------------+------------------+-------------------+-------------------+
-    // | entity_type       | $in              | Consumption       |                   |
-    // |                   |                  |                   | Entity type       |
-    // |                   |                  |                   | filters the       |
-    // |                   |                  |                   | consumption data  |
-    // |                   |                  |                   | generated for the |
-    // |                   |                  |                   | report to the     |
-    // |                   |                  |                   | given entity      |
-    // |                   |                  |                   | types.            |
-    // |                   |                  |                   | If filter is      |
-    // |                   |                  |                   | empty, it shows   |
-    // |                   |                  |                   | consumption       |
-    // |                   |                  |                   | report of the all |
-    // |                   |                  |                   | entity types.     |
-    // |                   |                  |                   |                   |
-    // |                   |                  |                   | filter={"entity_t |
-    // |                   |                  |                   | ype":{"$in":["Loc |
-    // |                   |                  |                   | alProtectionGroup |
-    // |                   |                  |                   | , DynamoDB"]}}    |
-    // |                   |                  |                   |                   |
-    // |                   |                  |                   |                   |
-    // +-------------------+------------------+-------------------+-------------------+
-    // | task              | $in              | Activity          |  Possible values  |
-    // |                   |                  |                   | for task include  |
-    // |                   |                  |                   | backup and        |
-    // |                   |                  |                   | restore.          |
-    // |                   |                  |                   | For example,      |
-    // |                   |                  |                   |                   |
-    // |                   |                  |                   | "filter":"{"task" |
-    // |                   |                  |                   | :{"$in":["ebs_inc |
-    // |                   |                  |                   | remental_backup"] |
-    // |                   |                  |                   | }}"               |
-    // |                   |                  |                   |                   |
-    // |                   |                  |                   |                   |
-    // +-------------------+------------------+-------------------+-------------------+
-    // | status            | $in              | Activity,         |  Filter on        |
-    // |                   |                  | Compliance        | compliance status |
-    // |                   |                  |                   | of entity.        |
-    // |                   |                  |                   | Possible values   |
-    // |                   |                  |                   | for compliance    |
-    // |                   |                  |                   | status            |
-    // |                   |                  |                   | include compliant |
-    // |                   |                  |                   | and non_compliant |
-    // |                   |                  |                   | For example,      |
-    // |                   |                  |                   |                   |
-    // |                   |                  |                   | "filter": "{"stat |
-    // |                   |                  |                   | us":{"$in":["non_ |
-    // |                   |                  |                   | compliant"]}}"    |
-    // |                   |                  |                   |                   |
-    // |                   |                  |                   |                   |
-    // +-------------------+------------------+-------------------+-------------------+
-    // | primary_entity.id | $in              | Any               | The system-       |
-    // |                   |                  |                   | generated IDs of  |
-    // |                   |                  |                   | the primary       |
-    // |                   |                  |                   | entities affected |
-    // |                   |                  |                   | by the activity.  |
-    // |                   |                  |                   | For example,      |
-    // |                   |                  |                   |                   |
-    // |                   |                  |                   | filter={"primary_ |
-    // |                   |                  |                   | entity.id":{"$in" |
-    // |                   |                  |                   | :["9c2934fc-ff4d- |
-    // |                   |                  |                   | 11e9-8e11-        |
-    // |                   |                  |                   | 76706df7fe01"]}}  |
-    // |                   |                  |                   |                   |
-    // |                   |                  |                   |                   |
-    // +-------------------+------------------+-------------------+-------------------+
-    // | primary_entity.ty | $eq              | Any               | The type of       |
-    // | pe                |                  |                   | primary entities  |
-    // |                   |                  |                   | affected by the   |
-    // |                   |                  |                   | activity.         |
-    // |                   |                  |                   | Examples of       |
-    // |                   |                  |                   | primary entity    |
-    // |                   |                  |                   | types include     |
-    // |                   |                  |                   | "aws_ebs_volume", |
-    // |                   |                  |                   | "vmware_vm",      |
-    // |                   |                  |                   | "microsoft365_mai |
-    // |                   |                  |                   | lbox". For        |
-    // |                   |                  |                   | example,          |
-    // |                   |                  |                   |                   |
-    // |                   |                  |                   | filter={"primary_ |
-    // |                   |                  |                   | entity.type":{"$i |
-    // |                   |                  |                   | n":["aws_ebs_volu |
-    // |                   |                  |                   | me"]}}            |
-    // |                   |                  |                   |                   |
-    // |                   |                  |                   |                   |
-    // +-------------------+------------------+-------------------+-------------------+
-    // | primary_entity.va | $in              | Any               | The value or name |
-    // | lue               |                  |                   | associated with   |
-    // |                   |                  |                   | the primary       |
-    // |                   |                  |                   | entities affected |
-    // |                   |                  |                   | by                |
-    // |                   |                  |                   | the compliance    |
-    // |                   |                  |                   | event. For        |
-    // |                   |                  |                   | example, the      |
-    // |                   |                  |                   | primary entity    |
-    // |                   |                  |                   | value associated  |
-    // |                   |                  |                   | with              |
-    // |                   |                  |                   | primary entity    |
-    // |                   |                  |                   | type              |
-    // |                   |                  |                   | "aws_ebs_volume"  |
-    // |                   |                  |                   | is "vol-          |
-    // |                   |                  |                   | 0a5f2e52d6decd664 |
-    // |                   |                  |                   | " representing    |
-    // |                   |                  |                   | the name of the   |
-    // |                   |                  |                   | EBS volume. The   |
-    // |                   |                  |                   | filter supports   |
-    // |                   |                  |                   | substring search  |
-    // |                   |                  |                   | for all           |
-    // |                   |                  |                   | elements in the   |
-    // |                   |                  |                   | array For         |
-    // |                   |                  |                   | example,          |
-    // |                   |                  |                   |                   |
-    // |                   |                  |                   | filter={"primary_ |
-    // |                   |                  |                   | entity.value":{"$ |
-    // |                   |                  |                   | in":["vol-0a"]}}  |
-    // |                   |                  |                   |                   |
-    // |                   |                  |                   |                   |
-    // +-------------------+------------------+-------------------+-------------------+
-    // | parent_entity.typ | $in              | Any               |  The types of the |
-    // | e                 |                  |                   | parent entities   |
-    // |                   |                  |                   | which are         |
-    // |                   |                  |                   | associated        |
-    // |                   |                  |                   | with the primary  |
-    // |                   |                  |                   | entity affected   |
-    // |                   |                  |                   | by the activity.  |
-    // |                   |                  |                   | Examples of the   |
-    // |                   |                  |                   | parent entity     |
-    // |                   |                  |                   | types include     |
-    // |                   |                  |                   | "vmware_vcenter", |
-    // |                   |                  |                   | "aws_environment" |
-    // |                   |                  |                   | , "microsoft365_d |
-    // |                   |                  |                   | omain". For       |
-    // |                   |                  |                   | example,          |
-    // |                   |                  |                   |                   |
-    // |                   |                  |                   | filter={"parent_e |
-    // |                   |                  |                   | ntity.type":{"$in |
-    // |                   |                  |                   | ":["aws_environme |
-    // |                   |                  |                   | nt"]}}            |
-    // |                   |                  |                   |                   |
-    // |                   |                  |                   |                   |
-    // +-------------------+------------------+-------------------+-------------------+
-    // | parent_entity.id  | $in              | Any               |                   |
-    // |                   |                  |                   | The value or name |
-    // |                   |                  |                   | associated with   |
-    // |                   |                  |                   | the parent        |
-    // |                   |                  |                   | entities affected |
-    // |                   |                  |                   | by                |
-    // |                   |                  |                   | the compliance    |
-    // |                   |                  |                   | event. For        |
-    // |                   |                  |                   | example, the      |
-    // |                   |                  |                   | parent entity     |
-    // |                   |                  |                   | value associated  |
-    // |                   |                  |                   | with              |
-    // |                   |                  |                   | primary entity    |
-    // |                   |                  |                   | type              |
-    // |                   |                  |                   | "aws_ebs_volume"  |
-    // |                   |                  |                   | is                |
-    // |                   |                  |                   | "891106093485/us- |
-    // |                   |                  |                   | west-2"           |
-    // |                   |                  |                   | representing      |
-    // |                   |                  |                   | the name of the   |
-    // |                   |                  |                   | AWS Account       |
-    // |                   |                  |                   | Region. For       |
-    // |                   |                  |                   | example,          |
-    // |                   |                  |                   |                   |
-    // |                   |                  |                   | filter={"parent_e |
-    // |                   |                  |                   | ntity.id":{"$in": |
-    // |                   |                  |                   | ["9c2934fc-ff4d-  |
-    // |                   |                  |                   | 11e9-8e11-        |
-    // |                   |                  |                   | 76706df7fe01"]}}  |
-    // |                   |                  |                   |                   |
-    // |                   |                  |                   |                   |
-    // +-------------------+------------------+-------------------+-------------------+
+    // +----------------------+------------------+-------------+----------------------+
+    // |        Field         | Filter Condition | Report Type |     Description      |
+    // +======================+==================+=============+======================+
+    // | activity_start_times | $gte, $lt, $eq   | Activity    | Activity start       |
+    // | tamp                 |                  |             | timestamp denotes    |
+    // |                      |                  |             | the time filter for  |
+    // |                      |                  |             | Activity reports.    |
+    // |                      |                  |             | $gte and $lt accept  |
+    // |                      |                  |             | RFC-3339 timestamps  |
+    // |                      |                  |             | and $eq accepts a    |
+    // |                      |                  |             | unix timestamp       |
+    // |                      |                  |             | denoting the offset  |
+    // |                      |                  |             | from the current     |
+    // |                      |                  |             | time. $eq takes      |
+    // |                      |                  |             | precedence over both |
+    // |                      |                  |             | $gte and $lt so if   |
+    // |                      |                  |             | $eq is used, the     |
+    // |                      |                  |             | backend will use the |
+    // |                      |                  |             | relative time filter |
+    // |                      |                  |             | instead of absolute  |
+    // |                      |                  |             | time filters.For     |
+    // |                      |                  |             | example,             |
+    // |                      |                  |             |                      |
+    // |                      |                  |             | "filter":"{"activity |
+    // |                      |                  |             | _start_timestamp":{" |
+    // |                      |                  |             | $eq":86400}}"        |
+    // |                      |                  |             |                      |
+    // |                      |                  |             |                      |
+    // +----------------------+------------------+-------------+----------------------+
+    // | timestamp            | $gte, $lte, $eq  | Consumption | timestamp denotes    |
+    // |                      |                  |             | the time filter for  |
+    // |                      |                  |             | Consumption reports. |
+    // |                      |                  |             | $gte and $lte accept |
+    // |                      |                  |             | RFC-3339 timestamps  |
+    // |                      |                  |             | and $eq accepts a    |
+    // |                      |                  |             | duration in seconds  |
+    // |                      |                  |             | denoting the offset  |
+    // |                      |                  |             | from the current     |
+    // |                      |                  |             | time. $eq takes      |
+    // |                      |                  |             | precedence over both |
+    // |                      |                  |             | $gte and $lte so if  |
+    // |                      |                  |             | $eq is used, the     |
+    // |                      |                  |             | backend will use the |
+    // |                      |                  |             | relative time filter |
+    // |                      |                  |             | instead of absolute  |
+    // |                      |                  |             | time filters.        |
+    // |                      |                  |             |                      |
+    // |                      |                  |             | "filter": "{\"timest |
+    // |                      |                  |             | amp\":{\"$gte\":\"20 |
+    // |                      |                  |             | 22-07-               |
+    // |                      |                  |             | 27T14:35:33.735Z\",\ |
+    // |                      |                  |             | "$lte\":\"2022-08-   |
+    // |                      |                  |             | 03T14:35:33.735Z\"}} |
+    // |                      |                  |             | "                    |
+    // |                      |                  |             |                      |
+    // |                      |                  |             |                      |
+    // +----------------------+------------------+-------------+----------------------+
+    // | organizational_unit_ | $in              | Consumption | Organizational Unit  |
+    // | id                   |                  |             | ID (OU ID) filters   |
+    // |                      |                  |             | the consumption data |
+    // |                      |                  |             | generated for the    |
+    // |                      |                  |             | report to the given  |
+    // |                      |                  |             | OU IDs and its       |
+    // |                      |                  |             | children.            |
+    // |                      |                  |             |                      |
+    // |                      |                  |             | "filter": "{\"organi |
+    // |                      |                  |             | zational_unit_id\":{ |
+    // |                      |                  |             | \"$in\":[\"00000000- |
+    // |                      |                  |             | 0000-0000-0000-      |
+    // |                      |                  |             | 000000000000\"]}}"   |
+    // |                      |                  |             |                      |
+    // |                      |                  |             |                      |
+    // +----------------------+------------------+-------------+----------------------+
+    // | entity_type          | $in              | Consumption |                      |
+    // |                      |                  |             | Entity type filters  |
+    // |                      |                  |             | the consumption data |
+    // |                      |                  |             | generated for the    |
+    // |                      |                  |             | report to the given  |
+    // |                      |                  |             | entity types.        |
+    // |                      |                  |             | If filter is empty,  |
+    // |                      |                  |             | it shows consumption |
+    // |                      |                  |             | report of the all    |
+    // |                      |                  |             | entity types.        |
+    // |                      |                  |             |                      |
+    // |                      |                  |             | filter={"entity_type |
+    // |                      |                  |             | ":{"$in":["LocalProt |
+    // |                      |                  |             | ectionGroup,         |
+    // |                      |                  |             | DynamoDB"]}}         |
+    // |                      |                  |             |                      |
+    // |                      |                  |             |                      |
+    // +----------------------+------------------+-------------+----------------------+
+    // | task                 | $in              | Activity    |  Possible values for |
+    // |                      |                  |             | task include backup  |
+    // |                      |                  |             | and                  |
+    // |                      |                  |             | restore.             |
+    // |                      |                  |             | For example,         |
+    // |                      |                  |             |                      |
+    // |                      |                  |             | "filter":"{"task":{" |
+    // |                      |                  |             | $in":["ebs_increment |
+    // |                      |                  |             | al_backup"]}}"       |
+    // |                      |                  |             |                      |
+    // |                      |                  |             |                      |
+    // +----------------------+------------------+-------------+----------------------+
+    // | status               | $in              | Activity    |  Filter on activity  |
+    // |                      |                  |             | status of entity.    |
+    // |                      |                  |             | Possible values for  |
+    // |                      |                  |             | activity status      |
+    // |                      |                  |             | include aborted,     |
+    // |                      |                  |             | failed, and success  |
+    // |                      |                  |             | For example,         |
+    // |                      |                  |             |                      |
+    // |                      |                  |             | "filter": "{"status" |
+    // |                      |                  |             | :{"$in":["success"]} |
+    // |                      |                  |             | }"                   |
+    // |                      |                  |             |                      |
+    // |                      |                  |             |                      |
+    // +----------------------+------------------+-------------+----------------------+
+    // | primary_entity.id    | $in              | Any         | The system-generated |
+    // |                      |                  |             | IDs of the primary   |
+    // |                      |                  |             | entities affected by |
+    // |                      |                  |             | the activity.        |
+    // |                      |                  |             | For example,         |
+    // |                      |                  |             |                      |
+    // |                      |                  |             | filter={"primary_ent |
+    // |                      |                  |             | ity.id":{"$in":["9c2 |
+    // |                      |                  |             | 934fc-ff4d-11e9-     |
+    // |                      |                  |             | 8e11-                |
+    // |                      |                  |             | 76706df7fe01"]}}     |
+    // |                      |                  |             |                      |
+    // |                      |                  |             |                      |
+    // +----------------------+------------------+-------------+----------------------+
+    // | primary_entity.type  | $eq              | Any         | The type of primary  |
+    // |                      |                  |             | entities affected by |
+    // |                      |                  |             | the activity.        |
+    // |                      |                  |             | Examples of primary  |
+    // |                      |                  |             | entity types include |
+    // |                      |                  |             | "aws_ebs_volume",    |
+    // |                      |                  |             | "aws_ec2_instance",  |
+    // |                      |                  |             | "microsoft365_mailbo |
+    // |                      |                  |             | x". For example,     |
+    // |                      |                  |             |                      |
+    // |                      |                  |             | filter={"primary_ent |
+    // |                      |                  |             | ity.type":{"$in":["a |
+    // |                      |                  |             | ws_ebs_volume"]}}    |
+    // |                      |                  |             |                      |
+    // |                      |                  |             |                      |
+    // +----------------------+------------------+-------------+----------------------+
+    // | primary_entity.value | $in              | Any         | The value or name    |
+    // |                      |                  |             | associated with the  |
+    // |                      |                  |             | primary entities     |
+    // |                      |                  |             | affected by          |
+    // |                      |                  |             | the compliance       |
+    // |                      |                  |             | event. For example,  |
+    // |                      |                  |             | the primary entity   |
+    // |                      |                  |             | value associated     |
+    // |                      |                  |             | with                 |
+    // |                      |                  |             | primary entity type  |
+    // |                      |                  |             | "aws_ebs_volume" is  |
+    // |                      |                  |             | "vol-                |
+    // |                      |                  |             | 0a5f2e52d6decd664"   |
+    // |                      |                  |             | representing         |
+    // |                      |                  |             | the name of the EBS  |
+    // |                      |                  |             | volume. The filter   |
+    // |                      |                  |             | supports substring   |
+    // |                      |                  |             | search for all       |
+    // |                      |                  |             | elements in the      |
+    // |                      |                  |             | array For example,   |
+    // |                      |                  |             |                      |
+    // |                      |                  |             | filter={"primary_ent |
+    // |                      |                  |             | ity.value":{"$in":[" |
+    // |                      |                  |             | vol-0a"]}}           |
+    // |                      |                  |             |                      |
+    // |                      |                  |             |                      |
+    // +----------------------+------------------+-------------+----------------------+
+    // | parent_entity.type   | $in              | Any         |  The types of the    |
+    // |                      |                  |             | parent entities      |
+    // |                      |                  |             | which are associated |
+    // |                      |                  |             | with the primary     |
+    // |                      |                  |             | entity affected by   |
+    // |                      |                  |             | the activity.        |
+    // |                      |                  |             | Examples of the      |
+    // |                      |                  |             | parent entity types  |
+    // |                      |                  |             | include              |
+    // |                      |                  |             | "aws_environment",   |
+    // |                      |                  |             | "microsoft365_domain |
+    // |                      |                  |             | ". For example,      |
+    // |                      |                  |             |                      |
+    // |                      |                  |             | filter={"parent_enti |
+    // |                      |                  |             | ty.type":{"$in":["aw |
+    // |                      |                  |             | s_environment"]}}    |
+    // |                      |                  |             |                      |
+    // |                      |                  |             |                      |
+    // +----------------------+------------------+-------------+----------------------+
+    // | parent_entity.id     | $in              | Any         |                      |
+    // |                      |                  |             | The value or name    |
+    // |                      |                  |             | associated with the  |
+    // |                      |                  |             | parent entities      |
+    // |                      |                  |             | affected by          |
+    // |                      |                  |             | the compliance       |
+    // |                      |                  |             | event. For example,  |
+    // |                      |                  |             | the parent entity    |
+    // |                      |                  |             | value associated     |
+    // |                      |                  |             | with                 |
+    // |                      |                  |             | primary entity type  |
+    // |                      |                  |             | "aws_ebs_volume" is  |
+    // |                      |                  |             | "891106093485/us-    |
+    // |                      |                  |             | west-2" representing |
+    // |                      |                  |             | the name of the AWS  |
+    // |                      |                  |             | Account Region. For  |
+    // |                      |                  |             | example,             |
+    // |                      |                  |             |                      |
+    // |                      |                  |             | filter={"parent_enti |
+    // |                      |                  |             | ty.id":{"$in":["9c29 |
+    // |                      |                  |             | 34fc-ff4d-11e9-8e11- |
+    // |                      |                  |             | 76706df7fe01"]}}     |
+    // |                      |                  |             |                      |
+    // |                      |                  |             |                      |
+    // +----------------------+------------------+-------------+----------------------+
     //  
     // For more information about filtering, refer to the
     // Filtering section of this guide.
     Filter     *string `json:"filter"`
-    // The report type. Examples of report types include, "activity",
-    // "compliance", "audit", and "consumption".
+    // The report type. Examples of report types include, "activity", "audit", and "consumption".
     ClumioType *string `json:"type"`
 }
 
@@ -1054,6 +1191,30 @@ type RestoreRdsRecordV1Request struct {
     Target *GrrTarget `json:"target"`
 }
 
+// RestoreAwsS3BucketV1Request represents a custom type struct
+type RestoreAwsS3BucketV1Request struct {
+    // The parameters for initiating an S3 bucket restore.
+    Source     *RestoreS3BucketSource `json:"source"`
+    // The destination where the S3 bucket will be restored.
+    Target     *RestoreS3BucketTarget `json:"target"`
+    // Type to be used during restore. If not specified, the default value is "Rollback".
+    // "Rollback" and "Undo delete marker" value will be deprecated. Use "rollback" and "undo_delete_marker" respectively.
+    ClumioType *string                `json:"type"`
+}
+
+// PreviewAwsS3BucketV1Request represents a custom type struct
+type PreviewAwsS3BucketV1Request struct {
+    // Search for or restore only objects that pass the source object filter.
+    ObjectFilters           *SourceObjectFiltersV2                        `json:"object_filters"`
+    // This field is required when the request type is 'Rollback'. The parameters for initiating a point in time restore.
+    PointInTimeRecovery     *RestoreS3BucketSourcePitrOptions             `json:"point_in_time_recovery"`
+    // Type to be used during preview. If not specified, the default value is "Rollback".
+    // "Rollback" and "Undo delete marker" value will be deprecated. Use "rollback" and "undo_delete_marker" respectively.
+    ClumioType              *string                                       `json:"type"`
+    // This field is required when the request type is 'Undo delete marker'.
+    UndoDeleteMarkerOptions *RestoreS3BucketSourceUndoDeleteMarkerOptions `json:"undo_delete_marker_options"`
+}
+
 // RestoreFilesV1Request represents a custom type struct
 type RestoreFilesV1Request struct {
     // The files to be restored and from which backup they are to be restored from.
@@ -1085,15 +1246,6 @@ type ShareRestoredFileV1Request struct {
     EmailAddress *string `json:"email_address"`
     // The optional message sent as part of the email.
     Message      *string `json:"message"`
-}
-
-// RestoreMssqlDatabaseV1Request represents a custom type struct
-type RestoreMssqlDatabaseV1Request struct {
-    // The MSSQL database backup to be restored. Only one of `backup` or `pitr`
-    // should be set.
-    Source *MssqlRestoreSource `json:"source"`
-    // The configuration of the MSSQL database to which the data has to be restored.
-    Target *MssqlRestoreTarget `json:"target"`
 }
 
 // RestoreProtectionGroupV1Request represents a custom type struct
@@ -1231,16 +1383,6 @@ type RestoreProtectionGroupS3ObjectsV1Request struct {
     Source []*Object                     `json:"source"`
     // The destination where the protection group will be restored.
     Target *ProtectionGroupRestoreTarget `json:"target"`
-}
-
-// RestoreVmwareVmV1Request represents a custom type struct
-type RestoreVmwareVmV1Request struct {
-    // Additional VM restore options.
-    Options *VMRestoreOptions `json:"options"`
-    // The VM backup to be restored.
-    Source  *VMRestoreSource  `json:"source"`
-    // The configuration of the VM to be restored.
-    Target  *VMRestoreTarget  `json:"target"`
 }
 
 // UpdateAutoUserProvisioningSettingV1Request represents a custom type struct

@@ -37,11 +37,15 @@ func (r *RestoredProtectionGroupS3AssetsV1) RestoreProtectionGroupS3Asset(
     payload := string(bytes)
     header := "application/api.clumio.restored-protection-group-s3-assets=v1+json"
     result := &models.RestoreProtectionGroupS3AssetResponse{}
-    queryParams := make(map[string]string)
-    if embed != nil {
-        queryParams["embed"] = *embed
+    defaultString := "" 
+    
+    if embed == nil {
+        embed = &defaultString
     }
     
+    queryParams := map[string]string{
+        "embed": *embed,
+    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: r.config,

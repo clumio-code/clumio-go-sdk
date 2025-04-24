@@ -17,23 +17,6 @@ type TasksV1Client interface {
     //  +-----------------------------------+------------------------------------------+
     //  |             Task Type             |               Description                |
     //  +===================================+==========================================+
-    //  | vmware_vm_file_restore            | A restore task for a file within a VM.   |
-    //  +-----------------------------------+------------------------------------------+
-    //  | vmware_vm_backup_seeding          | The initial backup task of a VM - future |
-    //  |                                   | backups are incremental.                 |
-    //  +-----------------------------------+------------------------------------------+
-    //  | vmware_vm_incremental_backup      | A scheduled incremental backup task for  |
-    //  |                                   | a VM.                                    |
-    //  +-----------------------------------+------------------------------------------+
-    //  | vmware_vm_backup_indexing         | A post-processing task that indexes the  |
-    //  |                                   | contents                                 |
-    //  |                                   | of a VM disk in preparation for file-    |
-    //  |                                   | level indexing and restores.             |
-    //  |                                   | The vmware_vm_backup_indexing task       |
-    //  |                                   | cannot be aborted.                       |
-    //  +-----------------------------------+------------------------------------------+
-    //  | vmware_vm_restore                 | A restore task for a VM.                 |
-    //  +-----------------------------------+------------------------------------------+
     //  | aws_ebs_volume_file_restore       | A restore task for a file within an EBS  |
     //  |                                   | volume.                                  |
     //  +-----------------------------------+------------------------------------------+
@@ -47,8 +30,8 @@ type TasksV1Client interface {
     //  |                                   | contents                                 |
     //  |                                   | of an EBS volume in preparation for      |
     //  |                                   | file-level indexing and restores.        |
-    //  |                                   | The aws_ebs_volume_backup_indexing task  |
-    //  |                                   | cannot be aborted.                       |
+    //  |                                   | The `aws_ebs_volume_backup_indexing`     |
+    //  |                                   | task cannot be aborted.                  |
     //  +-----------------------------------+------------------------------------------+
     //  | aws_ebs_volume_restore            | A restore task for an EBS Volume.        |
     //  +-----------------------------------+------------------------------------------+
@@ -62,7 +45,7 @@ type TasksV1Client interface {
     //  |                                   | Microsoft 365 domain by gathering        |
     //  |                                   | mailbox information and other data, such |
     //  |                                   | as usage and sizing statistics.          |
-    //  |                                   | The microsoft365_inventory_sync task     |
+    //  |                                   | The `microsoft365_inventory_sync` task   |
     //  |                                   | cannot be aborted.                       |
     //  +-----------------------------------+------------------------------------------+
     //  | microsoft365_mail_restore         | A restore task for a microsoft365        |
@@ -80,7 +63,7 @@ type TasksV1Client interface {
     //  +-------------+----------------------------------------------------------------+
     //  | in_progress | A task that is currently running. Once the task has            |
     //  |             | successfully completed,                                        |
-    //  |             | the task status changes to completed.                          |
+    //  |             | the task status changes to `completed`.                        |
     //  |             | A task that is in progress can be aborted at any time.         |
     //  +-------------+----------------------------------------------------------------+
     //  | completed   | A task that has successfully completed.                        |
@@ -90,7 +73,7 @@ type TasksV1Client interface {
     //  | aborting    | A task that is in the process of aborting.                     |
     //  |             | Only tasks that are queued or in progress can be aborted.      |
     //  |             | Once a task has successfully aborted, the task status changes  |
-    //  |             | to aborted.                                                    |
+    //  |             | to `aborted`.                                                  |
     //  +-------------+----------------------------------------------------------------+
     //  | aborted     | A task that has fully aborted.                                 |
     //  +-------------+----------------------------------------------------------------+
