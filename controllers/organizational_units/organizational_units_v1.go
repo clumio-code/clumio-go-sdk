@@ -30,24 +30,17 @@ func (o *OrganizationalUnitsV1) ListOrganizationalUnits(
     
     header := "application/api.clumio.organizational-units=v1+json"
     result := &models.ListOrganizationalUnitsResponseV1{}
-    defaultInt64 := int64(0)
-    defaultString := "" 
-    
-    if limit == nil {
-        limit = &defaultInt64
+    queryParams := make(map[string]string)
+    if limit != nil {
+        queryParams["limit"] = fmt.Sprintf("%v", *limit)
     }
-    if start == nil {
-        start = &defaultString
+    if start != nil {
+        queryParams["start"] = *start
     }
-    if filter == nil {
-        filter = &defaultString
+    if filter != nil {
+        queryParams["filter"] = *filter
     }
     
-    queryParams := map[string]string{
-        "limit": fmt.Sprintf("%v", *limit),
-        "start": *start,
-        "filter": *filter,
-    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: o.config,
@@ -83,15 +76,11 @@ func (o *OrganizationalUnitsV1) CreateOrganizationalUnit(
     payload := string(bytes)
     header := "application/api.clumio.organizational-units=v1+json"
     result := &models.CreateOrganizationalUnitV1ResponseWrapper{}
-    defaultString := "" 
-    
-    if embed == nil {
-        embed = &defaultString
+    queryParams := make(map[string]string)
+    if embed != nil {
+        queryParams["embed"] = *embed
     }
     
-    queryParams := map[string]string{
-        "embed": *embed,
-    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: o.config,
@@ -129,15 +118,11 @@ func (o *OrganizationalUnitsV1) ReadOrganizationalUnit(
     
     header := "application/api.clumio.organizational-units=v1+json"
     result := &models.ReadOrganizationalUnitResponseV1{}
-    defaultString := "" 
-    
-    if embed == nil {
-        embed = &defaultString
+    queryParams := make(map[string]string)
+    if embed != nil {
+        queryParams["embed"] = *embed
     }
     
-    queryParams := map[string]string{
-        "embed": *embed,
-    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: o.config,
@@ -169,15 +154,11 @@ func (o *OrganizationalUnitsV1) DeleteOrganizationalUnit(
     
     header := "application/api.clumio.organizational-units=v1+json"
     result := &models.DeleteOrganizationalUnitResponse{}
-    defaultString := "" 
-    
-    if embed == nil {
-        embed = &defaultString
+    queryParams := make(map[string]string)
+    if embed != nil {
+        queryParams["embed"] = *embed
     }
     
-    queryParams := map[string]string{
-        "embed": *embed,
-    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: o.config,
@@ -223,15 +204,11 @@ func (o *OrganizationalUnitsV1) PatchOrganizationalUnit(
     payload := string(bytes)
     header := "application/api.clumio.organizational-units=v1+json"
     result := &models.PatchOrganizationalUnitV1ResponseWrapper{}
-    defaultString := "" 
-    
-    if embed == nil {
-        embed = &defaultString
+    queryParams := make(map[string]string)
+    if embed != nil {
+        queryParams["embed"] = *embed
     }
     
-    queryParams := map[string]string{
-        "embed": *embed,
-    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: o.config,

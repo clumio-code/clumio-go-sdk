@@ -29,20 +29,14 @@ func (w *WalletsV1) ListWallets(
     
     header := "application/api.clumio.wallets=v1+json"
     result := &models.ListWalletsResponse{}
-    defaultInt64 := int64(0)
-    defaultString := "" 
-    
-    if limit == nil {
-        limit = &defaultInt64
+    queryParams := make(map[string]string)
+    if limit != nil {
+        queryParams["limit"] = fmt.Sprintf("%v", *limit)
     }
-    if start == nil {
-        start = &defaultString
+    if start != nil {
+        queryParams["start"] = *start
     }
     
-    queryParams := map[string]string{
-        "limit": fmt.Sprintf("%v", *limit),
-        "start": *start,
-    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: w.config,

@@ -89,19 +89,14 @@ func (p *PolicyDefinitionsV1) ListPolicyDefinitions(
     
     header := "application/api.clumio.policy-definitions=v1+json"
     result := &models.ListPoliciesResponse{}
-    defaultString := "" 
+    queryParams := make(map[string]string)
+    if filter != nil {
+        queryParams["filter"] = *filter
+    }
+    if embed != nil {
+        queryParams["embed"] = *embed
+    }
     
-    if filter == nil {
-        filter = &defaultString
-    }
-    if embed == nil {
-        embed = &defaultString
-    }
-    
-    queryParams := map[string]string{
-        "filter": *filter,
-        "embed": *embed,
-    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: p.config,
@@ -164,15 +159,11 @@ func (p *PolicyDefinitionsV1) ReadPolicyDefinition(
     
     header := "application/api.clumio.policy-definitions=v1+json"
     result := &models.ReadPolicyResponse{}
-    defaultString := "" 
-    
-    if embed == nil {
-        embed = &defaultString
+    queryParams := make(map[string]string)
+    if embed != nil {
+        queryParams["embed"] = *embed
     }
     
-    queryParams := map[string]string{
-        "embed": *embed,
-    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: p.config,
@@ -213,15 +204,11 @@ func (p *PolicyDefinitionsV1) UpdatePolicyDefinition(
     payload := string(bytes)
     header := "application/api.clumio.policy-definitions=v1+json"
     result := &models.UpdatePolicyResponse{}
-    defaultString := "" 
-    
-    if embed == nil {
-        embed = &defaultString
+    queryParams := make(map[string]string)
+    if embed != nil {
+        queryParams["embed"] = *embed
     }
     
-    queryParams := map[string]string{
-        "embed": *embed,
-    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: p.config,

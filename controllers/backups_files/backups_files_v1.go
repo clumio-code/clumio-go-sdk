@@ -29,21 +29,14 @@ func (b *BackupsFilesV1) ListFiles(
     
     header := "application/api.clumio.backups-files=v1+json"
     result := &models.FileSearchResponse{}
-    defaultInt64 := int64(0)
-    defaultString := "" 
-    
-    if limit == nil {
-        limit = &defaultInt64
+    queryParams := make(map[string]string)
+    if limit != nil {
+        queryParams["limit"] = fmt.Sprintf("%v", *limit)
     }
-    if start == nil {
-        start = &defaultString
+    if start != nil {
+        queryParams["start"] = *start
     }
     
-    queryParams := map[string]string{
-        "limit": fmt.Sprintf("%v", *limit),
-        "start": *start,
-        "filter": filter,
-    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: b.config,
@@ -75,20 +68,14 @@ func (b *BackupsFilesV1) ListFileVersions(
     
     header := "application/api.clumio.backups-files=v1+json"
     result := &models.FileListResponse{}
-    defaultInt64 := int64(0)
-    defaultString := "" 
-    
-    if limit == nil {
-        limit = &defaultInt64
+    queryParams := make(map[string]string)
+    if limit != nil {
+        queryParams["limit"] = fmt.Sprintf("%v", *limit)
     }
-    if start == nil {
-        start = &defaultString
+    if start != nil {
+        queryParams["start"] = *start
     }
     
-    queryParams := map[string]string{
-        "limit": fmt.Sprintf("%v", *limit),
-        "start": *start,
-    }
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: b.config,
