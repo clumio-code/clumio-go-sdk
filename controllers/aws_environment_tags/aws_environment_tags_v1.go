@@ -121,34 +121,3 @@ func (a *AwsEnvironmentTagsV1) ReadAwsEnvironmentTag(
 
     return result, apiErr
 }
-
-
-// ReadAwsEnvironmentTagEbsVolumesProtectionStats Returns the specified AWS tag's EBS protection statistics.
-func (a *AwsEnvironmentTagsV1) ReadAwsEnvironmentTagEbsVolumesProtectionStats(
-    environmentId string, 
-    tagId string)(
-    *models.ReadEbsTagProtectionStatsResponse, *apiutils.APIError) {
-
-    pathURL := "/datasources/aws/environments/{environment_id}/tags/{tag_id}/stats/protection/ebs-volumes"
-    //process optional template parameters
-    pathParams := map[string]string{
-        "environment_id": environmentId,
-        "tag_id": tagId,
-    }
-    queryBuilder := a.config.BaseUrl + pathURL
-
-    
-    header := "application/api.clumio.aws-environment-tags=v1+json"
-    result := &models.ReadEbsTagProtectionStatsResponse{}
-
-    apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
-        Config: a.config,
-        RequestUrl: queryBuilder,
-        PathParams: pathParams,
-        AcceptHeader: header,
-        Result200: &result,
-        RequestType: common.Get,
-    })
-
-    return result, apiErr
-}

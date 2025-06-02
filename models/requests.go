@@ -596,134 +596,47 @@ type UpdatePolicyRuleV1Request struct {
 // CreateProtectionGroupV1Request represents a custom type struct
 type CreateProtectionGroupV1Request struct {
     // The following table describes the possible conditions for a bucket to be
-    // automatically added to a protection group.
+    // automatically added to a protection group. 
+    // Denotes the properties to conditionalize on. For `$eq`, `$not_eq`, `$contains` and `$not_contains` a single element is provided: `{'$eq':{'key':'Environment', 'value':'Prod'}}`. For all other other operations, a list is provided: `{'$in':[{'key':'Environment','value':'Prod'}, {'key':'Hello', 'value':'World'}]}`.
     // 
-    // +-----------------------+----------------+-------------------------------------+
-    // |         Field         | Rule Condition |             Description             |
-    // +=======================+================+=====================================+
-    // | aws_tag               | $eq            | Denotes the AWS tag(s) to be        |
-    // |                       |                | exactly equal to the specified      |
-    // |                       |                | value.                              |
-    // |                       |                |                                     |
-    // |                       |                | {"aws_tag":{"$eq":{"key":"Environme |
-    // |                       |                | nt", "value":"Prod"}}}              |
-    // |                       |                |                                     |
-    // |                       |                |                                     |
-    // +-----------------------+----------------+-------------------------------------+
-    // | aws_tag               | $not_eq        | Denotes the AWS tag(s) to be not    |
-    // |                       |                | equal to the specified value.       |
-    // |                       |                |                                     |
-    // |                       |                | {"aws_tag":{"$not_eq":{"key":"Envir |
-    // |                       |                | onment", "value":"Prod"}}}          |
-    // |                       |                |                                     |
-    // |                       |                |                                     |
-    // +-----------------------+----------------+-------------------------------------+
-    // | aws_tag               | $contains      | Denotes the AWS tag(s) contain a    |
-    // |                       |                | specified substring.                |
-    // |                       |                |                                     |
-    // |                       |                | {"aws_tag":{"$contains":{"key":"Env |
-    // |                       |                | ironment", "value":"Prod"}}}        |
-    // |                       |                |                                     |
-    // |                       |                |                                     |
-    // +-----------------------+----------------+-------------------------------------+
-    // | aws_tag               | $not_contains  | Denotes the AWS tag(s) excludes a   |
-    // |                       |                | specified substring.                |
-    // |                       |                |                                     |
-    // |                       |                | {"aws_tag":{"$not_contains":{"key": |
-    // |                       |                | "Environment", "value":"Prod"}}}    |
-    // |                       |                |                                     |
-    // |                       |                |                                     |
-    // +-----------------------+----------------+-------------------------------------+
-    // | aws_tag               | $all           | Denotes the AWS tag(s) where all    |
-    // |                       |                | elements in the specified list are  |
-    // |                       |                | present.                            |
-    // |                       |                |                                     |
-    // |                       |                | {"aws_tag":{"$all":[{"key":"Environ |
-    // |                       |                | ment", "value":"Prod"}]}}           |
-    // |                       |                |                                     |
-    // |                       |                |                                     |
-    // +-----------------------+----------------+-------------------------------------+
-    // | aws_tag               | $not_all       | Denotes the AWS tag(s) where at     |
-    // |                       |                | least one element from the          |
-    // |                       |                | specified list is missing.          |
-    // |                       |                |                                     |
-    // |                       |                | {"aws_tag":{"$not_all":[{"key":"Env |
-    // |                       |                | ironment", "value":"Prod"}]}}       |
-    // |                       |                |                                     |
-    // |                       |                |                                     |
-    // +-----------------------+----------------+-------------------------------------+
-    // | aws_tag               | $in            | Denotes the AWS tag(s) exist in a   |
-    // |                       |                | specified list.                     |
-    // |                       |                |                                     |
-    // |                       |                | {"aws_tag":{"$in":[{"key":"Environm |
-    // |                       |                | ent", "value":"Prod"}]}}            |
-    // |                       |                |                                     |
-    // |                       |                |                                     |
-    // +-----------------------+----------------+-------------------------------------+
-    // | aws_tag               | $not_in        | Denotes the AWS tag(s) do not exist |
-    // |                       |                | in a specified list.                |
-    // |                       |                |                                     |
-    // |                       |                | {"aws_tag":{"$not_in":[{"key":"Envi |
-    // |                       |                | ronment", "value":"Prod"}]}}        |
-    // |                       |                |                                     |
-    // |                       |                |                                     |
-    // +-----------------------+----------------+-------------------------------------+
-    // | aws_account_native_id | $eq            | Denotes the AWS account to be       |
-    // |                       |                | exactly equal to the specified      |
-    // |                       |                | value.                              |
-    // |                       |                |                                     |
-    // |                       |                | {"aws_account_native_id":{"$eq":"11 |
-    // |                       |                | 1111111111"}}                       |
-    // |                       |                |                                     |
-    // |                       |                |                                     |
-    // +-----------------------+----------------+-------------------------------------+
-    // | aws_account_native_id | $in            | Denotes the AWS account exist in a  |
-    // |                       |                | specified list.                     |
-    // |                       |                |                                     |
-    // |                       |                | {"aws_account_native_id":{"$in":["1 |
-    // |                       |                | 11111111111"]}}                     |
-    // |                       |                |                                     |
-    // |                       |                |                                     |
-    // +-----------------------+----------------+-------------------------------------+
-    // | account_native_id     | $in            |                                     |
-    // |                       |                | This will be deprecated and use     |
-    // |                       |                | aws_account_native_id instead.      |
-    // |                       |                | Denotes the AWS account exist in a  |
-    // |                       |                | specified list.                     |
-    // |                       |                |                                     |
-    // |                       |                | {"account_native_id":{"$in":["11111 |
-    // |                       |                | 1111111"]}}                         |
-    // |                       |                |                                     |
-    // |                       |                |                                     |
-    // +-----------------------+----------------+-------------------------------------+
-    // | account_native_id     | $eq            |                                     |
-    // |                       |                | This will be deprecated and use     |
-    // |                       |                | aws_account_native_id instead.      |
-    // |                       |                | Denotes the AWS account to be       |
-    // |                       |                | exactly equal to the specified      |
-    // |                       |                | value.                              |
-    // |                       |                |                                     |
-    // |                       |                | {"account_native_id":{"$eq":"111111 |
-    // |                       |                | 111111"}}                           |
-    // |                       |                |                                     |
-    // |                       |                |                                     |
-    // +-----------------------+----------------+-------------------------------------+
-    // | aws_region            | $eq            | Denotes the AWS region to be        |
-    // |                       |                | exactly equal to the specified      |
-    // |                       |                | value.                              |
-    // |                       |                |                                     |
-    // |                       |                | {"aws_region":{"$eq":"us-west-2"}}  |
-    // |                       |                |                                     |
-    // |                       |                |                                     |
-    // +-----------------------+----------------+-------------------------------------+
-    // | aws_region            | $in            | Denotes the AWS region exist in a   |
-    // |                       |                | specified list.                     |
-    // |                       |                |                                     |
-    // |                       |                | {"aws_region":{"$in":["us-          |
-    // |                       |                | west-2"]}}                          |
-    // |                       |                |                                     |
-    // |                       |                |                                     |
-    // +-----------------------+----------------+-------------------------------------+
+    // +-------------------+-----------------------------+----------------------------+
+    // |       Field       |       Rule Condition        |        Description         |
+    // +===================+=============================+============================+
+    // | aws_tag           | $eq, $not_eq, $contains,    | Supports filtering by AWS  |
+    // |                   | $not_contains, $all,        | tag(s) using the following |
+    // |                   | $not_all, $in, $not_in      | operators. For example,    |
+    // |                   |                             |                            |
+    // |                   |                             | {"aws_tag":{"$eq":{"key":" |
+    // |                   |                             | Environment",              |
+    // |                   |                             | "value":"Prod"}}}          |
+    // |                   |                             |                            |
+    // |                   |                             |                            |
+    // +-------------------+-----------------------------+----------------------------+
+    // | account_native_id | $eq, $in                    |                            |
+    // |                   |                             | This will be deprecated    |
+    // |                   |                             | and use                    |
+    // |                   |                             | aws_account_native_id      |
+    // |                   |                             | instead.                   |
+    // |                   |                             | Supports filtering by AWS  |
+    // |                   |                             | account(s) using the       |
+    // |                   |                             | following operators. For   |
+    // |                   |                             | example,                   |
+    // |                   |                             |                            |
+    // |                   |                             | {"account_native_id":{"$in |
+    // |                   |                             | ":["111111111111"]}}       |
+    // |                   |                             |                            |
+    // |                   |                             |                            |
+    // +-------------------+-----------------------------+----------------------------+
+    // | aws_region        | $eq, $in                    | Supports filtering by AWS  |
+    // |                   |                             | region(s) using the        |
+    // |                   |                             | following operators. For   |
+    // |                   |                             | example,                   |
+    // |                   |                             |                            |
+    // |                   |                             | {"aws_region":{"$eq":"us-  |
+    // |                   |                             | west-2"}}                  |
+    // |                   |                             |                            |
+    // |                   |                             |                            |
+    // +-------------------+-----------------------------+----------------------------+
     // 
     BucketRule   *string       `json:"bucket_rule"`
     // The user-assigned description of the protection group.
@@ -738,134 +651,47 @@ type CreateProtectionGroupV1Request struct {
 // UpdateProtectionGroupV1Request represents a custom type struct
 type UpdateProtectionGroupV1Request struct {
     // The following table describes the possible conditions for a bucket to be
-    // automatically added to a protection group.
+    // automatically added to a protection group. 
+    // Denotes the properties to conditionalize on. For `$eq`, `$not_eq`, `$contains` and `$not_contains` a single element is provided: `{'$eq':{'key':'Environment', 'value':'Prod'}}`. For all other other operations, a list is provided: `{'$in':[{'key':'Environment','value':'Prod'}, {'key':'Hello', 'value':'World'}]}`.
     // 
-    // +-----------------------+----------------+-------------------------------------+
-    // |         Field         | Rule Condition |             Description             |
-    // +=======================+================+=====================================+
-    // | aws_tag               | $eq            | Denotes the AWS tag(s) to be        |
-    // |                       |                | exactly equal to the specified      |
-    // |                       |                | value.                              |
-    // |                       |                |                                     |
-    // |                       |                | {"aws_tag":{"$eq":{"key":"Environme |
-    // |                       |                | nt", "value":"Prod"}}}              |
-    // |                       |                |                                     |
-    // |                       |                |                                     |
-    // +-----------------------+----------------+-------------------------------------+
-    // | aws_tag               | $not_eq        | Denotes the AWS tag(s) to be not    |
-    // |                       |                | equal to the specified value.       |
-    // |                       |                |                                     |
-    // |                       |                | {"aws_tag":{"$not_eq":{"key":"Envir |
-    // |                       |                | onment", "value":"Prod"}}}          |
-    // |                       |                |                                     |
-    // |                       |                |                                     |
-    // +-----------------------+----------------+-------------------------------------+
-    // | aws_tag               | $contains      | Denotes the AWS tag(s) contain a    |
-    // |                       |                | specified substring.                |
-    // |                       |                |                                     |
-    // |                       |                | {"aws_tag":{"$contains":{"key":"Env |
-    // |                       |                | ironment", "value":"Prod"}}}        |
-    // |                       |                |                                     |
-    // |                       |                |                                     |
-    // +-----------------------+----------------+-------------------------------------+
-    // | aws_tag               | $not_contains  | Denotes the AWS tag(s) excludes a   |
-    // |                       |                | specified substring.                |
-    // |                       |                |                                     |
-    // |                       |                | {"aws_tag":{"$not_contains":{"key": |
-    // |                       |                | "Environment", "value":"Prod"}}}    |
-    // |                       |                |                                     |
-    // |                       |                |                                     |
-    // +-----------------------+----------------+-------------------------------------+
-    // | aws_tag               | $all           | Denotes the AWS tag(s) where all    |
-    // |                       |                | elements in the specified list are  |
-    // |                       |                | present.                            |
-    // |                       |                |                                     |
-    // |                       |                | {"aws_tag":{"$all":[{"key":"Environ |
-    // |                       |                | ment", "value":"Prod"}]}}           |
-    // |                       |                |                                     |
-    // |                       |                |                                     |
-    // +-----------------------+----------------+-------------------------------------+
-    // | aws_tag               | $not_all       | Denotes the AWS tag(s) where at     |
-    // |                       |                | least one element from the          |
-    // |                       |                | specified list is missing.          |
-    // |                       |                |                                     |
-    // |                       |                | {"aws_tag":{"$not_all":[{"key":"Env |
-    // |                       |                | ironment", "value":"Prod"}]}}       |
-    // |                       |                |                                     |
-    // |                       |                |                                     |
-    // +-----------------------+----------------+-------------------------------------+
-    // | aws_tag               | $in            | Denotes the AWS tag(s) exist in a   |
-    // |                       |                | specified list.                     |
-    // |                       |                |                                     |
-    // |                       |                | {"aws_tag":{"$in":[{"key":"Environm |
-    // |                       |                | ent", "value":"Prod"}]}}            |
-    // |                       |                |                                     |
-    // |                       |                |                                     |
-    // +-----------------------+----------------+-------------------------------------+
-    // | aws_tag               | $not_in        | Denotes the AWS tag(s) do not exist |
-    // |                       |                | in a specified list.                |
-    // |                       |                |                                     |
-    // |                       |                | {"aws_tag":{"$not_in":[{"key":"Envi |
-    // |                       |                | ronment", "value":"Prod"}]}}        |
-    // |                       |                |                                     |
-    // |                       |                |                                     |
-    // +-----------------------+----------------+-------------------------------------+
-    // | aws_account_native_id | $eq            | Denotes the AWS account to be       |
-    // |                       |                | exactly equal to the specified      |
-    // |                       |                | value.                              |
-    // |                       |                |                                     |
-    // |                       |                | {"aws_account_native_id":{"$eq":"11 |
-    // |                       |                | 1111111111"}}                       |
-    // |                       |                |                                     |
-    // |                       |                |                                     |
-    // +-----------------------+----------------+-------------------------------------+
-    // | aws_account_native_id | $in            | Denotes the AWS account exist in a  |
-    // |                       |                | specified list.                     |
-    // |                       |                |                                     |
-    // |                       |                | {"aws_account_native_id":{"$in":["1 |
-    // |                       |                | 11111111111"]}}                     |
-    // |                       |                |                                     |
-    // |                       |                |                                     |
-    // +-----------------------+----------------+-------------------------------------+
-    // | account_native_id     | $in            |                                     |
-    // |                       |                | This will be deprecated and use     |
-    // |                       |                | aws_account_native_id instead.      |
-    // |                       |                | Denotes the AWS account exist in a  |
-    // |                       |                | specified list.                     |
-    // |                       |                |                                     |
-    // |                       |                | {"account_native_id":{"$in":["11111 |
-    // |                       |                | 1111111"]}}                         |
-    // |                       |                |                                     |
-    // |                       |                |                                     |
-    // +-----------------------+----------------+-------------------------------------+
-    // | account_native_id     | $eq            |                                     |
-    // |                       |                | This will be deprecated and use     |
-    // |                       |                | aws_account_native_id instead.      |
-    // |                       |                | Denotes the AWS account to be       |
-    // |                       |                | exactly equal to the specified      |
-    // |                       |                | value.                              |
-    // |                       |                |                                     |
-    // |                       |                | {"account_native_id":{"$eq":"111111 |
-    // |                       |                | 111111"}}                           |
-    // |                       |                |                                     |
-    // |                       |                |                                     |
-    // +-----------------------+----------------+-------------------------------------+
-    // | aws_region            | $eq            | Denotes the AWS region to be        |
-    // |                       |                | exactly equal to the specified      |
-    // |                       |                | value.                              |
-    // |                       |                |                                     |
-    // |                       |                | {"aws_region":{"$eq":"us-west-2"}}  |
-    // |                       |                |                                     |
-    // |                       |                |                                     |
-    // +-----------------------+----------------+-------------------------------------+
-    // | aws_region            | $in            | Denotes the AWS region exist in a   |
-    // |                       |                | specified list.                     |
-    // |                       |                |                                     |
-    // |                       |                | {"aws_region":{"$in":["us-          |
-    // |                       |                | west-2"]}}                          |
-    // |                       |                |                                     |
-    // |                       |                |                                     |
-    // +-----------------------+----------------+-------------------------------------+
+    // +-------------------+-----------------------------+----------------------------+
+    // |       Field       |       Rule Condition        |        Description         |
+    // +===================+=============================+============================+
+    // | aws_tag           | $eq, $not_eq, $contains,    | Supports filtering by AWS  |
+    // |                   | $not_contains, $all,        | tag(s) using the following |
+    // |                   | $not_all, $in, $not_in      | operators. For example,    |
+    // |                   |                             |                            |
+    // |                   |                             | {"aws_tag":{"$eq":{"key":" |
+    // |                   |                             | Environment",              |
+    // |                   |                             | "value":"Prod"}}}          |
+    // |                   |                             |                            |
+    // |                   |                             |                            |
+    // +-------------------+-----------------------------+----------------------------+
+    // | account_native_id | $eq, $in                    |                            |
+    // |                   |                             | This will be deprecated    |
+    // |                   |                             | and use                    |
+    // |                   |                             | aws_account_native_id      |
+    // |                   |                             | instead.                   |
+    // |                   |                             | Supports filtering by AWS  |
+    // |                   |                             | account(s) using the       |
+    // |                   |                             | following operators. For   |
+    // |                   |                             | example,                   |
+    // |                   |                             |                            |
+    // |                   |                             | {"account_native_id":{"$in |
+    // |                   |                             | ":["111111111111"]}}       |
+    // |                   |                             |                            |
+    // |                   |                             |                            |
+    // +-------------------+-----------------------------+----------------------------+
+    // | aws_region        | $eq, $in                    | Supports filtering by AWS  |
+    // |                   |                             | region(s) using the        |
+    // |                   |                             | following operators. For   |
+    // |                   |                             | example,                   |
+    // |                   |                             |                            |
+    // |                   |                             | {"aws_region":{"$eq":"us-  |
+    // |                   |                             | west-2"}}                  |
+    // |                   |                             |                            |
+    // |                   |                             |                            |
+    // +-------------------+-----------------------------+----------------------------+
     // 
     BucketRule   *string       `json:"bucket_rule"`
     // The user-assigned description of the protection group.
@@ -881,6 +707,49 @@ type UpdateProtectionGroupV1Request struct {
 type AddBucketProtectionGroupV1Request struct {
     // TODO: Add struct field description
     BucketId *string `json:"bucket_id"`
+}
+
+// CreateComplianceReportConfigurationV1Request represents a custom type struct
+type CreateComplianceReportConfigurationV1Request struct {
+    // The user-provided description of the compliance report configuration.
+    Description  *string              `json:"description"`
+    // The user-provided name of the compliance report configuration.
+    Name         *string              `json:"name"`
+    // Notification channels to send the generated report runs.
+    Notification *NotificationSetting `json:"notification"`
+    // Filter and control parameters of compliance report.
+    Parameter    *Parameter           `json:"parameter"`
+    // When the report will be generated and sent. If the schedule is not provided then a
+    // default value will be used.
+    Schedule     *ScheduleSetting     `json:"schedule"`
+}
+
+// UpdateComplianceReportConfigurationV1Request represents a custom type struct
+type UpdateComplianceReportConfigurationV1Request struct {
+    // The user-provided description of the compliance report configuration.
+    Description  *string              `json:"description"`
+    // The user-provided name of the compliance report configuration.
+    Name         *string              `json:"name"`
+    // Notification channels to send the generated report runs.
+    Notification *NotificationSetting `json:"notification"`
+    // Filter and control parameters of compliance report.
+    Parameter    *Parameter           `json:"parameter"`
+    // When the report will be generated and sent. If the schedule is not provided then a
+    // default value will be used.
+    Schedule     *ScheduleSetting     `json:"schedule"`
+}
+
+// CreateComplianceReportRunV1Request represents a custom type struct
+type CreateComplianceReportRunV1Request struct {
+    // Name of the new compliance report run that will be created.
+    // If not given, default uses `{configuration ID} - {MM/DD/YYYY(Created time)}`.
+    Name *string `json:"name"`
+}
+
+// SendComplianceReportRunEmailV1Request represents a custom type struct
+type SendComplianceReportRunEmailV1Request struct {
+    // List of emails to be notified.
+    EmailList []*string `json:"email_list"`
 }
 
 // CreateReportDownloadV1Request represents a custom type struct

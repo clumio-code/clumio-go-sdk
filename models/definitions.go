@@ -303,6 +303,47 @@ type AmiModel struct {
     VirtualizationType       *string `json:"virtualization_type"`
 }
 
+// AssetBackupControl represents a custom type struct.
+// The control for asset backup.
+type AssetBackupControl struct {
+    // The time unit used in control definition.
+    LookBackPeriod           *TimeUnitParam `json:"look_back_period"`
+    // The time unit used in control definition.
+    MinimumRetentionDuration *TimeUnitParam `json:"minimum_retention_duration"`
+    // The time unit used in control definition.
+    WindowSize               *TimeUnitParam `json:"window_size"`
+}
+
+// AssetFilter represents a custom type struct.
+// The filter for asset. This will be applied to asset backup and asset protection controls.
+type AssetFilter struct {
+    // The asset groups to be filtered.
+    Groups    []*AssetGroupFilter `json:"groups"`
+    // The tag filter operation to be applied to the given tags. This is supported for AWS assets only.
+    TagOpMode *string             `json:"tag_op_mode"`
+    // The asset tags to be filtered. This is supported for AWS assets only.
+    Tags      []*Tag              `json:"tags"`
+}
+
+// AssetGroupFilter represents a custom type struct.
+// The asset groups to be filtered.
+type AssetGroupFilter struct {
+    // The id of asset group.
+    Id         *string `json:"id"`
+    // The region of asset group. For example, `us-west-2`.
+    // This is supported for AWS asset groups only.
+    Region     *string `json:"region"`
+    // The type of asset group.
+    ClumioType *string `json:"type"`
+}
+
+// AssetProtectionControl represents a custom type struct.
+// The control for asset protection.
+type AssetProtectionControl struct {
+    // Whether the report should ignore deactivated policy or not.
+    ShouldIgnoreDeactivatedPolicy *bool `json:"should_ignore_deactivated_policy"`
+}
+
 // AssignPolicyAction represents a custom type struct.
 // Apply a policy to assets.
 type AssignPolicyAction struct {
@@ -1053,6 +1094,173 @@ type ClumioTopicResource struct {
     Steps    *string          `json:"steps"`
 }
 
+// CommonFilter represents a custom type struct.
+// The common filter which will be applied to all controls.
+type CommonFilter struct {
+    // The asset types to be included in the report.
+    // For example, ["aws_ec2_instance", "microsoft365_drive"].
+    AssetTypes          []*string `json:"asset_types"`
+    // The data sources to be included in the report. Possible values include `aws`, `microsoft365` or `vmware`.
+    DataSources         []*string `json:"data_sources"`
+    // The organizational units to be included in the report.
+    OrganizationalUnits []*string `json:"organizational_units"`
+}
+
+// ComplianceConfiguration represents a custom type struct
+type ComplianceConfiguration struct {
+    // If the `embed` query parameter is set, displays the responses of the related resource,
+    // as defined by the embeddable link specified.
+    Embedded     interface{}                   `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links        *ComplianceConfigurationLinks `json:"_links"`
+    // The RFC3339 format time when the report configuration was created.
+    Created      *string                       `json:"created"`
+    // The user-provided description of the compliance report configuration.
+    Description  *string                       `json:"description"`
+    // The unique identifier of the report configuration.
+    Id           *string                       `json:"id"`
+    // Most recent report run generated from the report configuration.
+    LatestRun    *LatestRun                    `json:"latest_run"`
+    // The user-provided name of the compliance report configuration.
+    Name         *string                       `json:"name"`
+    // Notification channels to send the generated report runs.
+    Notification *NotificationSetting          `json:"notification"`
+    // Filter and control parameters of compliance report.
+    Parameter    *Parameter                    `json:"parameter"`
+    // When the report will be generated and sent. If the schedule is not provided then a
+    // default value will be used.
+    Schedule     *ScheduleSetting              `json:"schedule"`
+}
+
+// ComplianceConfigurationLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type ComplianceConfigurationLinks struct {
+    // The HATEOAS link to this resource.
+    Self                                *HateoasSelfLink `json:"_self"`
+    // A resource-specific HATEOAS link.
+    DeleteComplianceReportConfiguration *HateoasLink     `json:"delete-compliance-report-configuration"`
+    // A resource-specific HATEOAS link.
+    UpdateComplianceReportConfiguration *HateoasLink     `json:"update-compliance-report-configuration"`
+}
+
+// ComplianceConfigurationListEmbedded represents a custom type struct.
+// An array of embedded resources related to this resource.
+type ComplianceConfigurationListEmbedded struct {
+    // TODO: Add struct field description
+    Items []*ComplianceConfiguration `json:"items"`
+}
+
+// ComplianceConfigurationListLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type ComplianceConfigurationListLinks struct {
+    // The HATEOAS link to the first page of results.
+    First                               *HateoasFirstLink `json:"_first"`
+    // The HATEOAS link to the next page of results.
+    Next                                *HateoasNextLink  `json:"_next"`
+    // The HATEOAS link to this resource.
+    Self                                *HateoasSelfLink  `json:"_self"`
+    // A resource-specific HATEOAS link.
+    CreateComplianceReportConfiguration *HateoasLink      `json:"create-compliance-report-configuration"`
+}
+
+// ComplianceControls represents a custom type struct.
+// The set of controls supported in compliance report.
+type ComplianceControls struct {
+    // The control for asset backup.
+    AssetBackup     *AssetBackupControl     `json:"asset_backup"`
+    // The control for asset protection.
+    AssetProtection *AssetProtectionControl `json:"asset_protection"`
+    // The control for policy.
+    Policy          *PolicyControl          `json:"policy"`
+}
+
+// ComplianceFilters represents a custom type struct.
+// The set of filters supported in compliance report.
+type ComplianceFilters struct {
+    // The filter for asset. This will be applied to asset backup and asset protection controls.
+    Asset  *AssetFilter  `json:"asset"`
+    // The common filter which will be applied to all controls.
+    Common *CommonFilter `json:"common"`
+}
+
+// ComplianceInfo represents a custom type struct.
+// The status per controls in the compliance report created by the report run.
+type ComplianceInfo struct {
+    // The compliance status of the report run.
+    ComplianceStatus  *string        `json:"compliance_status"`
+    // The count of compliant items of the report run.
+    CompliantCount    *int64         `json:"compliant_count"`
+    // The status per controls in the compliance report created by the report run.
+    Controls          []*ControlInfo `json:"controls"`
+    // The items covered in the compliance report created by the report run.
+    ItemsCovered      *ItemsCovered  `json:"items_covered"`
+    // The count of non-compliant items of the report run.
+    NonCompliantCount *int64         `json:"non_compliant_count"`
+    // The count of unknown items of the report run.
+    UnknownCount      *int64         `json:"unknown_count"`
+}
+
+// ComplianceRun represents a custom type struct
+type ComplianceRun struct {
+    // Embedded responses related to the resource.
+    Embedded           interface{}                `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links              *ComplianceRunHateoasLinks `json:"_links"`
+    // The status per controls in the compliance report created by the report run.
+    ComplianceInfo     *ComplianceInfo            `json:"compliance_info"`
+    // The RFC3339 format time when the report run was created.
+    Created            *string                    `json:"created"`
+    // The RFC3339 format time when the report run was expired.
+    Expired            *string                    `json:"expired"`
+    // The unique identifier of the report run.
+    Id                 *string                    `json:"id"`
+    // The name of the report run.
+    Name               *string                    `json:"name"`
+    // Filter and control parameters of compliance report.
+    Parameter          *Parameter                 `json:"parameter"`
+    // The unique identifier of the report configuration from which the report run was generated.
+    ReportConfigId     *string                    `json:"report_config_id"`
+    // The link to download the report CSV.
+    ReportDownloadLink *string                    `json:"report_download_link"`
+    // The generation status of the report run.
+    Status             *string                    `json:"status"`
+    // The ID of the report run generation task.
+    TaskId             *string                    `json:"task_id"`
+    // The RFC3339 format time when the report run was updated.
+    Updated            *string                    `json:"updated"`
+}
+
+// ComplianceRunHateoasLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type ComplianceRunHateoasLinks struct {
+    // The HATEOAS link to this resource.
+    Self                         *HateoasSelfLink `json:"_self"`
+    // A resource-specific HATEOAS link.
+    DeleteComplianceReportRun    *HateoasLink     `json:"delete-compliance-report-run"`
+    // A resource-specific HATEOAS link.
+    SendComplianceReportRunEmail *HateoasLink     `json:"send-compliance-report-run-email"`
+}
+
+// ComplianceRunListHateoasEmbedded represents a custom type struct.
+// Embedded responses related to the resource.
+type ComplianceRunListHateoasEmbedded struct {
+    // TODO: Add struct field description
+    Items []*ComplianceRun `json:"items"`
+}
+
+// ComplianceRunListHateoasLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type ComplianceRunListHateoasLinks struct {
+    // The HATEOAS link to the first page of results.
+    First                               *HateoasFirstLink `json:"_first"`
+    // The HATEOAS link to the next page of results.
+    Next                                *HateoasNextLink  `json:"_next"`
+    // The HATEOAS link to this resource.
+    Self                                *HateoasSelfLink  `json:"_self"`
+    // A resource-specific HATEOAS link.
+    CreateComplianceReportConfiguration *HateoasLink      `json:"create-compliance-report-configuration"`
+}
+
 // ConnectionGroupLinks represents a custom type struct.
 // URLs to pages related to the resource.
 type ConnectionGroupLinks struct {
@@ -1303,6 +1511,31 @@ type ConsolidatedConfig struct {
     S3                       *S3AssetInfo           `json:"s3"`
     // The configuration of the Clumio Cloud Warm-Tier Protect product for this connection.
     WarmTierProtect          *WarmTierProtectConfig `json:"warm_tier_protect"`
+}
+
+// ControlInfo represents a custom type struct.
+// The status per controls in the compliance report created by the report run.
+type ControlInfo struct {
+    // The count of compliant items of the control.
+    CompliantCount    *int64  `json:"compliant_count"`
+    // The compliance status of the control.
+    ControlStatus     *string `json:"control_status"`
+    // The name of the control.
+    Name              *string `json:"name"`
+    // The count of non-compliant items of the control.
+    NonCompliantCount *int64  `json:"non_compliant_count"`
+    // The count of unknown items of the control.
+    UnknownCount      *int64  `json:"unknown_count"`
+}
+
+// CreateComplianceRunHateoasLinks represents a custom type struct.
+// CreateComplianceRunHateoasLinks
+// URLs to pages related to the resource.
+type CreateComplianceRunHateoasLinks struct {
+    // The HATEOAS link to this resource.
+    Self     *HateoasSelfLink     `json:"_self"`
+    // A HATEOAS link to the task associated with this resource.
+    ReadTask *ReadTaskHateoasLink `json:"read-task"`
 }
 
 // CreateEC2MSSQLDatabaseRestoreResponseLinks represents a custom type struct.
@@ -3826,6 +4059,13 @@ type IcebergAssetInfo struct {
     InstalledTemplateVersion *string `json:"installed_template_version"`
 }
 
+// IcebergBackupAdvancedSetting represents a custom type struct.
+// IcebergBackupAdvancedSetting defines the advanced settings for Iceberg backup operations
+type IcebergBackupAdvancedSetting struct {
+    // Backup tier to store the backup in. Valid values are: `standard`.
+    BackupTier *string `json:"backup_tier"`
+}
+
 // IcebergTemplateInfo represents a custom type struct.
 // IcebergTemplateInfo is the latest available information for the Iceberg feature.
 type IcebergTemplateInfo struct {
@@ -3866,6 +4106,15 @@ type InstanceStoreBlockDeviceMapping struct {
     VirtualName *string `json:"virtual_name"`
 }
 
+// ItemsCovered represents a custom type struct.
+// The items covered in the compliance report created by the report run.
+type ItemsCovered struct {
+    // The count of covered assets of the report run.
+    AssetCount  *int64 `json:"asset_count"`
+    // The count of covered policies of the report run.
+    PolicyCount *int64 `json:"policy_count"`
+}
+
 // KeySchemaElement represents a custom type struct.
 // Represents a single element of a key schema. A key schema specifies the attributes that make up the primary key
 // of a table, or the key attributes of an index.
@@ -3875,6 +4124,33 @@ type KeySchemaElement struct {
     // The role that this key attribute will assume.
     // Possible values include: `HASH` - partition key and `RANGE` - sort key.
     KeyType       *string `json:"key_type"`
+}
+
+// LatestRun represents a custom type struct.
+// Most recent report run generated from the report configuration.
+type LatestRun struct {
+    // The status per controls in the compliance report created by the report run.
+    ComplianceInfo     *ComplianceInfo `json:"compliance_info"`
+    // The RFC3339 format time when the report run was created.
+    Created            *string         `json:"created"`
+    // The RFC3339 format time when the report run was expired.
+    Expired            *string         `json:"expired"`
+    // The unique identifier of the report run.
+    Id                 *string         `json:"id"`
+    // The name of the report run.
+    Name               *string         `json:"name"`
+    // Filter and control parameters of compliance report.
+    Parameter          *Parameter      `json:"parameter"`
+    // The unique identifier of the report configuration from which the report run was generated.
+    ReportConfigId     *string         `json:"report_config_id"`
+    // The link to download the report CSV.
+    ReportDownloadLink *string         `json:"report_download_link"`
+    // The generation status of the report run.
+    Status             *string         `json:"status"`
+    // The ID of the report run generation task.
+    TaskId             *string         `json:"task_id"`
+    // The RFC3339 format time when the report run was updated.
+    Updated            *string         `json:"updated"`
 }
 
 // ListFileVersionsHateoasLink represents a custom type struct.
@@ -4023,6 +4299,13 @@ type NetworkInterface struct {
     SubnetNativeId           *string   `json:"subnet_native_id"`
     // The AWS-assigned name of the network interface. For example, `eth0`.
     VirtualName              *string   `json:"virtual_name"`
+}
+
+// NotificationSetting represents a custom type struct.
+// Notification channels to send the generated report runs.
+type NotificationSetting struct {
+    // Email list to send a generated report run.
+    EmailList []*string `json:"email_list"`
 }
 
 // OUGroupingCriteria represents a custom type struct.
@@ -4435,6 +4718,15 @@ type OrganizationalUnitWithETagV1 struct {
     Users                     []*string                `json:"users"`
 }
 
+// Parameter represents a custom type struct.
+// Filter and control parameters of compliance report.
+type Parameter struct {
+    // The set of controls supported in compliance report.
+    Controls *ComplianceControls `json:"controls"`
+    // The set of filters supported in compliance report.
+    Filters  *ComplianceFilters  `json:"filters"`
+}
+
 // PermissionModel represents a custom type struct
 type PermissionModel struct {
     // Description of the permission.
@@ -4521,6 +4813,8 @@ type PolicyAdvancedSettings struct {
     AwsEbsVolumeBackup              *EBSBackupAdvancedSetting                       `json:"aws_ebs_volume_backup"`
     // Advanced settings for EC2 backup.
     AwsEc2InstanceBackup            *EC2BackupAdvancedSetting                       `json:"aws_ec2_instance_backup"`
+    // IcebergBackupAdvancedSetting defines the advanced settings for Iceberg backup operations
+    AwsIcebergAirgapBackup          *IcebergBackupAdvancedSetting                   `json:"aws_iceberg_airgap_backup"`
     // Advanced settings for RDS PITR configuration sync.
     AwsRdsConfigSync                *RDSConfigSyncAdvancedSetting                   `json:"aws_rds_config_sync"`
     // Settings for determining if a RDS policy is created with standard or archive tier.
@@ -4541,6 +4835,15 @@ type PolicyAdvancedSettings struct {
     ProtectionGroupBackup           *ProtectionGroupBackupAdvancedSetting           `json:"protection_group_backup"`
     // Additional policy configuration settings for the `protection_group_continuous_backup` operation. If this operation is not of type `protection_group_continuous_backup`, then this field is omitted from the response.
     ProtectionGroupContinuousBackup *ProtectionGroupContinuousBackupAdvancedSetting `json:"protection_group_continuous_backup"`
+}
+
+// PolicyControl represents a custom type struct.
+// The control for policy.
+type PolicyControl struct {
+    // The time unit used in control definition.
+    MinimumRetentionDuration *TimeUnitParam `json:"minimum_retention_duration"`
+    // The time unit used in control definition.
+    MinimumRpoFrequency      *TimeUnitParam `json:"minimum_rpo_frequency"`
 }
 
 // PolicyDetails represents a custom type struct
@@ -4776,134 +5079,47 @@ type ProtectionGroup struct {
     // Number of buckets
     BucketCount                      *int64                   `json:"bucket_count"`
     // The following table describes the possible conditions for a bucket to be
-    // automatically added to a protection group.
+    // automatically added to a protection group. 
+    // Denotes the properties to conditionalize on. For `$eq`, `$not_eq`, `$contains` and `$not_contains` a single element is provided: `{'$eq':{'key':'Environment', 'value':'Prod'}}`. For all other other operations, a list is provided: `{'$in':[{'key':'Environment','value':'Prod'}, {'key':'Hello', 'value':'World'}]}`.
     // 
-    // +-----------------------+----------------+-------------------------------------+
-    // |         Field         | Rule Condition |             Description             |
-    // +=======================+================+=====================================+
-    // | aws_tag               | $eq            | Denotes the AWS tag(s) to be        |
-    // |                       |                | exactly equal to the specified      |
-    // |                       |                | value.                              |
-    // |                       |                |                                     |
-    // |                       |                | {"aws_tag":{"$eq":{"key":"Environme |
-    // |                       |                | nt", "value":"Prod"}}}              |
-    // |                       |                |                                     |
-    // |                       |                |                                     |
-    // +-----------------------+----------------+-------------------------------------+
-    // | aws_tag               | $not_eq        | Denotes the AWS tag(s) to be not    |
-    // |                       |                | equal to the specified value.       |
-    // |                       |                |                                     |
-    // |                       |                | {"aws_tag":{"$not_eq":{"key":"Envir |
-    // |                       |                | onment", "value":"Prod"}}}          |
-    // |                       |                |                                     |
-    // |                       |                |                                     |
-    // +-----------------------+----------------+-------------------------------------+
-    // | aws_tag               | $contains      | Denotes the AWS tag(s) contain a    |
-    // |                       |                | specified substring.                |
-    // |                       |                |                                     |
-    // |                       |                | {"aws_tag":{"$contains":{"key":"Env |
-    // |                       |                | ironment", "value":"Prod"}}}        |
-    // |                       |                |                                     |
-    // |                       |                |                                     |
-    // +-----------------------+----------------+-------------------------------------+
-    // | aws_tag               | $not_contains  | Denotes the AWS tag(s) excludes a   |
-    // |                       |                | specified substring.                |
-    // |                       |                |                                     |
-    // |                       |                | {"aws_tag":{"$not_contains":{"key": |
-    // |                       |                | "Environment", "value":"Prod"}}}    |
-    // |                       |                |                                     |
-    // |                       |                |                                     |
-    // +-----------------------+----------------+-------------------------------------+
-    // | aws_tag               | $all           | Denotes the AWS tag(s) where all    |
-    // |                       |                | elements in the specified list are  |
-    // |                       |                | present.                            |
-    // |                       |                |                                     |
-    // |                       |                | {"aws_tag":{"$all":[{"key":"Environ |
-    // |                       |                | ment", "value":"Prod"}]}}           |
-    // |                       |                |                                     |
-    // |                       |                |                                     |
-    // +-----------------------+----------------+-------------------------------------+
-    // | aws_tag               | $not_all       | Denotes the AWS tag(s) where at     |
-    // |                       |                | least one element from the          |
-    // |                       |                | specified list is missing.          |
-    // |                       |                |                                     |
-    // |                       |                | {"aws_tag":{"$not_all":[{"key":"Env |
-    // |                       |                | ironment", "value":"Prod"}]}}       |
-    // |                       |                |                                     |
-    // |                       |                |                                     |
-    // +-----------------------+----------------+-------------------------------------+
-    // | aws_tag               | $in            | Denotes the AWS tag(s) exist in a   |
-    // |                       |                | specified list.                     |
-    // |                       |                |                                     |
-    // |                       |                | {"aws_tag":{"$in":[{"key":"Environm |
-    // |                       |                | ent", "value":"Prod"}]}}            |
-    // |                       |                |                                     |
-    // |                       |                |                                     |
-    // +-----------------------+----------------+-------------------------------------+
-    // | aws_tag               | $not_in        | Denotes the AWS tag(s) do not exist |
-    // |                       |                | in a specified list.                |
-    // |                       |                |                                     |
-    // |                       |                | {"aws_tag":{"$not_in":[{"key":"Envi |
-    // |                       |                | ronment", "value":"Prod"}]}}        |
-    // |                       |                |                                     |
-    // |                       |                |                                     |
-    // +-----------------------+----------------+-------------------------------------+
-    // | aws_account_native_id | $eq            | Denotes the AWS account to be       |
-    // |                       |                | exactly equal to the specified      |
-    // |                       |                | value.                              |
-    // |                       |                |                                     |
-    // |                       |                | {"aws_account_native_id":{"$eq":"11 |
-    // |                       |                | 1111111111"}}                       |
-    // |                       |                |                                     |
-    // |                       |                |                                     |
-    // +-----------------------+----------------+-------------------------------------+
-    // | aws_account_native_id | $in            | Denotes the AWS account exist in a  |
-    // |                       |                | specified list.                     |
-    // |                       |                |                                     |
-    // |                       |                | {"aws_account_native_id":{"$in":["1 |
-    // |                       |                | 11111111111"]}}                     |
-    // |                       |                |                                     |
-    // |                       |                |                                     |
-    // +-----------------------+----------------+-------------------------------------+
-    // | account_native_id     | $in            |                                     |
-    // |                       |                | This will be deprecated and use     |
-    // |                       |                | aws_account_native_id instead.      |
-    // |                       |                | Denotes the AWS account exist in a  |
-    // |                       |                | specified list.                     |
-    // |                       |                |                                     |
-    // |                       |                | {"account_native_id":{"$in":["11111 |
-    // |                       |                | 1111111"]}}                         |
-    // |                       |                |                                     |
-    // |                       |                |                                     |
-    // +-----------------------+----------------+-------------------------------------+
-    // | account_native_id     | $eq            |                                     |
-    // |                       |                | This will be deprecated and use     |
-    // |                       |                | aws_account_native_id instead.      |
-    // |                       |                | Denotes the AWS account to be       |
-    // |                       |                | exactly equal to the specified      |
-    // |                       |                | value.                              |
-    // |                       |                |                                     |
-    // |                       |                | {"account_native_id":{"$eq":"111111 |
-    // |                       |                | 111111"}}                           |
-    // |                       |                |                                     |
-    // |                       |                |                                     |
-    // +-----------------------+----------------+-------------------------------------+
-    // | aws_region            | $eq            | Denotes the AWS region to be        |
-    // |                       |                | exactly equal to the specified      |
-    // |                       |                | value.                              |
-    // |                       |                |                                     |
-    // |                       |                | {"aws_region":{"$eq":"us-west-2"}}  |
-    // |                       |                |                                     |
-    // |                       |                |                                     |
-    // +-----------------------+----------------+-------------------------------------+
-    // | aws_region            | $in            | Denotes the AWS region exist in a   |
-    // |                       |                | specified list.                     |
-    // |                       |                |                                     |
-    // |                       |                | {"aws_region":{"$in":["us-          |
-    // |                       |                | west-2"]}}                          |
-    // |                       |                |                                     |
-    // |                       |                |                                     |
-    // +-----------------------+----------------+-------------------------------------+
+    // +-------------------+-----------------------------+----------------------------+
+    // |       Field       |       Rule Condition        |        Description         |
+    // +===================+=============================+============================+
+    // | aws_tag           | $eq, $not_eq, $contains,    | Supports filtering by AWS  |
+    // |                   | $not_contains, $all,        | tag(s) using the following |
+    // |                   | $not_all, $in, $not_in      | operators. For example,    |
+    // |                   |                             |                            |
+    // |                   |                             | {"aws_tag":{"$eq":{"key":" |
+    // |                   |                             | Environment",              |
+    // |                   |                             | "value":"Prod"}}}          |
+    // |                   |                             |                            |
+    // |                   |                             |                            |
+    // +-------------------+-----------------------------+----------------------------+
+    // | account_native_id | $eq, $in                    |                            |
+    // |                   |                             | This will be deprecated    |
+    // |                   |                             | and use                    |
+    // |                   |                             | aws_account_native_id      |
+    // |                   |                             | instead.                   |
+    // |                   |                             | Supports filtering by AWS  |
+    // |                   |                             | account(s) using the       |
+    // |                   |                             | following operators. For   |
+    // |                   |                             | example,                   |
+    // |                   |                             |                            |
+    // |                   |                             | {"account_native_id":{"$in |
+    // |                   |                             | ":["111111111111"]}}       |
+    // |                   |                             |                            |
+    // |                   |                             |                            |
+    // +-------------------+-----------------------------+----------------------------+
+    // | aws_region        | $eq, $in                    | Supports filtering by AWS  |
+    // |                   |                             | region(s) using the        |
+    // |                   |                             | following operators. For   |
+    // |                   |                             | example,                   |
+    // |                   |                             |                            |
+    // |                   |                             | {"aws_region":{"$eq":"us-  |
+    // |                   |                             | west-2"}}                  |
+    // |                   |                             |                            |
+    // |                   |                             |                            |
+    // +-------------------+-----------------------------+----------------------------+
     // 
     BucketRule                       *string                  `json:"bucket_rule"`
     // Creation time of the protection group in RFC-3339 format.
@@ -4936,8 +5152,7 @@ type ProtectionGroup struct {
     OrganizationalUnitId             *string                  `json:"organizational_unit_id"`
     // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
     ProtectionInfo                   *ProtectionInfoWithRule  `json:"protection_info"`
-    // A substruct that only includes protected_count and unprotected_count which can
-    // be used in common by other structs
+    // TODO: Add struct field description
     ProtectionStats                  *ProtectionStats         `json:"protection_stats"`
     // The protection status of the protection group. Possible values include "protected",
     // "unprotected", and "unsupported". If the protection group does not support backups, then
@@ -5482,9 +5697,7 @@ type ProtectionInfoWithRule struct {
     PolicyId             *string `json:"policy_id"`
 }
 
-// ProtectionStats represents a custom type struct.
-// A substruct that only includes protected_count and unprotected_count which can
-// be used in common by other structs
+// ProtectionStats represents a custom type struct
 type ProtectionStats struct {
     // The total number of entities associated with deactivated policies.
     DeactivatedCount *int64 `json:"deactivated_count"`
@@ -5934,13 +6147,6 @@ type RdsResourceRestoreTarget struct {
 type RdsTemplateInfo struct {
     // The latest available feature version for the asset.
     AvailableTemplateVersion *string `json:"available_template_version"`
-}
-
-// ReadEbsTagProtectionStatsLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type ReadEbsTagProtectionStatsLinks struct {
-    // The HATEOAS link to this resource.
-    Self *HateoasSelfLink `json:"_self"`
 }
 
 // ReadPolicyDefinitionHateoasLink represents a custom type struct.
@@ -7148,6 +7354,28 @@ type SSESpecification struct {
     KmsMasterKeyId *string `json:"kms_master_key_id"`
 }
 
+// ScheduleSetting represents a custom type struct.
+// When the report will be generated and sent. If the schedule is not provided then a
+// default value will be used.
+type ScheduleSetting struct {
+    // The day of the month when the report will be sent out. This is required for the 'monthly'
+    // report frequency. It has to be >= 1 and <= 28, or '-1', which signifies end of month.
+    // If the day_of_month is set to -1 then the report will be sent out at the end of every month.
+    DayOfMonth *int64  `json:"day_of_month"`
+    // Which day the report will be sent out. This is required for 'weekly' report frequency.
+    DayOfWeek  *string `json:"day_of_week"`
+    // The unit of frequency in which the report is generated.
+    Frequency  *string `json:"frequency"`
+    // When the report will be send out. This field should follow the format "HH:MM" based
+    // on a 24-hour clock. Only values where HH ranges from 0 to 23 and MM ranges from 0 to
+    // 59 are allowed.
+    StartTime  *string `json:"start_time"`
+    // The timezone for the report schedule. The timezone must be a valid location name from
+    // the IANA Time Zone database. For instance, it can be "America/New_York", "US/Central",
+    // "UTC", or similar. If empty, then the timezone is considered as UTC.
+    Timezone   *string `json:"timezone"`
+}
+
 // ServiceInstanceProfiles represents a custom type struct
 type ServiceInstanceProfiles struct {
     // TODO: Add struct field description
@@ -7272,6 +7500,15 @@ type StreamSpecification struct {
     // NEW_AND_OLD_IMAGES - Both the new and the old item images of the item
     // are written to the stream.
     ViewType *string `json:"view_type"`
+}
+
+// Tag represents a custom type struct.
+// The asset tags to be filtered. This is supported for AWS assets only.
+type Tag struct {
+    // The key of tag to filter.
+    Key   *string `json:"key"`
+    // The value of tag to filter.
+    Value *string `json:"value"`
 }
 
 // TaskLinks represents a custom type struct.
@@ -7435,6 +7672,15 @@ type TemplateConfigurationV2 struct {
 type TemplateLinks struct {
     // The HATEOAS link to this resource.
     Self *HateoasSelfLink `json:"_self"`
+}
+
+// TimeUnitParam represents a custom type struct.
+// The time unit used in control definition.
+type TimeUnitParam struct {
+    // Unit indicates the unit for time unit param.
+    Unit  *string `json:"unit"`
+    // Value indicates the value for time unit param.
+    Value *int32  `json:"value"`
 }
 
 // UnprotectEntitiesHateoasLink represents a custom type struct.

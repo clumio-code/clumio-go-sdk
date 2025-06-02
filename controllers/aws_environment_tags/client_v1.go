@@ -31,12 +31,6 @@ type AwsEnvironmentTagsV1Client interface {
         lookbackDays *int64)(
         *models.ReadAwsTagResponse,  *apiutils.APIError)
     
-    // ReadAwsEnvironmentTagEbsVolumesProtectionStats Returns the specified AWS tag's EBS protection statistics.
-    ReadAwsEnvironmentTagEbsVolumesProtectionStats(
-        environmentId string, 
-        tagId string)(
-        *models.ReadEbsTagProtectionStatsResponse,  *apiutils.APIError)
-    
 }
 
 // NewAwsEnvironmentTagsV1 returns AwsEnvironmentTagsV1Client
