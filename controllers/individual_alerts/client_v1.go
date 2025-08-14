@@ -13,7 +13,7 @@ type IndividualAlertsV1Client interface {
     // ListIndividualAlerts Returns a list of individual alerts.
     //  
     //  Each alert is associated with a cause, which represents the issue that generated the alert,
-    //  and each cause belongs to a general alert alert type. Some alert types may be associated with multiple causes.
+    //  and each cause belongs to a general alert type. Some alert types may be associated with multiple causes.
     //  
     //  The following table lists the Clumio alert types:
     //  

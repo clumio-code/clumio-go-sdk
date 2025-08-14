@@ -18,6 +18,7 @@ type AwsTemplatesV1Client interface {
     // CreateConnectionTemplate Returns the URLs for AWS CloudFormation and terraform templates  corresponding
     //  to a given configuration of asset types.
     CreateConnectionTemplate(
+        returnGroupToken *bool, 
         body *models.CreateConnectionTemplateV1Request)(
         *models.CreateAWSTemplateV2Response,  *apiutils.APIError)
     

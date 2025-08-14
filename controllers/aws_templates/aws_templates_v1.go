@@ -44,6 +44,7 @@ func (a *AwsTemplatesV1) ReadConnectionTemplates()(
 // CreateConnectionTemplate Returns the URLs for AWS CloudFormation and terraform templates  corresponding
 //  to a given configuration of asset types.
 func (a *AwsTemplatesV1) CreateConnectionTemplate(
+    returnGroupToken *bool, 
     body *models.CreateConnectionTemplateV1Request)(
     *models.CreateAWSTemplateV2Response, *apiutils.APIError) {
 
@@ -60,10 +61,16 @@ func (a *AwsTemplatesV1) CreateConnectionTemplate(
     payload := string(bytes)
     header := "application/api.clumio.aws-templates=v1+json"
     result := &models.CreateAWSTemplateV2Response{}
+    queryParams := make(map[string]string)
+    if returnGroupToken != nil {
+        queryParams["return_group_token"] = fmt.Sprintf("%v", *returnGroupToken)
+    }
+    
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: a.config,
         RequestUrl: queryBuilder,
+        QueryParams: queryParams,
         AcceptHeader: header,
         Body: payload,
         Result200: &result,

@@ -91,7 +91,7 @@ type CreateAwsConnectionV1Request struct {
     // Organizational-Units documentation.
     OrganizationalUnitId     *string   `json:"organizational_unit_id"`
     // The asset types enabled for protect.
-    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS"].
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS", "IcebergOnGlue", "IcebergOnS3Tables"].
     // 
     // NOTE -
     // 1. EC2/EBS is required for EC2MSSQL.
@@ -111,7 +111,7 @@ type CreateAwsConnectionGroupV1Request struct {
     // The AWS-assigned ID of the account to be associated with the Connection Group.
     AccountNativeId      *string   `json:"account_native_id"`
     // The asset types to be connected via the connection-group.
-    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS"].
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS", "IcebergOnGlue", "IcebergOnS3Tables"].
     // 
     // NOTE -
     // 1. EC2/EBS is required for EC2MSSQL.
@@ -120,7 +120,7 @@ type CreateAwsConnectionGroupV1Request struct {
     // DEPRECATED, use "asset_types" instead.
     // 
     // The asset types to be connected via the connection-group.
-    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS"].
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS", "IcebergOnGlue", "IcebergOnS3Tables"].
     // 
     // NOTE -
     // 1. EC2/EBS is required for EC2MSSQL.
@@ -147,7 +147,7 @@ type CreateAwsConnectionGroupV1Request struct {
 // UpdateAwsConnectionGroupV1Request represents a custom type struct
 type UpdateAwsConnectionGroupV1Request struct {
     // The asset types to be connected via the connection-group.
-    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS"].
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS", "IcebergOnGlue", "IcebergOnS3Tables"].
     // 
     // NOTE -
     // 1. EC2/EBS is required for EC2MSSQL.
@@ -157,7 +157,7 @@ type UpdateAwsConnectionGroupV1Request struct {
     // 
     // 
     // The asset types to be connected via the connection-group.
-    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS"].
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS", "IcebergOnGlue", "IcebergOnS3Tables"].
     // 
     // NOTE -
     // 1. EC2/EBS is required for EC2MSSQL.
@@ -199,7 +199,7 @@ type PostProcessAwsConnectionV1Request struct {
 // CreateConnectionTemplateV1Request represents a custom type struct
 type CreateConnectionTemplateV1Request struct {
     // The asset types for which the template is to be generated.
-    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS", "Iceberg"].
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS", "IcebergOnGlue", "IcebergOnS3Tables"].
     // 
     // NOTE -
     // 1. EC2/EBS is required for EC2MSSQL.
@@ -219,7 +219,7 @@ type CreateConnectionTemplateV1Request struct {
 type UpdateAwsConnectionV1Request struct {
     // Asset types enabled with the given resource ARNs.
     // This field is only applicable to manually configured connections.
-    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS"].
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS", "IcebergOnGlue", "IcebergOnS3Tables"].
     // 
     // NOTE -
     // 1. EC2/EBS is required for EC2MSSQL.
@@ -597,7 +597,7 @@ type UpdatePolicyRuleV1Request struct {
 type CreateProtectionGroupV1Request struct {
     // The following table describes the possible conditions for a bucket to be
     // automatically added to a protection group. 
-    // Denotes the properties to conditionalize on. For `$eq`, `$not_eq`, `$contains` and `$not_contains` a single element is provided: `{'$eq':{'key':'Environment', 'value':'Prod'}}`. For all other other operations, a list is provided: `{'$in':[{'key':'Environment','value':'Prod'}, {'key':'Hello', 'value':'World'}]}`.
+    // Denotes the properties to conditionalize on. For `$eq`, `$not_eq`, `$contains` and `$not_contains` a single element is provided: `{'$eq':{'key':'Environment', 'value':'Prod'}}`. For all other operations, a list is provided: `{'$in':[{'key':'Environment','value':'Prod'}, {'key':'Hello', 'value':'World'}]}`.
     // 
     // +-------------------+-----------------------------+----------------------------+
     // |       Field       |       Rule Condition        |        Description         |
@@ -652,7 +652,7 @@ type CreateProtectionGroupV1Request struct {
 type UpdateProtectionGroupV1Request struct {
     // The following table describes the possible conditions for a bucket to be
     // automatically added to a protection group. 
-    // Denotes the properties to conditionalize on. For `$eq`, `$not_eq`, `$contains` and `$not_contains` a single element is provided: `{'$eq':{'key':'Environment', 'value':'Prod'}}`. For all other other operations, a list is provided: `{'$in':[{'key':'Environment','value':'Prod'}, {'key':'Hello', 'value':'World'}]}`.
+    // Denotes the properties to conditionalize on. For `$eq`, `$not_eq`, `$contains` and `$not_contains` a single element is provided: `{'$eq':{'key':'Environment', 'value':'Prod'}}`. For all other operations, a list is provided: `{'$in':[{'key':'Environment','value':'Prod'}, {'key':'Hello', 'value':'World'}]}`.
     // 
     // +-------------------+-----------------------------+----------------------------+
     // |       Field       |       Rule Condition        |        Description         |
@@ -1519,6 +1519,8 @@ type ChangePasswordV1Request struct {
 type CreateWalletV1Request struct {
     // AWS Account ID to associate with the wallet.
     AccountNativeId *string `json:"account_native_id"`
+    // The AWS Region to associate with the wallet.
+    AwsRegion       *string `json:"aws_region"`
 }
 
 // PostProcessKmsV1Request represents a custom type struct.
