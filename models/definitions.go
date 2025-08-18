@@ -59,7 +59,7 @@ type AWSConnection struct {
     // value of `null`.
     Protect                    *ProtectConfig           `json:"protect"`
     // The asset types enabled for protect.
-    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS"].
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS", "IcebergOnGlue", "IcebergOnS3Tables"].
     // 
     // NOTE -
     // 1. EC2/EBS is required for EC2MSSQL.
@@ -1298,7 +1298,7 @@ type ConnectionGroupWithETag struct {
     // The AWS-assigned IDs of the accounts associated with the Connection Group.
     AccountNativeIds         []*string             `json:"account_native_ids"`
     // List of asset types connected via the connection-group.
-    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS"].
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS", "IcebergOnGlue", "IcebergOnS3Tables"].
     // 
     // NOTE -
     // 1. EC2/EBS is required for EC2MSSQL.
@@ -1485,32 +1485,32 @@ type ConsolidatedAlertWithETag struct {
 // value of `null`.
 type ConsolidatedConfig struct {
     // The asset types supported on the current version of the feature
-    AssetTypesEnabled        []*string              `json:"asset_types_enabled"`
+    AssetTypesEnabled        []*string               `json:"asset_types_enabled"`
     // DynamodbAssetInfo
     // The installed information for the DynamoDB feature.
-    Dynamodb                 *DynamodbAssetInfo     `json:"dynamodb"`
+    Dynamodb                 *DynamodbAssetInfo      `json:"dynamodb"`
     // EbsAssetInfo
     // The installed information for the EBS feature.
-    Ebs                      *EbsAssetInfo          `json:"ebs"`
+    Ebs                      *EbsAssetInfo           `json:"ebs"`
     // Ec2AssetInfo
     // The installed information for the EC2 feature.
-    Ec2                      *Ec2AssetInfo          `json:"ec2"`
+    Ec2                      *Ec2AssetInfo           `json:"ec2"`
     // EC2MSSQLProtectConfig
     // The installed information for the EC2_MSSQL feature.
-    Ec2Mssql                 *EC2MSSQLProtectConfig `json:"ec2_mssql"`
-    // IcebergAssetInfo
-    // The installed information for the Iceberg feature.
-    Iceberg                  *IcebergAssetInfo      `json:"iceberg"`
+    Ec2Mssql                 *EC2MSSQLProtectConfig  `json:"ec2_mssql"`
+    // IcebergOnGlueAssetInfo
+    // The installed information for the Iceberg on AWS Glue feature.
+    IcebergOnGlue            *IcebergOnGlueAssetInfo `json:"iceberg_on_glue"`
     // The current version of the feature.
-    InstalledTemplateVersion *string                `json:"installed_template_version"`
+    InstalledTemplateVersion *string                 `json:"installed_template_version"`
     // RdsAssetInfo
     // The installed information for the RDS feature.
-    Rds                      *RdsAssetInfo          `json:"rds"`
+    Rds                      *RdsAssetInfo           `json:"rds"`
     // S3AssetInfo
     // The installed information for the S3 feature.
-    S3                       *S3AssetInfo           `json:"s3"`
+    S3                       *S3AssetInfo            `json:"s3"`
     // The configuration of the Clumio Cloud Warm-Tier Protect product for this connection.
-    WarmTierProtect          *WarmTierProtectConfig `json:"warm_tier_protect"`
+    WarmTierProtect          *WarmTierProtectConfig  `json:"warm_tier_protect"`
 }
 
 // ControlInfo represents a custom type struct.
@@ -4051,14 +4051,6 @@ type IamInstanceProfileModel struct {
     NativeId *string `json:"native_id"`
 }
 
-// IcebergAssetInfo represents a custom type struct.
-// IcebergAssetInfo
-// The installed information for the Iceberg feature.
-type IcebergAssetInfo struct {
-    // The current version of the feature.
-    InstalledTemplateVersion *string `json:"installed_template_version"`
-}
-
 // IcebergBackupAdvancedSetting represents a custom type struct.
 // IcebergBackupAdvancedSetting defines the advanced settings for Iceberg backup operations
 type IcebergBackupAdvancedSetting struct {
@@ -4066,9 +4058,17 @@ type IcebergBackupAdvancedSetting struct {
     BackupTier *string `json:"backup_tier"`
 }
 
-// IcebergTemplateInfo represents a custom type struct.
-// IcebergTemplateInfo is the latest available information for the Iceberg feature.
-type IcebergTemplateInfo struct {
+// IcebergOnGlueAssetInfo represents a custom type struct.
+// IcebergOnGlueAssetInfo
+// The installed information for the Iceberg on AWS Glue feature.
+type IcebergOnGlueAssetInfo struct {
+    // The current version of the feature.
+    InstalledTemplateVersion *string `json:"installed_template_version"`
+}
+
+// IcebergOnGlueTemplateInfo represents a custom type struct.
+// IcebergOnGlueTemplateInfo is the latest available information for the IcebergOnGlue feature.
+type IcebergOnGlueTemplateInfo struct {
     // The latest available feature version for the asset.
     AvailableTemplateVersion *string `json:"available_template_version"`
 }
@@ -4814,7 +4814,7 @@ type PolicyAdvancedSettings struct {
     // Advanced settings for EC2 backup.
     AwsEc2InstanceBackup            *EC2BackupAdvancedSetting                       `json:"aws_ec2_instance_backup"`
     // IcebergBackupAdvancedSetting defines the advanced settings for Iceberg backup operations
-    AwsIcebergAirgapBackup          *IcebergBackupAdvancedSetting                   `json:"aws_iceberg_airgap_backup"`
+    AwsIcebergTableBackup           *IcebergBackupAdvancedSetting                   `json:"aws_iceberg_table_backup"`
     // Advanced settings for RDS PITR configuration sync.
     AwsRdsConfigSync                *RDSConfigSyncAdvancedSetting                   `json:"aws_rds_config_sync"`
     // Settings for determining if a RDS policy is created with standard or archive tier.
@@ -5080,7 +5080,7 @@ type ProtectionGroup struct {
     BucketCount                      *int64                   `json:"bucket_count"`
     // The following table describes the possible conditions for a bucket to be
     // automatically added to a protection group. 
-    // Denotes the properties to conditionalize on. For `$eq`, `$not_eq`, `$contains` and `$not_contains` a single element is provided: `{'$eq':{'key':'Environment', 'value':'Prod'}}`. For all other other operations, a list is provided: `{'$in':[{'key':'Environment','value':'Prod'}, {'key':'Hello', 'value':'World'}]}`.
+    // Denotes the properties to conditionalize on. For `$eq`, `$not_eq`, `$contains` and `$not_contains` a single element is provided: `{'$eq':{'key':'Environment', 'value':'Prod'}}`. For all other operations, a list is provided: `{'$in':[{'key':'Environment','value':'Prod'}, {'key':'Hello', 'value':'World'}]}`.
     // 
     // +-------------------+-----------------------------+----------------------------+
     // |       Field       |       Rule Condition        |        Description         |
@@ -6133,8 +6133,10 @@ type RdsResourceRestoreTarget struct {
     // The name must follow AWS RDS naming conventions:
     // https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Limits.html#RDS_Limits.Constraints
     Name                   *string              `json:"name"`
-    // Option group name to be added to the restored RDS resource
+    // Option group name to be added to the restored RDS resource.
     OptionGroupName        *string              `json:"option_group_name"`
+    // The name of the parameter group to be associated with the restored RDS resource.
+    ParameterGroupName     *string              `json:"parameter_group_name"`
     // The AWS-assigned IDs of the security groups to be associated with the restored RDS resource.
     SecurityGroupNativeIds []*string            `json:"security_group_native_ids"`
     // The AWS-assigned name of the subnet group to be associated with the restored RDS resource.
@@ -7657,8 +7659,8 @@ type TemplateConfigurationV2 struct {
     Ec2                      *Ec2TemplateInfo             `json:"ec2"`
     // The latest available information for the EC2 MSSQL feature.
     Ec2Mssql                 *EC2MSSQLTemplateInfo        `json:"ec2_mssql"`
-    // IcebergTemplateInfo is the latest available information for the Iceberg feature.
-    Iceberg                  *IcebergTemplateInfo         `json:"iceberg"`
+    // IcebergOnGlueTemplateInfo is the latest available information for the IcebergOnGlue feature.
+    IcebergOnGlue            *IcebergOnGlueTemplateInfo   `json:"iceberg_on_glue"`
     // TODO: Add struct field description
     Rds                      *RdsTemplateInfo             `json:"rds"`
     // The latest available information for the S3 feature.
@@ -7901,6 +7903,8 @@ type Wallet struct {
     AccountNativeId    *string                `json:"account_native_id"`
     // Version of the template available
     AvailableVersion   *int64                 `json:"available_version"`
+    // The AWS region associated with the wallet.
+    AwsRegion          *string                `json:"aws_region"`
     // Clumio AWS Account ID.
     ClumioAwsAccountId *string                `json:"clumio_aws_account_id"`
     // DeploymentURL is an (external) link to an AWS console page for quick-creation

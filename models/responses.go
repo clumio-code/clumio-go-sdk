@@ -211,7 +211,7 @@ type CreateAWSConnectionResponse struct {
     // value of `null`.
     Protect                    *ProtectConfig           `json:"protect"`
     // The asset types enabled for protect.
-    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS"].
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS", "IcebergOnGlue", "IcebergOnS3Tables"].
     // 
     // NOTE -
     // 1. EC2/EBS is required for EC2MSSQL.
@@ -254,6 +254,8 @@ type CreateAWSTemplateV2Response struct {
     Config                      *TemplateConfigurationV2 `json:"config"`
     // The latest available URL for the deployable template.
     DeployableCloudformationUrl *string                  `json:"deployable_cloudformation_url"`
+    // swagger: ignore
+    GroupToken                  *string                  `json:"group_token"`
     // Categorised Resources, based on the generated template, to be created manually by the user
     Resources                   *CategorisedResources    `json:"resources"`
     // The latest available URL for the terraform template.
@@ -379,7 +381,7 @@ type CreateConnectionGroupResponse struct {
     // The AWS-assigned IDs of the accounts associated with the Connection Group.
     AccountNativeIds         []*string             `json:"account_native_ids"`
     // List of asset types connected via the connection-group.
-    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS"].
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS", "IcebergOnGlue", "IcebergOnS3Tables"].
     // 
     // NOTE -
     // 1. EC2/EBS is required for EC2MSSQL.
@@ -619,7 +621,7 @@ type CreateProtectionGroupResponse struct {
     BucketCount                    *int64                       `json:"bucket_count"`
     // The following table describes the possible conditions for a bucket to be
     // automatically added to a protection group. 
-    // Denotes the properties to conditionalize on. For `$eq`, `$not_eq`, `$contains` and `$not_contains` a single element is provided: `{'$eq':{'key':'Environment', 'value':'Prod'}}`. For all other other operations, a list is provided: `{'$in':[{'key':'Environment','value':'Prod'}, {'key':'Hello', 'value':'World'}]}`.
+    // Denotes the properties to conditionalize on. For `$eq`, `$not_eq`, `$contains` and `$not_contains` a single element is provided: `{'$eq':{'key':'Environment', 'value':'Prod'}}`. For all other operations, a list is provided: `{'$in':[{'key':'Environment','value':'Prod'}, {'key':'Hello', 'value':'World'}]}`.
     // 
     // +-------------------+-----------------------------+----------------------------+
     // |       Field       |       Rule Condition        |        Description         |
@@ -822,6 +824,8 @@ type CreateWalletResponse struct {
     AccountNativeId    *string                `json:"account_native_id"`
     // Version of the template available
     AvailableVersion   *int64                 `json:"available_version"`
+    // The AWS region associated with the wallet.
+    AwsRegion          *string                `json:"aws_region"`
     // Clumio AWS Account ID.
     ClumioAwsAccountId *string                `json:"clumio_aws_account_id"`
     // DeploymentURL is an (external) link to an AWS console page for quick-creation
@@ -2404,7 +2408,7 @@ type ReadAWSConnectionResponse struct {
     // value of `null`.
     Protect                    *ProtectConfig           `json:"protect"`
     // The asset types enabled for protect.
-    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS"].
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS", "IcebergOnGlue", "IcebergOnS3Tables"].
     // 
     // NOTE -
     // 1. EC2/EBS is required for EC2MSSQL.
@@ -2723,7 +2727,7 @@ type ReadConnectionGroupResponse struct {
     // The AWS-assigned IDs of the accounts associated with the Connection Group.
     AccountNativeIds         []*string             `json:"account_native_ids"`
     // List of asset types connected via the connection-group.
-    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS"].
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS", "IcebergOnGlue", "IcebergOnS3Tables"].
     // 
     // NOTE -
     // 1. EC2/EBS is required for EC2MSSQL.
@@ -3749,7 +3753,7 @@ type ReadProtectionGroupResponse struct {
     BucketCount                      *int64                   `json:"bucket_count"`
     // The following table describes the possible conditions for a bucket to be
     // automatically added to a protection group. 
-    // Denotes the properties to conditionalize on. For `$eq`, `$not_eq`, `$contains` and `$not_contains` a single element is provided: `{'$eq':{'key':'Environment', 'value':'Prod'}}`. For all other other operations, a list is provided: `{'$in':[{'key':'Environment','value':'Prod'}, {'key':'Hello', 'value':'World'}]}`.
+    // Denotes the properties to conditionalize on. For `$eq`, `$not_eq`, `$contains` and `$not_contains` a single element is provided: `{'$eq':{'key':'Environment', 'value':'Prod'}}`. For all other operations, a list is provided: `{'$in':[{'key':'Environment','value':'Prod'}, {'key':'Hello', 'value':'World'}]}`.
     // 
     // +-------------------+-----------------------------+----------------------------+
     // |       Field       |       Rule Condition        |        Description         |
@@ -4481,6 +4485,8 @@ type ReadWalletResponse struct {
     AccountNativeId    *string                `json:"account_native_id"`
     // Version of the template available
     AvailableVersion   *int64                 `json:"available_version"`
+    // The AWS region associated with the wallet.
+    AwsRegion          *string                `json:"aws_region"`
     // Clumio AWS Account ID.
     ClumioAwsAccountId *string                `json:"clumio_aws_account_id"`
     // DeploymentURL is an (external) link to an AWS console page for quick-creation
@@ -4528,6 +4534,8 @@ type RefreshWalletResponse struct {
     AccountNativeId    *string                `json:"account_native_id"`
     // Version of the template available
     AvailableVersion   *int64                 `json:"available_version"`
+    // The AWS region associated with the wallet.
+    AwsRegion          *string                `json:"aws_region"`
     // Clumio AWS Account ID.
     ClumioAwsAccountId *string                `json:"clumio_aws_account_id"`
     // DeploymentURL is an (external) link to an AWS console page for quick-creation
@@ -4833,7 +4841,7 @@ type UpdateAWSConnectionResponse struct {
     // value of `null`.
     Protect                    *ProtectConfig           `json:"protect"`
     // The asset types enabled for protect.
-    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS"].
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS", "IcebergOnGlue", "IcebergOnS3Tables"].
     // 
     // NOTE -
     // 1. EC2/EBS is required for EC2MSSQL.
@@ -5025,7 +5033,7 @@ type UpdateConnectionGroupResponse struct {
     // The AWS-assigned IDs of the accounts associated with the Connection Group.
     AccountNativeIds         []*string             `json:"account_native_ids"`
     // List of asset types connected via the connection-group.
-    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS"].
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS", "IcebergOnGlue", "IcebergOnS3Tables"].
     // 
     // NOTE -
     // 1. EC2/EBS is required for EC2MSSQL.
@@ -5188,7 +5196,7 @@ type UpdateProtectionGroupResponse struct {
     BucketCount                    *int64                       `json:"bucket_count"`
     // The following table describes the possible conditions for a bucket to be
     // automatically added to a protection group. 
-    // Denotes the properties to conditionalize on. For `$eq`, `$not_eq`, `$contains` and `$not_contains` a single element is provided: `{'$eq':{'key':'Environment', 'value':'Prod'}}`. For all other other operations, a list is provided: `{'$in':[{'key':'Environment','value':'Prod'}, {'key':'Hello', 'value':'World'}]}`.
+    // Denotes the properties to conditionalize on. For `$eq`, `$not_eq`, `$contains` and `$not_contains` a single element is provided: `{'$eq':{'key':'Environment', 'value':'Prod'}}`. For all other operations, a list is provided: `{'$in':[{'key':'Environment','value':'Prod'}, {'key':'Hello', 'value':'World'}]}`.
     // 
     // +-------------------+-----------------------------+----------------------------+
     // |       Field       |       Rule Condition        |        Description         |
