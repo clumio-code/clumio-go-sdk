@@ -59,7 +59,8 @@ type AWSConnection struct {
     // value of `null`.
     Protect                    *ProtectConfig           `json:"protect"`
     // The asset types enabled for protect.
-    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS", "IcebergOnGlue", "IcebergOnS3Tables"].
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS",
+    // "IcebergOnGlue", "IcebergOnS3Tables", "FSX"].
     // 
     // NOTE -
     // 1. EC2/EBS is required for EC2MSSQL.
@@ -108,6 +109,8 @@ type AWSConnectionLinks struct {
     DeleteConnectionAws    *HateoasLink     `json:"delete-connection-aws"`
     // A resource-specific HATEOAS link.
     ReadOrganizationalUnit *HateoasLink     `json:"read-organizational-unit"`
+    // A resource-specific HATEOAS link.
+    UpdateConnectionAws    *HateoasLink     `json:"update-connection-aws"`
 }
 
 // AWSConnectionListEmbedded represents a custom type struct.
@@ -164,6 +167,8 @@ type AWSEnvironment struct {
     OrganizationalUnitId       *string                 `json:"organizational_unit_id"`
     // The AWS services enabled for this environment. Possible values include "ebs", "rds" and "dynamodb".
     ServicesEnabled            []*string               `json:"services_enabled"`
+    // Type of permissions in the template deployed for the environment
+    TemplatePermissionSet      *string                 `json:"template_permission_set"`
     // The Clumio CloudFormation template version used to deploy the CloudFormation stack.
     TemplateVersion            *int64                  `json:"template_version"`
 }
@@ -304,14 +309,17 @@ type AmiModel struct {
 }
 
 // AssetBackupControl represents a custom type struct.
-// The control for asset backup.
+// The control evaluating whether assets have at least one backup within each window of the specified look back period,
+// with retention meeting the minimum required duration.
+// For example, a look_back_period of 7 days, window_size of 1 day, and retention_duration of 1 month means that
+// there should be a backup every day for the past week and that the retention of that backup should be at least 1 month.
 type AssetBackupControl struct {
-    // The time unit used in control definition.
-    LookBackPeriod           *TimeUnitParam `json:"look_back_period"`
-    // The time unit used in control definition.
-    MinimumRetentionDuration *TimeUnitParam `json:"minimum_retention_duration"`
-    // The time unit used in control definition.
-    WindowSize               *TimeUnitParam `json:"window_size"`
+    // The duration prior to the compliance evaluation point to look back.
+    LookBackPeriod           *TimeUnitParamLookbackPeriod                  `json:"look_back_period"`
+    // The minimum required retention duration for a backup to be considered compliant.
+    MinimumRetentionDuration *TimeUnitParamAssetBackupMinRetentionDuration `json:"minimum_retention_duration"`
+    // The size of each evaluation window within the look back period in which at least one compliant backup must exist.
+    WindowSize               *TimeUnitParamWindowSize                      `json:"window_size"`
 }
 
 // AssetFilter represents a custom type struct.
@@ -338,9 +346,9 @@ type AssetGroupFilter struct {
 }
 
 // AssetProtectionControl represents a custom type struct.
-// The control for asset protection.
+// The control evaluating if all assets are protected with a policy or not.
 type AssetProtectionControl struct {
-    // Whether the report should ignore deactivated policy or not.
+    // Treat deactivated policies as compliant if true.
     ShouldIgnoreDeactivatedPolicy *bool `json:"should_ignore_deactivated_policy"`
 }
 
@@ -360,21 +368,25 @@ type AssignmentEntity struct {
     // The type of an entity being associated or disassociated with a policy.
     // Valid primary entity types include the following:
     // 
-    // +---------------------+---------------------+
-    // | Primary Entity Type |       Details       |
-    // +=====================+=====================+
-    // | aws_ebs_volume      | AWS EBS volume.     |
-    // +---------------------+---------------------+
-    // | aws_ec2_instance    | AWS EC2 instance.   |
-    // +---------------------+---------------------+
-    // | aws_rds_cluster     | AWS RDS cluster.    |
-    // +---------------------+---------------------+
-    // | aws_rds_instance    | AWS RDS instance.   |
-    // +---------------------+---------------------+
-    // | aws_dynamodb_table  | AWS DynamoDB table. |
-    // +---------------------+---------------------+
-    // | protection_group    | Protection group.   |
-    // +---------------------+---------------------+
+    // +------------------------+-------------------------+
+    // |  Primary Entity Type   |         Details         |
+    // +========================+=========================+
+    // | aws_ebs_volume         | AWS EBS volume.         |
+    // +------------------------+-------------------------+
+    // | aws_ec2_instance       | AWS EC2 instance.       |
+    // +------------------------+-------------------------+
+    // | aws_rds_cluster        | AWS RDS cluster.        |
+    // +------------------------+-------------------------+
+    // | aws_rds_instance       | AWS RDS instance.       |
+    // +------------------------+-------------------------+
+    // | aws_dynamodb_table     | AWS DynamoDB table.     |
+    // +------------------------+-------------------------+
+    // | protection_group       | Protection group.       |
+    // +------------------------+-------------------------+
+    // | aws_iceberg_glue_table | AWS Iceberg Glue table. |
+    // +------------------------+-------------------------+
+    // | aws_iceberg_s3_table   | AWS Iceberg S3 table.   |
+    // +------------------------+-------------------------+
     // 
     ClumioType *string `json:"type"`
 }
@@ -551,7 +563,10 @@ type AuditTrails struct {
     // 
     Category        *string             `json:"category"`
     // Additional details about the activity provided in JSON format.
+    // Deprecated
     Details         *string             `json:"details"`
+    // TODO: Add struct field description
+    DetailsJson     *Details            `json:"details_json"`
     // The Clumio-assigned ID of the audit event.
     Id              *string             `json:"id"`
     // The interface used to make the request i.e. 'UI','API'
@@ -790,27 +805,45 @@ type AwsTagCommonModel struct {
 // AwsTagEmbedded represents a custom type struct.
 // Embedded responses related to the resource.
 type AwsTagEmbedded struct {
-    // Backup statistics for each tag.
-    ReadAwsEnvironmentTagBackupStatusStats         interface{} `json:"read-aws-environment-tag-backup-status-stats"`
-    // TODO: Add struct field description
-    ReadAwsEnvironmentTagEbsVolumesProtectionStats interface{} `json:"read-aws-environment-tag-ebs-volumes-protection-stats"`
+    // Embedded AWS Backup statistics for each tag.
+    ReadAwsEnvironmentTagBackupStatusStats               interface{} `json:"read-aws-environment-tag-backup-status-stats"`
+    // Embedded AWS DynamoDB statistics for each tag.
+    ReadAwsEnvironmentTagDynamodbTablesProtectionStats   interface{} `json:"read-aws-environment-tag-dynamodb-tables-protection-stats"`
+    // Embedded AWS EBS statistics for each tag.
+    ReadAwsEnvironmentTagEbsVolumesProtectionStats       interface{} `json:"read-aws-environment-tag-ebs-volumes-protection-stats"`
+    // Embedded AWS EC2 statistics for each tag.
+    ReadAwsEnvironmentTagEc2InstancesProtectionStats     interface{} `json:"read-aws-environment-tag-ec2-instances-protection-stats"`
+    // Embedded Protection Group statistics for each tag.
+    ReadAwsEnvironmentTagProtectionGroupsProtectionStats interface{} `json:"read-aws-environment-tag-protection-groups-protection-stats"`
+    // Embedded AWS RDS statistics for each tag.
+    ReadAwsEnvironmentTagRdsResourcesProtectionStats     interface{} `json:"read-aws-environment-tag-rds-resources-protection-stats"`
     // Embeds the associated policy of a protected resource in the response if requested using the `embed` query parameter. Unprotected resources will not have an associated policy.
-    ReadPolicyDefinition                           interface{} `json:"read-policy-definition"`
+    ReadPolicyDefinition                                 interface{} `json:"read-policy-definition"`
 }
 
 // AwsTagLinks represents a custom type struct.
 // URLs to pages related to the resource.
 type AwsTagLinks struct {
     // The HATEOAS link to this resource.
-    Self                                           *HateoasSelfLink                 `json:"_self"`
+    Self                                                 *HateoasSelfLink                 `json:"_self"`
     // A HATEOAS link to protect the entities.
-    ProtectEntities                                *ProtectEntitiesHateoasLink      `json:"protect-entities"`
+    ProtectEntities                                      *ProtectEntitiesHateoasLink      `json:"protect-entities"`
     // A resource-specific HATEOAS link.
-    ReadAwsEnvironmentTagEbsVolumesProtectionStats *HateoasLink                     `json:"read-aws-environment-tag-ebs-volumes-protection-stats"`
+    ReadAwsEnvironmentTagBackupStatusStats               *HateoasLink                     `json:"read-aws-environment-tag-backup-status-stats"`
+    // A resource-specific HATEOAS link.
+    ReadAwsEnvironmentTagDynamodbTablesProtectionStats   *HateoasLink                     `json:"read-aws-environment-tag-dynamodb-tables-protection-stats"`
+    // A resource-specific HATEOAS link.
+    ReadAwsEnvironmentTagEbsVolumesProtectionStats       *HateoasLink                     `json:"read-aws-environment-tag-ebs-volumes-protection-stats"`
+    // A resource-specific HATEOAS link.
+    ReadAwsEnvironmentTagEc2InstancesProtectionStats     *HateoasLink                     `json:"read-aws-environment-tag-ec2-instances-protection-stats"`
+    // A resource-specific HATEOAS link.
+    ReadAwsEnvironmentTagProtectionGroupsProtectionStats *HateoasLink                     `json:"read-aws-environment-tag-protection-groups-protection-stats"`
+    // A resource-specific HATEOAS link.
+    ReadAwsEnvironmentTagRdsResourcesProtectionStats     *HateoasLink                     `json:"read-aws-environment-tag-rds-resources-protection-stats"`
     // A HATEOAS link to the policy protecting this resource. Will be omitted for unprotected entities.
-    ReadPolicyDefinition                           *ReadPolicyDefinitionHateoasLink `json:"read-policy-definition"`
+    ReadPolicyDefinition                                 *ReadPolicyDefinitionHateoasLink `json:"read-policy-definition"`
     // A HATEOAS link to unprotect the entities.
-    UnprotectEntities                              *UnprotectEntitiesHateoasLink    `json:"unprotect-entities"`
+    UnprotectEntities                                    *UnprotectEntitiesHateoasLink    `json:"unprotect-entities"`
 }
 
 // AwsTagListEmbedded represents a custom type struct.
@@ -1051,7 +1084,7 @@ type ClumioSsmDocumentInputs struct {
 type ClumioSsmDocumentParameterValue struct {
     // "allowedPattern" refers to the pattern that must be satisfied by the parameter
     Allowedpattern *string `json:"allowedPattern"`
-    // "default" refers to the default value for that paramter
+    // "default" refers to the default value for that parameter
     ClumioDefault  *string `json:"default"`
     // "description" is optional
     Description    *string `json:"description"`
@@ -1081,7 +1114,7 @@ type ClumioSsmDocumentStep struct {
     Inputs       *ClumioSsmDocumentInputs `json:"inputs"`
     // "name" refers to name of that step
     Name         *string                  `json:"name"`
-    // "preconditon" is used for targeting a OS or validating input parameters
+    // "precondition" is used for targeting a OS or validating input parameters
     Precondition map[string]*[]string     `json:"precondition"`
 }
 
@@ -1164,13 +1197,16 @@ type ComplianceConfigurationListLinks struct {
 }
 
 // ComplianceControls represents a custom type struct.
-// The set of controls supported in compliance report.
+// Compliance controls to evaluate policy or assets for compliance.
 type ComplianceControls struct {
-    // The control for asset backup.
+    // The control evaluating whether assets have at least one backup within each window of the specified look back period,
+    // with retention meeting the minimum required duration.
+    // For example, a look_back_period of 7 days, window_size of 1 day, and retention_duration of 1 month means that
+    // there should be a backup every day for the past week and that the retention of that backup should be at least 1 month.
     AssetBackup     *AssetBackupControl     `json:"asset_backup"`
-    // The control for asset protection.
+    // The control evaluating if all assets are protected with a policy or not.
     AssetProtection *AssetProtectionControl `json:"asset_protection"`
-    // The control for policy.
+    // The control evaluating if policies have a minimum backup retention and frequency.
     Policy          *PolicyControl          `json:"policy"`
 }
 
@@ -1265,9 +1301,11 @@ type ComplianceRunListHateoasLinks struct {
 // URLs to pages related to the resource.
 type ConnectionGroupLinks struct {
     // The HATEOAS link to this resource.
-    Self                   *HateoasSelfLink `json:"_self"`
+    Self                     *HateoasSelfLink `json:"_self"`
     // A resource-specific HATEOAS link.
-    ReadOrganizationalUnit *HateoasLink     `json:"read-organizational-unit"`
+    ReadOrganizationalUnit   *HateoasLink     `json:"read-organizational-unit"`
+    // A resource-specific HATEOAS link.
+    UpdateAwsConnectionGroup *HateoasLink     `json:"update-aws-connection-group"`
 }
 
 // ConnectionGroupListLinks represents a custom type struct.
@@ -1298,7 +1336,8 @@ type ConnectionGroupWithETag struct {
     // The AWS-assigned IDs of the accounts associated with the Connection Group.
     AccountNativeIds         []*string             `json:"account_native_ids"`
     // List of asset types connected via the connection-group.
-    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS", "IcebergOnGlue", "IcebergOnS3Tables"].
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS",
+    // "IcebergOnGlue", "IcebergOnS3Tables", "FSX"].
     // 
     // NOTE -
     // 1. EC2/EBS is required for EC2MSSQL.
@@ -1345,6 +1384,8 @@ type ConnectionGroupWithETag struct {
     StackName                *string               `json:"stack_name"`
     // The status of the Connection Group based on the stack in associated AWS account.
     Status                   *string               `json:"status"`
+    // TODO: Add struct field description
+    TemplatePermissionSet    *string               `json:"template_permission_set"`
 }
 
 // ConnectionRegion represents a custom type struct
@@ -1485,32 +1526,35 @@ type ConsolidatedAlertWithETag struct {
 // value of `null`.
 type ConsolidatedConfig struct {
     // The asset types supported on the current version of the feature
-    AssetTypesEnabled        []*string               `json:"asset_types_enabled"`
+    AssetTypesEnabled        []*string                   `json:"asset_types_enabled"`
     // DynamodbAssetInfo
     // The installed information for the DynamoDB feature.
-    Dynamodb                 *DynamodbAssetInfo      `json:"dynamodb"`
+    Dynamodb                 *DynamodbAssetInfo          `json:"dynamodb"`
     // EbsAssetInfo
     // The installed information for the EBS feature.
-    Ebs                      *EbsAssetInfo           `json:"ebs"`
+    Ebs                      *EbsAssetInfo               `json:"ebs"`
     // Ec2AssetInfo
     // The installed information for the EC2 feature.
-    Ec2                      *Ec2AssetInfo           `json:"ec2"`
+    Ec2                      *Ec2AssetInfo               `json:"ec2"`
     // EC2MSSQLProtectConfig
     // The installed information for the EC2_MSSQL feature.
-    Ec2Mssql                 *EC2MSSQLProtectConfig  `json:"ec2_mssql"`
+    Ec2Mssql                 *EC2MSSQLProtectConfig      `json:"ec2_mssql"`
     // IcebergOnGlueAssetInfo
     // The installed information for the Iceberg on AWS Glue feature.
-    IcebergOnGlue            *IcebergOnGlueAssetInfo `json:"iceberg_on_glue"`
+    IcebergOnGlue            *IcebergOnGlueAssetInfo     `json:"iceberg_on_glue"`
+    // IcebergOnS3TablesAssetInfo
+    // The installed information for the Iceberg on S3 Tables feature.
+    IcebergOnS3Tables        *IcebergOnS3TablesAssetInfo `json:"iceberg_on_s3_tables"`
     // The current version of the feature.
-    InstalledTemplateVersion *string                 `json:"installed_template_version"`
+    InstalledTemplateVersion *string                     `json:"installed_template_version"`
     // RdsAssetInfo
     // The installed information for the RDS feature.
-    Rds                      *RdsAssetInfo           `json:"rds"`
+    Rds                      *RdsAssetInfo               `json:"rds"`
     // S3AssetInfo
     // The installed information for the S3 feature.
-    S3                       *S3AssetInfo            `json:"s3"`
+    S3                       *S3AssetInfo                `json:"s3"`
     // The configuration of the Clumio Cloud Warm-Tier Protect product for this connection.
-    WarmTierProtect          *WarmTierProtectConfig  `json:"warm_tier_protect"`
+    WarmTierProtect          *WarmTierProtectConfig      `json:"warm_tier_protect"`
 }
 
 // ControlInfo represents a custom type struct.
@@ -1631,6 +1675,18 @@ type DeleteRuleResponseLinks struct {
     Self     *HateoasSelfLink     `json:"_self"`
     // A HATEOAS link to the task associated with this resource.
     ReadTask *ReadTaskHateoasLink `json:"read-task"`
+}
+
+// Details represents a custom type struct
+type Details struct {
+    // The request body of the API call
+    RequestBody interface{}   `json:"request_body"`
+    // The request url of the API call. This is omitempty because only internal
+    // namespace should return a request_url and prod should not see that
+    // a request_url is being returned.
+    RequestUrl  *string       `json:"request_url"`
+    // TODO: Add struct field description
+    Tags        []*RestEntity `json:"tags"`
 }
 
 // DirectDownloadDataAccessObject represents a custom type struct.
@@ -1816,6 +1872,8 @@ type DynamoDBGRRAttributeFilter struct {
 type DynamoDBGRRQueryFilter struct {
     // TODO: Add struct field description
     AttributeFilters   []*DynamoDBGRRAttributeFilter `json:"attribute_filters"`
+    // Key filters based on which DynamoDB backup records are filtered.
+    KeyFilters         []*DynamoDBRestoreKeyFilters  `json:"key_filters"`
     // Partition Key value of the DynamoDB table.
     // Deprecated: Use PartitionKeyFilter instead.
     PartitionKey       *string                       `json:"partition_key"`
@@ -1959,6 +2017,28 @@ type DynamoDBQueryPreviewResult struct {
     Attributes []*string   `json:"attributes"`
     // The rows of the previewed query result.
     Items      []*[]string `json:"items"`
+}
+
+// DynamoDBRestoreKeyFilters represents a custom type struct.
+// Key filters based on which DynamoDB backup records are filtered.
+type DynamoDBRestoreKeyFilters struct {
+    // Key filter of the DynamoDB table.
+    PartitionKeyFilter *DynamoDBKeyFilter `json:"partition_key_filter"`
+    // Key filter of the DynamoDB table.
+    SortKeyFilter      *DynamoDBKeyFilter `json:"sort_key_filter"`
+}
+
+// DynamoDBRestoreQueryFilter represents a custom type struct.
+// Filters based on which DynamoDB backup records are filtered.
+type DynamoDBRestoreQueryFilter struct {
+    // TODO: Add struct field description
+    AttributeFilters   []*DynamoDBGRRAttributeFilter `json:"attribute_filters"`
+    // Key filters based on which DynamoDB backup records are filtered.
+    KeyFilters         []*DynamoDBRestoreKeyFilters  `json:"key_filters"`
+    // Key filter of the DynamoDB table.
+    PartitionKeyFilter *DynamoDBKeyFilter            `json:"partition_key_filter"`
+    // Key filter of the DynamoDB table.
+    SortKeyFilter      *DynamoDBKeyFilter            `json:"sort_key_filter"`
 }
 
 // DynamoDBRestoreSourceBackupOptions represents a custom type struct.
@@ -2292,6 +2372,9 @@ type DynamoDBTableRestoreTarget struct {
     ProvisionedThroughput     *ProvisionedThroughput  `json:"provisioned_throughput"`
     // Contains the details of the replica.
     Replicas                  []*ReplicaDescription   `json:"replicas"`
+    // Specifies the Write Capacity Units to use during table restore operations.
+    // This is not used for restore to a new table without local secondary indexes.
+    RestoreWcu                *int64                  `json:"restore_wcu"`
     // Represents the server-side encryption settings for a table.
     SseSpecification          *SSESpecification       `json:"sse_specification"`
     // Represents the DynamoDB Streams configuration for a table in DynamoDB.
@@ -4073,6 +4156,21 @@ type IcebergOnGlueTemplateInfo struct {
     AvailableTemplateVersion *string `json:"available_template_version"`
 }
 
+// IcebergOnS3TablesAssetInfo represents a custom type struct.
+// IcebergOnS3TablesAssetInfo
+// The installed information for the Iceberg on S3 Tables feature.
+type IcebergOnS3TablesAssetInfo struct {
+    // The current version of the feature.
+    InstalledTemplateVersion *string `json:"installed_template_version"`
+}
+
+// IcebergOnS3TablesTemplateInfo represents a custom type struct.
+// IcebergOnS3TablesTemplateInfo is the latest available information for the IcebergOnS3Tables feature.
+type IcebergOnS3TablesTemplateInfo struct {
+    // The latest available feature version for the asset.
+    AvailableTemplateVersion *string `json:"available_template_version"`
+}
+
 // IndividualAlertDetails represents a custom type struct.
 // Additional information about the alert.
 type IndividualAlertDetails struct {
@@ -4312,6 +4410,8 @@ type NotificationSetting struct {
 // The grouping criteria for each datasource type.
 // These can only be edited for datasource types which do not have any
 // organizational units configured.
+// Deprecated: This struct is deprecated and will be removed in the future.
+// It is being kept for backward compatibility.
 type OUGroupingCriteria struct {
     // The entity type used to group organizational units for AWS resources.
     Aws          *AwsDsGroupingCriteria `json:"aws"`
@@ -4721,10 +4821,32 @@ type OrganizationalUnitWithETagV1 struct {
 // Parameter represents a custom type struct.
 // Filter and control parameters of compliance report.
 type Parameter struct {
-    // The set of controls supported in compliance report.
+    // Compliance controls to evaluate policy or assets for compliance.
     Controls *ComplianceControls `json:"controls"`
     // The set of filters supported in compliance report.
     Filters  *ComplianceFilters  `json:"filters"`
+}
+
+// PermissionListEmbedded represents a custom type struct.
+// Embedded responses related to the resource.
+type PermissionListEmbedded struct {
+    // TODO: Add struct field description
+    Items []*PermissionModel `json:"items"`
+}
+
+// PermissionListLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type PermissionListLinks struct {
+    // The HATEOAS link to the first page of results.
+    First *HateoasFirstLink `json:"_first"`
+    // The HATEOAS link to the last page of results.
+    Last  *HateoasLastLink  `json:"_last"`
+    // The HATEOAS link to the next page of results.
+    Next  *HateoasNextLink  `json:"_next"`
+    // The HATEOAS link to the previous page of results.
+    Prev  *HateoasPrevLink  `json:"_prev"`
+    // The HATEOAS link to this resource.
+    Self  *HateoasSelfLink  `json:"_self"`
 }
 
 // PermissionModel represents a custom type struct
@@ -4838,12 +4960,12 @@ type PolicyAdvancedSettings struct {
 }
 
 // PolicyControl represents a custom type struct.
-// The control for policy.
+// The control evaluating if policies have a minimum backup retention and frequency.
 type PolicyControl struct {
-    // The time unit used in control definition.
-    MinimumRetentionDuration *TimeUnitParam `json:"minimum_retention_duration"`
-    // The time unit used in control definition.
-    MinimumRpoFrequency      *TimeUnitParam `json:"minimum_rpo_frequency"`
+    // The minimum retention duration for policy control.
+    MinimumRetentionDuration *TimeUnitParamPolicyMinRetentionDuration `json:"minimum_retention_duration"`
+    // The minimum RPO duration for policy control.
+    MinimumRpoFrequency      *TimeUnitParamRpoDuration                `json:"minimum_rpo_frequency"`
 }
 
 // PolicyDetails represents a custom type struct
@@ -5187,6 +5309,10 @@ type ProtectionGroupBackup struct {
     FailedSizeBytes        *int64                      `json:"failed_size_bytes"`
     // The Clumio-assigned ID of the protection group backup.
     Id                     *string                     `json:"id"`
+    // The number of objects in the protection group that were missing during backup.
+    MissingObjectCount     *int64                      `json:"missing_object_count"`
+    // The total size in bytes of objects in the protection group that were missing during backup.
+    MissingSizeBytes       *int64                      `json:"missing_size_bytes"`
     // The Clumio-assigned ID of the protection group.
     ProtectionGroupId      *string                     `json:"protection_group_id"`
     // The user-assigned name of the protection group.
@@ -5396,8 +5522,8 @@ type ProtectionGroupBucketListLinks struct {
 // ProtectionGroupContinuousBackupAdvancedSetting represents a custom type struct.
 // Additional policy configuration settings for the `protection_group_continuous_backup` operation. If this operation is not of type `protection_group_continuous_backup`, then this field is omitted from the response.
 type ProtectionGroupContinuousBackupAdvancedSetting struct {
-    // If true, tries to disable EventBridge notification for the given bucket, when continuous backup no longer conducts.
-    // It may override the existing bucket notification configuration in the customer's account.
+    // If true, tries to disable EventBridge notification for the given protection group, when continuous backup no longer conducts.
+    // It may override the existing S3 bucket notification configuration in the customer's account.
     // This takes effect only when `event_bridge_enabled` is set to `false`.
     DisableEventbridgeNotification *bool `json:"disable_eventbridge_notification"`
 }
@@ -5499,27 +5625,31 @@ type ProtectionGroupRestoreTarget struct {
     // The Clumio-assigned ID of the bucket to which the backup must be restored.
     // Use the [GET /datasources/aws/s3-buckets](#operation/list-aws-s3-buckets) endpoint
     // to fetch valid values.
-    BucketId                    *string              `json:"bucket_id"`
+    BucketId                       *string              `json:"bucket_id"`
+    // Default AWS checksum algorithm for restored object.
+    // Valid values are: `CRC32`, `CRC32C`, `CRC64NVME`, `SHA1`, and `SHA256. 
+    // Note that this will be applied when backup didn't have checksum algorithm information.
+    DefaultObjectChecksumAlgorithm *string              `json:"default_object_checksum_algorithm"`
     // The Clumio-assigned ID of the AWS environment to be used as the restore destination.
     // Use the [GET /datasources/aws/s3-buckets/{bucket_id}](#operation/read-aws-s3-bucket) endpoint
     // to fetch the environment ID for a bucket.
-    EnvironmentId               *string              `json:"environment_id"`
+    EnvironmentId                  *string              `json:"environment_id"`
     // If overwrite is set to true, we will overwrite an object if it exists. If it's set to false,
     // then we will fail the restore if an object already exists.
-    Overwrite                   *bool                `json:"overwrite"`
+    Overwrite                      *bool                `json:"overwrite"`
     // Prefix to restore the objects under. If more than one bucket is restored, the
     // bucket name will be appended to the prefix.
-    Prefix                      *string              `json:"prefix"`
+    Prefix                         *string              `json:"prefix"`
     // Whether to restore objects with their original storage class or not. 
     // If it is `true`, `storage_class` must be empty.
     // Otherwise, `storage_class` must be given.
-    RestoreOriginalStorageClass *bool                `json:"restore_original_storage_class"`
+    RestoreOriginalStorageClass    *bool                `json:"restore_original_storage_class"`
     // Storage class for restored objects. Valid values are: `S3 Standard`, `S3 Standard-IA`,
     // `S3 Intelligent-Tiering` and `S3 One Zone-IA`. 
     // Note that this must be given unless `restore_original_storage_class` is `true`.
-    StorageClass                *string              `json:"storage_class"`
+    StorageClass                   *string              `json:"storage_class"`
     // A tag created through AWS Console which can be applied to EBS volumes.
-    Tags                        []*AwsTagCommonModel `json:"tags"`
+    Tags                           []*AwsTagCommonModel `json:"tags"`
 }
 
 // ProtectionGroupS3AssetBackup represents a custom type struct
@@ -5546,6 +5676,10 @@ type ProtectionGroupS3AssetBackup struct {
     FailedSizeBytes          *uint64                            `json:"failed_size_bytes"`
     // The Clumio-assigned ID of the protection group S3 asset backup.
     Id                       *string                            `json:"id"`
+    // The number of objects in the protection group S3 asset that were missing during backup.
+    MissingObjectCount       *int64                             `json:"missing_object_count"`
+    // The total size in bytes of objects in the protection group S3 asset that were missing during backup.
+    MissingSizeBytes         *int64                             `json:"missing_size_bytes"`
     // The Clumio-assigned ID of the protection group.
     ProtectionGroupId        *string                            `json:"protection_group_id"`
     // The Clumio-assigned ID of the protection group S3 asset.
@@ -5842,7 +5976,7 @@ type RDSLogicalPreviewQueryResult struct {
 // For example, to configure the minimum frequency between backups to be every 2 days, set `unit="days"` and `value=2`.
 // To configure the SLA for on-demand backups, set `unit="on_demand"` and leave the `value` field empty.
 type RPOBackupSLAParam struct {
-    // The weekday in decimal of the Weekly SLA parameter. Valid values are integers from 0 to 6, incidates Sunday, Monday, ..., Saturday. For example, to configure backup on every Monday, set `unit="weekly"`, `value=1`, and `offsets={1}`.
+    // The weekday in decimal of the Weekly SLA parameter. Valid values are integers from 0 to 6, indicates Sunday, Monday, ..., Saturday. For example, to configure backup on every Monday, set `unit="weekly"`, `value=1`, and `offsets={1}`.
     Offsets []*int64 `json:"offsets"`
     // The measurement unit of the SLA parameter.
     Unit    *string  `json:"unit"`
@@ -6548,7 +6682,8 @@ type RetentionBackupSLAParam struct {
 // The organizational units assigned to the user, with the specified role.
 type RoleForOrganizationalUnits struct {
     // The Clumio-assigned IDs of the organizational units assigned to the user.
-    // Use the [GET /organizational-units](#operation/list-organizational-units) endpoint to fetch valid values.
+    // Use the [GET /organizational-units](#operation/list-organizational-units) endpoint to fetch
+    // valid values.
     OrganizationalUnitIds []*string `json:"organizational_unit_ids"`
     // The Clumio-assigned ID of the role assigned to the user.
     // Use the [GET /roles](#operation/list-roles) endpoint to fetch valid values.
@@ -7648,25 +7783,27 @@ type TaskWithETag struct {
 // The configuration of the given template
 type TemplateConfigurationV2 struct {
     // The AWS asset types supported with the available version of the template.
-    AssetTypesEnabled        []*string                    `json:"asset_types_enabled"`
+    AssetTypesEnabled        []*string                      `json:"asset_types_enabled"`
     // The latest available version for the template.
-    AvailableTemplateVersion *string                      `json:"available_template_version"`
+    AvailableTemplateVersion *string                        `json:"available_template_version"`
     // The latest available information for the DynamoDB feature.
-    Dynamodb                 *DynamodbTemplateInfo        `json:"dynamodb"`
+    Dynamodb                 *DynamodbTemplateInfo          `json:"dynamodb"`
     // TODO: Add struct field description
-    Ebs                      *EbsTemplateInfo             `json:"ebs"`
+    Ebs                      *EbsTemplateInfo               `json:"ebs"`
     // TODO: Add struct field description
-    Ec2                      *Ec2TemplateInfo             `json:"ec2"`
+    Ec2                      *Ec2TemplateInfo               `json:"ec2"`
     // The latest available information for the EC2 MSSQL feature.
-    Ec2Mssql                 *EC2MSSQLTemplateInfo        `json:"ec2_mssql"`
+    Ec2Mssql                 *EC2MSSQLTemplateInfo          `json:"ec2_mssql"`
     // IcebergOnGlueTemplateInfo is the latest available information for the IcebergOnGlue feature.
-    IcebergOnGlue            *IcebergOnGlueTemplateInfo   `json:"iceberg_on_glue"`
+    IcebergOnGlue            *IcebergOnGlueTemplateInfo     `json:"iceberg_on_glue"`
+    // IcebergOnS3TablesTemplateInfo is the latest available information for the IcebergOnS3Tables feature.
+    IcebergOnS3Tables        *IcebergOnS3TablesTemplateInfo `json:"iceberg_on_s3_tables"`
     // TODO: Add struct field description
-    Rds                      *RdsTemplateInfo             `json:"rds"`
+    Rds                      *RdsTemplateInfo               `json:"rds"`
     // The latest available information for the S3 feature.
-    S3                       *S3TemplateInfo              `json:"s3"`
+    S3                       *S3TemplateInfo                `json:"s3"`
     // Configuration information about the Warm-Tier Protect feature of the template.
-    WarmTierProtect          *WarmTierProtectTemplateInfo `json:"warm_tier_protect"`
+    WarmTierProtect          *WarmTierProtectTemplateInfo   `json:"warm_tier_protect"`
 }
 
 // TemplateLinks represents a custom type struct.
@@ -7676,9 +7813,45 @@ type TemplateLinks struct {
     Self *HateoasSelfLink `json:"_self"`
 }
 
-// TimeUnitParam represents a custom type struct.
-// The time unit used in control definition.
-type TimeUnitParam struct {
+// TimeUnitParamAssetBackupMinRetentionDuration represents a custom type struct.
+// The minimum required retention duration for a backup to be considered compliant.
+type TimeUnitParamAssetBackupMinRetentionDuration struct {
+    // Unit indicates the unit for time unit param.
+    Unit  *string `json:"unit"`
+    // Value indicates the value for time unit param.
+    Value *int32  `json:"value"`
+}
+
+// TimeUnitParamLookbackPeriod represents a custom type struct.
+// The duration prior to the compliance evaluation point to look back.
+type TimeUnitParamLookbackPeriod struct {
+    // Unit indicates the unit for time unit param.
+    Unit  *string `json:"unit"`
+    // Value indicates the value for time unit param.
+    Value *int32  `json:"value"`
+}
+
+// TimeUnitParamPolicyMinRetentionDuration represents a custom type struct.
+// The minimum retention duration for policy control.
+type TimeUnitParamPolicyMinRetentionDuration struct {
+    // Unit indicates the unit for time unit param.
+    Unit  *string `json:"unit"`
+    // Value indicates the value for time unit param.
+    Value *int32  `json:"value"`
+}
+
+// TimeUnitParamRpoDuration represents a custom type struct.
+// The minimum RPO duration for policy control.
+type TimeUnitParamRpoDuration struct {
+    // Unit indicates the unit for time unit param.
+    Unit  *string `json:"unit"`
+    // Value indicates the value for time unit param.
+    Value *int32  `json:"value"`
+}
+
+// TimeUnitParamWindowSize represents a custom type struct.
+// The size of each evaluation window within the look back period in which at least one compliant backup must exist.
+type TimeUnitParamWindowSize struct {
     // Unit indicates the unit for time unit param.
     Unit  *string `json:"unit"`
     // Value indicates the value for time unit param.
@@ -7783,7 +7956,8 @@ type UserHateoasV1 struct {
     AssignedRole                  *string         `json:"assigned_role"`
     // The email address of the Clumio user.
     Email                         *string         `json:"email"`
-    // The first and last name of the Clumio user. The name appears in the User Management screen and is used to identify the user.
+    // The first and last name of the Clumio user. The name appears in the
+    // User Management screen and is used to identify the user.
     FullName                      *string         `json:"full_name"`
     // The Clumio-assigned ID of the Clumio user.
     Id                            *string         `json:"id"`
@@ -7795,12 +7969,13 @@ type UserHateoasV1 struct {
     // Determines whether the user is enabled (in "Activated" or "Invited" status) in Clumio.
     // If `true`, the user is in "Activated" or "Invited" status in Clumio.
     // Users in "Activated" status can log in to Clumio.
-    // Users in "Invited" status have been invited to log in to Clumio via an email invitation and the invitation
-    // is pending acceptance from the user.
+    // Users in "Invited" status have been invited to log in to Clumio via an email invitation and
+    // the invitation is pending acceptance from the user.
     // If `false`, the user has been manually suspended and cannot log in to Clumio
     // until another Clumio user reactivates the account.
     IsEnabled                     *bool           `json:"is_enabled"`
-    // The timestamp of when the user was last active in the Clumio system. Represented in RFC-3339 format.
+    // The timestamp of when the user was last active in the Clumio system.
+    // Represented in RFC-3339 format.
     LastActivityTimestamp         *string         `json:"last_activity_timestamp"`
     // The number of organizational units accessible to the user.
     OrganizationalUnitCount       *int64          `json:"organizational_unit_count"`
@@ -7852,36 +8027,40 @@ type UserListHateoasLinks struct {
 // UserWithETag to support etag string to be calculated.
 type UserWithETag struct {
     // Embedded responses related to the resource.
-    Embedded                   *UserEmbedded                 `json:"_embedded"`
+    Embedded                    *UserEmbedded                 `json:"_embedded"`
     // ETag value
-    Etag                       *string                       `json:"_etag"`
+    Etag                        *string                       `json:"_etag"`
     // URLs to pages related to the resource.
-    Links                      *UserLinks                    `json:"_links"`
+    Links                       *UserLinks                    `json:"_links"`
     // The organizational units assigned to the user, with the specified role.
-    AccessControlConfiguration []*RoleForOrganizationalUnits `json:"access_control_configuration"`
+    AccessControlConfiguration  []*RoleForOrganizationalUnits `json:"access_control_configuration"`
     // The email address of the Clumio user.
-    Email                      *string                       `json:"email"`
-    // The first and last name of the Clumio user. The name appears in the User Management screen and is used to identify the user.
-    FullName                   *string                       `json:"full_name"`
+    Email                       *string                       `json:"email"`
+    // The first and last name of the Clumio user. The name appears in the
+    // User Management screen and is used to identify the user.
+    FullName                    *string                       `json:"full_name"`
     // The Clumio-assigned ID of the Clumio user.
-    Id                         *string                       `json:"id"`
+    Id                          *string                       `json:"id"`
     // The ID number of the user who sent the email invitation.
-    Inviter                    *string                       `json:"inviter"`
+    Inviter                     *string                       `json:"inviter"`
     // Determines whether the user has activated their Clumio account.
     // If `true`, the user has activated the account.
-    IsConfirmed                *bool                         `json:"is_confirmed"`
+    IsConfirmed                 *bool                         `json:"is_confirmed"`
     // Determines whether the user is enabled (in "Activated" or "Invited" status) in Clumio.
     // If `true`, the user is in "Activated" or "Invited" status in Clumio.
     // Users in "Activated" status can log in to Clumio.
-    // Users in "Invited" status have been invited to log in to Clumio via an email invitation and the invitation
-    // is pending acceptance from the user.
+    // Users in "Invited" status have been invited to log in to Clumio via an email invitation and
+    // the invitation is pending acceptance from the user.
     // If `false`, the user has been manually suspended and cannot log in to Clumio
     // until another Clumio user reactivates the account.
-    IsEnabled                  *bool                         `json:"is_enabled"`
-    // The timestamp of when the user was last active in the Clumio system. Represented in RFC-3339 format.
-    LastActivityTimestamp      *string                       `json:"last_activity_timestamp"`
+    IsEnabled                   *bool                         `json:"is_enabled"`
+    // The timestamp of when the user was last active in the Clumio system.
+    // Represented in RFC-3339 format.
+    LastActivityTimestamp       *string                       `json:"last_activity_timestamp"`
+    // The last password change time of the Clumio user. Represented in RFC-3339 format.
+    LastPasswordChangeTimestamp *string                       `json:"last_password_change_timestamp"`
     // The number of organizational units accessible to the user.
-    OrganizationalUnitCount    *int64                        `json:"organizational_unit_count"`
+    OrganizationalUnitCount     *int64                        `json:"organizational_unit_count"`
 }
 
 // UserWithRole represents a custom type struct.

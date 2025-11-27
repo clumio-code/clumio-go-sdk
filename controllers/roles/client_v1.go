@@ -16,6 +16,10 @@ type RolesV1Client interface {
     ListRoles()(
         *models.ListRolesResponse,  *apiutils.APIError)
     
+    // ListPermissions Returns the list of supported permissions.
+    ListPermissions()(
+        *models.ListPermissionsResponse,  *apiutils.APIError)
+    
     // ReadRole Returns a representation of the specified role.
     ReadRole(
         roleId string)(

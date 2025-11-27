@@ -46,6 +46,8 @@ type PolicyDefinitionsV1Client interface {
     //  +----------------------------------+-------------------------------------------+
     //  | protection_group_backup          | AWS S3 Protection Group backup.           |
     //  +----------------------------------+-------------------------------------------+
+    //  | aws_s3_continuous_backup         | AWS S3 Continuous backup.                 |
+    //  +----------------------------------+-------------------------------------------+
     //  | microsoft365_mailbox_backup      | Microsoft365 mailbox backup.              |
     //  +----------------------------------+-------------------------------------------+
     //  | microsoft365_onedrive_backup     | Microsoft365 onedrive backup.             |
