@@ -39,6 +39,28 @@ func (r *RolesV1) ListRoles()(
 }
 
 
+// ListPermissions Returns the list of supported permissions.
+func (r *RolesV1) ListPermissions()(
+    *models.ListPermissionsResponse, *apiutils.APIError) {
+
+    queryBuilder := r.config.BaseUrl + "/roles/permissions"
+
+    
+    header := "application/api.clumio.roles=v1+json"
+    result := &models.ListPermissionsResponse{}
+
+    apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
+        Config: r.config,
+        RequestUrl: queryBuilder,
+        AcceptHeader: header,
+        Result200: &result,
+        RequestType: common.Get,
+    })
+
+    return result, apiErr
+}
+
+
 // ReadRole Returns a representation of the specified role.
 func (r *RolesV1) ReadRole(
     roleId string)(

@@ -211,7 +211,8 @@ type CreateAWSConnectionResponse struct {
     // value of `null`.
     Protect                    *ProtectConfig           `json:"protect"`
     // The asset types enabled for protect.
-    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS", "IcebergOnGlue", "IcebergOnS3Tables"].
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS",
+    // "IcebergOnGlue", "IcebergOnS3Tables", "FSX"].
     // 
     // NOTE -
     // 1. EC2/EBS is required for EC2MSSQL.
@@ -381,7 +382,8 @@ type CreateConnectionGroupResponse struct {
     // The AWS-assigned IDs of the accounts associated with the Connection Group.
     AccountNativeIds         []*string             `json:"account_native_ids"`
     // List of asset types connected via the connection-group.
-    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS", "IcebergOnGlue", "IcebergOnS3Tables"].
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS",
+    // "IcebergOnGlue", "IcebergOnS3Tables", "FSX"].
     // 
     // NOTE -
     // 1. EC2/EBS is required for EC2MSSQL.
@@ -428,6 +430,8 @@ type CreateConnectionGroupResponse struct {
     StackName                *string               `json:"stack_name"`
     // The status of the Connection Group based on the stack in associated AWS account.
     Status                   *string               `json:"status"`
+    // TODO: Add struct field description
+    TemplatePermissionSet    *string               `json:"template_permission_set"`
 }
 
 // CreateEC2MSSQLDatabaseRestoreResponse represents a custom type struct for Success
@@ -746,36 +750,40 @@ type CreateS3InstantAccessEndpointResponse struct {
 // CreateUserResponse represents a custom type struct for Success
 type CreateUserResponse struct {
     // Embedded responses related to the resource.
-    Embedded                   *UserEmbedded                 `json:"_embedded"`
+    Embedded                    *UserEmbedded                 `json:"_embedded"`
     // ETag value
-    Etag                       *string                       `json:"_etag"`
+    Etag                        *string                       `json:"_etag"`
     // URLs to pages related to the resource.
-    Links                      *UserLinks                    `json:"_links"`
+    Links                       *UserLinks                    `json:"_links"`
     // The organizational units assigned to the user, with the specified role.
-    AccessControlConfiguration []*RoleForOrganizationalUnits `json:"access_control_configuration"`
+    AccessControlConfiguration  []*RoleForOrganizationalUnits `json:"access_control_configuration"`
     // The email address of the Clumio user.
-    Email                      *string                       `json:"email"`
-    // The first and last name of the Clumio user. The name appears in the User Management screen and is used to identify the user.
-    FullName                   *string                       `json:"full_name"`
+    Email                       *string                       `json:"email"`
+    // The first and last name of the Clumio user. The name appears in the
+    // User Management screen and is used to identify the user.
+    FullName                    *string                       `json:"full_name"`
     // The Clumio-assigned ID of the Clumio user.
-    Id                         *string                       `json:"id"`
+    Id                          *string                       `json:"id"`
     // The ID number of the user who sent the email invitation.
-    Inviter                    *string                       `json:"inviter"`
+    Inviter                     *string                       `json:"inviter"`
     // Determines whether the user has activated their Clumio account.
     // If `true`, the user has activated the account.
-    IsConfirmed                *bool                         `json:"is_confirmed"`
+    IsConfirmed                 *bool                         `json:"is_confirmed"`
     // Determines whether the user is enabled (in "Activated" or "Invited" status) in Clumio.
     // If `true`, the user is in "Activated" or "Invited" status in Clumio.
     // Users in "Activated" status can log in to Clumio.
-    // Users in "Invited" status have been invited to log in to Clumio via an email invitation and the invitation
-    // is pending acceptance from the user.
+    // Users in "Invited" status have been invited to log in to Clumio via an email invitation and
+    // the invitation is pending acceptance from the user.
     // If `false`, the user has been manually suspended and cannot log in to Clumio
     // until another Clumio user reactivates the account.
-    IsEnabled                  *bool                         `json:"is_enabled"`
-    // The timestamp of when the user was last active in the Clumio system. Represented in RFC-3339 format.
-    LastActivityTimestamp      *string                       `json:"last_activity_timestamp"`
+    IsEnabled                   *bool                         `json:"is_enabled"`
+    // The timestamp of when the user was last active in the Clumio system.
+    // Represented in RFC-3339 format.
+    LastActivityTimestamp       *string                       `json:"last_activity_timestamp"`
+    // The last password change time of the Clumio user. Represented in RFC-3339 format.
+    LastPasswordChangeTimestamp *string                       `json:"last_password_change_timestamp"`
     // The number of organizational units accessible to the user.
-    OrganizationalUnitCount    *int64                        `json:"organizational_unit_count"`
+    OrganizationalUnitCount     *int64                        `json:"organizational_unit_count"`
 }
 
 // CreateUserResponseV1 represents a custom type struct for Success
@@ -791,7 +799,8 @@ type CreateUserResponseV1 struct {
     AssignedRole                  *string         `json:"assigned_role"`
     // The email address of the Clumio user.
     Email                         *string         `json:"email"`
-    // The first and last name of the Clumio user. The name appears in the User Management screen and is used to identify the user.
+    // The first and last name of the Clumio user. The name appears in the
+    // User Management screen and is used to identify the user.
     FullName                      *string         `json:"full_name"`
     // The Clumio-assigned ID of the Clumio user.
     Id                            *string         `json:"id"`
@@ -803,12 +812,13 @@ type CreateUserResponseV1 struct {
     // Determines whether the user is enabled (in "Activated" or "Invited" status) in Clumio.
     // If `true`, the user is in "Activated" or "Invited" status in Clumio.
     // Users in "Activated" status can log in to Clumio.
-    // Users in "Invited" status have been invited to log in to Clumio via an email invitation and the invitation
-    // is pending acceptance from the user.
+    // Users in "Invited" status have been invited to log in to Clumio via an email invitation and
+    // the invitation is pending acceptance from the user.
     // If `false`, the user has been manually suspended and cannot log in to Clumio
     // until another Clumio user reactivates the account.
     IsEnabled                     *bool           `json:"is_enabled"`
-    // The timestamp of when the user was last active in the Clumio system. Represented in RFC-3339 format.
+    // The timestamp of when the user was last active in the Clumio system.
+    // Represented in RFC-3339 format.
     LastActivityTimestamp         *string         `json:"last_activity_timestamp"`
     // The number of organizational units accessible to the user.
     OrganizationalUnitCount       *int64          `json:"organizational_unit_count"`
@@ -967,36 +977,40 @@ type DownloadSharedFileResponse struct {
 // EditProfileResponse represents a custom type struct for Success
 type EditProfileResponse struct {
     // Embedded responses related to the resource.
-    Embedded                   *UserEmbedded                 `json:"_embedded"`
+    Embedded                    *UserEmbedded                 `json:"_embedded"`
     // ETag value
-    Etag                       *string                       `json:"_etag"`
+    Etag                        *string                       `json:"_etag"`
     // URLs to pages related to the resource.
-    Links                      *UserLinks                    `json:"_links"`
+    Links                       *UserLinks                    `json:"_links"`
     // The organizational units assigned to the user, with the specified role.
-    AccessControlConfiguration []*RoleForOrganizationalUnits `json:"access_control_configuration"`
+    AccessControlConfiguration  []*RoleForOrganizationalUnits `json:"access_control_configuration"`
     // The email address of the Clumio user.
-    Email                      *string                       `json:"email"`
-    // The first and last name of the Clumio user. The name appears in the User Management screen and is used to identify the user.
-    FullName                   *string                       `json:"full_name"`
+    Email                       *string                       `json:"email"`
+    // The first and last name of the Clumio user. The name appears in the
+    // User Management screen and is used to identify the user.
+    FullName                    *string                       `json:"full_name"`
     // The Clumio-assigned ID of the Clumio user.
-    Id                         *string                       `json:"id"`
+    Id                          *string                       `json:"id"`
     // The ID number of the user who sent the email invitation.
-    Inviter                    *string                       `json:"inviter"`
+    Inviter                     *string                       `json:"inviter"`
     // Determines whether the user has activated their Clumio account.
     // If `true`, the user has activated the account.
-    IsConfirmed                *bool                         `json:"is_confirmed"`
+    IsConfirmed                 *bool                         `json:"is_confirmed"`
     // Determines whether the user is enabled (in "Activated" or "Invited" status) in Clumio.
     // If `true`, the user is in "Activated" or "Invited" status in Clumio.
     // Users in "Activated" status can log in to Clumio.
-    // Users in "Invited" status have been invited to log in to Clumio via an email invitation and the invitation
-    // is pending acceptance from the user.
+    // Users in "Invited" status have been invited to log in to Clumio via an email invitation and
+    // the invitation is pending acceptance from the user.
     // If `false`, the user has been manually suspended and cannot log in to Clumio
     // until another Clumio user reactivates the account.
-    IsEnabled                  *bool                         `json:"is_enabled"`
-    // The timestamp of when the user was last active in the Clumio system. Represented in RFC-3339 format.
-    LastActivityTimestamp      *string                       `json:"last_activity_timestamp"`
+    IsEnabled                   *bool                         `json:"is_enabled"`
+    // The timestamp of when the user was last active in the Clumio system.
+    // Represented in RFC-3339 format.
+    LastActivityTimestamp       *string                       `json:"last_activity_timestamp"`
+    // The last password change time of the Clumio user. Represented in RFC-3339 format.
+    LastPasswordChangeTimestamp *string                       `json:"last_password_change_timestamp"`
     // The number of organizational units accessible to the user.
-    OrganizationalUnitCount    *int64                        `json:"organizational_unit_count"`
+    OrganizationalUnitCount     *int64                        `json:"organizational_unit_count"`
 }
 
 // EditProfileResponseV1 represents a custom type struct for Success
@@ -1012,7 +1026,8 @@ type EditProfileResponseV1 struct {
     AssignedRole                  *string         `json:"assigned_role"`
     // The email address of the Clumio user.
     Email                         *string         `json:"email"`
-    // The first and last name of the Clumio user. The name appears in the User Management screen and is used to identify the user.
+    // The first and last name of the Clumio user. The name appears in the
+    // User Management screen and is used to identify the user.
     FullName                      *string         `json:"full_name"`
     // The Clumio-assigned ID of the Clumio user.
     Id                            *string         `json:"id"`
@@ -1024,12 +1039,13 @@ type EditProfileResponseV1 struct {
     // Determines whether the user is enabled (in "Activated" or "Invited" status) in Clumio.
     // If `true`, the user is in "Activated" or "Invited" status in Clumio.
     // Users in "Activated" status can log in to Clumio.
-    // Users in "Invited" status have been invited to log in to Clumio via an email invitation and the invitation
-    // is pending acceptance from the user.
+    // Users in "Invited" status have been invited to log in to Clumio via an email invitation and
+    // the invitation is pending acceptance from the user.
     // If `false`, the user has been manually suspended and cannot log in to Clumio
     // until another Clumio user reactivates the account.
     IsEnabled                     *bool           `json:"is_enabled"`
-    // The timestamp of when the user was last active in the Clumio system. Represented in RFC-3339 format.
+    // The timestamp of when the user was last active in the Clumio system.
+    // Represented in RFC-3339 format.
     LastActivityTimestamp         *string         `json:"last_activity_timestamp"`
     // The number of organizational units accessible to the user.
     OrganizationalUnitCount       *int64          `json:"organizational_unit_count"`
@@ -1693,6 +1709,27 @@ type ListOrganizationalUnitsResponseV1 struct {
     TotalPagesCount *int64                            `json:"total_pages_count"`
 }
 
+// ListPermissionsResponse represents a custom type struct for Success
+type ListPermissionsResponse struct {
+    // Embedded responses related to the resource.
+    Embedded        *PermissionListEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links           *PermissionListLinks    `json:"_links"`
+    // The number of items listed on the current page.
+    CurrentCount    *int64                  `json:"current_count"`
+    // The filter used in the request. The filter includes both manually-specified and system-generated filters.
+    FilterApplied   *string                 `json:"filter_applied"`
+    // The maximum number of items displayed per page in the response.
+    Limit           *int64                  `json:"limit"`
+    // The page number used to get this response.
+    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
+    Start           *string                 `json:"start"`
+    // The total number of items, summed across all pages.
+    TotalCount      *int64                  `json:"total_count"`
+    // The total number of pages of results.
+    TotalPagesCount *int64                  `json:"total_pages_count"`
+}
+
 // ListPoliciesResponse represents a custom type struct for Success
 type ListPoliciesResponse struct {
     // An array of embedded resources related to this resource.
@@ -2136,6 +2173,8 @@ type PatchGeneralSettingsResponseV2 struct {
     // The grouping criteria for each datasource type.
     // These can only be edited for datasource types which do not have any
     // organizational units configured.
+    // Deprecated: This struct is deprecated and will be removed in the future.
+    // It is being kept for backward compatibility.
     OrganizationalUnitDataGroups *OUGroupingCriteria   `json:"organizational_unit_data_groups"`
     // The length of time a user password is valid before it must be changed. Measured in seconds.
     // The valid range is between 2592000 seconds (30 days) and 15552000 seconds (180 days).
@@ -2408,7 +2447,8 @@ type ReadAWSConnectionResponse struct {
     // value of `null`.
     Protect                    *ProtectConfig           `json:"protect"`
     // The asset types enabled for protect.
-    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS", "IcebergOnGlue", "IcebergOnS3Tables"].
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS",
+    // "IcebergOnGlue", "IcebergOnS3Tables", "FSX"].
     // 
     // NOTE -
     // 1. EC2/EBS is required for EC2MSSQL.
@@ -2475,6 +2515,8 @@ type ReadAWSEnvironmentResponse struct {
     OrganizationalUnitId       *string                 `json:"organizational_unit_id"`
     // The AWS services enabled for this environment. Possible values include "ebs", "rds" and "dynamodb".
     ServicesEnabled            []*string               `json:"services_enabled"`
+    // Type of permissions in the template deployed for the environment
+    TemplatePermissionSet      *string                 `json:"template_permission_set"`
     // The Clumio CloudFormation template version used to deploy the CloudFormation stack.
     TemplateVersion            *int64                  `json:"template_version"`
 }
@@ -2727,7 +2769,8 @@ type ReadConnectionGroupResponse struct {
     // The AWS-assigned IDs of the accounts associated with the Connection Group.
     AccountNativeIds         []*string             `json:"account_native_ids"`
     // List of asset types connected via the connection-group.
-    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS", "IcebergOnGlue", "IcebergOnS3Tables"].
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS",
+    // "IcebergOnGlue", "IcebergOnS3Tables", "FSX"].
     // 
     // NOTE -
     // 1. EC2/EBS is required for EC2MSSQL.
@@ -2774,6 +2817,8 @@ type ReadConnectionGroupResponse struct {
     StackName                *string               `json:"stack_name"`
     // The status of the Connection Group based on the stack in associated AWS account.
     Status                   *string               `json:"status"`
+    // TODO: Add struct field description
+    TemplatePermissionSet    *string               `json:"template_permission_set"`
 }
 
 // ReadConsolidatedAlertResponse represents a custom type struct for Success
@@ -3567,6 +3612,8 @@ type ReadGeneralSettingsResponseV2 struct {
     // The grouping criteria for each datasource type.
     // These can only be edited for datasource types which do not have any
     // organizational units configured.
+    // Deprecated: This struct is deprecated and will be removed in the future.
+    // It is being kept for backward compatibility.
     OrganizationalUnitDataGroups *OUGroupingCriteria   `json:"organizational_unit_data_groups"`
     // The length of time a user password is valid before it must be changed. Measured in seconds.
     // The valid range is between 2592000 seconds (30 days) and 15552000 seconds (180 days).
@@ -3724,6 +3771,10 @@ type ReadProtectionGroupBackupResponse struct {
     FailedSizeBytes        *int64                      `json:"failed_size_bytes"`
     // The Clumio-assigned ID of the protection group backup.
     Id                     *string                     `json:"id"`
+    // The number of objects in the protection group that were missing during backup.
+    MissingObjectCount     *int64                      `json:"missing_object_count"`
+    // The total size in bytes of objects in the protection group that were missing during backup.
+    MissingSizeBytes       *int64                      `json:"missing_size_bytes"`
     // The Clumio-assigned ID of the protection group.
     ProtectionGroupId      *string                     `json:"protection_group_id"`
     // The user-assigned name of the protection group.
@@ -3868,6 +3919,10 @@ type ReadProtectionGroupS3AssetBackupResponse struct {
     FailedSizeBytes          *uint64                            `json:"failed_size_bytes"`
     // The Clumio-assigned ID of the protection group S3 asset backup.
     Id                       *string                            `json:"id"`
+    // The number of objects in the protection group S3 asset that were missing during backup.
+    MissingObjectCount       *int64                             `json:"missing_object_count"`
+    // The total size in bytes of objects in the protection group S3 asset that were missing during backup.
+    MissingSizeBytes         *int64                             `json:"missing_size_bytes"`
     // The Clumio-assigned ID of the protection group.
     ProtectionGroupId        *string                            `json:"protection_group_id"`
     // The Clumio-assigned ID of the protection group S3 asset.
@@ -4407,36 +4462,40 @@ type ReadTaskResponse struct {
 // ReadUserResponse represents a custom type struct for Success
 type ReadUserResponse struct {
     // Embedded responses related to the resource.
-    Embedded                   *UserEmbedded                 `json:"_embedded"`
+    Embedded                    *UserEmbedded                 `json:"_embedded"`
     // ETag value
-    Etag                       *string                       `json:"_etag"`
+    Etag                        *string                       `json:"_etag"`
     // URLs to pages related to the resource.
-    Links                      *UserLinks                    `json:"_links"`
+    Links                       *UserLinks                    `json:"_links"`
     // The organizational units assigned to the user, with the specified role.
-    AccessControlConfiguration []*RoleForOrganizationalUnits `json:"access_control_configuration"`
+    AccessControlConfiguration  []*RoleForOrganizationalUnits `json:"access_control_configuration"`
     // The email address of the Clumio user.
-    Email                      *string                       `json:"email"`
-    // The first and last name of the Clumio user. The name appears in the User Management screen and is used to identify the user.
-    FullName                   *string                       `json:"full_name"`
+    Email                       *string                       `json:"email"`
+    // The first and last name of the Clumio user. The name appears in the
+    // User Management screen and is used to identify the user.
+    FullName                    *string                       `json:"full_name"`
     // The Clumio-assigned ID of the Clumio user.
-    Id                         *string                       `json:"id"`
+    Id                          *string                       `json:"id"`
     // The ID number of the user who sent the email invitation.
-    Inviter                    *string                       `json:"inviter"`
+    Inviter                     *string                       `json:"inviter"`
     // Determines whether the user has activated their Clumio account.
     // If `true`, the user has activated the account.
-    IsConfirmed                *bool                         `json:"is_confirmed"`
+    IsConfirmed                 *bool                         `json:"is_confirmed"`
     // Determines whether the user is enabled (in "Activated" or "Invited" status) in Clumio.
     // If `true`, the user is in "Activated" or "Invited" status in Clumio.
     // Users in "Activated" status can log in to Clumio.
-    // Users in "Invited" status have been invited to log in to Clumio via an email invitation and the invitation
-    // is pending acceptance from the user.
+    // Users in "Invited" status have been invited to log in to Clumio via an email invitation and
+    // the invitation is pending acceptance from the user.
     // If `false`, the user has been manually suspended and cannot log in to Clumio
     // until another Clumio user reactivates the account.
-    IsEnabled                  *bool                         `json:"is_enabled"`
-    // The timestamp of when the user was last active in the Clumio system. Represented in RFC-3339 format.
-    LastActivityTimestamp      *string                       `json:"last_activity_timestamp"`
+    IsEnabled                   *bool                         `json:"is_enabled"`
+    // The timestamp of when the user was last active in the Clumio system.
+    // Represented in RFC-3339 format.
+    LastActivityTimestamp       *string                       `json:"last_activity_timestamp"`
+    // The last password change time of the Clumio user. Represented in RFC-3339 format.
+    LastPasswordChangeTimestamp *string                       `json:"last_password_change_timestamp"`
     // The number of organizational units accessible to the user.
-    OrganizationalUnitCount    *int64                        `json:"organizational_unit_count"`
+    OrganizationalUnitCount     *int64                        `json:"organizational_unit_count"`
 }
 
 // ReadUserResponseV1 represents a custom type struct for Success
@@ -4452,7 +4511,8 @@ type ReadUserResponseV1 struct {
     AssignedRole                  *string         `json:"assigned_role"`
     // The email address of the Clumio user.
     Email                         *string         `json:"email"`
-    // The first and last name of the Clumio user. The name appears in the User Management screen and is used to identify the user.
+    // The first and last name of the Clumio user. The name appears in the
+    // User Management screen and is used to identify the user.
     FullName                      *string         `json:"full_name"`
     // The Clumio-assigned ID of the Clumio user.
     Id                            *string         `json:"id"`
@@ -4464,12 +4524,13 @@ type ReadUserResponseV1 struct {
     // Determines whether the user is enabled (in "Activated" or "Invited" status) in Clumio.
     // If `true`, the user is in "Activated" or "Invited" status in Clumio.
     // Users in "Activated" status can log in to Clumio.
-    // Users in "Invited" status have been invited to log in to Clumio via an email invitation and the invitation
-    // is pending acceptance from the user.
+    // Users in "Invited" status have been invited to log in to Clumio via an email invitation and
+    // the invitation is pending acceptance from the user.
     // If `false`, the user has been manually suspended and cannot log in to Clumio
     // until another Clumio user reactivates the account.
     IsEnabled                     *bool           `json:"is_enabled"`
-    // The timestamp of when the user was last active in the Clumio system. Represented in RFC-3339 format.
+    // The timestamp of when the user was last active in the Clumio system.
+    // Represented in RFC-3339 format.
     LastActivityTimestamp         *string         `json:"last_activity_timestamp"`
     // The number of organizational units accessible to the user.
     OrganizationalUnitCount       *int64          `json:"organizational_unit_count"`
@@ -4841,7 +4902,8 @@ type UpdateAWSConnectionResponse struct {
     // value of `null`.
     Protect                    *ProtectConfig           `json:"protect"`
     // The asset types enabled for protect.
-    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS", "IcebergOnGlue", "IcebergOnS3Tables"].
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS",
+    // "IcebergOnGlue", "IcebergOnS3Tables", "FSX"].
     // 
     // NOTE -
     // 1. EC2/EBS is required for EC2MSSQL.
@@ -5033,7 +5095,8 @@ type UpdateConnectionGroupResponse struct {
     // The AWS-assigned IDs of the accounts associated with the Connection Group.
     AccountNativeIds         []*string             `json:"account_native_ids"`
     // List of asset types connected via the connection-group.
-    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS", "IcebergOnGlue", "IcebergOnS3Tables"].
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS",
+    // "IcebergOnGlue", "IcebergOnS3Tables", "FSX"].
     // 
     // NOTE -
     // 1. EC2/EBS is required for EC2MSSQL.
@@ -5080,6 +5143,8 @@ type UpdateConnectionGroupResponse struct {
     StackName                *string               `json:"stack_name"`
     // The status of the Connection Group based on the stack in associated AWS account.
     Status                   *string               `json:"status"`
+    // TODO: Add struct field description
+    TemplatePermissionSet    *string               `json:"template_permission_set"`
 }
 
 // UpdateConsolidatedAlertResponse represents a custom type struct for Success
@@ -5413,36 +5478,40 @@ type UpdateTaskResponse struct {
 // UpdateUserResponse represents a custom type struct for Success
 type UpdateUserResponse struct {
     // Embedded responses related to the resource.
-    Embedded                   *UserEmbedded                 `json:"_embedded"`
+    Embedded                    *UserEmbedded                 `json:"_embedded"`
     // ETag value
-    Etag                       *string                       `json:"_etag"`
+    Etag                        *string                       `json:"_etag"`
     // URLs to pages related to the resource.
-    Links                      *UserLinks                    `json:"_links"`
+    Links                       *UserLinks                    `json:"_links"`
     // The organizational units assigned to the user, with the specified role.
-    AccessControlConfiguration []*RoleForOrganizationalUnits `json:"access_control_configuration"`
+    AccessControlConfiguration  []*RoleForOrganizationalUnits `json:"access_control_configuration"`
     // The email address of the Clumio user.
-    Email                      *string                       `json:"email"`
-    // The first and last name of the Clumio user. The name appears in the User Management screen and is used to identify the user.
-    FullName                   *string                       `json:"full_name"`
+    Email                       *string                       `json:"email"`
+    // The first and last name of the Clumio user. The name appears in the
+    // User Management screen and is used to identify the user.
+    FullName                    *string                       `json:"full_name"`
     // The Clumio-assigned ID of the Clumio user.
-    Id                         *string                       `json:"id"`
+    Id                          *string                       `json:"id"`
     // The ID number of the user who sent the email invitation.
-    Inviter                    *string                       `json:"inviter"`
+    Inviter                     *string                       `json:"inviter"`
     // Determines whether the user has activated their Clumio account.
     // If `true`, the user has activated the account.
-    IsConfirmed                *bool                         `json:"is_confirmed"`
+    IsConfirmed                 *bool                         `json:"is_confirmed"`
     // Determines whether the user is enabled (in "Activated" or "Invited" status) in Clumio.
     // If `true`, the user is in "Activated" or "Invited" status in Clumio.
     // Users in "Activated" status can log in to Clumio.
-    // Users in "Invited" status have been invited to log in to Clumio via an email invitation and the invitation
-    // is pending acceptance from the user.
+    // Users in "Invited" status have been invited to log in to Clumio via an email invitation and
+    // the invitation is pending acceptance from the user.
     // If `false`, the user has been manually suspended and cannot log in to Clumio
     // until another Clumio user reactivates the account.
-    IsEnabled                  *bool                         `json:"is_enabled"`
-    // The timestamp of when the user was last active in the Clumio system. Represented in RFC-3339 format.
-    LastActivityTimestamp      *string                       `json:"last_activity_timestamp"`
+    IsEnabled                   *bool                         `json:"is_enabled"`
+    // The timestamp of when the user was last active in the Clumio system.
+    // Represented in RFC-3339 format.
+    LastActivityTimestamp       *string                       `json:"last_activity_timestamp"`
+    // The last password change time of the Clumio user. Represented in RFC-3339 format.
+    LastPasswordChangeTimestamp *string                       `json:"last_password_change_timestamp"`
     // The number of organizational units accessible to the user.
-    OrganizationalUnitCount    *int64                        `json:"organizational_unit_count"`
+    OrganizationalUnitCount     *int64                        `json:"organizational_unit_count"`
 }
 
 // UpdateUserResponseV1 represents a custom type struct for Success
@@ -5458,7 +5527,8 @@ type UpdateUserResponseV1 struct {
     AssignedRole                  *string         `json:"assigned_role"`
     // The email address of the Clumio user.
     Email                         *string         `json:"email"`
-    // The first and last name of the Clumio user. The name appears in the User Management screen and is used to identify the user.
+    // The first and last name of the Clumio user. The name appears in the
+    // User Management screen and is used to identify the user.
     FullName                      *string         `json:"full_name"`
     // The Clumio-assigned ID of the Clumio user.
     Id                            *string         `json:"id"`
@@ -5470,12 +5540,13 @@ type UpdateUserResponseV1 struct {
     // Determines whether the user is enabled (in "Activated" or "Invited" status) in Clumio.
     // If `true`, the user is in "Activated" or "Invited" status in Clumio.
     // Users in "Activated" status can log in to Clumio.
-    // Users in "Invited" status have been invited to log in to Clumio via an email invitation and the invitation
-    // is pending acceptance from the user.
+    // Users in "Invited" status have been invited to log in to Clumio via an email invitation and
+    // the invitation is pending acceptance from the user.
     // If `false`, the user has been manually suspended and cannot log in to Clumio
     // until another Clumio user reactivates the account.
     IsEnabled                     *bool           `json:"is_enabled"`
-    // The timestamp of when the user was last active in the Clumio system. Represented in RFC-3339 format.
+    // The timestamp of when the user was last active in the Clumio system.
+    // Represented in RFC-3339 format.
     LastActivityTimestamp         *string         `json:"last_activity_timestamp"`
     // The number of organizational units accessible to the user.
     OrganizationalUnitCount       *int64          `json:"organizational_unit_count"`

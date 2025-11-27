@@ -91,7 +91,8 @@ type CreateAwsConnectionV1Request struct {
     // Organizational-Units documentation.
     OrganizationalUnitId     *string   `json:"organizational_unit_id"`
     // The asset types enabled for protect.
-    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS", "IcebergOnGlue", "IcebergOnS3Tables"].
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS",
+    // "IcebergOnGlue", "IcebergOnS3Tables", "FSX"].
     // 
     // NOTE -
     // 1. EC2/EBS is required for EC2MSSQL.
@@ -109,64 +110,72 @@ type CreateAwsConnectionV1Request struct {
 // The body of the request.
 type CreateAwsConnectionGroupV1Request struct {
     // The AWS-assigned ID of the account to be associated with the Connection Group.
-    AccountNativeId      *string   `json:"account_native_id"`
+    AccountNativeId       *string   `json:"account_native_id"`
     // The asset types to be connected via the connection-group.
-    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS", "IcebergOnGlue", "IcebergOnS3Tables"].
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS",
+    // "IcebergOnGlue", "IcebergOnS3Tables", "FSX"].
     // 
     // NOTE -
     // 1. EC2/EBS is required for EC2MSSQL.
     // 2. EBS as a value is deprecated in favor of EC2/EBS.
-    AssetTypes           []*string `json:"asset_types"`
+    AssetTypes            []*string `json:"asset_types"`
     // DEPRECATED, use "asset_types" instead.
     // 
     // The asset types to be connected via the connection-group.
-    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS", "IcebergOnGlue", "IcebergOnS3Tables"].
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS",
+    // "IcebergOnGlue", "IcebergOnS3Tables", "FSX"].
     // 
     // NOTE -
     // 1. EC2/EBS is required for EC2MSSQL.
     // 2. EBS as a value is deprecated in favor of EC2/EBS.
-    AssetTypesEnabled    []*string `json:"asset_types_enabled"`
+    AssetTypesEnabled     []*string `json:"asset_types_enabled"`
     // The AWS regions to be associated with the Connection Group.
-    AwsRegions           []*string `json:"aws_regions"`
+    AwsRegions            []*string `json:"aws_regions"`
     // Description for this connection group.
-    Description          *string   `json:"description"`
+    Description           *string   `json:"description"`
     // The AWS Account that manages the connection-group's stack.
     // If the provided master_aws_account_id different than the account_native_id then
     // use service managed permissions while deploying stack.
-    MasterAwsAccountId   *string   `json:"master_aws_account_id"`
+    MasterAwsAccountId    *string   `json:"master_aws_account_id"`
     // The AWS Region that manages the connection-group's stack.
-    MasterRegion         *string   `json:"master_region"`
+    MasterRegion          *string   `json:"master_region"`
     // The Clumio-assigned ID of the organizational unit associated with the
     // AWS environment. If this parameter is not provided, then the value
     // defaults to the first organizational unit assigned to the requesting
     // user. For more information about organizational units, refer to the
     // Organizational-Units documentation.
-    OrganizationalUnitId *string   `json:"organizational_unit_id"`
+    OrganizationalUnitId  *string   `json:"organizational_unit_id"`
+    // TODO: Add struct field description
+    TemplatePermissionSet *string   `json:"template_permission_set"`
 }
 
 // UpdateAwsConnectionGroupV1Request represents a custom type struct
 type UpdateAwsConnectionGroupV1Request struct {
     // The asset types to be connected via the connection-group.
-    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS", "IcebergOnGlue", "IcebergOnS3Tables"].
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS",
+    // "IcebergOnGlue", "IcebergOnS3Tables", "FSX"].
     // 
     // NOTE -
     // 1. EC2/EBS is required for EC2MSSQL.
     // 2. EBS as a value is deprecated in favor of EC2/EBS.
-    AssetTypes        []*string `json:"asset_types"`
+    AssetTypes            []*string `json:"asset_types"`
     // DEPRECATED, use "asset_types" instead.
     // 
     // 
     // The asset types to be connected via the connection-group.
-    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS", "IcebergOnGlue", "IcebergOnS3Tables"].
+    // Valid values are any of ["EC2/EBS", "RDS", "DynamoDB", "EC2MSSQL", "S3", "EBS",
+    // "IcebergOnGlue", "IcebergOnS3Tables", "FSX"].
     // 
     // NOTE -
     // 1. EC2/EBS is required for EC2MSSQL.
     // 2. EBS as a value is deprecated in favor of EC2/EBS.
-    AssetTypesEnabled []*string `json:"asset_types_enabled"`
+    AssetTypesEnabled     []*string `json:"asset_types_enabled"`
     // The AWS regions to be associated with the Connection Group.
-    AwsRegions        []*string `json:"aws_regions"`
+    AwsRegions            []*string `json:"aws_regions"`
     // Description for this connection group.
-    Description       *string   `json:"description"`
+    Description           *string   `json:"description"`
+    // TODO: Add struct field description
+    TemplatePermissionSet *string   `json:"template_permission_set"`
 }
 
 // PostProcessAwsConnectionV1Request represents a custom type struct.
@@ -204,15 +213,17 @@ type CreateConnectionTemplateV1Request struct {
     // NOTE -
     // 1. EC2/EBS is required for EC2MSSQL.
     // 2. EBS as a value is deprecated in favor of EC2/EBS.
-    AssetTypesEnabled   []*string `json:"asset_types_enabled"`
+    AssetTypesEnabled     []*string `json:"asset_types_enabled"`
     // Account ID for the AWS environment to be connected
     // Mandatory to pass a 12 digit string if show_manual_resources is set to true
-    AwsAccountId        *string   `json:"aws_account_id"`
+    AwsAccountId          *string   `json:"aws_account_id"`
     // AWS Region of the AWS environment to be connected
     // Mandatory to pass a non-empty string if show_manual_resources is set to true
-    AwsRegion           *string   `json:"aws_region"`
+    AwsRegion             *string   `json:"aws_region"`
     // Returns the resources to be created manually if set to true
-    ShowManualResources *bool     `json:"show_manual_resources"`
+    ShowManualResources   *bool     `json:"show_manual_resources"`
+    // TODO: Add struct field description
+    TemplatePermissionSet *string   `json:"template_permission_set"`
 }
 
 // UpdateAwsConnectionV1Request represents a custom type struct
@@ -985,14 +996,16 @@ type CreateReportDownloadV1Request struct {
 
 // RestoreAwsDynamodbTableV1Request represents a custom type struct
 type RestoreAwsDynamodbTableV1Request struct {
+    // Filters based on which DynamoDB backup records are filtered.
+    QueryFilter *DynamoDBRestoreQueryFilter `json:"query_filter"`
     // The DynamoDB table restore backup or point-in-time restore options. Only one of these fields should be set.
-    Source *DynamoDBTableRestoreSource `json:"source"`
+    Source      *DynamoDBTableRestoreSource `json:"source"`
     // The configuration of the restored DynamoDB table.
     // For restore from snapshot, use the DynamoDB table configurations present at time of snapshot obtained from
     // [GET /backups/aws/dynamodb-tables/{backup_id}](#operation/read-backup-aws-dynamodb-table) and for restoring point-in-time,
     // use the current configuration of the table from [GET /datasources/aws/dynamodb-tables/{table_id}](#operation/read-aws-dynamodb-table).
     // The table properties are set to empty or to their default values if they are specified as `null`.
-    Target *DynamoDBTableRestoreTarget `json:"target"`
+    Target      *DynamoDBTableRestoreTarget `json:"target"`
 }
 
 // RestoreRecordsAwsDynamodbTableV1Request represents a custom type struct
@@ -1400,6 +1413,8 @@ type UpdateGeneralSettingsV2Request struct {
     // The grouping criteria for each datasource type.
     // These can only be edited for datasource types which do not have any
     // organizational units configured.
+    // Deprecated: This struct is deprecated and will be removed in the future.
+    // It is being kept for backward compatibility.
     OrganizationalUnitDataGroups *OUGroupingCriteria `json:"organizational_unit_data_groups"`
     // The length of time a user password is valid before it must be changed. Measured in seconds.
     // The valid range is between 2592000 seconds (30 days) and 15552000 seconds (180 days).
