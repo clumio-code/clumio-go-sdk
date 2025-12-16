@@ -243,19 +243,6 @@ type UpdateAwsConnectionV1Request struct {
     Resources         *Resources `json:"resources"`
 }
 
-// SetBucketPropertiesV1Request represents a custom type struct.
-// The set of properties that are being updated for the given bucket.
-type SetBucketPropertiesV1Request struct {
-    // If true, enables continuous backup for the given bucket.
-    // If false, disables continuous backup for the given bucket.
-    // If not set, does not update EventBridge.
-    EventBridgeEnabled              *bool `json:"event_bridge_enabled"`
-    // If true, tries to disable EventBridge notification for the given bucket.
-    // It may override the existing bucket notification configuration in the customer's account.
-    // This takes effect only when `event_bridge_enabled` is set to `false`.
-    EventBridgeNotificationDisabled *bool `json:"event_bridge_notification_disabled"`
-}
-
 // UpdateManagementGroupV1Request represents a custom type struct
 type UpdateManagementGroupV1Request struct {
     // Determines whether backups are allowed to occur across different subgroups or cloud connectors.

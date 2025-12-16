@@ -963,8 +963,6 @@ type Bucket struct {
     EncryptionSetting             *S3EncryptionOutput                           `json:"encryption_setting"`
     // The Clumio-assigned ID of the AWS environment associated with the S3 bucket.
     EnvironmentId                 *string                                       `json:"environment_id"`
-    // The EventBridge enablement state for the S3 bucket.
-    EventBridgeEnabled            *bool                                         `json:"event_bridge_enabled"`
     // The Clumio-assigned ID of the bucket.
     Id                            *string                                       `json:"id"`
     // The Encryption enablement state for the S3 bucket.
@@ -1889,7 +1887,28 @@ type DynamoDBGrrSource struct {
     // Performs the operation on a DynamoDB table within the specified backup.
     // Use the [GET /backups/aws/dynamodb-tables](#operation/list-backup-aws-dynamodb-tables)
     // endpoint to fetch valid values.
-    BackupId *string `json:"backup_id"`
+    BackupId         *string                       `json:"backup_id"`
+    // DynamoDBGrrSourcePitrOptions represents the parameters required to initiate a point-in-time restore (PITR)
+    // operation for a DynamoDB table. This struct is used to specify the target table and the specific point in time
+    // to which the table should be restored. Only one of `timestamp` or `use_latest_restorable_time` should be set
+    // to indicate the desired restore time.
+    ContinuousBackup *DynamoDBGrrSourcePitrOptions `json:"continuous_backup"`
+}
+
+// DynamoDBGrrSourcePitrOptions represents a custom type struct.
+// DynamoDBGrrSourcePitrOptions represents the parameters required to initiate a point-in-time restore (PITR)
+// operation for a DynamoDB table. This struct is used to specify the target table and the specific point in time
+// to which the table should be restored. Only one of `timestamp` or `use_latest_restorable_time` should be set
+// to indicate the desired restore time.
+type DynamoDBGrrSourcePitrOptions struct {
+    // The Clumio-assigned ID of the DynamoDB table to be restored.
+    // Use the [GET /datasources/aws/dynamodb-tables](#operation/list-aws-dynamodb-tables)
+    // endpoint to fetch valid values.
+    TableId                 *string `json:"table_id"`
+    // A point in time to be restored in RFC-3339 format.
+    Timestamp               *string `json:"timestamp"`
+    // Restore the table to the latest possible time.
+    UseLatestRestorableTime *bool   `json:"use_latest_restorable_time"`
 }
 
 // DynamoDBGrrTarget represents a custom type struct.
@@ -2119,6 +2138,9 @@ type DynamoDBTable struct {
     IsSupported                                   *bool                   `json:"is_supported"`
     // The number of items in the DynamoDB table.
     ItemCount                                     *int64                  `json:"item_count"`
+    // The timestamp of the most recent backup of the DynamoDB table. If the table has never been
+    // backed up, then this field has a value of `null`.
+    LastBackupTimestamp                           *string                 `json:"last_backup_timestamp"`
     // The timestamp of the most recent snapshot of the DynamoDB table taken as part of
     // AwsSnapMgr. Represented in RFC-3339 format. If the table has never been
     // snapshotted, then this field has a value of `null`.
@@ -2647,19 +2669,22 @@ type EBSRestoreSourceV1 struct {
 type EBSRestoreTarget struct {
     // The availability zone into which the EBS volume is restored. For example, `us-west-2a`.
     // Use the [GET /datasources/aws/environments](#operation/list-aws-environments) endpoint to fetch valid values.
-    AwsAz          *string              `json:"aws_az"`
+    AwsAz                    *string              `json:"aws_az"`
     // The Clumio-assigned ID of the AWS environment to be used as the restore destination. Use the [GET /datasources/aws/environments](#operation/list-aws-environments) endpoint to fetch valid values.
-    EnvironmentId  *string              `json:"environment_id"`
+    EnvironmentId            *string              `json:"environment_id"`
     // Iops of the volume to be restored.
     // Iops field is only applicable if volume_type is gp3, io1, io2.
-    Iops           *int64               `json:"iops"`
+    Iops                     *int64               `json:"iops"`
     // The KMS encryption key ID used to encrypt the EBS volume data. The KMS encryption key ID is stored in the AWS cloud as part of your AWS account.
-    KmsKeyNativeId *string              `json:"kms_key_native_id"`
+    KmsKeyNativeId           *string              `json:"kms_key_native_id"`
     // A tag created through AWS Console which can be applied to EBS volumes.
-    Tags           []*AwsTagCommonModel `json:"tags"`
+    Tags                     []*AwsTagCommonModel `json:"tags"`
     // Type of the volume to restore as.
     // Allowed Values: gp2, gp3, io1, io2, sc1, st1, standard.
-    ClumioType     *string              `json:"type"`
+    ClumioType               *string              `json:"type"`
+    // The rate (in MB/s) at which data is initialized on the restored volume.
+    // Accepted values are between 100 and 300.
+    VolumeInitializationRate *int64               `json:"volume_initialization_rate"`
 }
 
 // EBSRestoreTargetV1 represents a custom type struct.
@@ -3060,6 +3085,8 @@ type EC2MSSQLDatabaseBackup struct {
     Embedded            *EC2MSSQLDatabaseBackupEmbedded `json:"_embedded"`
     // URLs to pages related to the resource.
     Links               *EC2MSSQLDatabaseBackupLinks    `json:"_links"`
+    // The AWS region in which the backup resides.
+    AwsRegion           *string                         `json:"aws_region"`
     // TODO: Add struct field description
     DatabaseFiles       []*MssqlDatabaseFile            `json:"database_files"`
     // The Clumio-assigned ID of the database associated with this backup.
@@ -3529,15 +3556,17 @@ type EC2MssqlDatabasePitrIntervalListLinks struct {
 type EC2RestoreEbsBlockDeviceMapping struct {
     // The AWS-assigned ID for a customer managed KMS key under which the
     // EBS volume is encrypted.
-    KmsKeyNativeId *string              `json:"kms_key_native_id"`
+    KmsKeyNativeId           *string              `json:"kms_key_native_id"`
     // The device name where the EBS volume is attached to the instance, needed by
     // instance_restore_target and ami_restore_target restore type and by volumes_restore_target
     // when target_instance_native_id is provided.
-    Name           *string              `json:"name"`
+    Name                     *string              `json:"name"`
     // A tag created through AWS Console which can be applied to EBS volumes.
-    Tags           []*AwsTagCommonModel `json:"tags"`
+    Tags                     []*AwsTagCommonModel `json:"tags"`
+    // The initialization rate (in MB/s) for the restored volume.
+    VolumeInitializationRate *int64               `json:"volume_initialization_rate"`
     // The AWS-assigned ID of the backed-up volume.
-    VolumeNativeId *string              `json:"volume_native_id"`
+    VolumeNativeId           *string              `json:"volume_native_id"`
 }
 
 // EC2RestoreNetworkInterface represents a custom type struct
@@ -5329,7 +5358,9 @@ type ProtectionGroupBackup struct {
 // Additional policy configuration settings for the `protection_group_backup` operation. If this operation is not of type `protection_group_backup`, then this field is omitted from the response.
 type ProtectionGroupBackupAdvancedSetting struct {
     // Backup tier to store the backup in. Valid values are: `standard`, `archive`
-    BackupTier *string `json:"backup_tier"`
+    BackupTier  *string `json:"backup_tier"`
+    // Determines whether malware scanning is enabled for protection group backups.
+    MalwareScan *bool   `json:"malware_scan"`
 }
 
 // ProtectionGroupBackupLinks represents a custom type struct.
@@ -5859,7 +5890,7 @@ type ProvisionedThroughputOverride struct {
 
 // RDSBackupDatabase represents a custom type struct
 type RDSBackupDatabase struct {
-    // The name of the database.
+    // name of the database
     Name *string `json:"name"`
 }
 
@@ -5930,9 +5961,7 @@ type RDSDatabaseTableEmbedded struct {
 // URLs to pages related to the resource.
 type RDSDatabaseTableLinks struct {
     // The HATEOAS link to this resource.
-    Self                                         *HateoasSelfLink `json:"_self"`
-    // A resource-specific HATEOAS link.
-    ReadBackupAwsRdsResourceDatabaseTableColumns *HateoasLink     `json:"read-backup-aws-rds-resource-database-table-columns"`
+    Self *HateoasSelfLink `json:"_self"`
 }
 
 // RDSDatabaseTableListEmbedded represents a custom type struct.
@@ -5995,61 +6024,52 @@ type RdsAssetInfo struct {
 // RdsDatabaseBackup represents a custom type struct
 type RdsDatabaseBackup struct {
     // URLs to pages related to the resource.
-    Links                  *RdsDatabaseBackupLinks `json:"_links"`
+    Links               *RdsDatabaseBackupLinks `json:"_links"`
     // The AWS-assigned ID of the account associated with this database at the time of backup.
-    AccountNativeId        *string                 `json:"account_native_id"`
+    AccountNativeId     *string                 `json:"account_native_id"`
     // The AWS availability zones associated with this database at the time of backup.
-    AwsAzs                 []*string               `json:"aws_azs"`
-    // The AWS region associated with this environment.
-    AwsRegion              *string                 `json:"aws_region"`
-    // The AWS-assigned ID of the database at the time of backup.
-    DatabaseNativeId       *string                 `json:"database_native_id"`
-    // The AWS database engine at the time of backup.
-    Engine                 *string                 `json:"engine"`
-    // The aws database engine version at the time of backup.
-    EngineVersion          *string                 `json:"engine_version"`
-    // The timestamp of when this backup expires. Represented in RFC-3339 format.
-    ExpirationTimestamp    *string                 `json:"expiration_timestamp"`
-    // The Clumio-assigned ID of the backup.
-    Id                     *string                 `json:"id"`
-    // TODO: Add struct field description
-    Instances              []*RdsInstanceModel     `json:"instances"`
+    AwsAzs              []*string               `json:"aws_azs"`
     // The AWS-assigned ID of the KMS key associated with this database at the time of backup.
-    KmsKeyNativeId         *string                 `json:"kms_key_native_id"`
-    // The timestamp of when the migration was triggered. This field will be set only for
-    // migration granular backups. Represented in RFC-3339 format.
-    MigrationTimestamp     *string                 `json:"migration_timestamp"`
-    // Option group name associated with the backed up RDS resource
-    OptionGroupName        *string                 `json:"option_group_name"`
+    AwsKmsKeyId         *string                 `json:"aws_kms_key_id"`
+    // The AWS region associated with this environment.
+    AwsRegion           *string                 `json:"aws_region"`
+    // Security groups of instance of cluster at the time of backup
+    AwsSecurityGroup    []*string               `json:"aws_security_group"`
+    // The subnet group of RDS instance or cluster at the time of backup.
+    AwsSubnetGroup      *string                 `json:"aws_subnet_group"`
     // The Clumio-assigned ID of the database associated with this backup.
-    ResourceId             *string                 `json:"resource_id"`
-    // The type of the RDS resource associated with this backup. Possible values include `aws_rds_cluster` and `aws_rds_instance`.
-    ResourceType           *string                 `json:"resource_type"`
-    // The AWS-assigned IDs of the security groups associated with this RDS resource backup.
-    SecurityGroupNativeIds []*string               `json:"security_group_native_ids"`
-    // The size of the RDS resource backup. Measured in bytes (B).
-    Size                   *int64                  `json:"size"`
+    DatabaseId          *string                 `json:"database_id"`
+    // The AWS-assigned ID of the database at the time of backup.
+    DatabaseNativeId    *string                 `json:"database_native_id"`
+    // The type of the RDS database associated with this backup.
+    DatabaseType        *string                 `json:"database_type"`
+    // The AWS database engine at the time of backup.
+    Engine              *string                 `json:"engine"`
+    // The aws database engine version at the time of backup.
+    EngineVersion       *string                 `json:"engine_version"`
+    // The timestamp of when this backup expires. Represented in RFC-3339 format.
+    ExpirationTimestamp *string                 `json:"expiration_timestamp"`
+    // The Clumio-assigned ID of the backup.
+    Id                  *string                 `json:"id"`
+    // Instance class of the RDS instance at the time of backup.
+    InstanceClass       []*string               `json:"instance_class"`
+    // Public accessibility of instances.
+    PublicAccess        []*bool                 `json:"public_access"`
+    // The size of the database (i.e. in GiB) as noted by AWS at the time of backup.
+    Size                *int64                  `json:"size"`
     // The timestamp of when this backup started. Represented in RFC-3339 format.
-    StartTimestamp         *string                 `json:"start_timestamp"`
-    // The AWS-assigned name of the subnet group associated with this RDS resource backup.
-    SubnetGroupName        *string                 `json:"subnet_group_name"`
+    StartTimestamp      *string                 `json:"start_timestamp"`
     // A tag created through AWS Console which can be applied to EBS volumes.
-    Tags                   []*AwsTagCommonModel    `json:"tags"`
+    Tags                []*AwsTagCommonModel    `json:"tags"`
     // The type of backup. Possible values include `clumio_snapshot` and `granular_backup`.
-    ClumioType             *string                 `json:"type"`
+    ClumioType          *string                 `json:"type"`
 }
 
 // RdsDatabaseBackupLinks represents a custom type struct.
 // URLs to pages related to the resource.
 type RdsDatabaseBackupLinks struct {
     // The HATEOAS link to this resource.
-    Self                            *HateoasSelfLink `json:"_self"`
-    // A resource-specific HATEOAS link.
-    ListAwsRdsResourcesOptionGroups *HateoasLink     `json:"list-aws-rds-resources-option-groups"`
-    // A resource-specific HATEOAS link.
-    RestoreAwsRdsResource           *HateoasLink     `json:"restore-aws-rds-resource"`
-    // A resource-specific HATEOAS link.
-    RestoreRdsRecord                *HateoasLink     `json:"restore-rds-record"`
+    Self *HateoasSelfLink `json:"_self"`
 }
 
 // RdsDatabaseBackupListEmbedded represents a custom type struct.
@@ -7534,13 +7554,6 @@ type SetAssignmentsResponseLinks struct {
     Self     *HateoasSelfLink     `json:"_self"`
     // A HATEOAS link to the task associated with this resource.
     ReadTask *ReadTaskHateoasLink `json:"read-task"`
-}
-
-// SetBucketPropertiesResponseLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type SetBucketPropertiesResponseLinks struct {
-    // The HATEOAS link to this resource.
-    Self *HateoasSelfLink `json:"_self"`
 }
 
 // ShareFileRestoreEmailLinks represents a custom type struct.

@@ -4,7 +4,6 @@
 package awss3buckets
 
 import (
-    "encoding/json"
     "fmt"
 
     "github.com/clumio-code/clumio-go-sdk/api_utils"
@@ -78,45 +77,6 @@ func (a *AwsS3BucketsV1) ReadAwsS3Bucket(
         AcceptHeader: header,
         Result200: &result,
         RequestType: common.Get,
-    })
-
-    return result, apiErr
-}
-
-
-// SetBucketProperties Idempotent call to set properties on an S3 bucket to enable S3 continuous backup.
-func (a *AwsS3BucketsV1) SetBucketProperties(
-    bucketId string, 
-    body *models.SetBucketPropertiesV1Request)(
-    *models.SetBucketPropertiesResponse, *apiutils.APIError) {
-
-    pathURL := "/datasources/aws/s3-buckets/{bucket_id}"
-    //process optional template parameters
-    pathParams := map[string]string{
-        "bucket_id": bucketId,
-    }
-    queryBuilder := a.config.BaseUrl + pathURL
-
-    bytes, err := json.Marshal(body)
-    if err != nil {
-        return nil, &apiutils.APIError{
-            ResponseCode: 500,
-            Reason:       fmt.Sprintf("Failed to Marshal Request Body %v", body),
-            Response:     []byte(fmt.Sprintf("%v", err)),
-        }
-    }
-    payload := string(bytes)
-    header := "application/api.clumio.aws-s3-buckets=v1+json"
-    result := &models.SetBucketPropertiesResponse{}
-
-    apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
-        Config: a.config,
-        RequestUrl: queryBuilder,
-        PathParams: pathParams,
-        AcceptHeader: header,
-        Body: payload,
-        Result200: &result,
-        RequestType: common.Patch,
     })
 
     return result, apiErr
