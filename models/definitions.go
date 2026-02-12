@@ -1014,15 +1014,19 @@ type BucketListEmbedded struct {
 // URLs to pages related to the resource.
 type BucketListLinks struct {
     // The HATEOAS link to the first page of results.
-    First *HateoasFirstLink `json:"_first"`
+    First                            *HateoasFirstLink `json:"_first"`
     // The HATEOAS link to the last page of results.
-    Last  *HateoasLastLink  `json:"_last"`
+    Last                             *HateoasLastLink  `json:"_last"`
     // The HATEOAS link to the next page of results.
-    Next  *HateoasNextLink  `json:"_next"`
+    Next                             *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to the previous page of results.
-    Prev  *HateoasPrevLink  `json:"_prev"`
+    Prev                             *HateoasPrevLink  `json:"_prev"`
     // The HATEOAS link to this resource.
-    Self  *HateoasSelfLink  `json:"_self"`
+    Self                             *HateoasSelfLink  `json:"_self"`
+    // A resource-specific HATEOAS link.
+    ListBackupProtectionGroupBuckets *HateoasLink      `json:"list-backup-protection-group-buckets"`
+    // A resource-specific HATEOAS link.
+    RestoreProtectionGroupS3Asset    *HateoasLink      `json:"restore-protection-group-s3-asset"`
 }
 
 // CategorisedResources represents a custom type struct.
@@ -1293,6 +1297,20 @@ type ComplianceRunListHateoasLinks struct {
     Self                                *HateoasSelfLink  `json:"_self"`
     // A resource-specific HATEOAS link.
     CreateComplianceReportConfiguration *HateoasLink      `json:"create-compliance-report-configuration"`
+}
+
+// Configuration represents a custom type struct
+type Configuration struct {
+    // TODO: Add struct field description
+    Gcs                      *ConfigurationObject `json:"gcs"`
+    // The current version of the feature.
+    InstalledTemplateVersion *string              `json:"installed_template_version"`
+}
+
+// ConfigurationObject represents a custom type struct
+type ConfigurationObject struct {
+    // The current version of the feature.
+    InstalledTemplateVersion *string `json:"installed_template_version"`
 }
 
 // ConnectionGroupLinks represents a custom type struct.
@@ -4015,6 +4033,69 @@ type FileVersionsListLinks struct {
     Self  *HateoasSelfLink  `json:"_self"`
 }
 
+// GCPConnection represents a custom type struct
+type GCPConnection struct {
+    // URLs to pages related to the resource.
+    Links                 *GCPConnectionLinks `json:"_links"`
+    // TODO: Add struct field description
+    Configuration         *Configuration      `json:"configuration"`
+    // The status of the connection
+    ConnectionStatus      *string             `json:"connection_status"`
+    // The type of this connection, which identifies its use.
+    ConnectionType        *string             `json:"connection_type"`
+    // The timestamp of when the connection was created.
+    CreatedTimestamp      *string             `json:"created_timestamp"`
+    // The user defined description for the connection.
+    Description           *string             `json:"description"`
+    // The Clumio-assigned ID of the organizational unit associated with the
+    // GCP connection.
+    // For more information about organizational units, refer to the
+    // Organizational-Units documentation.
+    OrganizationalUnitId  *string             `json:"organizational_unit_id"`
+    // The user-assigned ID of the GCP project associated with the connection.
+    ProjectId             *string             `json:"project_id"`
+    // The user-friendly name of the GCP project associated with the connection.
+    ProjectName           *string             `json:"project_name"`
+    // The GCP-assigned numeric INT64 project number associated with the connection.
+    ProjectNumber         *string             `json:"project_number"`
+    // The permission set selected during registration.
+    TemplatePermissionSet *string             `json:"template_permission_set"`
+    // The 36-character Clumio GCP integration token used to identify the
+    // installation of the Clumio GCP integration resources in the project.
+    Token                 *string             `json:"token"`
+    // The timestamp of when the connection was updated.
+    UpdatedTimestamp      *string             `json:"updated_timestamp"`
+}
+
+// GCPConnectionLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type GCPConnectionLinks struct {
+    // The HATEOAS link to this resource.
+    Self                *HateoasSelfLink `json:"_self"`
+    // A resource-specific HATEOAS link.
+    DeleteGcpConnection *HateoasLink     `json:"delete-gcp-connection"`
+    // A resource-specific HATEOAS link.
+    UpdateGcpConnection *HateoasLink     `json:"update-gcp-connection"`
+}
+
+// GCPConnectionListEmbedded represents a custom type struct.
+// Embedded responses related to the resource.
+type GCPConnectionListEmbedded struct {
+    // TODO: Add struct field description
+    Items []*GCPConnection `json:"items"`
+}
+
+// GCPConnectionListLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type GCPConnectionListLinks struct {
+    // The HATEOAS link to the first page of results.
+    First *HateoasFirstLink `json:"_first"`
+    // The HATEOAS link to the next page of results.
+    Next  *HateoasNextLink  `json:"_next"`
+    // The HATEOAS link to this resource.
+    Self  *HateoasSelfLink  `json:"_self"`
+}
+
 // GeneralSettingsLinks represents a custom type struct.
 // URLs to pages related to the resource.
 type GeneralSettingsLinks struct {
@@ -5585,6 +5666,8 @@ type ProtectionGroupLinks struct {
     ReadOrganizationalUnit      *HateoasLink                     `json:"read-organizational-unit"`
     // A HATEOAS link to the policy protecting this resource. Will be omitted for unprotected entities.
     ReadPolicyDefinition        *ReadPolicyDefinitionHateoasLink `json:"read-policy-definition"`
+    // A resource-specific HATEOAS link.
+    RestoreProtectionGroup      *HateoasLink                     `json:"restore-protection-group"`
     // A resource-specific HATEOAS link.
     UpdateProtectionGroup       *HateoasLink                     `json:"update-protection-group"`
 }
