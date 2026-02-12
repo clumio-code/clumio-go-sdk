@@ -18,7 +18,8 @@ type RolesV1 struct {
 // ListRoles Returns a list of roles that can be assigned to users, either while inviting users using the
 //  [POST /users](#operation/create-user) API, or by updating the user using the
 //  [PATCH /users/{user_id}](#operation/update-user) API.
-func (r *RolesV1) ListRoles()(
+func (r *RolesV1) ListRoles(
+    filter *string)(
     *models.ListRolesResponse, *apiutils.APIError) {
 
     queryBuilder := r.config.BaseUrl + "/roles"
@@ -26,10 +27,16 @@ func (r *RolesV1) ListRoles()(
     
     header := "application/api.clumio.roles=v1+json"
     result := &models.ListRolesResponse{}
+    queryParams := make(map[string]string)
+    if filter != nil {
+        queryParams["filter"] = *filter
+    }
+    
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: r.config,
         RequestUrl: queryBuilder,
+        QueryParams: queryParams,
         AcceptHeader: header,
         Result200: &result,
         RequestType: common.Get,

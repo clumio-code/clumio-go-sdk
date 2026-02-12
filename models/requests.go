@@ -243,6 +243,52 @@ type UpdateAwsConnectionV1Request struct {
     Resources         *Resources `json:"resources"`
 }
 
+// CreateGcpConnectionV1Request represents a custom type struct.
+// The body of the request.
+type CreateGcpConnectionV1Request struct {
+    // The user defined description for the connection.
+    Description *string `json:"description"`
+    // The user-assigned ID of the GCP project associated with the connection.
+    ProjectId   *string `json:"project_id"`
+}
+
+// PostProcessGcpConnectionV1Request represents a custom type struct.
+// The body of the request.
+type PostProcessGcpConnectionV1Request struct {
+    // ClumioCustomerProtectRoleArn is the ARN of the IAM Role created in Clumio's AWS
+    // account to enable assuming the GCP service account created in customer's project environment.
+    ClumioCustomerProtectRoleArn *string            `json:"clumio_customer_protect_role_arn"`
+    // Configuration represents the GCP connection configuration in json string format
+    Configuration                *string            `json:"configuration"`
+    // The user-assigned ID of the GCP project associated with the connection.
+    ProjectId                    *string            `json:"project_id"`
+    // The user-friendly ID of the GCP project associated with the connection.
+    ProjectName                  *string            `json:"project_name"`
+    // The GCP-assigned numeric INT64 project number associated with the connection.
+    ProjectNumber                *string            `json:"project_number"`
+    // RequestType indicates whether this is a CREATE, UPDATE or DELETE request
+    RequestType                  *string            `json:"request_type"`
+    // ResourceProperties is a key value map meant to be used for passing additional information
+    // like resource IDs.
+    ResourceProperties           map[string]*string `json:"resource_properties"`
+    // The email address of the GCP service account created for this connection.
+    ServiceAccountEmail          *string            `json:"service_account_email"`
+    // The 36-character Clumio GCP integration token used to identify the
+    // installation of the Clumio GCP integration resources in the project.
+    Token                        *string            `json:"token"`
+    // WIFPoolID is the Workload Identity Federation Pool ID created for this connection.
+    WifPoolId                    *string            `json:"wif_pool_id"`
+    // WIFProviderID is the Workload Identity Federation Provider ID created for this connection.
+    WifProviderId                *string            `json:"wif_provider_id"`
+}
+
+// UpdateGcpConnectionV1Request represents a custom type struct.
+// The body of the request.
+type UpdateGcpConnectionV1Request struct {
+    // The user defined description for the connection.
+    Description *string `json:"description"`
+}
+
 // UpdateManagementGroupV1Request represents a custom type struct
 type UpdateManagementGroupV1Request struct {
     // Determines whether backups are allowed to occur across different subgroups or cloud connectors.

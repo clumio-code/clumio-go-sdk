@@ -446,6 +446,44 @@ type CreateEC2MSSQLDatabaseRestoreResponse struct {
     TaskId   *string                                     `json:"task_id"`
 }
 
+// CreateGCPConnectionResponse represents a custom type struct for Success
+type CreateGCPConnectionResponse struct {
+    // URLs to pages related to the resource.
+    Links                 *GCPConnectionLinks `json:"_links"`
+    // AWS account ID of the Clumio control plane.
+    AwsAccountId          *string             `json:"aws_account_id"`
+    // Clumio AWS IAM role name that will be federated into GCP
+    AwsIamRole            *string             `json:"aws_iam_role"`
+    // TODO: Add struct field description
+    Configuration         *Configuration      `json:"configuration"`
+    // The status of the connection
+    ConnectionStatus      *string             `json:"connection_status"`
+    // The type of this connection, which identifies its use.
+    ConnectionType        *string             `json:"connection_type"`
+    // The timestamp of when the connection was created.
+    CreatedTimestamp      *string             `json:"created_timestamp"`
+    // The user defined description for the connection.
+    Description           *string             `json:"description"`
+    // The Clumio-assigned ID of the organizational unit associated with the
+    // GCP connection.
+    // For more information about organizational units, refer to the
+    // Organizational-Units documentation.
+    OrganizationalUnitId  *string             `json:"organizational_unit_id"`
+    // The user-assigned ID of the GCP project associated with the connection.
+    ProjectId             *string             `json:"project_id"`
+    // The user-friendly name of the GCP project associated with the connection.
+    ProjectName           *string             `json:"project_name"`
+    // The GCP-assigned numeric INT64 project number associated with the connection.
+    ProjectNumber         *string             `json:"project_number"`
+    // The permission set selected during registration.
+    TemplatePermissionSet *string             `json:"template_permission_set"`
+    // The 36-character Clumio GCP integration token used to identify the
+    // installation of the Clumio GCP integration resources in the project.
+    Token                 *string             `json:"token"`
+    // The timestamp of when the connection was updated.
+    UpdatedTimestamp      *string             `json:"updated_timestamp"`
+}
+
 // CreateOrganizationalUnitNoTaskResponse represents a custom type struct for Success
 type CreateOrganizationalUnitNoTaskResponse struct {
     // URLs to pages related to the resource.
@@ -1648,6 +1686,22 @@ type ListFileSystemsResponse struct {
     TotalCount      *int64                  `json:"total_count"`
     // The total number of pages of results.
     TotalPagesCount *int64                  `json:"total_pages_count"`
+}
+
+// ListGCPConnectionsResponse represents a custom type struct for Success
+type ListGCPConnectionsResponse struct {
+    // Embedded responses related to the resource.
+    Embedded      *GCPConnectionListEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links         *GCPConnectionListLinks    `json:"_links"`
+    // The number of items listed on the current page.
+    CurrentCount  *int64                     `json:"current_count"`
+    // The filter used in the request. The filter includes both manually-specified and system-generated filters.
+    FilterApplied *string                    `json:"filter_applied"`
+    // The maximum number of items displayed per page in the response.
+    Limit         *int64                     `json:"limit"`
+    // The page token used to get this response.
+    Start         *string                    `json:"start"`
 }
 
 // ListManagementGroupsResponse represents a custom type struct for Success
@@ -3597,6 +3651,40 @@ type ReadFileSystemResponse struct {
     Used                 *uint64             `json:"used"`
 }
 
+// ReadGCPConnectionResponse represents a custom type struct for Success
+type ReadGCPConnectionResponse struct {
+    // URLs to pages related to the resource.
+    Links                 *GCPConnectionLinks `json:"_links"`
+    // TODO: Add struct field description
+    Configuration         *Configuration      `json:"configuration"`
+    // The status of the connection
+    ConnectionStatus      *string             `json:"connection_status"`
+    // The type of this connection, which identifies its use.
+    ConnectionType        *string             `json:"connection_type"`
+    // The timestamp of when the connection was created.
+    CreatedTimestamp      *string             `json:"created_timestamp"`
+    // The user defined description for the connection.
+    Description           *string             `json:"description"`
+    // The Clumio-assigned ID of the organizational unit associated with the
+    // GCP connection.
+    // For more information about organizational units, refer to the
+    // Organizational-Units documentation.
+    OrganizationalUnitId  *string             `json:"organizational_unit_id"`
+    // The user-assigned ID of the GCP project associated with the connection.
+    ProjectId             *string             `json:"project_id"`
+    // The user-friendly name of the GCP project associated with the connection.
+    ProjectName           *string             `json:"project_name"`
+    // The GCP-assigned numeric INT64 project number associated with the connection.
+    ProjectNumber         *string             `json:"project_number"`
+    // The permission set selected during registration.
+    TemplatePermissionSet *string             `json:"template_permission_set"`
+    // The 36-character Clumio GCP integration token used to identify the
+    // installation of the Clumio GCP integration resources in the project.
+    Token                 *string             `json:"token"`
+    // The timestamp of when the connection was updated.
+    UpdatedTimestamp      *string             `json:"updated_timestamp"`
+}
+
 // ReadGeneralSettingsResponseV2 represents a custom type struct for Success
 type ReadGeneralSettingsResponseV2 struct {
     // URLs to pages related to the resource.
@@ -4055,8 +4143,10 @@ type ReadRdsDatabaseBackupResponse struct {
     // The timestamp of when the migration was triggered. This field will be set only for
     // migration granular backups. Represented in RFC-3339 format.
     MigrationTimestamp     *string                 `json:"migration_timestamp"`
-    // Option group name associated with the backed up RDS resource
+    // Option group name associated with the backed up RDS resource.
     OptionGroupName        *string                 `json:"option_group_name"`
+    // Parameter group name associated with the backed up RDS resource.
+    ParameterGroupName     *string                 `json:"parameter_group_name"`
     // The Clumio-assigned ID of the database associated with this backup.
     ResourceId             *string                 `json:"resource_id"`
     // The type of the RDS resource associated with this backup. Possible values include `aws_rds_cluster` and `aws_rds_instance`.
@@ -5179,6 +5269,40 @@ type UpdateConsolidatedAlertResponse struct {
     // The timestamp of when the consolidated alert was last updated. Represented in RFC-3339 format.
     // Raising a new individual alert will update its associated consolidated alert.
     UpdatedTimestamp   *string                        `json:"updated_timestamp"`
+}
+
+// UpdateGCPConnectionResponse represents a custom type struct for Success
+type UpdateGCPConnectionResponse struct {
+    // URLs to pages related to the resource.
+    Links                 *GCPConnectionLinks `json:"_links"`
+    // TODO: Add struct field description
+    Configuration         *Configuration      `json:"configuration"`
+    // The status of the connection
+    ConnectionStatus      *string             `json:"connection_status"`
+    // The type of this connection, which identifies its use.
+    ConnectionType        *string             `json:"connection_type"`
+    // The timestamp of when the connection was created.
+    CreatedTimestamp      *string             `json:"created_timestamp"`
+    // The user defined description for the connection.
+    Description           *string             `json:"description"`
+    // The Clumio-assigned ID of the organizational unit associated with the
+    // GCP connection.
+    // For more information about organizational units, refer to the
+    // Organizational-Units documentation.
+    OrganizationalUnitId  *string             `json:"organizational_unit_id"`
+    // The user-assigned ID of the GCP project associated with the connection.
+    ProjectId             *string             `json:"project_id"`
+    // The user-friendly name of the GCP project associated with the connection.
+    ProjectName           *string             `json:"project_name"`
+    // The GCP-assigned numeric INT64 project number associated with the connection.
+    ProjectNumber         *string             `json:"project_number"`
+    // The permission set selected during registration.
+    TemplatePermissionSet *string             `json:"template_permission_set"`
+    // The 36-character Clumio GCP integration token used to identify the
+    // installation of the Clumio GCP integration resources in the project.
+    Token                 *string             `json:"token"`
+    // The timestamp of when the connection was updated.
+    UpdatedTimestamp      *string             `json:"updated_timestamp"`
 }
 
 // UpdateManagementGroupResponse represents a custom type struct for Success

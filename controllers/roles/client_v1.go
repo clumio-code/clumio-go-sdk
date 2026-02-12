@@ -13,7 +13,8 @@ type RolesV1Client interface {
     // ListRoles Returns a list of roles that can be assigned to users, either while inviting users using the
     //  [POST /users](#operation/create-user) API, or by updating the user using the
     //  [PATCH /users/{user_id}](#operation/update-user) API.
-    ListRoles()(
+    ListRoles(
+        filter *string)(
         *models.ListRolesResponse,  *apiutils.APIError)
     
     // ListPermissions Returns the list of supported permissions.
