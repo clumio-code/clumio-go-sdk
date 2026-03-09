@@ -304,6 +304,8 @@ type AmiModel struct {
     // A value of simple indicates that enhanced networking with the Intel 82599 VF
     // interface is enabled.
     SriovNetSupport          *string `json:"sriov_net_support"`
+    // The current state of the AMI.
+    State                    *string `json:"state"`
     // The type of virtualization of the AMI. Possible values include 'hvm' and 'paravirtual.'
     VirtualizationType       *string `json:"virtualization_type"`
 }
@@ -4096,6 +4098,13 @@ type GCPConnectionListLinks struct {
     Self  *HateoasSelfLink  `json:"_self"`
 }
 
+// GcpProtectionGroupBackupAdvancedSetting represents a custom type struct.
+// Additional policy configuration settings for the `gcp_protection_group_backup` operation.
+type GcpProtectionGroupBackupAdvancedSetting struct {
+    // Backup tier to store the backup in. Valid values are: `standard`, `archive`
+    BackupTier *string `json:"backup_tier"`
+}
+
 // GeneralSettingsLinks represents a custom type struct.
 // URLs to pages related to the resource.
 type GeneralSettingsLinks struct {
@@ -5055,6 +5064,8 @@ type PolicyAdvancedSettings struct {
     Ec2MssqlDatabaseBackup          *EC2MSSQLDatabaseBackupAdvancedSetting          `json:"ec2_mssql_database_backup"`
     // Additional policy configuration settings for the `ec2_mssql_log_backup` operation. If this operation is not of type `ec2_mssql_log_backup`, then this field is omitted from the response.
     Ec2MssqlLogBackup               *EC2MSSQLLogBackupAdvancedSetting               `json:"ec2_mssql_log_backup"`
+    // Additional policy configuration settings for the `gcp_protection_group_backup` operation.
+    GcpProtectionGroupBackup        *GcpProtectionGroupBackupAdvancedSetting        `json:"gcp_protection_group_backup"`
     // Additional policy configuration settings for the `mssql_database_backup` operation. If this operation is not of type `mssql_database_backup`, then this field is omitted from the response.
     MssqlDatabaseBackup             *MSSQLDatabaseBackupAdvancedSetting             `json:"mssql_database_backup"`
     // Additional policy configuration settings for the `mssql_log_backup` operation. If this operation is not of type `mssql_log_backup`, then this field is omitted from the response.
@@ -5448,7 +5459,9 @@ type ProtectionGroupBackupAdvancedSetting struct {
 // URLs to pages related to the resource.
 type ProtectionGroupBackupLinks struct {
     // The HATEOAS link to this resource.
-    Self *HateoasSelfLink `json:"_self"`
+    Self                   *HateoasSelfLink `json:"_self"`
+    // A resource-specific HATEOAS link.
+    RestoreProtectionGroup *HateoasLink     `json:"restore-protection-group"`
 }
 
 // ProtectionGroupBackupListEmbedded represents a custom type struct.
@@ -5607,6 +5620,8 @@ type ProtectionGroupBucketLinks struct {
     ReadOrganizationalUnit            *HateoasLink                     `json:"read-organizational-unit"`
     // A HATEOAS link to the policy protecting this resource. Will be omitted for unprotected entities.
     ReadPolicyDefinition              *ReadPolicyDefinitionHateoasLink `json:"read-policy-definition"`
+    // A resource-specific HATEOAS link.
+    RestoreProtectionGroupS3Asset     *HateoasLink                     `json:"restore-protection-group-s3-asset"`
 }
 
 // ProtectionGroupBucketListEmbedded represents a custom type struct.
@@ -5683,15 +5698,17 @@ type ProtectionGroupListEmbedded struct {
 // URLs to pages related to the resource.
 type ProtectionGroupListLinks struct {
     // The HATEOAS link to the first page of results.
-    First *HateoasFirstLink `json:"_first"`
+    First                 *HateoasFirstLink `json:"_first"`
     // The HATEOAS link to the last page of results.
-    Last  *HateoasLastLink  `json:"_last"`
+    Last                  *HateoasLastLink  `json:"_last"`
     // The HATEOAS link to the next page of results.
-    Next  *HateoasNextLink  `json:"_next"`
+    Next                  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to the previous page of results.
-    Prev  *HateoasPrevLink  `json:"_prev"`
+    Prev                  *HateoasPrevLink  `json:"_prev"`
     // The HATEOAS link to this resource.
-    Self  *HateoasSelfLink  `json:"_self"`
+    Self                  *HateoasSelfLink  `json:"_self"`
+    // A resource-specific HATEOAS link.
+    CreateProtectionGroup *HateoasLink      `json:"create-protection-group"`
 }
 
 // ProtectionGroupRestoreSource represents a custom type struct.
@@ -5810,7 +5827,9 @@ type ProtectionGroupS3AssetBackup struct {
 // URLs to pages related to the resource.
 type ProtectionGroupS3AssetBackupLinks struct {
     // The HATEOAS link to this resource.
-    Self *HateoasSelfLink `json:"_self"`
+    Self                          *HateoasSelfLink `json:"_self"`
+    // A resource-specific HATEOAS link.
+    RestoreProtectionGroupS3Asset *HateoasLink     `json:"restore-protection-group-s3-asset"`
 }
 
 // ProtectionGroupS3AssetBackupListEmbedded represents a custom type struct.
