@@ -21,7 +21,8 @@ type GcpConnectionsV1 struct {
 // ListGcpConnections Lists GCP Connections for a particular org
 func (g *GcpConnectionsV1) ListGcpConnections(
     limit *int64, 
-    start *string)(
+    start *string, 
+    filter *string)(
     *models.ListGCPConnectionsResponse, *apiutils.APIError) {
 
     queryBuilder := g.config.BaseUrl + "/connections/gcp"
@@ -35,6 +36,9 @@ func (g *GcpConnectionsV1) ListGcpConnections(
     }
     if start != nil {
         queryParams["start"] = *start
+    }
+    if filter != nil {
+        queryParams["filter"] = *filter
     }
     
 
