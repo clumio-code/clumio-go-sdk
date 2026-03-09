@@ -220,6 +220,8 @@ type CreateConnectionTemplateV1Request struct {
     // AWS Region of the AWS environment to be connected
     // Mandatory to pass a non-empty string if show_manual_resources is set to true
     AwsRegion             *string   `json:"aws_region"`
+    // If the template generated should be deployed on organization level
+    OrganizationTemplate  *bool     `json:"organization_template"`
     // Returns the resources to be created manually if set to true
     ShowManualResources   *bool     `json:"show_manual_resources"`
     // TODO: Add struct field description
