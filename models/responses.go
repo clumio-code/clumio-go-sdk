@@ -450,16 +450,16 @@ type CreateEC2MSSQLDatabaseRestoreResponse struct {
 type CreateGCPConnectionResponse struct {
     // URLs to pages related to the resource.
     Links                 *GCPConnectionLinks `json:"_links"`
-    // AWS account ID of the Clumio control plane.
-    AwsAccountId          *string             `json:"aws_account_id"`
-    // Clumio AWS IAM role name that will be federated into GCP
-    AwsIamRole            *string             `json:"aws_iam_role"`
     // TODO: Add struct field description
     Configuration         *Configuration      `json:"configuration"`
     // The status of the connection
     ConnectionStatus      *string             `json:"connection_status"`
     // The type of this connection, which identifies its use.
     ConnectionType        *string             `json:"connection_type"`
+    // Clumio control plane ID
+    ControlPlaneId        *string             `json:"control_plane_id"`
+    // Clumio Control plane role name that will be federated into GCP
+    ControlPlaneRole      *string             `json:"control_plane_role"`
     // The timestamp of when the connection was created.
     CreatedTimestamp      *string             `json:"created_timestamp"`
     // The user defined description for the connection.
@@ -3661,6 +3661,10 @@ type ReadGCPConnectionResponse struct {
     ConnectionStatus      *string             `json:"connection_status"`
     // The type of this connection, which identifies its use.
     ConnectionType        *string             `json:"connection_type"`
+    // Clumio control plane ID
+    ControlPlaneId        *string             `json:"control_plane_id"`
+    // Clumio Control plane role name that will be federated into GCP
+    ControlPlaneRole      *string             `json:"control_plane_role"`
     // The timestamp of when the connection was created.
     CreatedTimestamp      *string             `json:"created_timestamp"`
     // The user defined description for the connection.

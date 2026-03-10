@@ -13,7 +13,8 @@ type GcpConnectionsV1Client interface {
     // ListGcpConnections Lists GCP Connections for a particular org
     ListGcpConnections(
         limit *int64, 
-        start *string)(
+        start *string, 
+        filter *string)(
         *models.ListGCPConnectionsResponse,  *apiutils.APIError)
     
     // CreateGcpConnection Create a new GCP Connection. This API should only be invoked by the Clumio Terraform provider and should not be invoked manually.
