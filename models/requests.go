@@ -249,9 +249,12 @@ type UpdateAwsConnectionV1Request struct {
 // The body of the request.
 type CreateGcpConnectionV1Request struct {
     // The user defined description for the connection.
-    Description *string `json:"description"`
+    Description *string   `json:"description"`
     // The user-assigned ID of the GCP project associated with the connection.
-    ProjectId   *string `json:"project_id"`
+    ProjectId   *string   `json:"project_id"`
+    // The GCP regions to be used for inventory.
+    // Each region must be a valid GCP region identifier (e.g., "us-central1", "europe-west1").
+    Regions     []*string `json:"regions"`
 }
 
 // PostProcessGcpConnectionV1Request represents a custom type struct.
@@ -285,7 +288,10 @@ type PostProcessGcpConnectionV1Request struct {
 // The body of the request.
 type UpdateGcpConnectionV1Request struct {
     // The user defined description for the connection.
-    Description *string `json:"description"`
+    Description *string   `json:"description"`
+    // The GCP regions to be used for inventory.
+    // Each region must be a valid GCP region identifier (e.g., "us-central1", "europe-west1").
+    Regions     []*string `json:"regions"`
 }
 
 // UpdateManagementGroupV1Request represents a custom type struct

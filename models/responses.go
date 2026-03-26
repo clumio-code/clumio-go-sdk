@@ -475,6 +475,8 @@ type CreateGCPConnectionResponse struct {
     ProjectName           *string             `json:"project_name"`
     // The GCP-assigned numeric INT64 project number associated with the connection.
     ProjectNumber         *string             `json:"project_number"`
+    // The GCP regions used for inventory.
+    Regions               []*string           `json:"regions"`
     // The permission set selected during registration.
     TemplatePermissionSet *string             `json:"template_permission_set"`
     // The 36-character Clumio GCP integration token used to identify the
@@ -3680,6 +3682,8 @@ type ReadGCPConnectionResponse struct {
     ProjectName           *string             `json:"project_name"`
     // The GCP-assigned numeric INT64 project number associated with the connection.
     ProjectNumber         *string             `json:"project_number"`
+    // The GCP regions used for inventory.
+    Regions               []*string           `json:"regions"`
     // The permission set selected during registration.
     TemplatePermissionSet *string             `json:"template_permission_set"`
     // The 36-character Clumio GCP integration token used to identify the
@@ -5300,6 +5304,8 @@ type UpdateGCPConnectionResponse struct {
     ProjectName           *string             `json:"project_name"`
     // The GCP-assigned numeric INT64 project number associated with the connection.
     ProjectNumber         *string             `json:"project_number"`
+    // The GCP regions used for inventory.
+    Regions               []*string           `json:"regions"`
     // The permission set selected during registration.
     TemplatePermissionSet *string             `json:"template_permission_set"`
     // The 36-character Clumio GCP integration token used to identify the
