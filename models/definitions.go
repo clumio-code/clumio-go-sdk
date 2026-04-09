@@ -3858,6 +3858,15 @@ type EventRules struct {
     CloudwatchRuleArn *string `json:"cloudwatch_rule_arn"`
 }
 
+// ExportMalwareReportLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type ExportMalwareReportLinks struct {
+    // The HATEOAS link to this resource.
+    Self     *HateoasSelfLink     `json:"_self"`
+    // A HATEOAS link to the task associated with this resource.
+    ReadTask *ReadTaskHateoasLink `json:"read-task"`
+}
+
 // FileDescriptor represents a custom type struct.
 // Specifies a file/directory by providing path and file system.
 type FileDescriptor struct {
@@ -4440,6 +4449,20 @@ type MSSQLLogBackupAdvancedSetting struct {
     AlternativeReplica *string `json:"alternative_replica"`
     // The primary preferred replica for MSSQL log backups. This setting only applies to Availability Group databases. Possible values include `"primary"` and `"sync_secondary"`. Recurring backup will first attempt to use either the primary replica or the secondary replica accordingly.
     PreferredReplica   *string `json:"preferred_replica"`
+}
+
+// MalwareReportProtectionGroupBackup represents a custom type struct.
+// The parameters to specify s3 asset backup by protection group and s3 asset id.
+type MalwareReportProtectionGroupBackup struct {
+    // The Clumio-assigned ID of the protection group backup. Use the
+    // [GET /backups/protection-groups](#operation/list-backup-protection-groups)
+    // endpoint to fetch valid values.
+    ProtectionGroupBackupId *string `json:"protection_group_backup_id"`
+    // Clumio-assigned ID of protection group S3 asset, representing the
+    // bucket within the protection group to generate report from. Use the
+    // [GET /datasources/protection-groups/s3-assets](#operation/list-protection-group-s3-assets)
+    // endpoint to fetch valid values.
+    S3AssetId               *string `json:"s3_asset_id"`
 }
 
 // ManagementGroup represents a custom type struct
@@ -5421,35 +5444,39 @@ type ProtectionGroup struct {
 // ProtectionGroupBackup represents a custom type struct
 type ProtectionGroupBackup struct {
     // URLs to pages related to the resource.
-    Links                  *ProtectionGroupBackupLinks `json:"_links"`
+    Links                    *ProtectionGroupBackupLinks `json:"_links"`
     // The number of objects in the protection group that were successfully backed up.
-    BackedUpObjectCount    *int64                      `json:"backed_up_object_count"`
+    BackedUpObjectCount      *int64                      `json:"backed_up_object_count"`
     // The total size in bytes of objects in the protection group that were
     // successfully backed up.
-    BackedUpSizeBytes      *int64                      `json:"backed_up_size_bytes"`
+    BackedUpSizeBytes        *int64                      `json:"backed_up_size_bytes"`
     // The timestamp of when this backup expires. Represented in RFC-3339 format.
-    ExpirationTimestamp    *string                     `json:"expiration_timestamp"`
+    ExpirationTimestamp      *string                     `json:"expiration_timestamp"`
     // The number of objects in the protection group that failed to be backed up.
-    FailedObjectCount      *int64                      `json:"failed_object_count"`
+    FailedObjectCount        *int64                      `json:"failed_object_count"`
     // The total size in bytes of objects in the protection group that failed
     // to be backed up.
-    FailedSizeBytes        *int64                      `json:"failed_size_bytes"`
+    FailedSizeBytes          *int64                      `json:"failed_size_bytes"`
     // The Clumio-assigned ID of the protection group backup.
-    Id                     *string                     `json:"id"`
+    Id                       *string                     `json:"id"`
+    // The number of objects that were detected to be malicious during the backup.
+    MaliciousObjectCount     *int64                      `json:"malicious_object_count"`
+    // The link for the malicious objects list at protection group level.
+    MaliciousObjectsListLink *string                     `json:"malicious_objects_list_link"`
     // The number of objects in the protection group that were missing during backup.
-    MissingObjectCount     *int64                      `json:"missing_object_count"`
+    MissingObjectCount       *int64                      `json:"missing_object_count"`
     // The total size in bytes of objects in the protection group that were missing during backup.
-    MissingSizeBytes       *int64                      `json:"missing_size_bytes"`
+    MissingSizeBytes         *int64                      `json:"missing_size_bytes"`
     // The Clumio-assigned ID of the protection group.
-    ProtectionGroupId      *string                     `json:"protection_group_id"`
+    ProtectionGroupId        *string                     `json:"protection_group_id"`
     // The user-assigned name of the protection group.
-    ProtectionGroupName    *string                     `json:"protection_group_name"`
+    ProtectionGroupName      *string                     `json:"protection_group_name"`
     // The version of the protection group at the time the backup was taken.
-    ProtectionGroupVersion *int64                      `json:"protection_group_version"`
+    ProtectionGroupVersion   *int64                      `json:"protection_group_version"`
     // The timestamp of when this backup started. Represented in RFC-3339 format.
-    StartTimestamp         *string                     `json:"start_timestamp"`
+    StartTimestamp           *string                     `json:"start_timestamp"`
     // The type of backup. Possible values include `protection_group_backup`.
-    ClumioType             *string                     `json:"type"`
+    ClumioType               *string                     `json:"type"`
 }
 
 // ProtectionGroupBackupAdvancedSetting represents a custom type struct.
@@ -5813,6 +5840,10 @@ type ProtectionGroupS3AssetBackup struct {
     FailedSizeBytes          *uint64                            `json:"failed_size_bytes"`
     // The Clumio-assigned ID of the protection group S3 asset backup.
     Id                       *string                            `json:"id"`
+    // The number of objects that were detected to be malicious during the backup.
+    MaliciousObjectCount     *int64                             `json:"malicious_object_count"`
+    // The link for the malicious objects list.
+    MaliciousObjectsListLink *string                            `json:"malicious_objects_list_link"`
     // The number of objects in the protection group S3 asset that were missing during backup.
     MissingObjectCount       *int64                             `json:"missing_object_count"`
     // The total size in bytes of objects in the protection group S3 asset that were missing during backup.
@@ -7080,12 +7111,77 @@ type S3AccessControlTranslation struct {
     Owner *string `json:"owner"`
 }
 
+// S3AssetBackupTimeRange represents a custom type struct.
+// The parameters to generate the report of malicious objects detected within backup time range.
+type S3AssetBackupTimeRange struct {
+    // The end timestamp of searching time range in RFC-3339 format.
+    // Clumio backup time until the given time inclusive. If not provided, defaults to the latest backup time.
+    EndTimestamp   *string `json:"end_timestamp"`
+    // Clumio-assigned ID of protection group S3 asset, representing the
+    // bucket within the protection group to generate report from. Use the
+    // [GET /datasources/protection-groups/s3-assets](#operation/list-protection-group-s3-assets)
+    // endpoint to fetch valid values.
+    S3AssetId      *string `json:"s3_asset_id"`
+    // The start timestamp of searching time range in RFC-3339 format.
+    // Clumio backup time since the given time inclusive. If not provided, defaults to the earliest backup time.
+    StartTimestamp *string `json:"start_timestamp"`
+}
+
 // S3AssetInfo represents a custom type struct.
 // S3AssetInfo
 // The installed information for the S3 feature.
 type S3AssetInfo struct {
     // The current version of the feature.
     InstalledTemplateVersion *string `json:"installed_template_version"`
+}
+
+// S3AssetMalwareReportSource represents a custom type struct.
+// The parameters to specify how to generate the malware report for protection group S3 asset.
+// Must set exactly one of the options.
+type S3AssetMalwareReportSource struct {
+    // The parameters to generate the report of malicious objects detected within backup time range.
+    BackupTimeRange       *S3AssetBackupTimeRange             `json:"backup_time_range"`
+    // The parameters to generate the report of malicious objects detected in a specific malware scan task.
+    MalwareScanTask       *S3AssetMalwareScanTask             `json:"malware_scan_task"`
+    // The parameters to specify s3 asset backup by protection group and s3 asset id.
+    ProtectionGroupBackup *MalwareReportProtectionGroupBackup `json:"protection_group_backup"`
+    // Option to generate malware report using S3AssetBackupID.
+    // This is an Clumio-assigned ID of the protection group S3 asset backup. Use the
+    // [GET /backups/protection-groups/s3-assets](#operation/list-backup-protection-group-s3-assets)
+    // endpoint to fetch valid values.
+    S3AssetBackupId       *string                             `json:"s3_asset_backup_id"`
+}
+
+// S3AssetMalwareReportTarget represents a custom type struct.
+// The parameters for which S3 bucket to export the malware report to.
+type S3AssetMalwareReportTarget struct {
+    // The Clumio-assigned ID of the bucket where the report is exported to
+    // Use the [GET /datasources/aws/s3-buckets](#operation/list-aws-s3-buckets) endpoint
+    // to fetch valid values.
+    BucketId      *string `json:"bucket_id"`
+    // The Clumio-assigned ID of the AWS environment to be used as the export destination.
+    // Use the [GET /datasources/aws/s3-buckets/{bucket_id}](#operation/read-aws-s3-bucket) endpoint
+    // to fetch the environment ID for a bucket.
+    EnvironmentId *string `json:"environment_id"`
+    // Prefix to export the objects under.
+    // The final destination would be `s3://///malware_report_.csv`
+    Prefix        *string `json:"prefix"`
+    // Storage class for exported objects. Valid values are: `S3 Standard`, `S3 Standard-IA`,
+    // `S3 Intelligent-Tiering` and `S3 One Zone-IA`. 
+    // Default is `S3 Standard`.
+    StorageClass  *string `json:"storage_class"`
+}
+
+// S3AssetMalwareScanTask represents a custom type struct.
+// The parameters to generate the report of malicious objects detected in a specific malware scan task.
+type S3AssetMalwareScanTask struct {
+    // Clumio-assigned ID of protection group S3 asset, representing the
+    // bucket within the protection group to generate report from. Use the
+    // [GET /datasources/protection-groups/s3-assets](#operation/list-protection-group-s3-assets)
+    // endpoint to fetch valid values.
+    S3AssetId *string `json:"s3_asset_id"`
+    // The task ID assigned to the backup or regular malware scan where malicious objects were detected.
+    TaskId    *int64  `json:"task_id"`
 }
 
 // S3BucketSizeRes represents a custom type struct.

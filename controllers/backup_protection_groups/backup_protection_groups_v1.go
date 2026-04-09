@@ -4,6 +4,7 @@
 package backupprotectiongroups
 
 import (
+    "encoding/json"
     "fmt"
 
     "github.com/clumio-code/clumio-go-sdk/api_utils"
@@ -93,6 +94,45 @@ func (b *BackupProtectionGroupsV1) ListBackupProtectionGroupS3Assets(
         AcceptHeader: header,
         Result200: &result,
         RequestType: common.Get,
+    })
+
+    return result, apiErr
+}
+
+
+// ExportProtectionGroupS3AssetMalwareReport Exports the specified malware report for a protection group S3 asset.
+func (b *BackupProtectionGroupsV1) ExportProtectionGroupS3AssetMalwareReport(
+    embed *string, 
+    body models.ExportProtectionGroupS3AssetMalwareReportV1Request)(
+    *models.ExportMalwareReportResponse, *apiutils.APIError) {
+
+    queryBuilder := b.config.BaseUrl + "/backups/protection-groups/s3-assets/malware-report"
+
+    bytes, err := json.Marshal(body)
+    if err != nil {
+        return nil, &apiutils.APIError{
+            ResponseCode: 500,
+            Reason:       fmt.Sprintf("Failed to Marshal Request Body %v", body),
+            Response:     []byte(fmt.Sprintf("%v", err)),
+        }
+    }
+    payload := string(bytes)
+    header := "application/api.clumio.backup-protection-groups=v1+json"
+    result := &models.ExportMalwareReportResponse{}
+    queryParams := make(map[string]string)
+    if embed != nil {
+        queryParams["embed"] = *embed
+    }
+    
+
+    apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
+        Config: b.config,
+        RequestUrl: queryBuilder,
+        QueryParams: queryParams,
+        AcceptHeader: header,
+        Body: payload,
+        Result202: &result,
+        RequestType: common.Post,
     })
 
     return result, apiErr

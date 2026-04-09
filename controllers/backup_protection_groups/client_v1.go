@@ -26,6 +26,12 @@ type BackupProtectionGroupsV1Client interface {
         filter *string)(
         *models.ListProtectionGroupS3AssetBackupsResponse,  *apiutils.APIError)
     
+    // ExportProtectionGroupS3AssetMalwareReport Exports the specified malware report for a protection group S3 asset.
+    ExportProtectionGroupS3AssetMalwareReport(
+        embed *string, 
+        body models.ExportProtectionGroupS3AssetMalwareReportV1Request)(
+        *models.ExportMalwareReportResponse,  *apiutils.APIError)
+    
     // ReadBackupProtectionGroupS3Asset Returns a representation of the specified protection group S3 asset backup.
     ReadBackupProtectionGroupS3Asset(
         backupId string)(
