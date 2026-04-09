@@ -1139,6 +1139,18 @@ type EstimateCostS3InstantAccessEndpointSyncResponse struct {
     TotalObjectSize  *int64                                                `json:"total_object_size"`
 }
 
+// ExportMalwareReportResponse represents a custom type struct for Success
+type ExportMalwareReportResponse struct {
+    // Embedded responses related to the resource.
+    Embedded *ReadTaskHateoasOuterEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links    *ExportMalwareReportLinks     `json:"_links"`
+    // The Clumio-assigned ID of the task created by this request.
+    // The progress of the task can be monitored using the
+    // `GET /tasks/{task_id}` endpoint.
+    TaskId   *string                       `json:"task_id"`
+}
+
 // FileListResponse represents a custom type struct for Success
 type FileListResponse struct {
     // Embedded responses related to the resource.
@@ -3855,35 +3867,39 @@ type ReadPolicyResponse struct {
 // ReadProtectionGroupBackupResponse represents a custom type struct for Success
 type ReadProtectionGroupBackupResponse struct {
     // URLs to pages related to the resource.
-    Links                  *ProtectionGroupBackupLinks `json:"_links"`
+    Links                    *ProtectionGroupBackupLinks `json:"_links"`
     // The number of objects in the protection group that were successfully backed up.
-    BackedUpObjectCount    *int64                      `json:"backed_up_object_count"`
+    BackedUpObjectCount      *int64                      `json:"backed_up_object_count"`
     // The total size in bytes of objects in the protection group that were
     // successfully backed up.
-    BackedUpSizeBytes      *int64                      `json:"backed_up_size_bytes"`
+    BackedUpSizeBytes        *int64                      `json:"backed_up_size_bytes"`
     // The timestamp of when this backup expires. Represented in RFC-3339 format.
-    ExpirationTimestamp    *string                     `json:"expiration_timestamp"`
+    ExpirationTimestamp      *string                     `json:"expiration_timestamp"`
     // The number of objects in the protection group that failed to be backed up.
-    FailedObjectCount      *int64                      `json:"failed_object_count"`
+    FailedObjectCount        *int64                      `json:"failed_object_count"`
     // The total size in bytes of objects in the protection group that failed
     // to be backed up.
-    FailedSizeBytes        *int64                      `json:"failed_size_bytes"`
+    FailedSizeBytes          *int64                      `json:"failed_size_bytes"`
     // The Clumio-assigned ID of the protection group backup.
-    Id                     *string                     `json:"id"`
+    Id                       *string                     `json:"id"`
+    // The number of objects that were detected to be malicious during the backup.
+    MaliciousObjectCount     *int64                      `json:"malicious_object_count"`
+    // The link for the malicious objects list at protection group level.
+    MaliciousObjectsListLink *string                     `json:"malicious_objects_list_link"`
     // The number of objects in the protection group that were missing during backup.
-    MissingObjectCount     *int64                      `json:"missing_object_count"`
+    MissingObjectCount       *int64                      `json:"missing_object_count"`
     // The total size in bytes of objects in the protection group that were missing during backup.
-    MissingSizeBytes       *int64                      `json:"missing_size_bytes"`
+    MissingSizeBytes         *int64                      `json:"missing_size_bytes"`
     // The Clumio-assigned ID of the protection group.
-    ProtectionGroupId      *string                     `json:"protection_group_id"`
+    ProtectionGroupId        *string                     `json:"protection_group_id"`
     // The user-assigned name of the protection group.
-    ProtectionGroupName    *string                     `json:"protection_group_name"`
+    ProtectionGroupName      *string                     `json:"protection_group_name"`
     // The version of the protection group at the time the backup was taken.
-    ProtectionGroupVersion *int64                      `json:"protection_group_version"`
+    ProtectionGroupVersion   *int64                      `json:"protection_group_version"`
     // The timestamp of when this backup started. Represented in RFC-3339 format.
-    StartTimestamp         *string                     `json:"start_timestamp"`
+    StartTimestamp           *string                     `json:"start_timestamp"`
     // The type of backup. Possible values include `protection_group_backup`.
-    ClumioType             *string                     `json:"type"`
+    ClumioType               *string                     `json:"type"`
 }
 
 // ReadProtectionGroupResponse represents a custom type struct for Success
@@ -4018,6 +4034,10 @@ type ReadProtectionGroupS3AssetBackupResponse struct {
     FailedSizeBytes          *uint64                            `json:"failed_size_bytes"`
     // The Clumio-assigned ID of the protection group S3 asset backup.
     Id                       *string                            `json:"id"`
+    // The number of objects that were detected to be malicious during the backup.
+    MaliciousObjectCount     *int64                             `json:"malicious_object_count"`
+    // The link for the malicious objects list.
+    MaliciousObjectsListLink *string                            `json:"malicious_objects_list_link"`
     // The number of objects in the protection group S3 asset that were missing during backup.
     MissingObjectCount       *int64                             `json:"missing_object_count"`
     // The total size in bytes of objects in the protection group S3 asset that were missing during backup.

@@ -76,6 +76,15 @@ type CreateBackupEc2MssqlDatabaseV1Request struct {
     ClumioType *string          `json:"type"`
 }
 
+// ExportProtectionGroupS3AssetMalwareReportV1Request represents a custom type struct
+type ExportProtectionGroupS3AssetMalwareReportV1Request struct {
+    // The parameters to specify how to generate the malware report for protection group S3 asset.
+    // Must set exactly one of the options.
+    Source *S3AssetMalwareReportSource `json:"source"`
+    // The parameters for which S3 bucket to export the malware report to.
+    Target *S3AssetMalwareReportTarget `json:"target"`
+}
+
 // CreateAwsConnectionV1Request represents a custom type struct
 type CreateAwsConnectionV1Request struct {
     // The AWS-assigned ID of the account associated with the connection.
