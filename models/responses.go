@@ -462,6 +462,8 @@ type CreateGCPConnectionResponse struct {
     ControlPlaneRole      *string             `json:"control_plane_role"`
     // The timestamp of when the connection was created.
     CreatedTimestamp      *string             `json:"created_timestamp"`
+    // The method by which the GCP terraform template was deployed.
+    DeploymentType        *string             `json:"deployment_type"`
     // The user defined description for the connection.
     Description           *string             `json:"description"`
     // The Clumio-assigned ID of the organizational unit associated with the
@@ -3681,6 +3683,8 @@ type ReadGCPConnectionResponse struct {
     ControlPlaneRole      *string             `json:"control_plane_role"`
     // The timestamp of when the connection was created.
     CreatedTimestamp      *string             `json:"created_timestamp"`
+    // The method by which the GCP terraform template was deployed.
+    DeploymentType        *string             `json:"deployment_type"`
     // The user defined description for the connection.
     Description           *string             `json:"description"`
     // The Clumio-assigned ID of the organizational unit associated with the
@@ -5311,6 +5315,8 @@ type UpdateGCPConnectionResponse struct {
     ConnectionType        *string             `json:"connection_type"`
     // The timestamp of when the connection was created.
     CreatedTimestamp      *string             `json:"created_timestamp"`
+    // The method by which the GCP terraform template was deployed.
+    DeploymentType        *string             `json:"deployment_type"`
     // The user defined description for the connection.
     Description           *string             `json:"description"`
     // The Clumio-assigned ID of the organizational unit associated with the
