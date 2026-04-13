@@ -4060,6 +4060,8 @@ type GCPConnection struct {
     ConnectionType        *string             `json:"connection_type"`
     // The timestamp of when the connection was created.
     CreatedTimestamp      *string             `json:"created_timestamp"`
+    // The method by which the GCP terraform template was deployed.
+    DeploymentType        *string             `json:"deployment_type"`
     // The user defined description for the connection.
     Description           *string             `json:"description"`
     // The Clumio-assigned ID of the organizational unit associated with the
