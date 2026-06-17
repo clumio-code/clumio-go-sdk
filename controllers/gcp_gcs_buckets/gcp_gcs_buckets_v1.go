@@ -1,7 +1,7 @@
 // Copyright (c) 2023 Clumio All Rights Reserved
 
-// Package awss3buckets contains methods related to AwsS3Buckets
-package awss3buckets
+// Package gcpgcsbuckets contains methods related to GcpGcsBuckets
+package gcpgcsbuckets
 
 import (
     "fmt"
@@ -12,24 +12,24 @@ import (
     "github.com/clumio-code/clumio-go-sdk/models"
 )
 
-// AwsS3BucketsV1 represents a custom type struct
-type AwsS3BucketsV1 struct {
+// GcpGcsBucketsV1 represents a custom type struct
+type GcpGcsBucketsV1 struct {
     config config.Config
 }
 
-// ListAwsS3Buckets Returns a list of S3 buckets.
-func (a *AwsS3BucketsV1) ListAwsS3Buckets(
+// ListGcpGcsBuckets Returns a list of GCS buckets.
+func (g *GcpGcsBucketsV1) ListGcpGcsBuckets(
     limit *int64, 
     start *string, 
     filter *string, 
-    lookbackDays *int64)(
-    *models.ListBucketsResponse, *apiutils.APIError) {
+    bucketMatcher *string)(
+    *models.ListGCSBucketsResponse, *apiutils.APIError) {
 
-    queryBuilder := a.config.BaseUrl + "/datasources/aws/s3-buckets"
+    queryBuilder := g.config.BaseUrl + "/datasources/gcp/gcs-buckets"
 
     
-    header := "application/api.clumio.aws-s3-buckets=v1+json"
-    result := &models.ListBucketsResponse{}
+    header := "application/api.clumio.gcp-gcs-buckets=v1+json"
+    result := &models.ListGCSBucketsResponse{}
     queryParams := make(map[string]string)
     if limit != nil {
         queryParams["limit"] = fmt.Sprintf("%v", *limit)
@@ -40,13 +40,13 @@ func (a *AwsS3BucketsV1) ListAwsS3Buckets(
     if filter != nil {
         queryParams["filter"] = *filter
     }
-    if lookbackDays != nil {
-        queryParams["lookback_days"] = fmt.Sprintf("%v", *lookbackDays)
+    if bucketMatcher != nil {
+        queryParams["bucket_matcher"] = *bucketMatcher
     }
     
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
-        Config: a.config,
+        Config: g.config,
         RequestUrl: queryBuilder,
         QueryParams: queryParams,
         AcceptHeader: header,
@@ -58,24 +58,24 @@ func (a *AwsS3BucketsV1) ListAwsS3Buckets(
 }
 
 
-// ReadAwsS3Bucket Returns a representation of the specified S3 bucket.
-func (a *AwsS3BucketsV1) ReadAwsS3Bucket(
+// ReadGcpGcsBucket Returns a representation of the specified GCS bucket.
+func (g *GcpGcsBucketsV1) ReadGcpGcsBucket(
     bucketId string)(
-    *models.ReadBucketResponse, *apiutils.APIError) {
+    *models.ReadGCSBucketResponse, *apiutils.APIError) {
 
-    pathURL := "/datasources/aws/s3-buckets/{bucket_id}"
+    pathURL := "/datasources/gcp/gcs-buckets/{bucket_id}"
     //process optional template parameters
     pathParams := map[string]string{
         "bucket_id": bucketId,
     }
-    queryBuilder := a.config.BaseUrl + pathURL
+    queryBuilder := g.config.BaseUrl + pathURL
 
     
-    header := "application/api.clumio.aws-s3-buckets=v1+json"
-    result := &models.ReadBucketResponse{}
+    header := "application/api.clumio.gcp-gcs-buckets=v1+json"
+    result := &models.ReadGCSBucketResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
-        Config: a.config,
+        Config: g.config,
         RequestUrl: queryBuilder,
         PathParams: pathParams,
         AcceptHeader: header,

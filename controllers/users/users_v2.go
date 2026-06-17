@@ -90,7 +90,7 @@ func (u *UsersV2) CreateUser(
 // ChangePassword Change the password of the current user. Users can only change their own passwords.
 func (u *UsersV2) ChangePassword(
     body *models.ChangePasswordV2Request)(
-    *models.ChangePasswordResponse, *apiutils.APIError) {
+    interface{}, *apiutils.APIError) {
 
     queryBuilder := u.config.BaseUrl + "/users/_change_password"
 
@@ -104,7 +104,7 @@ func (u *UsersV2) ChangePassword(
     }
     payload := string(bytes)
     header := "application/api.clumio.users=v2+json"
-    result := &models.ChangePasswordResponse{}
+    var result interface{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: u.config,

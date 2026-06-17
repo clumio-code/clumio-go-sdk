@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	sdkVersion = "0.30.1"
+	sdkVersion = "0.31.0"
 
 	AcceptHeader         = "Accept"
 	OrgUnitContextHeader = "x-clumio-organizationalunit-context"

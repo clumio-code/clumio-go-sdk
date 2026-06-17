@@ -35,7 +35,7 @@ type UsersV1Client interface {
     // DeleteUser Deletes an existing user from Clumio, revoking the user's access to Clumio. A deleted user cannot be recovered.
     DeleteUser(
         userId int64)(
-        *models.DeleteUserResponseV1,  *apiutils.APIError)
+        interface{},  *apiutils.APIError)
     
     // UpdateUser Manages an existing user. Managing a user includes enabling or disabling the user,
     //  changing the user's full name or updating the user's role.
@@ -48,7 +48,7 @@ type UsersV1Client interface {
     ChangePassword(
         userId int64, 
         body *models.ChangePasswordV1Request)(
-        *models.ChangePasswordResponse,  *apiutils.APIError)
+        interface{},  *apiutils.APIError)
     
 }
 

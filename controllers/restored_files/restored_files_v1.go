@@ -165,7 +165,7 @@ func (r *RestoredFilesV1) GenerateRestoredFilePasscode(
 func (r *RestoredFilesV1) ShareRestoredFile(
     restoredFileId string, 
     body *models.ShareRestoredFileV1Request)(
-    *models.ShareFileRestoreEmailResponse, *apiutils.APIError) {
+    interface{}, *apiutils.APIError) {
 
     pathURL := "/restores/files/{restored_file_id}/_share"
     //process optional template parameters
@@ -184,7 +184,7 @@ func (r *RestoredFilesV1) ShareRestoredFile(
     }
     payload := string(bytes)
     header := "application/api.clumio.restored-files=v1+json"
-    result := &models.ShareFileRestoreEmailResponse{}
+    var result interface{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: r.config,

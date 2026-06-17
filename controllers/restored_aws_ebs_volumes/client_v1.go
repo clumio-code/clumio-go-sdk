@@ -13,7 +13,7 @@ type RestoredAwsEbsVolumesV1Client interface {
     // RestoreAwsEbsVolume TODO: Add comment
     RestoreAwsEbsVolume(
         body models.RestoreAwsEbsVolumeV1Request)(
-        *models.RestoreEBSResponseV1,  *apiutils.APIError)
+        interface{},  *apiutils.APIError)
     
 }
 

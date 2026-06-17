@@ -137,7 +137,7 @@ func (r *ReportComplianceRunsV1) SendComplianceReportRunEmail(
     configurationId string, 
     runId string, 
     body *models.SendComplianceReportRunEmailV1Request)(
-    *models.SendComplianceRunEmailResponse, *apiutils.APIError) {
+    interface{}, *apiutils.APIError) {
 
     pathURL := "/reports/compliance/configurations/{configuration_id}/runs/{run_id}/_notify"
     //process optional template parameters
@@ -157,7 +157,7 @@ func (r *ReportComplianceRunsV1) SendComplianceReportRunEmail(
     }
     payload := string(bytes)
     header := "application/api.clumio.report-compliance-runs=v1+json"
-    result := &models.SendComplianceRunEmailResponse{}
+    var result interface{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: r.config,

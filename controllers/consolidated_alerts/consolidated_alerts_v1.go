@@ -22,6 +22,7 @@ type ConsolidatedAlertsV1 struct {
 func (c *ConsolidatedAlertsV1) ListConsolidatedAlerts(
     limit *int64, 
     start *string, 
+    sort *string, 
     filter *string)(
     *models.ListConsolidatedAlertsResponse, *apiutils.APIError) {
 
@@ -36,6 +37,9 @@ func (c *ConsolidatedAlertsV1) ListConsolidatedAlerts(
     }
     if start != nil {
         queryParams["start"] = *start
+    }
+    if sort != nil {
+        queryParams["sort"] = *sort
     }
     if filter != nil {
         queryParams["filter"] = *filter

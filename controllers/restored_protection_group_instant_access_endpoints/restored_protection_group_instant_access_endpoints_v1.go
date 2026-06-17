@@ -356,7 +356,7 @@ func (r *RestoredProtectionGroupInstantAccessEndpointsV1) UpdateProtectionGroupI
     endpointId string, 
     roleId string, 
     body models.UpdateProtectionGroupInstantAccessEndpointRoleV1Request)(
-    *models.UpdateS3InstantAccessEndpointRoleResponse, *apiutils.APIError) {
+    interface{}, *apiutils.APIError) {
 
     pathURL := "/restores/protection-groups/instant-access-endpoints/{endpoint_id}/roles/{role_id}"
     //process optional template parameters
@@ -376,7 +376,7 @@ func (r *RestoredProtectionGroupInstantAccessEndpointsV1) UpdateProtectionGroupI
     }
     payload := string(bytes)
     header := "application/api.clumio.restored-protection-group-instant-access-endpoints=v1+json"
-    result := &models.UpdateS3InstantAccessEndpointRoleResponse{}
+    var result interface{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: r.config,
@@ -396,7 +396,7 @@ func (r *RestoredProtectionGroupInstantAccessEndpointsV1) UpdateProtectionGroupI
 func (r *RestoredProtectionGroupInstantAccessEndpointsV1) DeleteProtectionGroupInstantAccessEndpointRole(
     endpointId string, 
     roleId string)(
-    *models.DeleteS3InstantAccessEndpointRoleResponse, *apiutils.APIError) {
+    interface{}, *apiutils.APIError) {
 
     pathURL := "/restores/protection-groups/instant-access-endpoints/{endpoint_id}/roles/{role_id}"
     //process optional template parameters
@@ -408,7 +408,7 @@ func (r *RestoredProtectionGroupInstantAccessEndpointsV1) DeleteProtectionGroupI
 
     
     header := "application/api.clumio.restored-protection-group-instant-access-endpoints=v1+json"
-    result := &models.DeleteS3InstantAccessEndpointRoleResponse{}
+    var result interface{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: r.config,
