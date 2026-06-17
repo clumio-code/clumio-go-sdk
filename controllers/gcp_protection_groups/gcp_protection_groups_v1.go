@@ -134,7 +134,7 @@ func (g *GcpProtectionGroupsV1) ReadGcpProtectionGroup(
 // DeleteGcpProtectionGroup Deletes the specified GCP protection group.
 func (g *GcpProtectionGroupsV1) DeleteGcpProtectionGroup(
     protectionGroupId string)(
-    *models., *apiutils.APIError) {
+    interface{}, *apiutils.APIError) {
 
     pathURL := "/datasources/gcp/protection-groups/{protection_group_id}"
     //process optional template parameters
@@ -145,7 +145,7 @@ func (g *GcpProtectionGroupsV1) DeleteGcpProtectionGroup(
 
     
     header := "application/api.clumio.gcp-protection-groups=v1+json"
-    result := &models.{}
+    var result interface{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: g.config,

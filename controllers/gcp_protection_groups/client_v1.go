@@ -33,7 +33,7 @@ type GcpProtectionGroupsV1Client interface {
     // DeleteGcpProtectionGroup Deletes the specified GCP protection group.
     DeleteGcpProtectionGroup(
         protectionGroupId string)(
-        *models.,  *apiutils.APIError)
+        interface{},  *apiutils.APIError)
     
     // UpdateGcpProtectionGroup Updates an existing GCP protection group.
     UpdateGcpProtectionGroup(
