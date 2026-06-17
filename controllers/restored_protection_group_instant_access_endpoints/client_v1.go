@@ -72,13 +72,13 @@ type RestoredProtectionGroupInstantAccessEndpointsV1Client interface {
         endpointId string, 
         roleId string, 
         body models.UpdateProtectionGroupInstantAccessEndpointRoleV1Request)(
-        *models.UpdateS3InstantAccessEndpointRoleResponse,  *apiutils.APIError)
+        interface{},  *apiutils.APIError)
     
     // DeleteProtectionGroupInstantAccessEndpointRole Deletes a user-defined IAM role attached to an S3 Instant Access endpoint.
     DeleteProtectionGroupInstantAccessEndpointRole(
         endpointId string, 
         roleId string)(
-        *models.DeleteS3InstantAccessEndpointRoleResponse,  *apiutils.APIError)
+        interface{},  *apiutils.APIError)
     
 }
 

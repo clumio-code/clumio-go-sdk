@@ -46,7 +46,7 @@ type RestoredFilesV1Client interface {
     ShareRestoredFile(
         restoredFileId string, 
         body *models.ShareRestoredFileV1Request)(
-        *models.ShareFileRestoreEmailResponse,  *apiutils.APIError)
+        interface{},  *apiutils.APIError)
     
 }
 

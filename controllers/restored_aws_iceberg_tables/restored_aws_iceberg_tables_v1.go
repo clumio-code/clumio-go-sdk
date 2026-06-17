@@ -1,7 +1,7 @@
 // Copyright (c) 2023 Clumio All Rights Reserved
 
-// Package restoredawsebsvolumes contains methods related to RestoredAwsEbsVolumes
-package restoredawsebsvolumes
+// Package restoredawsicebergtables contains methods related to RestoredAwsIcebergTables
+package restoredawsicebergtables
 
 import (
     "encoding/json"
@@ -13,17 +13,17 @@ import (
     "github.com/clumio-code/clumio-go-sdk/models"
 )
 
-// RestoredAwsEbsVolumesV1 represents a custom type struct
-type RestoredAwsEbsVolumesV1 struct {
+// RestoredAwsIcebergTablesV1 represents a custom type struct
+type RestoredAwsIcebergTablesV1 struct {
     config config.Config
 }
 
-// RestoreAwsEbsVolume TODO: Add comment
-func (r *RestoredAwsEbsVolumesV1) RestoreAwsEbsVolume(
-    body models.RestoreAwsEbsVolumeV1Request)(
-    interface{}, *apiutils.APIError) {
+// RestoreAwsIcebergTable Restores the specified source AWS Iceberg Table snapshots to the specified target destination. The source AWS Iceberg Table must be one that was backed up by Clumio.
+func (r *RestoredAwsIcebergTablesV1) RestoreAwsIcebergTable(
+    body models.RestoreAwsIcebergTableV1Request)(
+    *models.RestoreAWSIcebergTableResponse, *apiutils.APIError) {
 
-    queryBuilder := r.config.BaseUrl + "/restores/aws/ebs-volumes"
+    queryBuilder := r.config.BaseUrl + "/restores/aws/iceberg-tables"
 
     bytes, err := json.Marshal(body)
     if err != nil {
@@ -34,15 +34,15 @@ func (r *RestoredAwsEbsVolumesV1) RestoreAwsEbsVolume(
         }
     }
     payload := string(bytes)
-    header := "application/api.clumio.restored-aws-ebs-volumes=v1+json"
-    var result interface{}
+    header := "application/api.clumio.restored-aws-iceberg-tables=v1+json"
+    result := &models.RestoreAWSIcebergTableResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: r.config,
         RequestUrl: queryBuilder,
         AcceptHeader: header,
         Body: payload,
-        Result200: &result,
+        Result202: &result,
         RequestType: common.Post,
     })
 

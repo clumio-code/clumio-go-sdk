@@ -14,6 +14,7 @@ type ConsolidatedAlertsV1Client interface {
     ListConsolidatedAlerts(
         limit *int64, 
         start *string, 
+        sort *string, 
         filter *string)(
         *models.ListConsolidatedAlertsResponse,  *apiutils.APIError)
     

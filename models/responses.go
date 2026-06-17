@@ -149,12 +149,6 @@ type AddS3InstantAccessEndpointRoleResponse struct {
     RoleId   *string                          `json:"role_id"`
 }
 
-// ChangePasswordResponse represents a custom type struct for Success
-type ChangePasswordResponse struct {
-    // HateoasCommonLinks are the common fields for HATEOAS response.
-    Links *HateoasCommonLinks `json:"_links"`
-}
-
 // CreateAWSConnectionResponse represents a custom type struct for Success
 type CreateAWSConnectionResponse struct {
     // URLs to pages related to the resource.
@@ -486,6 +480,77 @@ type CreateGCPConnectionResponse struct {
     Token                 *string             `json:"token"`
     // The timestamp of when the connection was updated.
     UpdatedTimestamp      *string             `json:"updated_timestamp"`
+}
+
+// CreateGCPProtectionGroupResponse represents a custom type struct for Success
+type CreateGCPProtectionGroupResponse struct {
+    // TODO: Add struct field description
+    Embedded                     *GCPProtectionGroupEmbedded `json:"_embedded"`
+    // TODO: Add struct field description
+    Etag                         *string                     `json:"_etag"`
+    // TODO: Add struct field description
+    Links                        *GCPProtectionGroupLinks    `json:"_links"`
+    // Represents the aggregated stats for backup status.
+    BackupStatusStats            *BackupStatusStats          `json:"backup_status_stats"`
+    // The total number of unique buckets in this protection group
+    // (manual + rule-matched, deduplicated).
+    BucketCount                  *int64                      `json:"bucket_count"`
+    // TODO: Add struct field description
+    BucketRule                   *GCPBucketRuleModel         `json:"bucket_rule"`
+    // The number of buckets auto-included by the bucket rule.
+    BucketRuleMatchedBucketCount *int64                      `json:"bucket_rule_matched_bucket_count"`
+    // The set of bucket UUIDs auto-included by the bucket rule.
+    // NOTE: A bucket that is both directly assigned and rule-matched will appear
+    // in both bucket_uuids and this field. Deduplicate before computing totals.
+    // Always returned on read/create/update. On the list endpoint, only
+    // returned when bucket_uuid_detail is "all" or "bucket_rule".
+    BucketRuleMatchedBucketUuids []*string                   `json:"bucket_rule_matched_bucket_uuids"`
+    // The set of bucket UUIDs directly assigned to this protection group
+    // (via manual membership). Does not include buckets auto-included by a
+    // bucket rule; see bucket_rule_matched_bucket_uuids for those.
+    // Always returned on read/create/update. On the list endpoint, only
+    // returned when bucket_uuid_detail is "all" or "manual".
+    BucketUuids                  []*string                   `json:"bucket_uuids"`
+    // Creation time of the protection group in RFC-3339 format.
+    CreatedTimestamp             *string                     `json:"created_timestamp"`
+    // TODO: Add struct field description
+    Filter                       *GCPProtectionGroupFilter   `json:"filter"`
+    // The Clumio-assigned ID of the protection group.
+    Id                           *string                     `json:"id"`
+    // Determines whether the protection group is active or has been deleted.
+    IsDeleted                    *bool                       `json:"is_deleted"`
+    // A label that can be applied to GCP resources.
+    Labels                       []*GcpLabelModel            `json:"labels"`
+    // Time of the last backup in RFC-3339 format.
+    LastBackupTimestamp          *string                     `json:"last_backup_timestamp"`
+    // The location of the protection group (e.g., "us-central1", "us", "us-west1").
+    Location                     *string                     `json:"location"`
+    // The location type of the protection group (e.g., "Region", "Dual-region", "Multi-region").
+    LocationType                 *string                     `json:"location_type"`
+    // The number of buckets directly assigned to this protection group
+    // (via manual membership). Does not include buckets auto-included by a
+    // bucket rule; see bucket_rule_matched_bucket_count for those.
+    ManualAddedBucketCount       *int64                      `json:"manual_added_bucket_count"`
+    // Modified time of the protection group in RFC-3339 format.
+    ModifiedTimestamp            *string                     `json:"modified_timestamp"`
+    // The user-assigned name of the protection group.
+    Name                         *string                     `json:"name"`
+    // The Clumio-assigned ID of the organizational unit associated with the Protection Group.
+    OrganizationalUnitId         *string                     `json:"organizational_unit_id"`
+    // TODO: Add struct field description
+    ProtectionInfo               *GCPProtectionInfoModel     `json:"protection_info"`
+    // The protection status of this resource. Possible values include
+    // "protected", "unprotected".
+    ProtectionStatus             *string                     `json:"protection_status"`
+    // Cumulative count of all unexpired objects in each backup (any new or updated since
+    // the last backup) that have been backed up as part of this protection group
+    TotalBackedUpObjectCount     *int64                      `json:"total_backed_up_object_count"`
+    // Cumulative size of all unexpired objects in each backup (any new or updated since
+    // the last backup) that have been backed up as part of this protection group
+    TotalBackedUpSizeBytes       *int64                      `json:"total_backed_up_size_bytes"`
+    // Version of the protection group. The version number is incremented every time
+    // a change is made to the protection group.
+    Version                      *int64                      `json:"version"`
 }
 
 // CreateOrganizationalUnitNoTaskResponse represents a custom type struct for Success
@@ -993,20 +1058,6 @@ type DeleteRuleResponse struct {
     TaskId    *string                  `json:"task_id"`
 }
 
-// DeleteS3InstantAccessEndpointRoleResponse represents a custom type struct for Success
-type DeleteS3InstantAccessEndpointRoleResponse struct {
-    // Embedded responses related to the resource.
-    Embedded *S3InstantAccessEndpointEmbedded `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links    *S3InstantAccessEndpointLinks    `json:"_links"`
-}
-
-// DeleteUserResponseV1 represents a custom type struct for Success
-type DeleteUserResponseV1 struct {
-    // HateoasCommonLinks are the common fields for HATEOAS response.
-    Links *HateoasCommonLinks `json:"_links"`
-}
-
 // DownloadSharedFileResponse represents a custom type struct for Success
 type DownloadSharedFileResponse struct {
     // URLs to pages related to the resource.
@@ -1179,6 +1230,22 @@ type FileSearchResponse struct {
     Limit        *int64                  `json:"limit"`
     // The page token used to get this response.
     Start        *string                 `json:"start"`
+}
+
+// GcsAssetErrorReportV1Response represents a custom type struct for Success
+type GcsAssetErrorReportV1Response struct {
+    // The HATEOAS link to this resource.
+    Self   *HateoasSelfLink `json:"_self"`
+    // ID of the task created to generate the error report.
+    TaskId *int64           `json:"task_id"`
+}
+
+// GcsProtectionGroupErrorReportV1Response represents a custom type struct for Success
+type GcsProtectionGroupErrorReportV1Response struct {
+    // The HATEOAS link to this resource.
+    Self   *HateoasSelfLink `json:"_self"`
+    // ID of the task created to generate the error report.
+    TaskId *int64           `json:"task_id"`
 }
 
 // GenerateRestoredFilePasscodeResponse represents a custom type struct for Success
@@ -1392,6 +1459,8 @@ type ListConsolidatedAlertsResponse struct {
     FilterApplied   *string                        `json:"filter_applied"`
     // The maximum number of items displayed per page in the response.
     Limit           *int64                         `json:"limit"`
+    // The sort order used in the request.
+    SortApplied     *string                        `json:"sort_applied"`
     // The page number used to get this response.
     // Pages are indexed starting from 1 (i.e., `"start": "1"`).
     Start           *string                        `json:"start"`
@@ -1718,6 +1787,219 @@ type ListGCPConnectionsResponse struct {
     Limit         *int64                     `json:"limit"`
     // The page token used to get this response.
     Start         *string                    `json:"start"`
+}
+
+// ListGCPGCSAssetPitrIntervalsResponse represents a custom type struct.
+// ListGCSAssetPitrIntervalsResponse represents the success response.
+type ListGCPGCSAssetPitrIntervalsResponse struct {
+    // TODO: Add struct field description
+    Embedded      *GCPGCSAssetPitrIntervalListEmbedded `json:"_embedded"`
+    // TODO: Add struct field description
+    Links         *GCPGCSAssetPitrIntervalListLinks    `json:"_links"`
+    // The number of items listed on the current page.
+    CurrentCount  *int64                               `json:"current_count"`
+    // The filter used in the request. The filter includes both manually-specified and system-generated filters.
+    FilterApplied *string                              `json:"filter_applied"`
+    // The maximum number of items displayed per page in the response.
+    Limit         *int64                               `json:"limit"`
+    // The page token used to get this response.
+    Start         *string                              `json:"start"`
+}
+
+// ListGCPGCSAssetsResponse represents a custom type struct
+type ListGCPGCSAssetsResponse struct {
+    // TODO: Add struct field description
+    Embedded        *GCPGCSAssetListEmbedded `json:"_embedded"`
+    // TODO: Add struct field description
+    Links           *GCPGCSAssetListLinks    `json:"_links"`
+    // The number of items listed on the current page.
+    CurrentCount    *int64                   `json:"current_count"`
+    // The maximum number of items displayed per page in the response.
+    Limit           *int64                   `json:"limit"`
+    // The page number used to get this response.
+    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
+    Start           *string                  `json:"start"`
+    // The total number of items, summed across all pages.
+    TotalCount      *int64                   `json:"total_count"`
+    // The total number of pages of results.
+    TotalPagesCount *int64                   `json:"total_pages_count"`
+}
+
+// ListGCPLabelKeysResponse represents a custom type struct for Success
+type ListGCPLabelKeysResponse struct {
+    // TODO: Add struct field description
+    Embedded        *GCPLabelKeyListEmbedded `json:"_embedded"`
+    // TODO: Add struct field description
+    Links           *GCPLabelKeyListLinks    `json:"_links"`
+    // The number of items listed on the current page.
+    CurrentCount    *int64                   `json:"current_count"`
+    // The maximum number of items displayed per page in the response.
+    Limit           *int64                   `json:"limit"`
+    // The page number used to get this response.
+    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
+    Start           *string                  `json:"start"`
+    // The total number of items, summed across all pages.
+    TotalCount      *int64                   `json:"total_count"`
+    // The total number of pages of results.
+    TotalPagesCount *int64                   `json:"total_pages_count"`
+}
+
+// ListGCPLabelValuesResponse represents a custom type struct for Success
+type ListGCPLabelValuesResponse struct {
+    // TODO: Add struct field description
+    Embedded        *GCPLabelValueListEmbedded `json:"_embedded"`
+    // TODO: Add struct field description
+    Links           *GCPLabelValueListLinks    `json:"_links"`
+    // The number of items listed on the current page.
+    CurrentCount    *int64                     `json:"current_count"`
+    // The maximum number of items displayed per page in the response.
+    Limit           *int64                     `json:"limit"`
+    // The page number used to get this response.
+    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
+    Start           *string                    `json:"start"`
+    // The total number of items, summed across all pages.
+    TotalCount      *int64                     `json:"total_count"`
+    // The total number of pages of results.
+    TotalPagesCount *int64                     `json:"total_pages_count"`
+}
+
+// ListGCPProjectsResponse represents a custom type struct for Success
+type ListGCPProjectsResponse struct {
+    // TODO: Add struct field description
+    Embedded        *GCPProjectListEmbedded `json:"_embedded"`
+    // TODO: Add struct field description
+    Links           *GCPProjectListLinks    `json:"_links"`
+    // The number of items listed on the current page.
+    CurrentCount    *int64                  `json:"current_count"`
+    // The maximum number of items displayed per page in the response.
+    Limit           *int64                  `json:"limit"`
+    // The page number used to get this response.
+    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
+    Start           *string                 `json:"start"`
+    // The total number of items, summed across all pages.
+    TotalCount      *int64                  `json:"total_count"`
+    // The total number of pages of results.
+    TotalPagesCount *int64                  `json:"total_pages_count"`
+}
+
+// ListGCPProtectionGroupsResponse represents a custom type struct for Success
+type ListGCPProtectionGroupsResponse struct {
+    // TODO: Add struct field description
+    Embedded        *GCPProtectionGroupListEmbedded `json:"_embedded"`
+    // TODO: Add struct field description
+    Links           *GCPProtectionGroupListLinks    `json:"_links"`
+    // The number of items listed on the current page.
+    CurrentCount    *int64                          `json:"current_count"`
+    // The maximum number of items displayed per page in the response.
+    Limit           *int64                          `json:"limit"`
+    // The page number used to get this response.
+    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
+    Start           *string                         `json:"start"`
+    // The total number of items, summed across all pages.
+    TotalCount      *int64                          `json:"total_count"`
+    // The total number of pages of results.
+    TotalPagesCount *int64                          `json:"total_pages_count"`
+}
+
+// ListGCSBucketsResponse represents a custom type struct for Success
+type ListGCSBucketsResponse struct {
+    // TODO: Add struct field description
+    Embedded        *GCSBucketListEmbedded `json:"_embedded"`
+    // TODO: Add struct field description
+    Links           *GCSBucketListLinks    `json:"_links"`
+    // The number of items listed on the current page.
+    CurrentCount    *int64                 `json:"current_count"`
+    // The maximum number of items displayed per page in the response.
+    Limit           *int64                 `json:"limit"`
+    // The page number used to get this response.
+    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
+    Start           *string                `json:"start"`
+    // The total number of items, summed across all pages.
+    TotalCount      *int64                 `json:"total_count"`
+    // The total number of pages of results.
+    TotalPagesCount *int64                 `json:"total_pages_count"`
+}
+
+// ListGCSProtectionGroupAssetBackupsResponse represents a custom type struct for Success
+type ListGCSProtectionGroupAssetBackupsResponse struct {
+    // TODO: Add struct field description
+    Embedded        *GCSProtectionGroupAssetBackupListEmbedded `json:"_embedded"`
+    // TODO: Add struct field description
+    Links           *GCSProtectionGroupAssetBackupListLinks    `json:"_links"`
+    // The number of items listed on the current page.
+    CurrentCount    *int64                                     `json:"current_count"`
+    // The filter used in the request. The filter includes both manually-specified and system-generated filters.
+    FilterApplied   *string                                    `json:"filter_applied"`
+    // The maximum number of items displayed per page in the response.
+    Limit           *int64                                     `json:"limit"`
+    // The page number used to get this response.
+    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
+    Start           *string                                    `json:"start"`
+    // The total number of items, summed across all pages.
+    TotalCount      *int64                                     `json:"total_count"`
+    // The total number of pages of results.
+    TotalPagesCount *int64                                     `json:"total_pages_count"`
+}
+
+// ListGCSProtectionGroupBackupsResponse represents a custom type struct for Success
+type ListGCSProtectionGroupBackupsResponse struct {
+    // TODO: Add struct field description
+    Embedded        *GCSProtectionGroupBackupListEmbedded `json:"_embedded"`
+    // TODO: Add struct field description
+    Links           *GCSProtectionGroupBackupListLinks    `json:"_links"`
+    // The number of items listed on the current page.
+    CurrentCount    *int64                                `json:"current_count"`
+    // The filter used in the request. The filter includes both manually-specified and system-generated filters.
+    FilterApplied   *string                               `json:"filter_applied"`
+    // The maximum number of items displayed per page in the response.
+    Limit           *int64                                `json:"limit"`
+    // The page number used to get this response.
+    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
+    Start           *string                               `json:"start"`
+    // The total number of items, summed across all pages.
+    TotalCount      *int64                                `json:"total_count"`
+    // The total number of pages of results.
+    TotalPagesCount *int64                                `json:"total_pages_count"`
+}
+
+// ListIcebergTableBackupsResponse represents a custom type struct for Success
+type ListIcebergTableBackupsResponse struct {
+    // Embedded responses related to the resource.
+    Embedded        *IcebergTableBackupListEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links           *IcebergTableBackupListLinks    `json:"_links"`
+    // The number of items listed on the current page.
+    CurrentCount    *int64                          `json:"current_count"`
+    // The filter used in the request. The filter includes both manually-specified and system-generated filters.
+    FilterApplied   *string                         `json:"filter_applied"`
+    // The maximum number of items displayed per page in the response.
+    Limit           *int64                          `json:"limit"`
+    // The page number used to get this response.
+    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
+    Start           *string                         `json:"start"`
+    // The total number of items, summed across all pages.
+    TotalCount      *int64                          `json:"total_count"`
+    // The total number of pages of results.
+    TotalPagesCount *int64                          `json:"total_pages_count"`
+}
+
+// ListIcebergTablesResponse represents a custom type struct for Success
+type ListIcebergTablesResponse struct {
+    // Embedded responses related to the resource.
+    Embedded        *IcebergTableListEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links           *IcebergTableListLinks    `json:"_links"`
+    // The number of items listed on the current page.
+    CurrentCount    *int64                    `json:"current_count"`
+    // The maximum number of items displayed per page in the response.
+    Limit           *int64                    `json:"limit"`
+    // The page number used to get this response.
+    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
+    Start           *string                   `json:"start"`
+    // The total number of items, summed across all pages.
+    TotalCount      *int64                    `json:"total_count"`
+    // The total number of pages of results.
+    TotalPagesCount *int64                    `json:"total_pages_count"`
 }
 
 // ListManagementGroupsResponse represents a custom type struct for Success
@@ -2165,6 +2447,18 @@ type ListWalletsResponse struct {
     Start        *string             `json:"start"`
 }
 
+// OnDemandAWSIcebergTableBackupResponse represents a custom type struct for Success
+type OnDemandAWSIcebergTableBackupResponse struct {
+    // Embedded responses related to the resource.
+    Embedded *ReadTaskHateoasOuterEmbedded       `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links    *OnDemandAWSIcebergTableBackupLinks `json:"_links"`
+    // The Clumio-assigned ID of the task created by this on-demand backup request.
+    // The progress of the task can be monitored using the
+    // `GET /tasks/{task_id}` endpoint.
+    TaskId   *string                             `json:"task_id"`
+}
+
 // OnDemandDynamoDBBackupResponse represents a custom type struct for Success
 type OnDemandDynamoDBBackupResponse struct {
     // Embedded responses related to the resource.
@@ -2372,6 +2666,16 @@ type PatchOrganizationalUnitResponseV1 struct {
     Users                     []*string                `json:"users"`
 }
 
+// PreviewDetailsGCSProtectionGroupResponse represents a custom type struct for Success
+type PreviewDetailsGCSProtectionGroupResponse struct {
+    // The ETag value.
+    Etag    *string                                `json:"_etag"`
+    // URLs to pages related to the resource.
+    Links   *PreviewDetailsGCSProtectionGroupLinks `json:"_links"`
+    // GCSObject defines one object to restore
+    Objects []*GCSObject                           `json:"objects"`
+}
+
 // PreviewDetailsProtectionGroupResponse represents a custom type struct for Success
 type PreviewDetailsProtectionGroupResponse struct {
     // The ETag value.
@@ -2388,6 +2692,44 @@ type PreviewDetailsS3BucketResponse struct {
     Links   *PreviewDetailsS3BucketLinks `json:"_links"`
     // ObjectV2 defines one object to restore
     Objects []*ObjectV2                  `json:"objects"`
+}
+
+// PreviewGCSProtectionGroupAssetAsyncResponse represents a custom type struct.
+// Success (Async)
+type PreviewGCSProtectionGroupAssetAsyncResponse struct {
+    // URLs to pages related to the resource.
+    Links     *PreviewGCSProtectionGroupAssetAsyncLinks `json:"_links"`
+    // The identifier for the requested preview which is used to fetch results of the preview.
+    PreviewId *string                                   `json:"preview_id"`
+    // The Clumio-assigned ID of the task created by this restore request.
+    // The progress of the task can be monitored using the
+    // `GET /tasks/{task_id}` endpoint.
+    // Note that this field is given only for async request.
+    TaskId    *string                                   `json:"task_id"`
+}
+
+// PreviewGCSProtectionGroupAssetDetailsResponse represents a custom type struct for Success
+type PreviewGCSProtectionGroupAssetDetailsResponse struct {
+    // The ETag value.
+    Etag    *string                                     `json:"_etag"`
+    // URLs to pages related to the resource.
+    Links   *PreviewGCSProtectionGroupAssetDetailsLinks `json:"_links"`
+    // GCSObject defines one object to restore
+    Objects []*GCSObject                                `json:"objects"`
+}
+
+// PreviewGCSProtectionGroupAsyncResponse represents a custom type struct.
+// Success (Async)
+type PreviewGCSProtectionGroupAsyncResponse struct {
+    // URLs to pages related to the resource.
+    Links     *PreviewGCSProtectionGroupAsyncLinks `json:"_links"`
+    // The identifier for the requested preview which is used to fetch results of the preview.
+    PreviewId *string                              `json:"preview_id"`
+    // The Clumio-assigned ID of the task created by this restore request.
+    // The progress of the task can be monitored using the
+    // `GET /tasks/{task_id}` endpoint.
+    // Note that this field is given only for async request.
+    TaskId    *string                              `json:"task_id"`
 }
 
 // PreviewProtectionGroupAsyncResponse represents a custom type struct.
@@ -3709,6 +4051,263 @@ type ReadGCPConnectionResponse struct {
     UpdatedTimestamp      *string             `json:"updated_timestamp"`
 }
 
+// ReadGCPGCSAssetContinuousBackupStatsResponse represents a custom type struct
+type ReadGCPGCSAssetContinuousBackupStatsResponse struct {
+    // GCSAssetContinuousBackupStatsLinks
+    // URLs to pages related to the resource.
+    Links      *GCPGCSAssetContinuousBackupStatsLinks `json:"_links"`
+    // GCSAssetContinuousBackupStats is one bin of CDP execution and dmover/drain
+    // aggregates for a GCS asset. Used for both the window-wide total and per-bin
+    // entries in the continuous-backup-stats response.
+    Bins       []*GCPGCSAssetContinuousBackupStats    `json:"bins"`
+    // GCSAssetContinuousBackupStats is one bin of CDP execution and dmover/drain
+    // aggregates for a GCS asset. Used for both the window-wide total and per-bin
+    // entries in the continuous-backup-stats response.
+    TotalStats *GCPGCSAssetContinuousBackupStats      `json:"total_stats"`
+}
+
+// ReadGCPGCSAssetResponse represents a custom type struct
+type ReadGCPGCSAssetResponse struct {
+    // TODO: Add struct field description
+    Embedded             *GCPGCSAssetEmbedded `json:"_embedded"`
+    // TODO: Add struct field description
+    Etag                 *string              `json:"_etag"`
+    // TODO: Add struct field description
+    Links                *GCPGCSAssetLinks    `json:"_links"`
+    // Indicates how the bucket was added to the protection group. Possible values include `user` and `bucket_rule`.
+    AddedBy              *string              `json:"added_by"`
+    // Lists all methods by which the bucket was added to the protection group.
+    AddedWith            []*string            `json:"added_with"`
+    // The backup target region configured for the GCS asset, if any.
+    BackupTargetRegion   *string              `json:"backup_target_region"`
+    // The Clumio-assigned ID of the bucket associated with this GCS asset.
+    BucketId             *string              `json:"bucket_id"`
+    // The name of the GCS bucket associated with this GCS asset.
+    BucketName           *string              `json:"bucket_name"`
+    // Creation time of the GCS asset in RFC-3339 format.
+    CreatedTimestamp     *string              `json:"created_timestamp"`
+    // Deletion time of the GCS asset in RFC-3339 format.
+    DeletedTimestamp     *string              `json:"deleted_timestamp"`
+    // The Clumio-assigned ID that represents the bucket within the protection group.
+    Id                   *string              `json:"id"`
+    // Indicates whether the GCS asset has been deleted (`true`) or is still active (`false`).
+    IsDeleted            *bool                `json:"is_deleted"`
+    // Time of the last backup in RFC-3339 format.
+    LastBackupTimestamp  *string              `json:"last_backup_timestamp"`
+    // The display name of the GCS asset.
+    Name                 *string              `json:"name"`
+    // The Clumio-assigned native ID of the GCS asset.
+    NativeId             *string              `json:"native_id"`
+    // The number of objects that have been backed up in this GCS asset.
+    ObjectCount          *int64               `json:"object_count"`
+    // The Clumio-assigned ID of the organizational unit associated with the GCS asset.
+    OrganizationalUnitId *string              `json:"organizational_unit_id"`
+    // The Clumio-assigned UUID of the GCP project associated with this GCS asset.
+    ProjectUuid          *string              `json:"project_uuid"`
+    // The Clumio-assigned ID of the protection group associated with this GCS asset.
+    ProtectionGroupId    *string              `json:"protection_group_id"`
+    // The user-assigned name of the protection group associated with this GCS asset.
+    // Omitted when the parent protection group could not be resolved or has no name.
+    ProtectionGroupName  *string              `json:"protection_group_name"`
+    // The Clumio-assigned UUID of the GCP region associated with this GCS asset.
+    RegionUuid           *string              `json:"region_uuid"`
+    // Total size in bytes of all objects that have been backed up in this GCS asset.
+    SizeBytes            *int64               `json:"size_bytes"`
+    // Last update time of the GCS asset in RFC-3339 format.
+    UpdatedTimestamp     *string              `json:"updated_timestamp"`
+    // The resource version of the GCS asset.
+    Version              *int64               `json:"version"`
+}
+
+// ReadGCPProtectionGroupResponse represents a custom type struct for Success
+type ReadGCPProtectionGroupResponse struct {
+    // TODO: Add struct field description
+    Embedded                     *GCPProtectionGroupEmbedded `json:"_embedded"`
+    // TODO: Add struct field description
+    Etag                         *string                     `json:"_etag"`
+    // TODO: Add struct field description
+    Links                        *GCPProtectionGroupLinks    `json:"_links"`
+    // Represents the aggregated stats for backup status.
+    BackupStatusStats            *BackupStatusStats          `json:"backup_status_stats"`
+    // The total number of unique buckets in this protection group
+    // (manual + rule-matched, deduplicated).
+    BucketCount                  *int64                      `json:"bucket_count"`
+    // TODO: Add struct field description
+    BucketRule                   *GCPBucketRuleModel         `json:"bucket_rule"`
+    // The number of buckets auto-included by the bucket rule.
+    BucketRuleMatchedBucketCount *int64                      `json:"bucket_rule_matched_bucket_count"`
+    // The set of bucket UUIDs auto-included by the bucket rule.
+    // NOTE: A bucket that is both directly assigned and rule-matched will appear
+    // in both bucket_uuids and this field. Deduplicate before computing totals.
+    // Always returned on read/create/update. On the list endpoint, only
+    // returned when bucket_uuid_detail is "all" or "bucket_rule".
+    BucketRuleMatchedBucketUuids []*string                   `json:"bucket_rule_matched_bucket_uuids"`
+    // The set of bucket UUIDs directly assigned to this protection group
+    // (via manual membership). Does not include buckets auto-included by a
+    // bucket rule; see bucket_rule_matched_bucket_uuids for those.
+    // Always returned on read/create/update. On the list endpoint, only
+    // returned when bucket_uuid_detail is "all" or "manual".
+    BucketUuids                  []*string                   `json:"bucket_uuids"`
+    // Creation time of the protection group in RFC-3339 format.
+    CreatedTimestamp             *string                     `json:"created_timestamp"`
+    // TODO: Add struct field description
+    Filter                       *GCPProtectionGroupFilter   `json:"filter"`
+    // The Clumio-assigned ID of the protection group.
+    Id                           *string                     `json:"id"`
+    // Determines whether the protection group is active or has been deleted.
+    IsDeleted                    *bool                       `json:"is_deleted"`
+    // A label that can be applied to GCP resources.
+    Labels                       []*GcpLabelModel            `json:"labels"`
+    // Time of the last backup in RFC-3339 format.
+    LastBackupTimestamp          *string                     `json:"last_backup_timestamp"`
+    // The location of the protection group (e.g., "us-central1", "us", "us-west1").
+    Location                     *string                     `json:"location"`
+    // The location type of the protection group (e.g., "Region", "Dual-region", "Multi-region").
+    LocationType                 *string                     `json:"location_type"`
+    // The number of buckets directly assigned to this protection group
+    // (via manual membership). Does not include buckets auto-included by a
+    // bucket rule; see bucket_rule_matched_bucket_count for those.
+    ManualAddedBucketCount       *int64                      `json:"manual_added_bucket_count"`
+    // Modified time of the protection group in RFC-3339 format.
+    ModifiedTimestamp            *string                     `json:"modified_timestamp"`
+    // The user-assigned name of the protection group.
+    Name                         *string                     `json:"name"`
+    // The Clumio-assigned ID of the organizational unit associated with the Protection Group.
+    OrganizationalUnitId         *string                     `json:"organizational_unit_id"`
+    // TODO: Add struct field description
+    ProtectionInfo               *GCPProtectionInfoModel     `json:"protection_info"`
+    // The protection status of this resource. Possible values include
+    // "protected", "unprotected".
+    ProtectionStatus             *string                     `json:"protection_status"`
+    // Cumulative count of all unexpired objects in each backup (any new or updated since
+    // the last backup) that have been backed up as part of this protection group
+    TotalBackedUpObjectCount     *int64                      `json:"total_backed_up_object_count"`
+    // Cumulative size of all unexpired objects in each backup (any new or updated since
+    // the last backup) that have been backed up as part of this protection group
+    TotalBackedUpSizeBytes       *int64                      `json:"total_backed_up_size_bytes"`
+    // Version of the protection group. The version number is incremented every time
+    // a change is made to the protection group.
+    Version                      *int64                      `json:"version"`
+}
+
+// ReadGCSBucketResponse represents a custom type struct for Success
+type ReadGCSBucketResponse struct {
+    // TODO: Add struct field description
+    Embedded             interface{}      `json:"_embedded"`
+    // TODO: Add struct field description
+    Etag                 *string          `json:"_etag"`
+    // TODO: Add struct field description
+    Links                *GCSBucketLinks  `json:"_links"`
+    // The name of the bucket
+    BucketName           *string          `json:"bucket_name"`
+    // Creation time of the bucket in RFC-3339 format.
+    CreatedTimestamp     *string          `json:"created_timestamp"`
+    // The Clumio-assigned ID that represents the bucket.
+    Id                   *string          `json:"id"`
+    // Determines whether the bucket has been deleted
+    IsDeleted            *bool            `json:"is_deleted"`
+    // Determines whether versioning is enabled for the bucket.
+    IsVersioningEnabled  *bool            `json:"is_versioning_enabled"`
+    // A label that can be applied to GCP resources.
+    Labels               []*GcpLabelModel `json:"labels"`
+    // Time of the last backup in RFC-3339 format.
+    LastBackupTimestamp  *string          `json:"last_backup_timestamp"`
+    // The GCP location associated with the bucket.
+    Location             *string          `json:"location"`
+    // The location type of the bucket (e.g., "Region", "Dual-region", "Multi-region").
+    LocationType         *string          `json:"location_type"`
+    // The Clumio-assigned UUID of the GCP location associated with the bucket.
+    LocationUuid         *string          `json:"location_uuid"`
+    // The number of objects in the bucket.
+    ObjectCount          *int64           `json:"object_count"`
+    // The Clumio-assigned ID of the organizational unit associated with the bucket.
+    OrganizationalUnitId *string          `json:"organizational_unit_id"`
+    // The GCP project ID associated with the bucket.
+    ProjectId            *string          `json:"project_id"`
+    // The Clumio-assigned UUID of the GCP project associated with the bucket.
+    ProjectUuid          *string          `json:"project_uuid"`
+    // The number of protection groups associated with the bucket.
+    ProtectionGroupCount *int64           `json:"protection_group_count"`
+    // Total size in bytes of all objects in the bucket.
+    SizeBytes            *int64           `json:"size_bytes"`
+}
+
+// ReadGCSProtectionGroupAssetBackupResponse represents a custom type struct for Success
+type ReadGCSProtectionGroupAssetBackupResponse struct {
+    // TODO: Add struct field description
+    Links                     *GCSProtectionGroupAssetBackupLinks `json:"_links"`
+    // The number of objects in the protection group GCS asset that were successfully backed up.
+    BackedUpObjectCount       *uint64                             `json:"backed_up_object_count"`
+    // The total size in bytes of new (non-deleted) objects in the protection group GCS asset
+    // that were backed up in this backup. Excludes deleted/tombstone objects.
+    BackedUpSizeBytes         *uint64                             `json:"backed_up_size_bytes"`
+    // The Clumio-assigned ID of the GCS bucket.
+    BucketId                  *string                             `json:"bucket_id"`
+    // The name of the GCS bucket.
+    BucketName                *string                             `json:"bucket_name"`
+    // The timestamp of when this backup expires. Represented in RFC-3339 format.
+    ExpirationTimestamp       *string                             `json:"expiration_timestamp"`
+    // The number of objects in the protection group GCS asset that failed to be backed up.
+    FailedObjectCount         *uint64                             `json:"failed_object_count"`
+    // The total size in bytes of objects in the protection group GCS asset that failed
+    // to be backed up.
+    FailedSizeBytes           *uint64                             `json:"failed_size_bytes"`
+    // The GCP region in which the backup resides. For example, `us-west1`.
+    GcpRegion                 *string                             `json:"gcp_region"`
+    // The Clumio-assigned ID of the protection group GCS asset backup.
+    Id                        *string                             `json:"id"`
+    // The number of objects in the protection group GCS asset that were missing during backup.
+    MissingObjectCount        *int64                              `json:"missing_object_count"`
+    // The total size in bytes of objects in the protection group GCS asset that were missing during backup.
+    MissingSizeBytes          *int64                              `json:"missing_size_bytes"`
+    // The GCP project ID.
+    ProjectId                 *string                             `json:"project_id"`
+    // The Clumio-assigned ID of the protection group GCS asset.
+    ProtectionGroupGcsAssetId *string                             `json:"protection_group_gcs_asset_id"`
+    // The Clumio-assigned ID of the protection group.
+    ProtectionGroupId         *string                             `json:"protection_group_id"`
+    // The version of the protection group at the time the backup was taken.
+    ProtectionGroupVersion    *int64                              `json:"protection_group_version"`
+    // The timestamp of when this backup started. Represented in RFC-3339 format.
+    StartTimestamp            *string                             `json:"start_timestamp"`
+    // The type of backup. Possible values include `gcp_protection_group_gcs_asset_backup`.
+    ClumioType                *string                             `json:"type"`
+}
+
+// ReadGCSProtectionGroupBackupResponse represents a custom type struct for Success
+type ReadGCSProtectionGroupBackupResponse struct {
+    // URLs to pages related to the resource.
+    Links                  *GCSProtectionGroupBackupLinks `json:"_links"`
+    // The number of objects in the GCS protection group that were successfully backed up.
+    BackedUpObjectCount    *int64                         `json:"backed_up_object_count"`
+    // The total size in bytes of objects in the GCS protection group that were
+    // successfully backed up.
+    BackedUpSizeBytes      *int64                         `json:"backed_up_size_bytes"`
+    // The timestamp of when this backup expires. Represented in RFC-3339 format.
+    ExpirationTimestamp    *string                        `json:"expiration_timestamp"`
+    // The number of objects in the GCS protection group that failed to be backed up.
+    FailedObjectCount      *int64                         `json:"failed_object_count"`
+    // The total size in bytes of objects in the GCS protection group that failed
+    // to be backed up.
+    FailedSizeBytes        *int64                         `json:"failed_size_bytes"`
+    // The Clumio-assigned ID of the GCS protection group backup.
+    Id                     *string                        `json:"id"`
+    // The number of objects in the GCS protection group that were missing during backup.
+    MissingObjectCount     *int64                         `json:"missing_object_count"`
+    // The total size in bytes of objects in the GCS protection group that were missing during backup.
+    MissingSizeBytes       *int64                         `json:"missing_size_bytes"`
+    // The Clumio-assigned ID of the GCS protection group.
+    ProtectionGroupId      *string                        `json:"protection_group_id"`
+    // The user-assigned name of the GCS protection group.
+    ProtectionGroupName    *string                        `json:"protection_group_name"`
+    // The version of the GCS protection group at the time of backup.
+    ProtectionGroupVersion *int64                         `json:"protection_group_version"`
+    // The timestamp of when this backup started. Represented in RFC-3339 format.
+    StartTimestamp         *string                        `json:"start_timestamp"`
+    // The type of backup. Possible values include `gcp_protection_group_backup`.
+    ClumioType             *string                        `json:"type"`
+}
+
 // ReadGeneralSettingsResponseV2 represents a custom type struct for Success
 type ReadGeneralSettingsResponseV2 struct {
     // URLs to pages related to the resource.
@@ -3734,6 +4333,102 @@ type ReadGeneralSettingsResponseV2 struct {
     // The valid range is between 2592000 seconds (30 days) and 15552000 seconds (180 days).
     // If not configured, the value defaults to 7776000 seconds (90 days).
     PasswordExpirationDuration   *int64                `json:"password_expiration_duration"`
+}
+
+// ReadIcebergTableBackupResponse represents a custom type struct for Success
+type ReadIcebergTableBackupResponse struct {
+    // TODO: Add struct field description
+    Links               *IcebergTableBackupLinks `json:"_links"`
+    // The AWS-assigned ID of the account associated with this database at the time of backup.
+    AccountNativeId     *string                  `json:"account_native_id"`
+    // The AWS region associated with this environment.
+    AwsRegion           *string                  `json:"aws_region"`
+    // The region in which this backup is stored. For policies that keep backups
+    // in-region, this value will be the same as the source region of the asset backed up.
+    // For out of region policies, this region will the one specified in the policy.
+    BackupAwsRegion     *string                  `json:"backup_aws_region"`
+    // The timestamp of when this backup expires. Represented in RFC-3339 format.
+    ExpirationTimestamp *string                  `json:"expiration_timestamp"`
+    // The Clumio-assigned ID of the backup.
+    Id                  *string                  `json:"id"`
+    // The total count of the newly added snapshots in this backup.
+    NewlyAddedSnapshots *int32                   `json:"newly_added_snapshots"`
+    // TODO: Add struct field description
+    Schema              *string                  `json:"schema"`
+    // TODO: Add struct field description
+    SnapshotCreatedAt   *string                  `json:"snapshot_created_at"`
+    // TODO: Add struct field description
+    SnapshotId          *string                  `json:"snapshot_id"`
+    // The timestamp of when this backup started. Represented in RFC-3339 format.
+    StartTimestamp      *string                  `json:"start_timestamp"`
+    // TODO: Add struct field description
+    Summary             *ModelSummary            `json:"summary"`
+    // The Clumio-assigned ID of the Iceberg table.
+    TableId             *string                  `json:"table_id"`
+    // The name of the Iceberg table.
+    TableName           *string                  `json:"table_name"`
+    // The type of catalog.
+    // This field is always set to "iceberg_snapshot" or "iceberg_metadata".
+    ClumioType          *string                  `json:"type"`
+}
+
+// ReadIcebergTableResponse represents a custom type struct for Success
+type ReadIcebergTableResponse struct {
+    // Embedded responses related to the resource.
+    Embedded                 *IcebergTableEmbedded   `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links                    *IcebergTableLinks      `json:"_links"`
+    // The AWS-assigned ID of the account associated with the Iceberg Table.
+    AccountNativeId          *string                 `json:"account_native_id"`
+    // The AWS region associated with the Iceberg Table.
+    AwsRegion                *string                 `json:"aws_region"`
+    // The backup status information applied to this resource.
+    BackupStatusInfo         *BackupStatusInfo       `json:"backup_status_info"`
+    // The catalog name of the Iceberg Table.
+    Catalog                  *string                 `json:"catalog"`
+    // Type is mostly an asset type or the type of Entity. Some examples are
+    // "restored_file", "aws_ebs_volume",  etc.
+    CatalogType              *string                 `json:"catalog_type"`
+    // The timestamp of when the Iceberg Table was created. Represented in RFC-3339 format.
+    CreationTimestamp        *string                 `json:"creation_timestamp"`
+    // The timestamp of when the table was deleted. Represented in RFC-3339 format. If
+    // this table has not been deleted, then this field has a value of `null`.
+    DeletionTimestamp        *string                 `json:"deletion_timestamp"`
+    // The Clumio-assigned ID of the policy directly assigned to the entity.
+    DirectAssignmentPolicyId *string                 `json:"direct_assignment_policy_id"`
+    // The Clumio-assigned ID of the AWS environment associated with the Iceberg Table.
+    EnvironmentId            *string                 `json:"environment_id"`
+    // Determines whether the table has a direct assignment.
+    HasDirectAssignment      *bool                   `json:"has_direct_assignment"`
+    // The Clumio-assigned ID of the Iceberg Table.
+    Id                       *string                 `json:"id"`
+    // Determines whether the Iceberg Table has been deleted. If `true`, the table has been
+    // deleted.
+    IsDeleted                *bool                   `json:"is_deleted"`
+    // Determines whether the Iceberg Table is supported for backups.
+    IsSupported              *bool                   `json:"is_supported"`
+    // The timestamp of the most recent backup of the Iceberg Table. Represented in RFC-3339
+    // format. If the table has never been backed up, then this field has a value of
+    // `null`.
+    LastBackupTimestamp      *string                 `json:"last_backup_timestamp"`
+    // The AWS-assigned name of the Iceberg Table.
+    Name                     *string                 `json:"name"`
+    // The namespace of the Iceberg Table.
+    Namespace                *string                 `json:"namespace"`
+    // The Clumio-assigned ID of the organizational unit associated with the Iceberg Table.
+    OrganizationalUnitId     *string                 `json:"organizational_unit_id"`
+    // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
+    ProtectionInfo           *ProtectionInfoWithRule `json:"protection_info"`
+    // The protection status of the Iceberg Table. Possible values include "protected",
+    // "unprotected", and "unsupported". If the Iceberg Table does not support backups, then
+    // this field has a value of `unsupported`. If the table has been deleted, then this
+    // field has a value of `null`.
+    ProtectionStatus         *string                 `json:"protection_status"`
+    // A tag created through AWS console which can be applied to EBS volumes.
+    Tags                     []*AwsTagModel          `json:"tags"`
+    // The reason why protection is not available. If the table is supported, then this
+    // field has a value of `null`.
+    UnsupportedReason        *string                 `json:"unsupported_reason"`
 }
 
 // ReadManagementGroupResponse represents a custom type struct for Success
@@ -4402,6 +5097,48 @@ type ReadRuleResponse struct {
     // |                       |                           |                          |
     // |                       |                           |                          |
     // +-----------------------+---------------------------+--------------------------+
+    // | asset_name            | $eq, $not_eq, $in,        | Denotes the asset        |
+    // |                       | $not_in, $contains,       | name(s) to               |
+    // |                       | $not_contains             | conditionalize on. Max   |
+    // |                       |                           | 100 names allowed        |
+    // |                       |                           | in each rule and each    |
+    // |                       |                           | name can be upto 256     |
+    // |                       |                           | characters long. For EC2 |
+    // |                       |                           | instances and EBS        |
+    // |                       |                           | volumes, asset_name is   |
+    // |                       |                           | derived from the         |
+    // |                       |                           | AWS Name tag (case-      |
+    // |                       |                           | sensitive key);          |
+    // |                       |                           | resources without a      |
+    // |                       |                           | Name tag will have an    |
+    // |                       |                           | empty asset name.        |
+    // |                       |                           |                          |
+    // |                       |                           | {"asset_name":{"$eq":"my |
+    // |                       |                           | -asset"}}                |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"asset_name":{"$not_eq" |
+    // |                       |                           | :"my-asset"}}            |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"asset_name":{"$in":["a |
+    // |                       |                           | sset-1", "asset-2"]}}    |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"asset_name":{"$not_in" |
+    // |                       |                           | :["asset-1",             |
+    // |                       |                           | "asset-2"]}}             |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"asset_name":{"$contain |
+    // |                       |                           | s":"backup"}}            |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"asset_name":{"$not_con |
+    // |                       |                           | tains":"temp"}}          |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // +-----------------------+---------------------------+--------------------------+
     // | entity_type           | $eq, $in                  | Denotes the AWS entity   |
     // |                       |                           | type to conditionalize   |
     // |                       |                           | on. (Required)           |
@@ -4411,11 +5148,14 @@ type ReadRuleResponse struct {
     // |                       |                           |                          |
     // |                       |                           |                          |
     // |                       |                           | {"entity_type":{"$in":[" |
-    // |                       |                           | aws_rds_instance",       |
-    // |                       |                           | "aws_ebs_volume", "aws_e |
-    // |                       |                           | c2_instance","aws_dynamo |
-    // |                       |                           | db_table",               |
-    // |                       |                           | "aws_rds_cluster"]}}     |
+    // |                       |                           | aws_documentdb",         |
+    // |                       |                           | "aws_dynamodb_table",    |
+    // |                       |                           | "aws_ebs_volume",        |
+    // |                       |                           | "aws_ec2_instance",      |
+    // |                       |                           | "aws_iceberg_s3_table",  |
+    // |                       |                           | "aws_neptune",           |
+    // |                       |                           | "aws_rds_cluster",       |
+    // |                       |                           | "aws_rds_instance"]}}    |
     // |                       |                           |                          |
     // |                       |                           |                          |
     // +-----------------------+---------------------------+--------------------------+
@@ -4759,6 +5499,18 @@ type RefreshWalletResponse struct {
     Token              *string                `json:"token"`
 }
 
+// RestoreAWSIcebergTableResponse represents a custom type struct for Success
+type RestoreAWSIcebergTableResponse struct {
+    // Embedded responses related to the resource.
+    Embedded *ReadTaskHateoasOuterEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links    *RestoreIcebergTableLinks     `json:"_links"`
+    // The Clumio-assigned ID of the task created by this restore request.
+    // The progress of the task can be monitored using the
+    // `GET /tasks/{task_id}` endpoint.
+    TaskId   *string                       `json:"task_id"`
+}
+
 // RestoreDynamoDBTableResponse represents a custom type struct for Success
 type RestoreDynamoDBTableResponse struct {
     // Embedded responses related to the resource.
@@ -4781,12 +5533,6 @@ type RestoreEBSResponse struct {
     // The progress of the task can be monitored using the
     // `GET /tasks/{task_id}` endpoint.
     TaskId   *string                       `json:"task_id"`
-}
-
-// RestoreEBSResponseV1 represents a custom type struct for Success
-type RestoreEBSResponseV1 struct {
-    // HateoasCommonLinks are the common fields for HATEOAS response.
-    Links *HateoasCommonLinks `json:"_links"`
 }
 
 // RestoreEC2Response represents a custom type struct for Success
@@ -4817,6 +5563,42 @@ type RestoreFileResponse struct {
     // The progress of the task can be monitored using the
     // `GET /tasks/{task_id}` endpoint.
     TaskId   *string                       `json:"task_id"`
+}
+
+// RestoreGCSObjectsResponse represents a custom type struct for Success
+type RestoreGCSObjectsResponse struct {
+    // Embedded responses related to the resource.
+    Embedded *ReadTaskHateoasOuterEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links    *RestoreGCSObjectsLinks       `json:"_links"`
+    // The Clumio-assigned ID of the task created by this restore request.
+    // The progress of the task can be monitored using the
+    // `GET /tasks/{task_id}` endpoint.
+    TaskId   *string                       `json:"task_id"`
+}
+
+// RestoreGCSProtectionGroupBucketResponse represents a custom type struct for Success
+type RestoreGCSProtectionGroupBucketResponse struct {
+    // Embedded responses related to the resource.
+    Embedded *ReadTaskHateoasOuterEmbedded         `json:"_embedded"`
+    // RestoreGCSProtectionGroupBucketLinks contains HATEOAS links for a GCS bucket restore response
+    Links    *RestoreGCSProtectionGroupBucketLinks `json:"_links"`
+    // The Clumio-assigned ID of the task created by this restore request.
+    // The progress of the task can be monitored using the
+    // `GET /tasks/{task_id}` endpoint.
+    TaskId   *string                               `json:"task_id"`
+}
+
+// RestoreGCSProtectionGroupResponse represents a custom type struct for Success
+type RestoreGCSProtectionGroupResponse struct {
+    // Embedded responses related to the resource.
+    Embedded *ReadTaskHateoasOuterEmbedded   `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links    *RestoreGCSProtectionGroupLinks `json:"_links"`
+    // The Clumio-assigned ID of the task created by this restore request.
+    // The progress of the task can be monitored using the
+    // `GET /tasks/{task_id}` endpoint.
+    TaskId   *string                         `json:"task_id"`
 }
 
 // RestoreObjectsResponse represents a custom type struct for Success
@@ -4942,26 +5724,12 @@ type RestoredFilesResponse struct {
     TotalPagesCount *int64                     `json:"total_pages_count"`
 }
 
-// SendComplianceRunEmailResponse represents a custom type struct for Success
-type SendComplianceRunEmailResponse struct {
-    // Embedded responses related to the resource.
-    Embedded interface{}                `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links    *ComplianceRunHateoasLinks `json:"_links"`
-}
-
 // SetAssignmentsResponse represents a custom type struct for Success
 type SetAssignmentsResponse struct {
     // URLs to pages related to the resource.
     Links  *SetAssignmentsResponseLinks `json:"_links"`
     // The Clumio-assigned ID of the task generated by this request.
     TaskId *string                      `json:"task_id"`
-}
-
-// ShareFileRestoreEmailResponse represents a custom type struct for Success
-type ShareFileRestoreEmailResponse struct {
-    // URLs to pages related to the resource.
-    Links *ShareFileRestoreEmailLinks `json:"_links"`
 }
 
 // UpdateAWSConnectionResponse represents a custom type struct for Success
@@ -5341,6 +6109,77 @@ type UpdateGCPConnectionResponse struct {
     UpdatedTimestamp      *string             `json:"updated_timestamp"`
 }
 
+// UpdateGCPProtectionGroupResponse represents a custom type struct for Success
+type UpdateGCPProtectionGroupResponse struct {
+    // TODO: Add struct field description
+    Embedded                     *GCPProtectionGroupEmbedded `json:"_embedded"`
+    // TODO: Add struct field description
+    Etag                         *string                     `json:"_etag"`
+    // TODO: Add struct field description
+    Links                        *GCPProtectionGroupLinks    `json:"_links"`
+    // Represents the aggregated stats for backup status.
+    BackupStatusStats            *BackupStatusStats          `json:"backup_status_stats"`
+    // The total number of unique buckets in this protection group
+    // (manual + rule-matched, deduplicated).
+    BucketCount                  *int64                      `json:"bucket_count"`
+    // TODO: Add struct field description
+    BucketRule                   *GCPBucketRuleModel         `json:"bucket_rule"`
+    // The number of buckets auto-included by the bucket rule.
+    BucketRuleMatchedBucketCount *int64                      `json:"bucket_rule_matched_bucket_count"`
+    // The set of bucket UUIDs auto-included by the bucket rule.
+    // NOTE: A bucket that is both directly assigned and rule-matched will appear
+    // in both bucket_uuids and this field. Deduplicate before computing totals.
+    // Always returned on read/create/update. On the list endpoint, only
+    // returned when bucket_uuid_detail is "all" or "bucket_rule".
+    BucketRuleMatchedBucketUuids []*string                   `json:"bucket_rule_matched_bucket_uuids"`
+    // The set of bucket UUIDs directly assigned to this protection group
+    // (via manual membership). Does not include buckets auto-included by a
+    // bucket rule; see bucket_rule_matched_bucket_uuids for those.
+    // Always returned on read/create/update. On the list endpoint, only
+    // returned when bucket_uuid_detail is "all" or "manual".
+    BucketUuids                  []*string                   `json:"bucket_uuids"`
+    // Creation time of the protection group in RFC-3339 format.
+    CreatedTimestamp             *string                     `json:"created_timestamp"`
+    // TODO: Add struct field description
+    Filter                       *GCPProtectionGroupFilter   `json:"filter"`
+    // The Clumio-assigned ID of the protection group.
+    Id                           *string                     `json:"id"`
+    // Determines whether the protection group is active or has been deleted.
+    IsDeleted                    *bool                       `json:"is_deleted"`
+    // A label that can be applied to GCP resources.
+    Labels                       []*GcpLabelModel            `json:"labels"`
+    // Time of the last backup in RFC-3339 format.
+    LastBackupTimestamp          *string                     `json:"last_backup_timestamp"`
+    // The location of the protection group (e.g., "us-central1", "us", "us-west1").
+    Location                     *string                     `json:"location"`
+    // The location type of the protection group (e.g., "Region", "Dual-region", "Multi-region").
+    LocationType                 *string                     `json:"location_type"`
+    // The number of buckets directly assigned to this protection group
+    // (via manual membership). Does not include buckets auto-included by a
+    // bucket rule; see bucket_rule_matched_bucket_count for those.
+    ManualAddedBucketCount       *int64                      `json:"manual_added_bucket_count"`
+    // Modified time of the protection group in RFC-3339 format.
+    ModifiedTimestamp            *string                     `json:"modified_timestamp"`
+    // The user-assigned name of the protection group.
+    Name                         *string                     `json:"name"`
+    // The Clumio-assigned ID of the organizational unit associated with the Protection Group.
+    OrganizationalUnitId         *string                     `json:"organizational_unit_id"`
+    // TODO: Add struct field description
+    ProtectionInfo               *GCPProtectionInfoModel     `json:"protection_info"`
+    // The protection status of this resource. Possible values include
+    // "protected", "unprotected".
+    ProtectionStatus             *string                     `json:"protection_status"`
+    // Cumulative count of all unexpired objects in each backup (any new or updated since
+    // the last backup) that have been backed up as part of this protection group
+    TotalBackedUpObjectCount     *int64                      `json:"total_backed_up_object_count"`
+    // Cumulative size of all unexpired objects in each backup (any new or updated since
+    // the last backup) that have been backed up as part of this protection group
+    TotalBackedUpSizeBytes       *int64                      `json:"total_backed_up_size_bytes"`
+    // Version of the protection group. The version number is incremented every time
+    // a change is made to the protection group.
+    Version                      *int64                      `json:"version"`
+}
+
 // UpdateManagementGroupResponse represents a custom type struct for Success
 type UpdateManagementGroupResponse struct {
     // URLs to pages related to the resource.
@@ -5547,14 +6386,6 @@ type UpdateS3InstantAccessEndpointResponse struct {
     RestoreTimestamp         *string                          `json:"restore_timestamp"`
     // The time that this endpoint was last updated, in RFC-3339 format.
     UpdatedTimestamp         *string                          `json:"updated_timestamp"`
-}
-
-// UpdateS3InstantAccessEndpointRoleResponse represents a custom type struct for Success
-type UpdateS3InstantAccessEndpointRoleResponse struct {
-    // Embedded responses related to the resource.
-    Embedded *S3InstantAccessEndpointEmbedded `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links    *S3InstantAccessEndpointLinks    `json:"_links"`
 }
 
 // UpdateTaskResponse represents a custom type struct for Success

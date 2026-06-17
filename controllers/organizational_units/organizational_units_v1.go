@@ -139,6 +139,8 @@ func (o *OrganizationalUnitsV1) ReadOrganizationalUnit(
 
 
 // DeleteOrganizationalUnit Delete the specified organizational unit.
+//  Concurrent AWS OU operations that move overlapping scopes across multiple OUs
+//  should be issued sequentially.
 func (o *OrganizationalUnitsV1) DeleteOrganizationalUnit(
     id string, 
     embed *string)(

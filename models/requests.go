@@ -76,6 +76,14 @@ type CreateBackupEc2MssqlDatabaseV1Request struct {
     ClumioType *string          `json:"type"`
 }
 
+// CreateBackupAwsIcebergTableV1Request represents a custom type struct
+type CreateBackupAwsIcebergTableV1Request struct {
+    // Settings for requesting on-demand backup directly.
+    Settings *OnDemandSetting `json:"settings"`
+    // Performs the operation on the Iceberg Table with the specified Clumio-assigned ID.
+    TableId  *string          `json:"table_id"`
+}
+
 // ExportProtectionGroupS3AssetMalwareReportV1Request represents a custom type struct
 type ExportProtectionGroupS3AssetMalwareReportV1Request struct {
     // The parameters to specify how to generate the malware report for protection group S3 asset.
@@ -307,6 +315,85 @@ type UpdateGcpConnectionV1Request struct {
     Regions        []*string `json:"regions"`
 }
 
+// CreateGcpProtectionGroupV1Request represents a custom type struct.
+// The protection group to create
+type CreateGcpProtectionGroupV1Request struct {
+    // TODO: Add struct field description
+    BucketRule        *GCPBucketRuleModel `json:"bucket_rule"`
+    // A list of prefixes to exclude from the backup. If multiple prefixes are specified,
+    // then any object whose path matches one of the prefixes will be excluded from the backup.
+    ExcludePrefixes   []*string           `json:"exclude_prefixes"`
+    // A list of prefixes to include in the backup. If multiple prefixes are specified,
+    // then any object whose path matches one of the prefixes will be included in the backup.
+    IncludePrefixes   []*string           `json:"include_prefixes"`
+    // Whether to back up only the latest object version. Defaults to true if not specified.
+    LatestVersionOnly *bool               `json:"latest_version_only"`
+    // The user-assigned name of the protection group.
+    Name              *string             `json:"name"`
+}
+
+// UpdateGcpProtectionGroupV1Request represents a custom type struct.
+// The protection group update data
+type UpdateGcpProtectionGroupV1Request struct {
+    // A list of bucket UUIDs to add to this protection group.
+    AddBucketUuids    []*string           `json:"add_bucket_uuids"`
+    // TODO: Add struct field description
+    BucketRule        *GCPBucketRuleModel `json:"bucket_rule"`
+    // Set to true to remove an existing bucket rule from this protection group.
+    // Mutually exclusive with bucket_rule.
+    ClearBucketRule   *bool               `json:"clear_bucket_rule"`
+    // A list of prefixes to exclude from the backup. If multiple prefixes are specified,
+    // then any object whose path matches one of the prefixes will be excluded from the backup.
+    // Part of the PUT-style filter trio (see model docs); a non-nil empty list
+    // clears existing excludes, while omitting the field leaves the filter
+    // unchanged unless another trio field is present.
+    ExcludePrefixes   []*string           `json:"exclude_prefixes"`
+    // A list of prefixes to include in the backup. If multiple prefixes are specified,
+    // then any object whose path matches one of the prefixes will be included in the backup.
+    // Part of the PUT-style filter trio (see model docs); a non-nil empty list
+    // clears existing includes, while omitting the field leaves the filter
+    // unchanged unless another trio field is present.
+    IncludePrefixes   []*string           `json:"include_prefixes"`
+    // Whether to back up only the latest object version. Part of the
+    // PUT-style filter trio (see model docs); when any trio field is present,
+    // an absent latest_version_only defaults to true.
+    LatestVersionOnly *bool               `json:"latest_version_only"`
+    // The user-assigned name of the protection group.
+    Name              *string             `json:"name"`
+    // A list of bucket UUIDs to remove from this protection group.
+    RemoveBucketUuids []*string           `json:"remove_bucket_uuids"`
+}
+
+// GcsAssetErrorReportV1Request represents a custom type struct
+type GcsAssetErrorReportV1Request struct {
+    // ID of the failed backup id for which the error report will be generated.
+    BackupId                  *string `json:"backup_id"`
+    // Name of the GCS bucket where the generated error report will be stored.
+    ErrorReportBucketName     *string `json:"error_report_bucket_name"`
+    // Object prefix under which the generated error report will be stored.
+    ErrorReportPrefix         *string `json:"error_report_prefix"`
+    // ID of the GCP project where the generated error report will be stored.
+    ErrorReportProjectId      *string `json:"error_report_project_id"`
+    // ID of the asset for which the error report will be generated.
+    ProtectionGroupGcsAssetId *string `json:"protection_group_gcs_asset_id"`
+    // ID of the failed task for which the error report will be generated.
+    TaskId                    *int64  `json:"task_id"`
+}
+
+// GcsProtectionGroupErrorReportV1Request represents a custom type struct
+type GcsProtectionGroupErrorReportV1Request struct {
+    // ID of the failed backup id for which the error report will be generated.
+    BackupId              *string `json:"backup_id"`
+    // Name of the GCS bucket where the generated error report will be stored.
+    ErrorReportBucketName *string `json:"error_report_bucket_name"`
+    // Object prefix under which the generated error report will be stored.
+    ErrorReportPrefix     *string `json:"error_report_prefix"`
+    // ID of the GCP project where the generated error report will be stored.
+    ErrorReportProjectId  *string `json:"error_report_project_id"`
+    // ID of the failed task for which the error report will be generated.
+    TaskId                *int64  `json:"task_id"`
+}
+
 // UpdateManagementGroupV1Request represents a custom type struct
 type UpdateManagementGroupV1Request struct {
     // Determines whether backups are allowed to occur across different subgroups or cloud connectors.
@@ -352,6 +439,8 @@ type PatchOrganizationalUnitV2Request struct {
     // Updates to the entities in the organizational unit.
     // Adding or removing entities from the OU is an asynchronous operation.
     // The response has a task ID which can be used to track the progress of the operation.
+    // Concurrent AWS OU operations that move overlapping scopes across multiple OUs
+    // should be issued sequentially.
     Entities         *UpdateEntities                   `json:"entities"`
     // Unique name assigned to the organizational unit.
     Name             *string                           `json:"name"`
@@ -370,6 +459,8 @@ type PatchOrganizationalUnitV1Request struct {
     // Updates to the entities in the organizational unit.
     // Adding or removing entities from the OU is an asynchronous operation.
     // The response has a task ID which can be used to track the progress of the operation.
+    // Concurrent AWS OU operations that move overlapping scopes across multiple OUs
+    // should be issued sequentially.
     Entities    *UpdateEntities        `json:"entities"`
     // Unique name assigned to the organizational unit.
     Name        *string                `json:"name"`
@@ -512,6 +603,48 @@ type CreatePolicyRuleV1Request struct {
     // |                       |                           |                          |
     // |                       |                           |                          |
     // +-----------------------+---------------------------+--------------------------+
+    // | asset_name            | $eq, $not_eq, $in,        | Denotes the asset        |
+    // |                       | $not_in, $contains,       | name(s) to               |
+    // |                       | $not_contains             | conditionalize on. Max   |
+    // |                       |                           | 100 names allowed        |
+    // |                       |                           | in each rule and each    |
+    // |                       |                           | name can be upto 256     |
+    // |                       |                           | characters long. For EC2 |
+    // |                       |                           | instances and EBS        |
+    // |                       |                           | volumes, asset_name is   |
+    // |                       |                           | derived from the         |
+    // |                       |                           | AWS Name tag (case-      |
+    // |                       |                           | sensitive key);          |
+    // |                       |                           | resources without a      |
+    // |                       |                           | Name tag will have an    |
+    // |                       |                           | empty asset name.        |
+    // |                       |                           |                          |
+    // |                       |                           | {"asset_name":{"$eq":"my |
+    // |                       |                           | -asset"}}                |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"asset_name":{"$not_eq" |
+    // |                       |                           | :"my-asset"}}            |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"asset_name":{"$in":["a |
+    // |                       |                           | sset-1", "asset-2"]}}    |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"asset_name":{"$not_in" |
+    // |                       |                           | :["asset-1",             |
+    // |                       |                           | "asset-2"]}}             |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"asset_name":{"$contain |
+    // |                       |                           | s":"backup"}}            |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"asset_name":{"$not_con |
+    // |                       |                           | tains":"temp"}}          |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // +-----------------------+---------------------------+--------------------------+
     // | entity_type           | $eq, $in                  | Denotes the AWS entity   |
     // |                       |                           | type to conditionalize   |
     // |                       |                           | on. (Required)           |
@@ -521,11 +654,14 @@ type CreatePolicyRuleV1Request struct {
     // |                       |                           |                          |
     // |                       |                           |                          |
     // |                       |                           | {"entity_type":{"$in":[" |
-    // |                       |                           | aws_rds_instance",       |
-    // |                       |                           | "aws_ebs_volume", "aws_e |
-    // |                       |                           | c2_instance","aws_dynamo |
-    // |                       |                           | db_table",               |
-    // |                       |                           | "aws_rds_cluster"]}}     |
+    // |                       |                           | aws_documentdb",         |
+    // |                       |                           | "aws_dynamodb_table",    |
+    // |                       |                           | "aws_ebs_volume",        |
+    // |                       |                           | "aws_ec2_instance",      |
+    // |                       |                           | "aws_iceberg_s3_table",  |
+    // |                       |                           | "aws_neptune",           |
+    // |                       |                           | "aws_rds_cluster",       |
+    // |                       |                           | "aws_rds_instance"]}}    |
     // |                       |                           |                          |
     // |                       |                           |                          |
     // +-----------------------+---------------------------+--------------------------+
@@ -630,6 +766,48 @@ type UpdatePolicyRuleV1Request struct {
     // |                       |                           |                          |
     // |                       |                           |                          |
     // +-----------------------+---------------------------+--------------------------+
+    // | asset_name            | $eq, $not_eq, $in,        | Denotes the asset        |
+    // |                       | $not_in, $contains,       | name(s) to               |
+    // |                       | $not_contains             | conditionalize on. Max   |
+    // |                       |                           | 100 names allowed        |
+    // |                       |                           | in each rule and each    |
+    // |                       |                           | name can be upto 256     |
+    // |                       |                           | characters long. For EC2 |
+    // |                       |                           | instances and EBS        |
+    // |                       |                           | volumes, asset_name is   |
+    // |                       |                           | derived from the         |
+    // |                       |                           | AWS Name tag (case-      |
+    // |                       |                           | sensitive key);          |
+    // |                       |                           | resources without a      |
+    // |                       |                           | Name tag will have an    |
+    // |                       |                           | empty asset name.        |
+    // |                       |                           |                          |
+    // |                       |                           | {"asset_name":{"$eq":"my |
+    // |                       |                           | -asset"}}                |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"asset_name":{"$not_eq" |
+    // |                       |                           | :"my-asset"}}            |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"asset_name":{"$in":["a |
+    // |                       |                           | sset-1", "asset-2"]}}    |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"asset_name":{"$not_in" |
+    // |                       |                           | :["asset-1",             |
+    // |                       |                           | "asset-2"]}}             |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"asset_name":{"$contain |
+    // |                       |                           | s":"backup"}}            |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // |                       |                           | {"asset_name":{"$not_con |
+    // |                       |                           | tains":"temp"}}          |
+    // |                       |                           |                          |
+    // |                       |                           |                          |
+    // +-----------------------+---------------------------+--------------------------+
     // | entity_type           | $eq, $in                  | Denotes the AWS entity   |
     // |                       |                           | type to conditionalize   |
     // |                       |                           | on. (Required)           |
@@ -639,11 +817,14 @@ type UpdatePolicyRuleV1Request struct {
     // |                       |                           |                          |
     // |                       |                           |                          |
     // |                       |                           | {"entity_type":{"$in":[" |
-    // |                       |                           | aws_rds_instance",       |
-    // |                       |                           | "aws_ebs_volume", "aws_e |
-    // |                       |                           | c2_instance","aws_dynamo |
-    // |                       |                           | db_table",               |
-    // |                       |                           | "aws_rds_cluster"]}}     |
+    // |                       |                           | aws_documentdb",         |
+    // |                       |                           | "aws_dynamodb_table",    |
+    // |                       |                           | "aws_ebs_volume",        |
+    // |                       |                           | "aws_ec2_instance",      |
+    // |                       |                           | "aws_iceberg_s3_table",  |
+    // |                       |                           | "aws_neptune",           |
+    // |                       |                           | "aws_rds_cluster",       |
+    // |                       |                           | "aws_rds_instance"]}}    |
     // |                       |                           |                          |
     // |                       |                           |                          |
     // +-----------------------+---------------------------+--------------------------+
@@ -910,6 +1091,19 @@ type CreateReportDownloadV1Request struct {
     // |                      |                  |             |                      |
     // |                      |                  |             |                      |
     // +----------------------+------------------+-------------+----------------------+
+    // | backup_tier          | $in              | Consumption |                      |
+    // |                      |                  |             | Backup tier filters  |
+    // |                      |                  |             | the consumption data |
+    // |                      |                  |             | generated for the    |
+    // |                      |                  |             | report to the given  |
+    // |                      |                  |             | backup tiers.        |
+    // |                      |                  |             |                      |
+    // |                      |                  |             | filter={"backup_tier |
+    // |                      |                  |             | ":{"$in":["lite","st |
+    // |                      |                  |             | andard","archive"]}} |
+    // |                      |                  |             |                      |
+    // |                      |                  |             |                      |
+    // +----------------------+------------------+-------------+----------------------+
     // | task                 | $in              | Activity    |  Possible values for |
     // |                      |                  |             | task include backup  |
     // |                      |                  |             | and                  |
@@ -1100,12 +1294,22 @@ type RestoreAwsEc2InstanceV1Request struct {
 
 // RestoreEc2MssqlDatabaseV1Request represents a custom type struct
 type RestoreEc2MssqlDatabaseV1Request struct {
-    // The EC2 MSSQL database backup to be restored. Only one of `backup` or `pitr`
-    // should be set.
+    // The EC2 MSSQL database backup to be restored. Only one of `backup`, `pitr`,
+    // or `restore_to_aag` should be set.
     // `pitr` A database backup at a specific point in time to be restored.
     Source *EC2MSSQLRestoreSource `json:"source"`
     // The configuration of the EC2 MSSQL database to which the data has to be restored.
     Target *EC2MSSQLRestoreTarget `json:"target"`
+}
+
+// RestoreAwsIcebergTableV1Request represents a custom type struct
+type RestoreAwsIcebergTableV1Request struct {
+    // IcebergRestoreSource
+    // The Iceberg Snapshot records to be restored.
+    Source *IcebergRestoreSource `json:"source"`
+    // IcebergRestoreTarget
+    // The target destination for the restored Iceberg Table.
+    Target *IcebergRestoreTarget `json:"target"`
 }
 
 // RestoreAwsRdsResourceV1Request represents a custom type struct
@@ -1179,6 +1383,65 @@ type ShareRestoredFileV1Request struct {
     EmailAddress *string `json:"email_address"`
     // The optional message sent as part of the email.
     Message      *string `json:"message"`
+}
+
+// RestoreGcsProtectionGroupV1Request represents a custom type struct
+type RestoreGcsProtectionGroupV1Request struct {
+    // The parameters for initiating a GCS protection group restore from a backup.
+    Source *GCSProtectionGroupRestoreSource `json:"source"`
+    // The destination where the GCS protection group will be restored.
+    Target *GCSProtectionGroupRestoreTarget `json:"target"`
+}
+
+// RestoreGcsProtectionGroupAssetV1Request represents a custom type struct
+type RestoreGcsProtectionGroupAssetV1Request struct {
+    // The parameters for initiating a GCS protection group asset restore from a backup.
+    Source *GCSProtectionGroupAssetRestoreSource `json:"source"`
+    // The destination where the GCS protection group will be restored.
+    Target *GCSProtectionGroupRestoreTarget      `json:"target"`
+}
+
+// PreviewGcsProtectionGroupAssetV1Request represents a custom type struct
+type PreviewGcsProtectionGroupAssetV1Request struct {
+    // The Clumio-assigned ID of the protection group GCS asset backup to be restored. Use the
+    // [GET /backups/gcp/protection-groups/assets](#operation/list-backup-gcs-protection-group-assets)
+    // endpoint to fetch valid values. 
+    // Note that only one of `backup_id` or `pitr` must be given.
+    BackupId      *string                   `json:"backup_id"`
+    // Search for or restore only objects that pass the source object filter.
+    ObjectFilters *GCSSourceObjectFilters   `json:"object_filters"`
+    // Time bounds shared by restore and preview endpoints. Restore endpoints
+    // embed this with a resource ID; preview endpoints use it as-is (the resource
+    // ID lives in the URL path).
+    Pitr          *GCSRestorePitrTimestamps `json:"pitr"`
+}
+
+// RestoreGcsProtectionGroupObjectsV1Request represents a custom type struct
+type RestoreGcsProtectionGroupObjectsV1Request struct {
+    // GCSObject defines one object to restore
+    Source []*GCSObject                     `json:"source"`
+    // The destination where the GCS protection group will be restored.
+    Target *GCSProtectionGroupRestoreTarget `json:"target"`
+}
+
+// PreviewGcsProtectionGroupV1Request represents a custom type struct
+type PreviewGcsProtectionGroupV1Request struct {
+    // The Clumio-assigned ID of the protection group GCS asset backup to be restored. Use the
+    // [GET /backups/gcp/protection-groups/assets](#operation/list-backup-gcp-protection-group-gcs-assets)
+    // endpoint to fetch valid values. 
+    // Note that only one of `backup_id` or `pitr` must be given.
+    BackupId      *string                   `json:"backup_id"`
+    // A list of Clumio-assigned IDs of GCS assets, representing the buckets
+    // within the protection group to restore from. Use the
+    // [GET /datasources/gcp/gcs-assets](#operation/list-gcp-gcs-assets)
+    // endpoint to fetch valid values.
+    GcsAssetIds   []*string                 `json:"gcs_asset_ids"`
+    // Search for or restore only objects that pass the source object filter.
+    ObjectFilters *GCSSourceObjectFilters   `json:"object_filters"`
+    // Time bounds shared by restore and preview endpoints. Restore endpoints
+    // embed this with a resource ID; preview endpoints use it as-is (the resource
+    // ID lives in the URL path).
+    Pitr          *GCSRestorePitrTimestamps `json:"pitr"`
 }
 
 // RestoreProtectionGroupV1Request represents a custom type struct

@@ -151,7 +151,7 @@ func (u *UsersV1) ReadUser(
 // DeleteUser Deletes an existing user from Clumio, revoking the user's access to Clumio. A deleted user cannot be recovered.
 func (u *UsersV1) DeleteUser(
     userId int64)(
-    *models.DeleteUserResponseV1, *apiutils.APIError) {
+    interface{}, *apiutils.APIError) {
 
     pathURL := "/users/{user_id}"
     //process optional template parameters
@@ -162,7 +162,7 @@ func (u *UsersV1) DeleteUser(
 
     
     header := "application/api.clumio.users=v1+json"
-    result := &models.DeleteUserResponseV1{}
+    var result interface{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: u.config,
@@ -221,7 +221,7 @@ func (u *UsersV1) UpdateUser(
 func (u *UsersV1) ChangePassword(
     userId int64, 
     body *models.ChangePasswordV1Request)(
-    *models.ChangePasswordResponse, *apiutils.APIError) {
+    interface{}, *apiutils.APIError) {
 
     pathURL := "/users/{user_id}/password"
     //process optional template parameters
@@ -240,7 +240,7 @@ func (u *UsersV1) ChangePassword(
     }
     payload := string(bytes)
     header := "application/api.clumio.users=v1+json"
-    result := &models.ChangePasswordResponse{}
+    var result interface{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: u.config,

@@ -35,7 +35,7 @@ type ReportComplianceRunsV1Client interface {
         configurationId string, 
         runId string, 
         body *models.SendComplianceReportRunEmailV1Request)(
-        *models.SendComplianceRunEmailResponse,  *apiutils.APIError)
+        interface{},  *apiutils.APIError)
     
 }
 

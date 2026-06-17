@@ -32,6 +32,8 @@ type OrganizationalUnitsV2Client interface {
         *models.ReadOrganizationalUnitResponse,  *apiutils.APIError)
     
     // DeleteOrganizationalUnit Delete the specified organizational unit.
+    //  Concurrent AWS OU operations that move overlapping scopes across multiple OUs
+    //  should be issued sequentially.
     DeleteOrganizationalUnit(
         id string, 
         embed *string)(

@@ -25,7 +25,7 @@ type UsersV2Client interface {
     // ChangePassword Change the password of the current user. Users can only change their own passwords.
     ChangePassword(
         body *models.ChangePasswordV2Request)(
-        *models.ChangePasswordResponse,  *apiutils.APIError)
+        interface{},  *apiutils.APIError)
     
     // UpdateUserProfile Manages the current user's profile, such as changing the user's full name.
     UpdateUserProfile(
