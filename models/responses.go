@@ -444,6 +444,8 @@ type CreateEC2MSSQLDatabaseRestoreResponse struct {
 type CreateGCPConnectionResponse struct {
     // URLs to pages related to the resource.
     Links                 *GCPConnectionLinks `json:"_links"`
+    // Clumio service account email that will be allowed access in customer env
+    ClumioServiceAccount  *string             `json:"clumio_service_account"`
     // TODO: Add struct field description
     Configuration         *Configuration      `json:"configuration"`
     // The status of the connection
@@ -4013,6 +4015,8 @@ type ReadFileSystemResponse struct {
 type ReadGCPConnectionResponse struct {
     // URLs to pages related to the resource.
     Links                 *GCPConnectionLinks `json:"_links"`
+    // Clumio service account email that will be allowed access in customer env
+    ClumioServiceAccount  *string             `json:"clumio_service_account"`
     // TODO: Add struct field description
     Configuration         *Configuration      `json:"configuration"`
     // The status of the connection
@@ -6075,12 +6079,18 @@ type UpdateConsolidatedAlertResponse struct {
 type UpdateGCPConnectionResponse struct {
     // URLs to pages related to the resource.
     Links                 *GCPConnectionLinks `json:"_links"`
+    // Clumio service account email that will be allowed access in customer env
+    ClumioServiceAccount  *string             `json:"clumio_service_account"`
     // TODO: Add struct field description
     Configuration         *Configuration      `json:"configuration"`
     // The status of the connection
     ConnectionStatus      *string             `json:"connection_status"`
     // The type of this connection, which identifies its use.
     ConnectionType        *string             `json:"connection_type"`
+    // Clumio control plane ID
+    ControlPlaneId        *string             `json:"control_plane_id"`
+    // Clumio Control plane role name that will be federated into GCP
+    ControlPlaneRole      *string             `json:"control_plane_role"`
     // The timestamp of when the connection was created.
     CreatedTimestamp      *string             `json:"created_timestamp"`
     // The method by which the GCP terraform template was deployed.
