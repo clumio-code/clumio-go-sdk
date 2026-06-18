@@ -287,6 +287,9 @@ type PostProcessGcpConnectionV1Request struct {
     ProjectName         *string            `json:"project_name"`
     // The GCP-assigned numeric INT64 project number associated with the connection.
     ProjectNumber       *string            `json:"project_number"`
+    // The GCP regions to be used for inventory.
+    // Each region must be a valid GCP region identifier (e.g., "us-central1", "europe-west1").
+    Regions             []*string          `json:"regions"`
     // RequestType indicates whether this is a CREATE, UPDATE or DELETE request
     RequestType         *string            `json:"request_type"`
     // ResourceProperties is a key value map meant to be used for passing additional information
