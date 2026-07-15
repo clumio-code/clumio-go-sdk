@@ -21,6 +21,7 @@ type AwsDynamodbTablesV1 struct {
 func (a *AwsDynamodbTablesV1) ListAwsDynamodbTables(
     limit *int64, 
     start *string, 
+    sort *string, 
     filter *string, 
     embed *string, 
     lookbackDays *int64)(
@@ -37,6 +38,9 @@ func (a *AwsDynamodbTablesV1) ListAwsDynamodbTables(
     }
     if start != nil {
         queryParams["start"] = *start
+    }
+    if sort != nil {
+        queryParams["sort"] = *sort
     }
     if filter != nil {
         queryParams["filter"] = *filter

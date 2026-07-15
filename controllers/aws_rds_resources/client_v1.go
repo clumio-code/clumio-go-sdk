@@ -14,6 +14,7 @@ type AwsRdsResourcesV1Client interface {
     ListAwsRdsResources(
         limit *int64, 
         start *string, 
+        sort *string, 
         filter *string, 
         embed *string, 
         lookbackDays *int64)(

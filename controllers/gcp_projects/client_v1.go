@@ -15,7 +15,8 @@ type GcpProjectsV1Client interface {
     ListGcpProjects(
         limit *int64, 
         start *string, 
-        filter *string)(
+        filter *string, 
+        sort *string)(
         *models.ListGCPProjectsResponse,  *apiutils.APIError)
     
 }

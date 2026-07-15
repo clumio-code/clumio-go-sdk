@@ -22,7 +22,8 @@ type GcpProjectsV1 struct {
 func (g *GcpProjectsV1) ListGcpProjects(
     limit *int64, 
     start *string, 
-    filter *string)(
+    filter *string, 
+    sort *string)(
     *models.ListGCPProjectsResponse, *apiutils.APIError) {
 
     queryBuilder := g.config.BaseUrl + "/datasources/gcp/projects"
@@ -39,6 +40,9 @@ func (g *GcpProjectsV1) ListGcpProjects(
     }
     if filter != nil {
         queryParams["filter"] = *filter
+    }
+    if sort != nil {
+        queryParams["sort"] = *sort
     }
     
 

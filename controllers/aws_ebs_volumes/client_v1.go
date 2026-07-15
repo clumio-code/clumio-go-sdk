@@ -14,6 +14,7 @@ type AwsEbsVolumesV1Client interface {
     ListAwsEbsVolumes(
         limit *int64, 
         start *string, 
+        sort *string, 
         filter *string, 
         embed *string, 
         lookbackDays *int64)(

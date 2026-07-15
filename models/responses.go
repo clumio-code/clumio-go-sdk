@@ -428,6 +428,17 @@ type CreateConnectionGroupResponse struct {
     TemplatePermissionSet    *string               `json:"template_permission_set"`
 }
 
+// CreateDocumentDBRestoreResponse represents a custom type struct for Success
+type CreateDocumentDBRestoreResponse struct {
+    // Embedded responses related to the resource.
+    Embedded *ReadTaskHateoasOuterEmbedded         `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links    *CreateDocumentDBRestoreResponseLinks `json:"_links"`
+    // The Clumio-assigned ID of the task created by this restore request.
+    // The progress of the task can be monitored using the `GET /tasks/{task_id}` endpoint.
+    TaskId   *string                               `json:"task_id"`
+}
+
 // CreateEC2MSSQLDatabaseRestoreResponse represents a custom type struct for Success
 type CreateEC2MSSQLDatabaseRestoreResponse struct {
     // Embedded responses related to the resource.
@@ -443,45 +454,48 @@ type CreateEC2MSSQLDatabaseRestoreResponse struct {
 // CreateGCPConnectionResponse represents a custom type struct for Success
 type CreateGCPConnectionResponse struct {
     // URLs to pages related to the resource.
-    Links                 *GCPConnectionLinks `json:"_links"`
+    Links                 *GCPConnectionLinks         `json:"_links"`
     // Clumio service account email that will be allowed access in customer env
-    ClumioServiceAccount  *string             `json:"clumio_service_account"`
+    ClumioServiceAccount  *string                     `json:"clumio_service_account"`
     // TODO: Add struct field description
-    Configuration         *Configuration      `json:"configuration"`
+    Configuration         *Configuration              `json:"configuration"`
     // The status of the connection
-    ConnectionStatus      *string             `json:"connection_status"`
+    ConnectionStatus      *string                     `json:"connection_status"`
     // The type of this connection, which identifies its use.
-    ConnectionType        *string             `json:"connection_type"`
+    ConnectionType        *string                     `json:"connection_type"`
     // Clumio control plane ID
-    ControlPlaneId        *string             `json:"control_plane_id"`
+    ControlPlaneId        *string                     `json:"control_plane_id"`
     // Clumio Control plane role name that will be federated into GCP
-    ControlPlaneRole      *string             `json:"control_plane_role"`
+    ControlPlaneRole      *string                     `json:"control_plane_role"`
     // The timestamp of when the connection was created.
-    CreatedTimestamp      *string             `json:"created_timestamp"`
+    CreatedTimestamp      *string                     `json:"created_timestamp"`
     // The method by which the GCP terraform template was deployed.
-    DeploymentType        *string             `json:"deployment_type"`
+    DeploymentType        *string                     `json:"deployment_type"`
     // The user defined description for the connection.
-    Description           *string             `json:"description"`
+    Description           *string                     `json:"description"`
     // The Clumio-assigned ID of the organizational unit associated with the
     // GCP connection.
     // For more information about organizational units, refer to the
     // Organizational-Units documentation.
-    OrganizationalUnitId  *string             `json:"organizational_unit_id"`
+    OrganizationalUnitId  *string                     `json:"organizational_unit_id"`
     // The user-assigned ID of the GCP project associated with the connection.
-    ProjectId             *string             `json:"project_id"`
+    ProjectId             *string                     `json:"project_id"`
     // The user-friendly name of the GCP project associated with the connection.
-    ProjectName           *string             `json:"project_name"`
+    ProjectName           *string                     `json:"project_name"`
     // The GCP-assigned numeric INT64 project number associated with the connection.
-    ProjectNumber         *string             `json:"project_number"`
+    ProjectNumber         *string                     `json:"project_number"`
+    // RegionConfigurationModel contains the configuration of a single GCP region
+    // of the connection.
+    RegionConfiguration   []*RegionConfigurationModel `json:"region_configuration"`
     // The GCP regions used for inventory.
-    Regions               []*string           `json:"regions"`
+    Regions               []*string                   `json:"regions"`
     // The permission set selected during registration.
-    TemplatePermissionSet *string             `json:"template_permission_set"`
+    TemplatePermissionSet *string                     `json:"template_permission_set"`
     // The 36-character Clumio GCP integration token used to identify the
     // installation of the Clumio GCP integration resources in the project.
-    Token                 *string             `json:"token"`
+    Token                 *string                     `json:"token"`
     // The timestamp of when the connection was updated.
-    UpdatedTimestamp      *string             `json:"updated_timestamp"`
+    UpdatedTimestamp      *string                     `json:"updated_timestamp"`
 }
 
 // CreateGCPProtectionGroupResponse represents a custom type struct for Success
@@ -553,6 +567,17 @@ type CreateGCPProtectionGroupResponse struct {
     // Version of the protection group. The version number is incremented every time
     // a change is made to the protection group.
     Version                      *int64                      `json:"version"`
+}
+
+// CreateNeptuneRestoreResponse represents a custom type struct for Success
+type CreateNeptuneRestoreResponse struct {
+    // Embedded responses related to the resource.
+    Embedded *ReadTaskHateoasOuterEmbedded      `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links    *CreateNeptuneRestoreResponseLinks `json:"_links"`
+    // The Clumio-assigned ID of the task created by this restore request.
+    // The progress of the task can be monitored using the `GET /tasks/{task_id}` endpoint.
+    TaskId   *string                            `json:"task_id"`
 }
 
 // CreateOrganizationalUnitNoTaskResponse represents a custom type struct for Success
@@ -1206,6 +1231,18 @@ type ExportMalwareReportResponse struct {
     TaskId   *string                       `json:"task_id"`
 }
 
+// ExportThreatReportResponse represents a custom type struct for Success
+type ExportThreatReportResponse struct {
+    // Embedded responses related to the resource.
+    Embedded *ReadTaskHateoasOuterEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links    *ExportThreatReportLinks      `json:"_links"`
+    // The Clumio-assigned ID of the task created by this request.
+    // The progress of the task can be monitored using the
+    // `GET /tasks/{task_id}` endpoint.
+    TaskId   *string                       `json:"task_id"`
+}
+
 // FileListResponse represents a custom type struct for Success
 type FileListResponse struct {
     // Embedded responses related to the resource.
@@ -1470,6 +1507,48 @@ type ListConsolidatedAlertsResponse struct {
     TotalCount      *int64                         `json:"total_count"`
     // The total number of pages of results.
     TotalPagesCount *int64                         `json:"total_pages_count"`
+}
+
+// ListDocumentDBBackupsResponse represents a custom type struct for Success
+type ListDocumentDBBackupsResponse struct {
+    // Embedded responses related to the resource.
+    Embedded        *RdsDatabaseBackupListEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links           *RdsDatabaseBackupListLinks    `json:"_links"`
+    // The number of items listed on the current page.
+    CurrentCount    *int64                         `json:"current_count"`
+    // The filter used in the request. The filter includes both manually-specified and system-generated filters.
+    FilterApplied   *string                        `json:"filter_applied"`
+    // The maximum number of items displayed per page in the response.
+    Limit           *int64                         `json:"limit"`
+    // The page number used to get this response.
+    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
+    Start           *string                        `json:"start"`
+    // The total number of items, summed across all pages.
+    TotalCount      *int64                         `json:"total_count"`
+    // The total number of pages of results.
+    TotalPagesCount *int64                         `json:"total_pages_count"`
+}
+
+// ListDocumentDBResponse represents a custom type struct for Success
+type ListDocumentDBResponse struct {
+    // Embedded responses related to the resource.
+    Embedded        *RdsResourceListEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links           *RdsResourceListLinks    `json:"_links"`
+    // The number of items listed on the current page.
+    CurrentCount    *int64                   `json:"current_count"`
+    // The filter used in the request. The filter includes both manually-specified and system-generated filters.
+    FilterApplied   *string                  `json:"filter_applied"`
+    // The maximum number of items displayed per page in the response.
+    Limit           *int64                   `json:"limit"`
+    // The page number used to get this response.
+    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
+    Start           *string                  `json:"start"`
+    // The total number of items, summed across all pages.
+    TotalCount      *int64                   `json:"total_count"`
+    // The total number of pages of results.
+    TotalPagesCount *int64                   `json:"total_pages_count"`
 }
 
 // ListDynamoDBTableBackupsResponse represents a custom type struct for Success
@@ -1989,8 +2068,6 @@ type ListIcebergTableBackupsResponse struct {
 type ListIcebergTablesResponse struct {
     // Embedded responses related to the resource.
     Embedded        *IcebergTableListEmbedded `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links           *IcebergTableListLinks    `json:"_links"`
     // The number of items listed on the current page.
     CurrentCount    *int64                    `json:"current_count"`
     // The maximum number of items displayed per page in the response.
@@ -2019,6 +2096,48 @@ type ListManagementGroupsResponse struct {
     MinCount     *int64                       `json:"min_count"`
     // The page token used to get this response.
     Start        *string                      `json:"start"`
+}
+
+// ListNeptuneBackupsResponse represents a custom type struct for Success
+type ListNeptuneBackupsResponse struct {
+    // Embedded responses related to the resource.
+    Embedded        *RdsDatabaseBackupListEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links           *RdsDatabaseBackupListLinks    `json:"_links"`
+    // The number of items listed on the current page.
+    CurrentCount    *int64                         `json:"current_count"`
+    // The filter used in the request. The filter includes both manually-specified and system-generated filters.
+    FilterApplied   *string                        `json:"filter_applied"`
+    // The maximum number of items displayed per page in the response.
+    Limit           *int64                         `json:"limit"`
+    // The page number used to get this response.
+    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
+    Start           *string                        `json:"start"`
+    // The total number of items, summed across all pages.
+    TotalCount      *int64                         `json:"total_count"`
+    // The total number of pages of results.
+    TotalPagesCount *int64                         `json:"total_pages_count"`
+}
+
+// ListNeptuneResponse represents a custom type struct for Success
+type ListNeptuneResponse struct {
+    // Embedded responses related to the resource.
+    Embedded        *RdsResourceListEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links           *RdsResourceListLinks    `json:"_links"`
+    // The number of items listed on the current page.
+    CurrentCount    *int64                   `json:"current_count"`
+    // The filter used in the request. The filter includes both manually-specified and system-generated filters.
+    FilterApplied   *string                  `json:"filter_applied"`
+    // The maximum number of items displayed per page in the response.
+    Limit           *int64                   `json:"limit"`
+    // The page number used to get this response.
+    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
+    Start           *string                  `json:"start"`
+    // The total number of items, summed across all pages.
+    TotalCount      *int64                   `json:"total_count"`
+    // The total number of pages of results.
+    TotalPagesCount *int64                   `json:"total_pages_count"`
 }
 
 // ListOrganizationalUnitsResponse represents a custom type struct for Success
@@ -2461,6 +2580,18 @@ type OnDemandAWSIcebergTableBackupResponse struct {
     TaskId   *string                             `json:"task_id"`
 }
 
+// OnDemandDocumentDBBackupResponse represents a custom type struct for Success
+type OnDemandDocumentDBBackupResponse struct {
+    // Embedded responses related to the resource.
+    Embedded *ReadTaskHateoasOuterEmbedded  `json:"_embedded"`
+    // OnDemandDocumentDBBackupLinks
+    // URLs to pages related to the resource.
+    Links    *OnDemandDocumentDBBackupLinks `json:"_links"`
+    // The Clumio-assigned ID of the task created for DocumentDB backup.
+    // The progress of the task can be monitored using the `GET /tasks/{task_id}` endpoint.
+    TaskId   *string                        `json:"task_id"`
+}
+
 // OnDemandDynamoDBBackupResponse represents a custom type struct for Success
 type OnDemandDynamoDBBackupResponse struct {
     // Embedded responses related to the resource.
@@ -2519,6 +2650,18 @@ type OnDemandEC2MSSQLDatabaseBackupResponse struct {
     Self     *HateoasSelfLink                                   `json:"_self"`
     // Task Id
     TaskId   *string                                            `json:"task_id"`
+}
+
+// OnDemandNeptuneBackupResponse represents a custom type struct for Success
+type OnDemandNeptuneBackupResponse struct {
+    // Embedded responses related to the resource.
+    Embedded *ReadTaskHateoasOuterEmbedded `json:"_embedded"`
+    // OnDemandNeptuneBackupLinks
+    // URLs to pages related to the resource.
+    Links    *OnDemandNeptuneBackupLinks   `json:"_links"`
+    // The Clumio-assigned ID of the task created for Neptune backup.
+    // The progress of the task can be monitored using the `GET /tasks/{task_id}` endpoint.
+    TaskId   *string                       `json:"task_id"`
 }
 
 // PatchGeneralSettingsResponseV2 represents a custom type struct for Success
@@ -3285,6 +3428,145 @@ type ReadDirectoryResponse struct {
     Start        *string                  `json:"start"`
 }
 
+// ReadDocumentDBBackupResponse represents a custom type struct for Success
+type ReadDocumentDBBackupResponse struct {
+    // URLs to pages related to the resource.
+    Links                  *RdsDatabaseBackupLinks `json:"_links"`
+    // The AWS-assigned ID of the account associated with this database at the time of backup.
+    AccountNativeId        *string                 `json:"account_native_id"`
+    // The AWS availability zones associated with this database at the time of backup.
+    AwsAzs                 []*string               `json:"aws_azs"`
+    // The AWS region associated with this environment.
+    AwsRegion              *string                 `json:"aws_region"`
+    // The AWS-assigned ID of the database at the time of backup.
+    DatabaseNativeId       *string                 `json:"database_native_id"`
+    // The AWS database engine at the time of backup.
+    Engine                 *string                 `json:"engine"`
+    // The aws database engine version at the time of backup.
+    EngineVersion          *string                 `json:"engine_version"`
+    // The timestamp of when this backup expires. Represented in RFC-3339 format.
+    ExpirationTimestamp    *string                 `json:"expiration_timestamp"`
+    // The Clumio-assigned ID of the backup.
+    Id                     *string                 `json:"id"`
+    // TODO: Add struct field description
+    Instances              []*RdsInstanceModel     `json:"instances"`
+    // The AWS-assigned ID of the KMS key associated with this database at the time of backup.
+    KmsKeyNativeId         *string                 `json:"kms_key_native_id"`
+    // The timestamp of when the migration was triggered. This field will be set only for
+    // migration granular backups. Represented in RFC-3339 format.
+    MigrationTimestamp     *string                 `json:"migration_timestamp"`
+    // Option group name associated with the backed up RDS resource.
+    OptionGroupName        *string                 `json:"option_group_name"`
+    // Parameter group name associated with the backed up RDS resource.
+    ParameterGroupName     *string                 `json:"parameter_group_name"`
+    // The Clumio-assigned ID of the database associated with this backup.
+    ResourceId             *string                 `json:"resource_id"`
+    // The type of the RDS resource associated with this backup. Possible values include `aws_rds_cluster` and `aws_rds_instance`.
+    ResourceType           *string                 `json:"resource_type"`
+    // The AWS-assigned IDs of the security groups associated with this RDS resource backup.
+    SecurityGroupNativeIds []*string               `json:"security_group_native_ids"`
+    // The size of the RDS resource backup. Measured in bytes (B).
+    Size                   *int64                  `json:"size"`
+    // The timestamp of when this backup started. Represented in RFC-3339 format.
+    StartTimestamp         *string                 `json:"start_timestamp"`
+    // The AWS-assigned name of the subnet group associated with this RDS resource backup.
+    SubnetGroupName        *string                 `json:"subnet_group_name"`
+    // A tag created through AWS Console which can be applied to EBS volumes.
+    Tags                   []*AwsTagCommonModel    `json:"tags"`
+    // The type of backup. Possible values include `clumio_snapshot` and `granular_backup`.
+    ClumioType             *string                 `json:"type"`
+}
+
+// ReadDocumentDBResponse represents a custom type struct for Success
+type ReadDocumentDBResponse struct {
+    // Embedded responses related to the resource.
+    Embedded                               *RdsResourceEmbedded    `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links                                  *RdsResourceLinks       `json:"_links"`
+    // The AWS-assigned ID of the account associated with this resource.
+    AccountNativeId                        *string                 `json:"account_native_id"`
+    // The AWS availability zone(s) associated with the resource. For example, `us-west-2a`.
+    AwsAzs                                 []*string               `json:"aws_azs"`
+    // The AWS region associated with this resource.
+    AwsRegion                              *string                 `json:"aws_region"`
+    // The backup status information applied to this resource.
+    BackupStatusInfo                       *BackupStatusInfo       `json:"backup_status_info"`
+    // The timestamp of when the RDS resource was deleted. Represented in RFC-3339 format.
+    // If the resource was not deleted, then this field has a value of `null`.
+    DeletionTimestamp                      *string                 `json:"deletion_timestamp"`
+    // The Clumio-assigned ID of the policy directly assigned to the entity.
+    DirectAssignmentPolicyId               *string                 `json:"direct_assignment_policy_id"`
+    // The timestamp of the oldest AWS snapshot of the RDS resource. Represented in RFC-3339
+    // format. If the resource has no available snapshots, then this field has a value of `null`.
+    EarliestAwsSnapshotRestorableTimestamp *string                 `json:"earliest_aws_snapshot_restorable_timestamp"`
+    // The database engine of the RDS resource. Possible values include `postgres` and `mysql`.
+    // For a full list of possible values, please refer to the AWS documentation at
+    // https://docs.aws.amazon.com/cli/latest/reference/rds/describe-db-engine-versions.html
+    Engine                                 *string                 `json:"engine"`
+    // The database engine mode of the RDS resource. Possible values include `provisioned`
+    // and `serverless`.
+    EngineMode                             *string                 `json:"engine_mode"`
+    // The database engine version of the RDS resource. For example, `10.12`.
+    EngineVersion                          *string                 `json:"engine_version"`
+    // The Clumio-assigned ID of the AWS environment associated with this resource.
+    EnvironmentId                          *string                 `json:"environment_id"`
+    // The timestamp of the first active backup of the database to Clumio. Represented
+    // in RFC-3339 format.
+    FirstClumioSnapshotTimestamp           *string                 `json:"first_clumio_snapshot_timestamp"`
+    // The timestamp of the first active granular backup for the database. Represented in
+    // RFC-3339 format.
+    FirstGranularBackupTimestamp           *string                 `json:"first_granular_backup_timestamp"`
+    // Determines whether the table has a direct assignment.
+    HasDirectAssignment                    *bool                   `json:"has_direct_assignment"`
+    // The Clumio-assigned ID of the resource.
+    Id                                     *string                 `json:"id"`
+    // Determines whether an RDS resource is deleted.
+    IsDeleted                              *bool                   `json:"is_deleted"`
+    // Determines whether an RDS resource is encrypted.
+    IsEncrypted                            *bool                   `json:"is_encrypted"`
+    // Determines whether the RDS resource is supported for backups.
+    IsSupported                            *bool                   `json:"is_supported"`
+    // The AWS-assigned ID of the KMS key encrypting this resource. If the resource is
+    // unencrypted, then this field has a value of `null`.
+    KmsKeyNativeId                         *string                 `json:"kms_key_native_id"`
+    // The timestamp of the last time this database was backed up to Clumio. Represented
+    // in RFC-3339 format.
+    LastClumioSnapshotTimestamp            *string                 `json:"last_clumio_snapshot_timestamp"`
+    // The timestamp of the last time this database had granular backup performed.
+    // Represented in RFC-3339 format.
+    LastGranularBackupTimestamp            *string                 `json:"last_granular_backup_timestamp"`
+    // The timestamp of the newest AWS snapshot of the RDS resource. Represented in RFC-3339
+    // format. If the resource has no available snapshots, then this field has a value of `null`.
+    LatestAwsSnapshotRestorableTimestamp   *string                 `json:"latest_aws_snapshot_restorable_timestamp"`
+    // The AWS-assigned name of the RDS resource. For example, `clumio-aurora-dev`.
+    Name                                   *string                 `json:"name"`
+    // The organizational unit to which this resource belongs.
+    OrganizationalUnitId                   *string                 `json:"organizational_unit_id"`
+    // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
+    ProtectionInfo                         *ProtectionInfoWithRule `json:"protection_info"`
+    // The protection status of the RDS resource. Possible values include `protected`,
+    // `unprotected`, and `unsupported`. If the RDS resource does not support backups, then
+    // this field has a value of `unsupported`. If the resource has been deleted, then this
+    // field has a value of `null`.
+    ProtectionStatus                       *string                 `json:"protection_status"`
+    // The AWS-assigned ID of the RDS resource. For example, `cluster-3WW6IXRWO5ZS4PTUIKGZEACISY`.
+    ResourceNativeId                       *string                 `json:"resource_native_id"`
+    // The AWS-assigned IDs of the security groups associated with this resource
+    SecurityGroupNativeIds                 []*string               `json:"security_group_native_ids"`
+    // The size of the RDS resource. Measured in bytes (B).
+    Size                                   *int64                  `json:"size"`
+    // The RDS subnet group name associated with this resource.
+    SubnetGroupName                        *string                 `json:"subnet_group_name"`
+    // A tag created through AWS console which can be applied to EBS volumes.
+    Tags                                   []*AwsTagModel          `json:"tags"`
+    // The RDS resource type. Possible values include `aws_rds_cluster` and `aws_rds_instance`.
+    ClumioType                             *string                 `json:"type"`
+    // The reason why protection is not available on this RDS resource, if any.
+    // Possible values include `rds_engine_oracle` and `rds_postgres_9_4`.
+    // If the resource is supported, then this field has a value of `null`.
+    UnsupportedReason                      *string                 `json:"unsupported_reason"`
+}
+
 // ReadDynamoDBTableBackupResponse represents a custom type struct for Success
 type ReadDynamoDBTableBackupResponse struct {
     // The ETag value.
@@ -4014,45 +4296,48 @@ type ReadFileSystemResponse struct {
 // ReadGCPConnectionResponse represents a custom type struct for Success
 type ReadGCPConnectionResponse struct {
     // URLs to pages related to the resource.
-    Links                 *GCPConnectionLinks `json:"_links"`
+    Links                 *GCPConnectionLinks         `json:"_links"`
     // Clumio service account email that will be allowed access in customer env
-    ClumioServiceAccount  *string             `json:"clumio_service_account"`
+    ClumioServiceAccount  *string                     `json:"clumio_service_account"`
     // TODO: Add struct field description
-    Configuration         *Configuration      `json:"configuration"`
+    Configuration         *Configuration              `json:"configuration"`
     // The status of the connection
-    ConnectionStatus      *string             `json:"connection_status"`
+    ConnectionStatus      *string                     `json:"connection_status"`
     // The type of this connection, which identifies its use.
-    ConnectionType        *string             `json:"connection_type"`
+    ConnectionType        *string                     `json:"connection_type"`
     // Clumio control plane ID
-    ControlPlaneId        *string             `json:"control_plane_id"`
+    ControlPlaneId        *string                     `json:"control_plane_id"`
     // Clumio Control plane role name that will be federated into GCP
-    ControlPlaneRole      *string             `json:"control_plane_role"`
+    ControlPlaneRole      *string                     `json:"control_plane_role"`
     // The timestamp of when the connection was created.
-    CreatedTimestamp      *string             `json:"created_timestamp"`
+    CreatedTimestamp      *string                     `json:"created_timestamp"`
     // The method by which the GCP terraform template was deployed.
-    DeploymentType        *string             `json:"deployment_type"`
+    DeploymentType        *string                     `json:"deployment_type"`
     // The user defined description for the connection.
-    Description           *string             `json:"description"`
+    Description           *string                     `json:"description"`
     // The Clumio-assigned ID of the organizational unit associated with the
     // GCP connection.
     // For more information about organizational units, refer to the
     // Organizational-Units documentation.
-    OrganizationalUnitId  *string             `json:"organizational_unit_id"`
+    OrganizationalUnitId  *string                     `json:"organizational_unit_id"`
     // The user-assigned ID of the GCP project associated with the connection.
-    ProjectId             *string             `json:"project_id"`
+    ProjectId             *string                     `json:"project_id"`
     // The user-friendly name of the GCP project associated with the connection.
-    ProjectName           *string             `json:"project_name"`
+    ProjectName           *string                     `json:"project_name"`
     // The GCP-assigned numeric INT64 project number associated with the connection.
-    ProjectNumber         *string             `json:"project_number"`
+    ProjectNumber         *string                     `json:"project_number"`
+    // RegionConfigurationModel contains the configuration of a single GCP region
+    // of the connection.
+    RegionConfiguration   []*RegionConfigurationModel `json:"region_configuration"`
     // The GCP regions used for inventory.
-    Regions               []*string           `json:"regions"`
+    Regions               []*string                   `json:"regions"`
     // The permission set selected during registration.
-    TemplatePermissionSet *string             `json:"template_permission_set"`
+    TemplatePermissionSet *string                     `json:"template_permission_set"`
     // The 36-character Clumio GCP integration token used to identify the
     // installation of the Clumio GCP integration resources in the project.
-    Token                 *string             `json:"token"`
+    Token                 *string                     `json:"token"`
     // The timestamp of when the connection was updated.
-    UpdatedTimestamp      *string             `json:"updated_timestamp"`
+    UpdatedTimestamp      *string                     `json:"updated_timestamp"`
 }
 
 // ReadGCPGCSAssetContinuousBackupStatsResponse represents a custom type struct
@@ -4341,47 +4626,41 @@ type ReadGeneralSettingsResponseV2 struct {
 
 // ReadIcebergTableBackupResponse represents a custom type struct for Success
 type ReadIcebergTableBackupResponse struct {
-    // TODO: Add struct field description
-    Links               *IcebergTableBackupLinks `json:"_links"`
     // The AWS-assigned ID of the account associated with this database at the time of backup.
-    AccountNativeId     *string                  `json:"account_native_id"`
+    AccountNativeId     *string       `json:"account_native_id"`
     // The AWS region associated with this environment.
-    AwsRegion           *string                  `json:"aws_region"`
+    AwsRegion           *string       `json:"aws_region"`
     // The region in which this backup is stored. For policies that keep backups
     // in-region, this value will be the same as the source region of the asset backed up.
     // For out of region policies, this region will the one specified in the policy.
-    BackupAwsRegion     *string                  `json:"backup_aws_region"`
+    BackupAwsRegion     *string       `json:"backup_aws_region"`
     // The timestamp of when this backup expires. Represented in RFC-3339 format.
-    ExpirationTimestamp *string                  `json:"expiration_timestamp"`
+    ExpirationTimestamp *string       `json:"expiration_timestamp"`
     // The Clumio-assigned ID of the backup.
-    Id                  *string                  `json:"id"`
+    Id                  *string       `json:"id"`
     // The total count of the newly added snapshots in this backup.
-    NewlyAddedSnapshots *int32                   `json:"newly_added_snapshots"`
-    // TODO: Add struct field description
-    Schema              *string                  `json:"schema"`
-    // TODO: Add struct field description
-    SnapshotCreatedAt   *string                  `json:"snapshot_created_at"`
-    // TODO: Add struct field description
-    SnapshotId          *string                  `json:"snapshot_id"`
+    NewlyAddedSnapshots *int32        `json:"newly_added_snapshots"`
+    // The schema of the Iceberg table captured in this backup.
+    Schema              *string       `json:"schema"`
+    // The timestamp of when the Iceberg snapshot was created. Represented in RFC-3339 format.
+    SnapshotCreatedAt   *string       `json:"snapshot_created_at"`
+    // The ID of the Iceberg snapshot associated with this backup.
+    SnapshotId          *string       `json:"snapshot_id"`
     // The timestamp of when this backup started. Represented in RFC-3339 format.
-    StartTimestamp      *string                  `json:"start_timestamp"`
+    StartTimestamp      *string       `json:"start_timestamp"`
     // TODO: Add struct field description
-    Summary             *ModelSummary            `json:"summary"`
+    Summary             *ModelSummary `json:"summary"`
     // The Clumio-assigned ID of the Iceberg table.
-    TableId             *string                  `json:"table_id"`
+    TableId             *string       `json:"table_id"`
     // The name of the Iceberg table.
-    TableName           *string                  `json:"table_name"`
-    // The type of catalog.
+    TableName           *string       `json:"table_name"`
+    // The record type of this backup.
     // This field is always set to "iceberg_snapshot" or "iceberg_metadata".
-    ClumioType          *string                  `json:"type"`
+    ClumioType          *string       `json:"type"`
 }
 
 // ReadIcebergTableResponse represents a custom type struct for Success
 type ReadIcebergTableResponse struct {
-    // Embedded responses related to the resource.
-    Embedded                 *IcebergTableEmbedded   `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links                    *IcebergTableLinks      `json:"_links"`
     // The AWS-assigned ID of the account associated with the Iceberg Table.
     AccountNativeId          *string                 `json:"account_native_id"`
     // The AWS region associated with the Iceberg Table.
@@ -4452,6 +4731,145 @@ type ReadManagementGroupResponse struct {
     // The Clumio-assigned ID of the vCenter server associated with the management group.
     // All management groups are associated with a vCenter server.
     VcenterId             *string               `json:"vcenter_id"`
+}
+
+// ReadNeptuneBackupResponse represents a custom type struct for Success
+type ReadNeptuneBackupResponse struct {
+    // URLs to pages related to the resource.
+    Links                  *RdsDatabaseBackupLinks `json:"_links"`
+    // The AWS-assigned ID of the account associated with this database at the time of backup.
+    AccountNativeId        *string                 `json:"account_native_id"`
+    // The AWS availability zones associated with this database at the time of backup.
+    AwsAzs                 []*string               `json:"aws_azs"`
+    // The AWS region associated with this environment.
+    AwsRegion              *string                 `json:"aws_region"`
+    // The AWS-assigned ID of the database at the time of backup.
+    DatabaseNativeId       *string                 `json:"database_native_id"`
+    // The AWS database engine at the time of backup.
+    Engine                 *string                 `json:"engine"`
+    // The aws database engine version at the time of backup.
+    EngineVersion          *string                 `json:"engine_version"`
+    // The timestamp of when this backup expires. Represented in RFC-3339 format.
+    ExpirationTimestamp    *string                 `json:"expiration_timestamp"`
+    // The Clumio-assigned ID of the backup.
+    Id                     *string                 `json:"id"`
+    // TODO: Add struct field description
+    Instances              []*RdsInstanceModel     `json:"instances"`
+    // The AWS-assigned ID of the KMS key associated with this database at the time of backup.
+    KmsKeyNativeId         *string                 `json:"kms_key_native_id"`
+    // The timestamp of when the migration was triggered. This field will be set only for
+    // migration granular backups. Represented in RFC-3339 format.
+    MigrationTimestamp     *string                 `json:"migration_timestamp"`
+    // Option group name associated with the backed up RDS resource.
+    OptionGroupName        *string                 `json:"option_group_name"`
+    // Parameter group name associated with the backed up RDS resource.
+    ParameterGroupName     *string                 `json:"parameter_group_name"`
+    // The Clumio-assigned ID of the database associated with this backup.
+    ResourceId             *string                 `json:"resource_id"`
+    // The type of the RDS resource associated with this backup. Possible values include `aws_rds_cluster` and `aws_rds_instance`.
+    ResourceType           *string                 `json:"resource_type"`
+    // The AWS-assigned IDs of the security groups associated with this RDS resource backup.
+    SecurityGroupNativeIds []*string               `json:"security_group_native_ids"`
+    // The size of the RDS resource backup. Measured in bytes (B).
+    Size                   *int64                  `json:"size"`
+    // The timestamp of when this backup started. Represented in RFC-3339 format.
+    StartTimestamp         *string                 `json:"start_timestamp"`
+    // The AWS-assigned name of the subnet group associated with this RDS resource backup.
+    SubnetGroupName        *string                 `json:"subnet_group_name"`
+    // A tag created through AWS Console which can be applied to EBS volumes.
+    Tags                   []*AwsTagCommonModel    `json:"tags"`
+    // The type of backup. Possible values include `clumio_snapshot` and `granular_backup`.
+    ClumioType             *string                 `json:"type"`
+}
+
+// ReadNeptuneResponse represents a custom type struct for Success
+type ReadNeptuneResponse struct {
+    // Embedded responses related to the resource.
+    Embedded                               *RdsResourceEmbedded    `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links                                  *RdsResourceLinks       `json:"_links"`
+    // The AWS-assigned ID of the account associated with this resource.
+    AccountNativeId                        *string                 `json:"account_native_id"`
+    // The AWS availability zone(s) associated with the resource. For example, `us-west-2a`.
+    AwsAzs                                 []*string               `json:"aws_azs"`
+    // The AWS region associated with this resource.
+    AwsRegion                              *string                 `json:"aws_region"`
+    // The backup status information applied to this resource.
+    BackupStatusInfo                       *BackupStatusInfo       `json:"backup_status_info"`
+    // The timestamp of when the RDS resource was deleted. Represented in RFC-3339 format.
+    // If the resource was not deleted, then this field has a value of `null`.
+    DeletionTimestamp                      *string                 `json:"deletion_timestamp"`
+    // The Clumio-assigned ID of the policy directly assigned to the entity.
+    DirectAssignmentPolicyId               *string                 `json:"direct_assignment_policy_id"`
+    // The timestamp of the oldest AWS snapshot of the RDS resource. Represented in RFC-3339
+    // format. If the resource has no available snapshots, then this field has a value of `null`.
+    EarliestAwsSnapshotRestorableTimestamp *string                 `json:"earliest_aws_snapshot_restorable_timestamp"`
+    // The database engine of the RDS resource. Possible values include `postgres` and `mysql`.
+    // For a full list of possible values, please refer to the AWS documentation at
+    // https://docs.aws.amazon.com/cli/latest/reference/rds/describe-db-engine-versions.html
+    Engine                                 *string                 `json:"engine"`
+    // The database engine mode of the RDS resource. Possible values include `provisioned`
+    // and `serverless`.
+    EngineMode                             *string                 `json:"engine_mode"`
+    // The database engine version of the RDS resource. For example, `10.12`.
+    EngineVersion                          *string                 `json:"engine_version"`
+    // The Clumio-assigned ID of the AWS environment associated with this resource.
+    EnvironmentId                          *string                 `json:"environment_id"`
+    // The timestamp of the first active backup of the database to Clumio. Represented
+    // in RFC-3339 format.
+    FirstClumioSnapshotTimestamp           *string                 `json:"first_clumio_snapshot_timestamp"`
+    // The timestamp of the first active granular backup for the database. Represented in
+    // RFC-3339 format.
+    FirstGranularBackupTimestamp           *string                 `json:"first_granular_backup_timestamp"`
+    // Determines whether the table has a direct assignment.
+    HasDirectAssignment                    *bool                   `json:"has_direct_assignment"`
+    // The Clumio-assigned ID of the resource.
+    Id                                     *string                 `json:"id"`
+    // Determines whether an RDS resource is deleted.
+    IsDeleted                              *bool                   `json:"is_deleted"`
+    // Determines whether an RDS resource is encrypted.
+    IsEncrypted                            *bool                   `json:"is_encrypted"`
+    // Determines whether the RDS resource is supported for backups.
+    IsSupported                            *bool                   `json:"is_supported"`
+    // The AWS-assigned ID of the KMS key encrypting this resource. If the resource is
+    // unencrypted, then this field has a value of `null`.
+    KmsKeyNativeId                         *string                 `json:"kms_key_native_id"`
+    // The timestamp of the last time this database was backed up to Clumio. Represented
+    // in RFC-3339 format.
+    LastClumioSnapshotTimestamp            *string                 `json:"last_clumio_snapshot_timestamp"`
+    // The timestamp of the last time this database had granular backup performed.
+    // Represented in RFC-3339 format.
+    LastGranularBackupTimestamp            *string                 `json:"last_granular_backup_timestamp"`
+    // The timestamp of the newest AWS snapshot of the RDS resource. Represented in RFC-3339
+    // format. If the resource has no available snapshots, then this field has a value of `null`.
+    LatestAwsSnapshotRestorableTimestamp   *string                 `json:"latest_aws_snapshot_restorable_timestamp"`
+    // The AWS-assigned name of the RDS resource. For example, `clumio-aurora-dev`.
+    Name                                   *string                 `json:"name"`
+    // The organizational unit to which this resource belongs.
+    OrganizationalUnitId                   *string                 `json:"organizational_unit_id"`
+    // The protection policy applied to this resource. If the resource is not protected, then this field has a value of `null`.
+    ProtectionInfo                         *ProtectionInfoWithRule `json:"protection_info"`
+    // The protection status of the RDS resource. Possible values include `protected`,
+    // `unprotected`, and `unsupported`. If the RDS resource does not support backups, then
+    // this field has a value of `unsupported`. If the resource has been deleted, then this
+    // field has a value of `null`.
+    ProtectionStatus                       *string                 `json:"protection_status"`
+    // The AWS-assigned ID of the RDS resource. For example, `cluster-3WW6IXRWO5ZS4PTUIKGZEACISY`.
+    ResourceNativeId                       *string                 `json:"resource_native_id"`
+    // The AWS-assigned IDs of the security groups associated with this resource
+    SecurityGroupNativeIds                 []*string               `json:"security_group_native_ids"`
+    // The size of the RDS resource. Measured in bytes (B).
+    Size                                   *int64                  `json:"size"`
+    // The RDS subnet group name associated with this resource.
+    SubnetGroupName                        *string                 `json:"subnet_group_name"`
+    // A tag created through AWS console which can be applied to EBS volumes.
+    Tags                                   []*AwsTagModel          `json:"tags"`
+    // The RDS resource type. Possible values include `aws_rds_cluster` and `aws_rds_instance`.
+    ClumioType                             *string                 `json:"type"`
+    // The reason why protection is not available on this RDS resource, if any.
+    // Possible values include `rds_engine_oracle` and `rds_postgres_9_4`.
+    // If the resource is supported, then this field has a value of `null`.
+    UnsupportedReason                      *string                 `json:"unsupported_reason"`
 }
 
 // ReadOrganizationalUnitResponse represents a custom type struct for Success
@@ -4586,8 +5004,10 @@ type ReadProtectionGroupBackupResponse struct {
     // The Clumio-assigned ID of the protection group backup.
     Id                       *string                     `json:"id"`
     // The number of objects that were detected to be malicious during the backup.
+    // (Deprecated, use `threat_object_count` instead.)
     MaliciousObjectCount     *int64                      `json:"malicious_object_count"`
     // The link for the malicious objects list at protection group level.
+    // (Deprecated, use `threat_objects_list_link` instead.)
     MaliciousObjectsListLink *string                     `json:"malicious_objects_list_link"`
     // The number of objects in the protection group that were missing during backup.
     MissingObjectCount       *int64                      `json:"missing_object_count"`
@@ -4601,6 +5021,10 @@ type ReadProtectionGroupBackupResponse struct {
     ProtectionGroupVersion   *int64                      `json:"protection_group_version"`
     // The timestamp of when this backup started. Represented in RFC-3339 format.
     StartTimestamp           *string                     `json:"start_timestamp"`
+    // The number of objects that were detected as threats during the backup.
+    ThreatObjectCount        *int64                      `json:"threat_object_count"`
+    // The link for the threat objects list at protection group level.
+    ThreatObjectsListLink    *string                     `json:"threat_objects_list_link"`
     // The type of backup. Possible values include `protection_group_backup`.
     ClumioType               *string                     `json:"type"`
 }
@@ -4738,8 +5162,10 @@ type ReadProtectionGroupS3AssetBackupResponse struct {
     // The Clumio-assigned ID of the protection group S3 asset backup.
     Id                       *string                            `json:"id"`
     // The number of objects that were detected to be malicious during the backup.
+    // (Deprecated, use `threat_object_count` instead.)
     MaliciousObjectCount     *int64                             `json:"malicious_object_count"`
     // The link for the malicious objects list.
+    // (Deprecated, use `threat_objects_list_link` instead.)
     MaliciousObjectsListLink *string                            `json:"malicious_objects_list_link"`
     // The number of objects in the protection group S3 asset that were missing during backup.
     MissingObjectCount       *int64                             `json:"missing_object_count"`
@@ -4753,6 +5179,10 @@ type ReadProtectionGroupS3AssetBackupResponse struct {
     ProtectionGroupVersion   *int64                             `json:"protection_group_version"`
     // The timestamp of when this backup started. Represented in RFC-3339 format.
     StartTimestamp           *string                            `json:"start_timestamp"`
+    // The number of objects that were detected as threats during the backup.
+    ThreatObjectCount        *int64                             `json:"threat_object_count"`
+    // The link for the threat objects list.
+    ThreatObjectsListLink    *string                            `json:"threat_objects_list_link"`
     // The type of backup. Possible values include `protection_group_s3_asset_backup`.
     ClumioType               *string                            `json:"type"`
 }
@@ -5507,8 +5937,6 @@ type RefreshWalletResponse struct {
 type RestoreAWSIcebergTableResponse struct {
     // Embedded responses related to the resource.
     Embedded *ReadTaskHateoasOuterEmbedded `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links    *RestoreIcebergTableLinks     `json:"_links"`
     // The Clumio-assigned ID of the task created by this restore request.
     // The progress of the task can be monitored using the
     // `GET /tasks/{task_id}` endpoint.
@@ -6078,45 +6506,48 @@ type UpdateConsolidatedAlertResponse struct {
 // UpdateGCPConnectionResponse represents a custom type struct for Success
 type UpdateGCPConnectionResponse struct {
     // URLs to pages related to the resource.
-    Links                 *GCPConnectionLinks `json:"_links"`
+    Links                 *GCPConnectionLinks         `json:"_links"`
     // Clumio service account email that will be allowed access in customer env
-    ClumioServiceAccount  *string             `json:"clumio_service_account"`
+    ClumioServiceAccount  *string                     `json:"clumio_service_account"`
     // TODO: Add struct field description
-    Configuration         *Configuration      `json:"configuration"`
+    Configuration         *Configuration              `json:"configuration"`
     // The status of the connection
-    ConnectionStatus      *string             `json:"connection_status"`
+    ConnectionStatus      *string                     `json:"connection_status"`
     // The type of this connection, which identifies its use.
-    ConnectionType        *string             `json:"connection_type"`
+    ConnectionType        *string                     `json:"connection_type"`
     // Clumio control plane ID
-    ControlPlaneId        *string             `json:"control_plane_id"`
+    ControlPlaneId        *string                     `json:"control_plane_id"`
     // Clumio Control plane role name that will be federated into GCP
-    ControlPlaneRole      *string             `json:"control_plane_role"`
+    ControlPlaneRole      *string                     `json:"control_plane_role"`
     // The timestamp of when the connection was created.
-    CreatedTimestamp      *string             `json:"created_timestamp"`
+    CreatedTimestamp      *string                     `json:"created_timestamp"`
     // The method by which the GCP terraform template was deployed.
-    DeploymentType        *string             `json:"deployment_type"`
+    DeploymentType        *string                     `json:"deployment_type"`
     // The user defined description for the connection.
-    Description           *string             `json:"description"`
+    Description           *string                     `json:"description"`
     // The Clumio-assigned ID of the organizational unit associated with the
     // GCP connection.
     // For more information about organizational units, refer to the
     // Organizational-Units documentation.
-    OrganizationalUnitId  *string             `json:"organizational_unit_id"`
+    OrganizationalUnitId  *string                     `json:"organizational_unit_id"`
     // The user-assigned ID of the GCP project associated with the connection.
-    ProjectId             *string             `json:"project_id"`
+    ProjectId             *string                     `json:"project_id"`
     // The user-friendly name of the GCP project associated with the connection.
-    ProjectName           *string             `json:"project_name"`
+    ProjectName           *string                     `json:"project_name"`
     // The GCP-assigned numeric INT64 project number associated with the connection.
-    ProjectNumber         *string             `json:"project_number"`
+    ProjectNumber         *string                     `json:"project_number"`
+    // RegionConfigurationModel contains the configuration of a single GCP region
+    // of the connection.
+    RegionConfiguration   []*RegionConfigurationModel `json:"region_configuration"`
     // The GCP regions used for inventory.
-    Regions               []*string           `json:"regions"`
+    Regions               []*string                   `json:"regions"`
     // The permission set selected during registration.
-    TemplatePermissionSet *string             `json:"template_permission_set"`
+    TemplatePermissionSet *string                     `json:"template_permission_set"`
     // The 36-character Clumio GCP integration token used to identify the
     // installation of the Clumio GCP integration resources in the project.
-    Token                 *string             `json:"token"`
+    Token                 *string                     `json:"token"`
     // The timestamp of when the connection was updated.
-    UpdatedTimestamp      *string             `json:"updated_timestamp"`
+    UpdatedTimestamp      *string                     `json:"updated_timestamp"`
 }
 
 // UpdateGCPProtectionGroupResponse represents a custom type struct for Success

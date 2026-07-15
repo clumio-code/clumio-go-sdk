@@ -22,7 +22,8 @@ func (g *GcpGcsAssetsV1) ListGcpGcsAssets(
     limit *int64, 
     start *string, 
     filter *string, 
-    embed *string)(
+    embed *string, 
+    sort *string)(
     *models.ListGCPGCSAssetsResponse, *apiutils.APIError) {
 
     queryBuilder := g.config.BaseUrl + "/datasources/gcp/gcs-assets"
@@ -42,6 +43,9 @@ func (g *GcpGcsAssetsV1) ListGcpGcsAssets(
     }
     if embed != nil {
         queryParams["embed"] = *embed
+    }
+    if sort != nil {
+        queryParams["sort"] = *sort
     }
     
 
