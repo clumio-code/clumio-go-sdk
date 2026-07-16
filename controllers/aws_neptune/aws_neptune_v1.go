@@ -1,7 +1,7 @@
 // Copyright (c) 2023 Clumio All Rights Reserved
 
-// Package awss3buckets contains methods related to AwsS3Buckets
-package awss3buckets
+// Package awsneptune contains methods related to AwsNeptune
+package awsneptune
 
 import (
     "fmt"
@@ -12,25 +12,26 @@ import (
     "github.com/clumio-code/clumio-go-sdk/models"
 )
 
-// AwsS3BucketsV1 represents a custom type struct
-type AwsS3BucketsV1 struct {
+// AwsNeptuneV1 represents a custom type struct
+type AwsNeptuneV1 struct {
     config config.Config
 }
 
-// ListAwsS3Buckets Returns a list of S3 buckets.
-func (a *AwsS3BucketsV1) ListAwsS3Buckets(
+// ListAwsNeptune Retrieve a list of Neptune clusters.
+func (a *AwsNeptuneV1) ListAwsNeptune(
     limit *int64, 
     start *string, 
     sort *string, 
     filter *string, 
+    embed *string, 
     lookbackDays *int64)(
-    *models.ListBucketsResponse, *apiutils.APIError) {
+    *models.ListNeptuneResponse, *apiutils.APIError) {
 
-    queryBuilder := a.config.BaseUrl + "/datasources/aws/s3-buckets"
+    queryBuilder := a.config.BaseUrl + "/datasources/aws/neptune"
 
     
-    header := "application/api.clumio.aws-s3-buckets=v1+json"
-    result := &models.ListBucketsResponse{}
+    header := "application/api.clumio.aws-neptune=v1+json"
+    result := &models.ListNeptuneResponse{}
     queryParams := make(map[string]string)
     if limit != nil {
         queryParams["limit"] = fmt.Sprintf("%v", *limit)
@@ -43,6 +44,9 @@ func (a *AwsS3BucketsV1) ListAwsS3Buckets(
     }
     if filter != nil {
         queryParams["filter"] = *filter
+    }
+    if embed != nil {
+        queryParams["embed"] = *embed
     }
     if lookbackDays != nil {
         queryParams["lookback_days"] = fmt.Sprintf("%v", *lookbackDays)
@@ -62,25 +66,36 @@ func (a *AwsS3BucketsV1) ListAwsS3Buckets(
 }
 
 
-// ReadAwsS3Bucket Returns a representation of the specified S3 bucket.
-func (a *AwsS3BucketsV1) ReadAwsS3Bucket(
-    bucketId string)(
-    *models.ReadBucketResponse, *apiutils.APIError) {
+// ReadAwsNeptune Returns a representation of the specified Neptune cluster.
+func (a *AwsNeptuneV1) ReadAwsNeptune(
+    resourceId string, 
+    lookbackDays *int64, 
+    embed *string)(
+    *models.ReadNeptuneResponse, *apiutils.APIError) {
 
-    pathURL := "/datasources/aws/s3-buckets/{bucket_id}"
+    pathURL := "/datasources/aws/neptune/{resource_id}"
     //process optional template parameters
     pathParams := map[string]string{
-        "bucket_id": bucketId,
+        "resource_id": resourceId,
     }
     queryBuilder := a.config.BaseUrl + pathURL
 
     
-    header := "application/api.clumio.aws-s3-buckets=v1+json"
-    result := &models.ReadBucketResponse{}
+    header := "application/api.clumio.aws-neptune=v1+json"
+    result := &models.ReadNeptuneResponse{}
+    queryParams := make(map[string]string)
+    if lookbackDays != nil {
+        queryParams["lookback_days"] = fmt.Sprintf("%v", *lookbackDays)
+    }
+    if embed != nil {
+        queryParams["embed"] = *embed
+    }
+    
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: a.config,
         RequestUrl: queryBuilder,
+        QueryParams: queryParams,
         PathParams: pathParams,
         AcceptHeader: header,
         Result200: &result,

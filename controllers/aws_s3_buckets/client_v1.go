@@ -14,6 +14,7 @@ type AwsS3BucketsV1Client interface {
     ListAwsS3Buckets(
         limit *int64, 
         start *string, 
+        sort *string, 
         filter *string, 
         lookbackDays *int64)(
         *models.ListBucketsResponse,  *apiutils.APIError)

@@ -14,6 +14,7 @@ type AwsDynamodbTablesV1Client interface {
     ListAwsDynamodbTables(
         limit *int64, 
         start *string, 
+        sort *string, 
         filter *string, 
         embed *string, 
         lookbackDays *int64)(

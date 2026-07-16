@@ -25,6 +25,16 @@ type UpdateIndividualAlertV1Request struct {
     Status *string `json:"status"`
 }
 
+// CreateBackupAwsDocumentdbV1Request represents a custom type struct
+type CreateBackupAwsDocumentdbV1Request struct {
+    // Performs the operation on the DocumentDB cluster with the specified Clumio-assigned ID.
+    DocumentdbId *string          `json:"documentdb_id"`
+    // Settings for requesting on-demand backup directly.
+    Settings     *OnDemandSetting `json:"settings"`
+    // The type of the backup. Possible values - `aws_snapshot`.
+    ClumioType   *string          `json:"type"`
+}
+
 // CreateBackupAwsDynamodbTableV1Request represents a custom type struct
 type CreateBackupAwsDynamodbTableV1Request struct {
     // Settings for requesting on-demand backup directly.
@@ -84,6 +94,16 @@ type CreateBackupAwsIcebergTableV1Request struct {
     TableId  *string          `json:"table_id"`
 }
 
+// CreateBackupAwsNeptuneV1Request represents a custom type struct
+type CreateBackupAwsNeptuneV1Request struct {
+    // Performs the operation on the Neptune cluster with the specified Clumio-assigned ID.
+    NeptuneId  *string          `json:"neptune_id"`
+    // Settings for requesting on-demand backup directly.
+    Settings   *OnDemandSetting `json:"settings"`
+    // The type of the backup. Possible values - `aws_snapshot`.
+    ClumioType *string          `json:"type"`
+}
+
 // ExportProtectionGroupS3AssetMalwareReportV1Request represents a custom type struct
 type ExportProtectionGroupS3AssetMalwareReportV1Request struct {
     // The parameters to specify how to generate the malware report for protection group S3 asset.
@@ -91,6 +111,15 @@ type ExportProtectionGroupS3AssetMalwareReportV1Request struct {
     Source *S3AssetMalwareReportSource `json:"source"`
     // The parameters for which S3 bucket to export the malware report to.
     Target *S3AssetMalwareReportTarget `json:"target"`
+}
+
+// ExportProtectionGroupS3AssetThreatReportV1Request represents a custom type struct
+type ExportProtectionGroupS3AssetThreatReportV1Request struct {
+    // The parameters to specify how to generate the threat report for protection group S3 asset.
+    // Must set exactly one of the options.
+    Source *S3AssetThreatReportSource `json:"source"`
+    // The parameters for which S3 bucket to export the threat report to.
+    Target *S3AssetThreatReportTarget `json:"target"`
 }
 
 // CreateAwsConnectionV1Request represents a custom type struct
@@ -287,6 +316,8 @@ type PostProcessGcpConnectionV1Request struct {
     ProjectName         *string            `json:"project_name"`
     // The GCP-assigned numeric INT64 project number associated with the connection.
     ProjectNumber       *string            `json:"project_number"`
+    // RegionConfigurationString represents the GCP region configuration in json string format
+    RegionConfiguration []*string          `json:"region_configuration"`
     // The GCP regions to be used for inventory.
     // Each region must be a valid GCP region identifier (e.g., "us-central1", "europe-west1").
     Regions             []*string          `json:"regions"`
@@ -333,6 +364,13 @@ type CreateGcpProtectionGroupV1Request struct {
     LatestVersionOnly *bool               `json:"latest_version_only"`
     // The user-assigned name of the protection group.
     Name              *string             `json:"name"`
+    // Storage classes to include in the backup. If omitted, objects of all storage
+    // classes are backed up; an empty array is rejected. Valid values are:
+    // `STANDARD`, `NEARLINE`, `COLDLINE`, `ARCHIVE`.
+    StorageClasses    []*string           `json:"storage_classes"`
+    // Only back up objects created after this timestamp (RFC-3339). If omitted,
+    // objects are not filtered by creation time.
+    UpdatedAfter      *string             `json:"updated_after"`
 }
 
 // UpdateGcpProtectionGroupV1Request represents a custom type struct.
@@ -347,24 +385,35 @@ type UpdateGcpProtectionGroupV1Request struct {
     ClearBucketRule   *bool               `json:"clear_bucket_rule"`
     // A list of prefixes to exclude from the backup. If multiple prefixes are specified,
     // then any object whose path matches one of the prefixes will be excluded from the backup.
-    // Part of the PUT-style filter trio (see model docs); a non-nil empty list
+    // Part of the PUT-style filter group (see model docs); a non-nil empty list
     // clears existing excludes, while omitting the field leaves the filter
-    // unchanged unless another trio field is present.
+    // unchanged unless another group field is present.
     ExcludePrefixes   []*string           `json:"exclude_prefixes"`
     // A list of prefixes to include in the backup. If multiple prefixes are specified,
     // then any object whose path matches one of the prefixes will be included in the backup.
-    // Part of the PUT-style filter trio (see model docs); a non-nil empty list
+    // Part of the PUT-style filter group (see model docs); a non-nil empty list
     // clears existing includes, while omitting the field leaves the filter
-    // unchanged unless another trio field is present.
+    // unchanged unless another group field is present.
     IncludePrefixes   []*string           `json:"include_prefixes"`
     // Whether to back up only the latest object version. Part of the
-    // PUT-style filter trio (see model docs); when any trio field is present,
+    // PUT-style filter group (see model docs); when any group field is present,
     // an absent latest_version_only defaults to true.
     LatestVersionOnly *bool               `json:"latest_version_only"`
     // The user-assigned name of the protection group.
     Name              *string             `json:"name"`
     // A list of bucket UUIDs to remove from this protection group.
     RemoveBucketUuids []*string           `json:"remove_bucket_uuids"`
+    // Storage classes to include in the backup. Part of the PUT-style filter
+    // group (see model docs); an empty array is rejected. Omitting the field
+    // leaves the filter unchanged unless another group field is present, in which
+    // case the storage-class filter resets to all storage classes. Valid values
+    // are: `STANDARD`, `NEARLINE`, `COLDLINE`, `ARCHIVE`.
+    StorageClasses    []*string           `json:"storage_classes"`
+    // Only back up objects created after this timestamp (RFC-3339). Part of the
+    // PUT-style filter group (see model docs); an empty string clears the
+    // creation-time filter, while omitting the field leaves the filter unchanged
+    // unless another group field is present.
+    UpdatedAfter      *string             `json:"updated_after"`
 }
 
 // GcsAssetErrorReportV1Request represents a custom type struct
@@ -1242,6 +1291,14 @@ type CreateReportDownloadV1Request struct {
     ClumioType *string `json:"type"`
 }
 
+// RestoreAwsDocumentdbV1Request represents a custom type struct
+type RestoreAwsDocumentdbV1Request struct {
+    // The DocumentDB backup or snapshot to be restored.  Only one of these fields should be set.
+    Source *DocumentDBRestoreSource `json:"source"`
+    // The configuration of the DocumentDB cluster to be restored.
+    Target *DocumentDBRestoreTarget `json:"target"`
+}
+
 // RestoreAwsDynamodbTableV1Request represents a custom type struct
 type RestoreAwsDynamodbTableV1Request struct {
     // Filters based on which DynamoDB backup records are filtered.
@@ -1313,6 +1370,14 @@ type RestoreAwsIcebergTableV1Request struct {
     // IcebergRestoreTarget
     // The target destination for the restored Iceberg Table.
     Target *IcebergRestoreTarget `json:"target"`
+}
+
+// RestoreAwsNeptuneV1Request represents a custom type struct
+type RestoreAwsNeptuneV1Request struct {
+    // The Neptune backup or snapshot to be restored.  Only one of these fields should be set.
+    Source *NeptuneRestoreSource `json:"source"`
+    // The configuration of the Neptune cluster to be restored.
+    Target *NeptuneRestoreTarget `json:"target"`
 }
 
 // RestoreAwsRdsResourceV1Request represents a custom type struct

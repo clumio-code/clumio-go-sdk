@@ -493,8 +493,8 @@ type AuditTrails struct {
     // +-------------------------+----------------------------------------------------+
     // | suspend                 | Suspend an existing user                           |
     // +-------------------------+----------------------------------------------------+
-    // | full_restore            | Full restore of the VM, volume, mailbox, database  |
-    // |                         | or other entities                                  |
+    // | full_restore            | Full restore of the volume, mailbox, database or   |
+    // |                         | other entities                                     |
     // +-------------------------+----------------------------------------------------+
     // | granular_retrieval      | Restoring individual files, mails or records       |
     // +-------------------------+----------------------------------------------------+
@@ -559,9 +559,6 @@ type AuditTrails struct {
     // | bandwidth_config        | Bandwidth configuration related changes            |
     // +-------------------------+----------------------------------------------------+
     // | partner_ecosystem       | Changes to partner ecosystem                       |
-    // +-------------------------+----------------------------------------------------+
-    // | ecosystem_changes       | Changes in the ecosystem like adding or removing   |
-    // |                         | VMs                                                |
     // +-------------------------+----------------------------------------------------+
     // | organizational_unit     | Changes in the Organizational Unit/Entity group    |
     // |                         | such as creation, deletion, patch.                 |
@@ -1616,9 +1613,27 @@ type CreateComplianceRunHateoasLinks struct {
     ReadTask *ReadTaskHateoasLink `json:"read-task"`
 }
 
+// CreateDocumentDBRestoreResponseLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type CreateDocumentDBRestoreResponseLinks struct {
+    // The HATEOAS link to this resource.
+    Self     *HateoasSelfLink     `json:"_self"`
+    // A HATEOAS link to the task associated with this resource.
+    ReadTask *ReadTaskHateoasLink `json:"read-task"`
+}
+
 // CreateEC2MSSQLDatabaseRestoreResponseLinks represents a custom type struct.
 // URLs to pages related to the resource.
 type CreateEC2MSSQLDatabaseRestoreResponseLinks struct {
+    // The HATEOAS link to this resource.
+    Self     *HateoasSelfLink     `json:"_self"`
+    // A HATEOAS link to the task associated with this resource.
+    ReadTask *ReadTaskHateoasLink `json:"read-task"`
+}
+
+// CreateNeptuneRestoreResponseLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type CreateNeptuneRestoreResponseLinks struct {
     // The HATEOAS link to this resource.
     Self     *HateoasSelfLink     `json:"_self"`
     // A HATEOAS link to the task associated with this resource.
@@ -1790,6 +1805,59 @@ type DiscoverConfig struct {
     AssetTypesEnabled        []*string `json:"asset_types_enabled"`
     // The current version of the feature.
     InstalledTemplateVersion *string   `json:"installed_template_version"`
+}
+
+// DocumentDBRestoreSource represents a custom type struct.
+// The DocumentDB backup or snapshot to be restored.  Only one of these fields should be set.
+type DocumentDBRestoreSource struct {
+    // The parameters for initiating a DocumentDB restore from a backup.
+    Backup   *DocumentDBRestoreSourceAirGapOptions `json:"backup"`
+    // The parameters for initiating a DocumentDB restore from a snapshot.
+    Snapshot *DocumentDBRestoreSourcePitrOptions   `json:"snapshot"`
+}
+
+// DocumentDBRestoreSourceAirGapOptions represents a custom type struct.
+// The parameters for initiating a DocumentDB restore from a backup.
+type DocumentDBRestoreSourceAirGapOptions struct {
+    // The Clumio-assigned ID of the DocumentDB backup to be restored.
+    // Use the [GET /backups/aws/documentdb](#operation/list-backup-aws-documentdb)
+    // endpoint to fetch valid values.
+    BackupId *string `json:"backup_id"`
+}
+
+// DocumentDBRestoreSourcePitrOptions represents a custom type struct.
+// The parameters for initiating a DocumentDB restore from a snapshot.
+type DocumentDBRestoreSourcePitrOptions struct {
+    // The Clumio-assigned ID of the DocumentDB cluster to be restored.
+    // Use the [GET /datasources/aws/documentdb](#operation/list-aws-documentdb)
+    // endpoint to fetch valid values.
+    ResourceId *string `json:"resource_id"`
+    // A point in time to be restored in RFC-3339 format.
+    Timestamp  *string `json:"timestamp"`
+}
+
+// DocumentDBRestoreTarget represents a custom type struct.
+// The configuration of the DocumentDB cluster to be restored.
+type DocumentDBRestoreTarget struct {
+    // The Clumio-assigned ID of the AWS environment to be used as the restore destination.
+    // Use the [GET /datasources/aws/environments](#operation/list-aws-environments) endpoint to fetch valid values.
+    EnvironmentId          *string              `json:"environment_id"`
+    // The instance class of the DocumentDB cluster instances to be created. Possible values include `db.r5.2xlarge` and `db.t2.small`.
+    InstanceClass          *string              `json:"instance_class"`
+    // The AWS-assigned ID of the KMS encryption key used to encrypt data in this DocumentDB cluster.
+    KmsKeyNativeId         *string              `json:"kms_key_native_id"`
+    // The name given to the restored DocumentDB cluster.
+    Name                   *string              `json:"name"`
+    // Option group name to be added to the restored DocumentDB cluster.
+    OptionGroupName        *string              `json:"option_group_name"`
+    // The name of the parameter group to be associated with the restored DocumentDB cluster.
+    ParameterGroupName     *string              `json:"parameter_group_name"`
+    // The AWS-assigned IDs of the security groups to be associated with the restored DocumentDB cluster.
+    SecurityGroupNativeIds []*string            `json:"security_group_native_ids"`
+    // The AWS-assigned name of the subnet group to be associated with the restored DocumentDB cluster.
+    SubnetGroupName        *string              `json:"subnet_group_name"`
+    // A tag created through AWS Console which can be applied to EBS volumes.
+    Tags                   []*AwsTagCommonModel `json:"tags"`
 }
 
 // DownloadSharedFileLinks represents a custom type struct.
@@ -3882,6 +3950,15 @@ type ExportMalwareReportLinks struct {
     ReadTask *ReadTaskHateoasLink `json:"read-task"`
 }
 
+// ExportThreatReportLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type ExportThreatReportLinks struct {
+    // The HATEOAS link to this resource.
+    Self     *HateoasSelfLink     `json:"_self"`
+    // A HATEOAS link to the task associated with this resource.
+    ReadTask *ReadTaskHateoasLink `json:"read-task"`
+}
+
 // FileDescriptor represents a custom type struct.
 // Specifies a file/directory by providing path and file system.
 type FileDescriptor struct {
@@ -4084,39 +4161,42 @@ type GCPBucketRuleModel struct {
 // GCPConnection represents a custom type struct
 type GCPConnection struct {
     // URLs to pages related to the resource.
-    Links                 *GCPConnectionLinks `json:"_links"`
+    Links                 *GCPConnectionLinks         `json:"_links"`
     // TODO: Add struct field description
-    Configuration         *Configuration      `json:"configuration"`
+    Configuration         *Configuration              `json:"configuration"`
     // The status of the connection
-    ConnectionStatus      *string             `json:"connection_status"`
+    ConnectionStatus      *string                     `json:"connection_status"`
     // The type of this connection, which identifies its use.
-    ConnectionType        *string             `json:"connection_type"`
+    ConnectionType        *string                     `json:"connection_type"`
     // The timestamp of when the connection was created.
-    CreatedTimestamp      *string             `json:"created_timestamp"`
+    CreatedTimestamp      *string                     `json:"created_timestamp"`
     // The method by which the GCP terraform template was deployed.
-    DeploymentType        *string             `json:"deployment_type"`
+    DeploymentType        *string                     `json:"deployment_type"`
     // The user defined description for the connection.
-    Description           *string             `json:"description"`
+    Description           *string                     `json:"description"`
     // The Clumio-assigned ID of the organizational unit associated with the
     // GCP connection.
     // For more information about organizational units, refer to the
     // Organizational-Units documentation.
-    OrganizationalUnitId  *string             `json:"organizational_unit_id"`
+    OrganizationalUnitId  *string                     `json:"organizational_unit_id"`
     // The user-assigned ID of the GCP project associated with the connection.
-    ProjectId             *string             `json:"project_id"`
+    ProjectId             *string                     `json:"project_id"`
     // The user-friendly name of the GCP project associated with the connection.
-    ProjectName           *string             `json:"project_name"`
+    ProjectName           *string                     `json:"project_name"`
     // The GCP-assigned numeric INT64 project number associated with the connection.
-    ProjectNumber         *string             `json:"project_number"`
+    ProjectNumber         *string                     `json:"project_number"`
+    // RegionConfigurationModel contains the configuration of a single GCP region
+    // of the connection.
+    RegionConfiguration   []*RegionConfigurationModel `json:"region_configuration"`
     // The GCP regions used for inventory.
-    Regions               []*string           `json:"regions"`
+    Regions               []*string                   `json:"regions"`
     // The permission set selected during registration.
-    TemplatePermissionSet *string             `json:"template_permission_set"`
+    TemplatePermissionSet *string                     `json:"template_permission_set"`
     // The 36-character Clumio GCP integration token used to identify the
     // installation of the Clumio GCP integration resources in the project.
-    Token                 *string             `json:"token"`
+    Token                 *string                     `json:"token"`
     // The timestamp of when the connection was updated.
-    UpdatedTimestamp      *string             `json:"updated_timestamp"`
+    UpdatedTimestamp      *string                     `json:"updated_timestamp"`
 }
 
 // GCPConnectionLinks represents a custom type struct.
@@ -4568,7 +4648,10 @@ type GCPProtectionGroupFilter struct {
     IncludeObjectNamePrefixRegexes []*string `json:"include_object_name_prefix_regexes"`
     // Specifies that the protection group is configured with the latest version of the filter.
     LatestVersion                  *bool     `json:"latest_version"`
-    // Only backup objects that were created or last modified after this timestamp (in RFC-3339 format).
+    // Storage classes included in the backup (STANDARD, NEARLINE, COLDLINE, ARCHIVE).
+    // If empty, objects of all storage classes are backed up.
+    StorageClasses                 []*string `json:"storage_classes"`
+    // Only back up objects created after this timestamp (RFC-3339).
     UpdatedAfter                   *string   `json:"updated_after"`
 }
 
@@ -5057,9 +5140,9 @@ type GlueCompactionConfiguration struct {
     DeleteFileThreshold *int64  `json:"delete_file_threshold"`
     // TODO: Add struct field description
     MinInputFiles       *int64  `json:"min_input_files"`
-    // TODO: Add struct field description
+    // Whether compaction is enabled. Possible values include "enabled" and "disabled".
     Status              *string `json:"status"`
-    // TODO: Add struct field description
+    // The compaction strategy. Possible values include "binpack", "sort", and "z-order".
     Strategy            *string `json:"strategy"`
 }
 
@@ -5085,7 +5168,7 @@ type GlueOrphanFileDeletionConfiguration struct {
     OrphanFileRetentionPeriodInDays *int64  `json:"orphan_file_retention_period_in_days"`
     // TODO: Add struct field description
     RunRateInHours                  *int64  `json:"run_rate_in_hours"`
-    // TODO: Add struct field description
+    // Whether orphan file deletion is enabled. Possible values include "enabled" and "disabled".
     Status                          *string `json:"status"`
 }
 
@@ -5099,7 +5182,7 @@ type GlueRetentionConfiguration struct {
     RunRateInHours                *int64  `json:"run_rate_in_hours"`
     // TODO: Add struct field description
     SnapshotRetentionPeriodInDays *int64  `json:"snapshot_retention_period_in_days"`
-    // TODO: Add struct field description
+    // Whether snapshot retention is enabled. Possible values include "enabled" and "disabled".
     Status                        *string `json:"status"`
 }
 
@@ -5313,10 +5396,6 @@ type IcebergRestoreTarget struct {
 
 // IcebergTable represents a custom type struct
 type IcebergTable struct {
-    // Embedded responses related to the resource.
-    Embedded                 *IcebergTableEmbedded   `json:"_embedded"`
-    // URLs to pages related to the resource.
-    Links                    *IcebergTableLinks      `json:"_links"`
     // The AWS-assigned ID of the account associated with the Iceberg Table.
     AccountNativeId          *string                 `json:"account_native_id"`
     // The AWS region associated with the Iceberg Table.
@@ -5372,47 +5451,37 @@ type IcebergTable struct {
 
 // IcebergTableBackup represents a custom type struct
 type IcebergTableBackup struct {
-    // TODO: Add struct field description
-    Links               *IcebergTableBackupLinks `json:"_links"`
     // The AWS-assigned ID of the account associated with this database at the time of backup.
-    AccountNativeId     *string                  `json:"account_native_id"`
+    AccountNativeId     *string       `json:"account_native_id"`
     // The AWS region associated with this environment.
-    AwsRegion           *string                  `json:"aws_region"`
+    AwsRegion           *string       `json:"aws_region"`
     // The region in which this backup is stored. For policies that keep backups
     // in-region, this value will be the same as the source region of the asset backed up.
     // For out of region policies, this region will the one specified in the policy.
-    BackupAwsRegion     *string                  `json:"backup_aws_region"`
+    BackupAwsRegion     *string       `json:"backup_aws_region"`
     // The timestamp of when this backup expires. Represented in RFC-3339 format.
-    ExpirationTimestamp *string                  `json:"expiration_timestamp"`
+    ExpirationTimestamp *string       `json:"expiration_timestamp"`
     // The Clumio-assigned ID of the backup.
-    Id                  *string                  `json:"id"`
+    Id                  *string       `json:"id"`
     // The total count of the newly added snapshots in this backup.
-    NewlyAddedSnapshots *int32                   `json:"newly_added_snapshots"`
-    // TODO: Add struct field description
-    Schema              *string                  `json:"schema"`
-    // TODO: Add struct field description
-    SnapshotCreatedAt   *string                  `json:"snapshot_created_at"`
-    // TODO: Add struct field description
-    SnapshotId          *string                  `json:"snapshot_id"`
+    NewlyAddedSnapshots *int32        `json:"newly_added_snapshots"`
+    // The schema of the Iceberg table captured in this backup.
+    Schema              *string       `json:"schema"`
+    // The timestamp of when the Iceberg snapshot was created. Represented in RFC-3339 format.
+    SnapshotCreatedAt   *string       `json:"snapshot_created_at"`
+    // The ID of the Iceberg snapshot associated with this backup.
+    SnapshotId          *string       `json:"snapshot_id"`
     // The timestamp of when this backup started. Represented in RFC-3339 format.
-    StartTimestamp      *string                  `json:"start_timestamp"`
+    StartTimestamp      *string       `json:"start_timestamp"`
     // TODO: Add struct field description
-    Summary             *ModelSummary            `json:"summary"`
+    Summary             *ModelSummary `json:"summary"`
     // The Clumio-assigned ID of the Iceberg table.
-    TableId             *string                  `json:"table_id"`
+    TableId             *string       `json:"table_id"`
     // The name of the Iceberg table.
-    TableName           *string                  `json:"table_name"`
-    // The type of catalog.
+    TableName           *string       `json:"table_name"`
+    // The record type of this backup.
     // This field is always set to "iceberg_snapshot" or "iceberg_metadata".
-    ClumioType          *string                  `json:"type"`
-}
-
-// IcebergTableBackupLinks represents a custom type struct
-type IcebergTableBackupLinks struct {
-    // The HATEOAS link to this resource.
-    Self                   *HateoasSelfLink `json:"_self"`
-    // A resource-specific HATEOAS link.
-    RestoreAwsIcebergTable *HateoasLink     `json:"restore-aws-iceberg-table"`
+    ClumioType          *string       `json:"type"`
 }
 
 // IcebergTableBackupListEmbedded represents a custom type struct.
@@ -5437,42 +5506,11 @@ type IcebergTableBackupListLinks struct {
     Self  *HateoasSelfLink  `json:"_self"`
 }
 
-// IcebergTableEmbedded represents a custom type struct.
-// Embedded responses related to the resource.
-type IcebergTableEmbedded struct {
-    // Embeds the associated policy of a protected resource in the response if requested using the `embed` query parameter. Unprotected resources will not have an associated policy.
-    ReadPolicyDefinition interface{} `json:"read-policy-definition"`
-}
-
-// IcebergTableLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type IcebergTableLinks struct {
-    // The HATEOAS link to this resource.
-    Self                 *HateoasSelfLink                 `json:"_self"`
-    // A HATEOAS link to the policy protecting this resource. Will be omitted for unprotected entities.
-    ReadPolicyDefinition *ReadPolicyDefinitionHateoasLink `json:"read-policy-definition"`
-}
-
 // IcebergTableListEmbedded represents a custom type struct.
 // Embedded responses related to the resource.
 type IcebergTableListEmbedded struct {
     // TODO: Add struct field description
     Items []*IcebergTable `json:"items"`
-}
-
-// IcebergTableListLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type IcebergTableListLinks struct {
-    // The HATEOAS link to the first page of results.
-    First *HateoasFirstLink `json:"_first"`
-    // The HATEOAS link to the last page of results.
-    Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
-    Next  *HateoasNextLink  `json:"_next"`
-    // The HATEOAS link to the previous page of results.
-    Prev  *HateoasPrevLink  `json:"_prev"`
-    // The HATEOAS link to this resource.
-    Self  *HateoasSelfLink  `json:"_self"`
 }
 
 // IndividualAlertDetails represents a custom type struct.
@@ -5679,13 +5717,13 @@ type ManagementGroupListLinks struct {
 
 // ModelSummary represents a custom type struct
 type ModelSummary struct {
-    // TODO: Add struct field description
+    // The number of records added in this snapshot.
     AddedRecords   *string `json:"added_records"`
-    // TODO: Add struct field description
+    // The operation that produced this snapshot. For example, "append" or "overwrite".
     Operation      *string `json:"operation"`
-    // TODO: Add struct field description
+    // The total size of the data files in this snapshot. Measured in bytes.
     TotalFilesSize *string `json:"total_files_size"`
-    // TODO: Add struct field description
+    // The total number of records in the Iceberg table at this snapshot.
     TotalRecords   *string `json:"total_records"`
 }
 
@@ -5711,6 +5749,59 @@ type MssqlServiceRoles struct {
     Ec2SsmInstanceProfileArn  *string `json:"ec2_ssm_instance_profile_arn"`
     // Role assumable by ssm service.
     SsmNotificationRoleArn    *string `json:"ssm_notification_role_arn"`
+}
+
+// NeptuneRestoreSource represents a custom type struct.
+// The Neptune backup or snapshot to be restored.  Only one of these fields should be set.
+type NeptuneRestoreSource struct {
+    // The parameters for initiating a Neptune restore from a backup.
+    Backup   *NeptuneRestoreSourceAirGapOptions `json:"backup"`
+    // The parameters for initiating a Neptune restore from a snapshot.
+    Snapshot *NeptuneRestoreSourcePitrOptions   `json:"snapshot"`
+}
+
+// NeptuneRestoreSourceAirGapOptions represents a custom type struct.
+// The parameters for initiating a Neptune restore from a backup.
+type NeptuneRestoreSourceAirGapOptions struct {
+    // The Clumio-assigned ID of the Neptune backup to be restored.
+    // Use the [GET /backups/aws/neptune](#operation/list-backup-aws-neptune)
+    // endpoint to fetch valid values.
+    BackupId *string `json:"backup_id"`
+}
+
+// NeptuneRestoreSourcePitrOptions represents a custom type struct.
+// The parameters for initiating a Neptune restore from a snapshot.
+type NeptuneRestoreSourcePitrOptions struct {
+    // The Clumio-assigned ID of the Neptune cluster to be restored.
+    // Use the [GET /datasources/aws/neptune](#operation/list-aws-neptune)
+    // endpoint to fetch valid values.
+    ResourceId *string `json:"resource_id"`
+    // A point in time to be restored in RFC-3339 format.
+    Timestamp  *string `json:"timestamp"`
+}
+
+// NeptuneRestoreTarget represents a custom type struct.
+// The configuration of the Neptune cluster to be restored.
+type NeptuneRestoreTarget struct {
+    // The Clumio-assigned ID of the AWS environment to be used as the restore destination.
+    // Use the [GET /datasources/aws/environments](#operation/list-aws-environments) endpoint to fetch valid values.
+    EnvironmentId          *string              `json:"environment_id"`
+    // The instance class of the Neptune cluster instances to be created. Possible values include `db.r5.2xlarge` and `db.t2.small`.
+    InstanceClass          *string              `json:"instance_class"`
+    // The AWS-assigned ID of the KMS encryption key used to encrypt data in this Neptune cluster.
+    KmsKeyNativeId         *string              `json:"kms_key_native_id"`
+    // The name given to the restored Neptune cluster.
+    Name                   *string              `json:"name"`
+    // Option group name to be added to the restored Neptune cluster.
+    OptionGroupName        *string              `json:"option_group_name"`
+    // The name of the parameter group to be associated with the restored Neptune cluster.
+    ParameterGroupName     *string              `json:"parameter_group_name"`
+    // The AWS-assigned IDs of the security groups to be associated with the restored Neptune cluster.
+    SecurityGroupNativeIds []*string            `json:"security_group_native_ids"`
+    // The AWS-assigned name of the subnet group to be associated with the restored Neptune cluster.
+    SubnetGroupName        *string              `json:"subnet_group_name"`
+    // A tag created through AWS Console which can be applied to EBS volumes.
+    Tags                   []*AwsTagCommonModel `json:"tags"`
 }
 
 // NetworkInterface represents a custom type struct
@@ -5850,6 +5941,16 @@ type OnDemandAWSIcebergTableBackupLinks struct {
     ReadTask *ReadTaskHateoasLink `json:"read-task"`
 }
 
+// OnDemandDocumentDBBackupLinks represents a custom type struct.
+// OnDemandDocumentDBBackupLinks
+// URLs to pages related to the resource.
+type OnDemandDocumentDBBackupLinks struct {
+    // The HATEOAS link to this resource.
+    Self     *HateoasSelfLink     `json:"_self"`
+    // A HATEOAS link to the task associated with this resource.
+    ReadTask *ReadTaskHateoasLink `json:"read-task"`
+}
+
 // OnDemandDynamoDBBackupLinks represents a custom type struct.
 // URLs to pages related to the resource.
 type OnDemandDynamoDBBackupLinks struct {
@@ -5871,6 +5972,16 @@ type OnDemandEBSBackupLinks struct {
 // OnDemandEC2BackupLinks represents a custom type struct.
 // URLs to pages related to the resource.
 type OnDemandEC2BackupLinks struct {
+    // The HATEOAS link to this resource.
+    Self     *HateoasSelfLink     `json:"_self"`
+    // A HATEOAS link to the task associated with this resource.
+    ReadTask *ReadTaskHateoasLink `json:"read-task"`
+}
+
+// OnDemandNeptuneBackupLinks represents a custom type struct.
+// OnDemandNeptuneBackupLinks
+// URLs to pages related to the resource.
+type OnDemandNeptuneBackupLinks struct {
     // The HATEOAS link to this resource.
     Self     *HateoasSelfLink     `json:"_self"`
     // A HATEOAS link to the task associated with this resource.
@@ -5913,7 +6024,8 @@ type OperationInfo struct {
 type Optimizer struct {
     // TODO: Add struct field description
     Glue     *GlueOptimizer     `json:"glue"`
-    // TODO: Add struct field description
+    // The optimizer mode. Set to "custom" to configure the optimizers explicitly,
+    // or "disabled" to turn optimization off.
     Mode     *string            `json:"mode"`
     // TODO: Add struct field description
     S3Tables *S3TablesOptimizer `json:"s3tables"`
@@ -6691,8 +6803,10 @@ type ProtectionGroupBackup struct {
     // The Clumio-assigned ID of the protection group backup.
     Id                       *string                     `json:"id"`
     // The number of objects that were detected to be malicious during the backup.
+    // (Deprecated, use `threat_object_count` instead.)
     MaliciousObjectCount     *int64                      `json:"malicious_object_count"`
     // The link for the malicious objects list at protection group level.
+    // (Deprecated, use `threat_objects_list_link` instead.)
     MaliciousObjectsListLink *string                     `json:"malicious_objects_list_link"`
     // The number of objects in the protection group that were missing during backup.
     MissingObjectCount       *int64                      `json:"missing_object_count"`
@@ -6706,6 +6820,10 @@ type ProtectionGroupBackup struct {
     ProtectionGroupVersion   *int64                      `json:"protection_group_version"`
     // The timestamp of when this backup started. Represented in RFC-3339 format.
     StartTimestamp           *string                     `json:"start_timestamp"`
+    // The number of objects that were detected as threats during the backup.
+    ThreatObjectCount        *int64                      `json:"threat_object_count"`
+    // The link for the threat objects list at protection group level.
+    ThreatObjectsListLink    *string                     `json:"threat_objects_list_link"`
     // The type of backup. Possible values include `protection_group_backup`.
     ClumioType               *string                     `json:"type"`
 }
@@ -6715,8 +6833,11 @@ type ProtectionGroupBackup struct {
 type ProtectionGroupBackupAdvancedSetting struct {
     // Backup tier to store the backup in. Valid values are: `standard`, `archive`
     BackupTier  *string `json:"backup_tier"`
-    // Determines whether malware scanning is enabled for protection group backups.
+    // Determines whether malware scanning is enabled for protection group backups. (Deprecated, use `threat_scan` instead.)
     MalwareScan *bool   `json:"malware_scan"`
+    // Determines whether threat scanning is enabled for protection group backups.
+    // When both `threat_scan` and `malware_scan` are provided, `threat_scan` takes precedence.
+    ThreatScan  *bool   `json:"threat_scan"`
 }
 
 // ProtectionGroupBackupLinks represents a custom type struct.
@@ -7072,8 +7193,10 @@ type ProtectionGroupS3AssetBackup struct {
     // The Clumio-assigned ID of the protection group S3 asset backup.
     Id                       *string                            `json:"id"`
     // The number of objects that were detected to be malicious during the backup.
+    // (Deprecated, use `threat_object_count` instead.)
     MaliciousObjectCount     *int64                             `json:"malicious_object_count"`
     // The link for the malicious objects list.
+    // (Deprecated, use `threat_objects_list_link` instead.)
     MaliciousObjectsListLink *string                            `json:"malicious_objects_list_link"`
     // The number of objects in the protection group S3 asset that were missing during backup.
     MissingObjectCount       *int64                             `json:"missing_object_count"`
@@ -7087,6 +7210,10 @@ type ProtectionGroupS3AssetBackup struct {
     ProtectionGroupVersion   *int64                             `json:"protection_group_version"`
     // The timestamp of when this backup started. Represented in RFC-3339 format.
     StartTimestamp           *string                            `json:"start_timestamp"`
+    // The number of objects that were detected as threats during the backup.
+    ThreatObjectCount        *int64                             `json:"threat_object_count"`
+    // The link for the threat objects list.
+    ThreatObjectsListLink    *string                            `json:"threat_objects_list_link"`
     // The type of backup. Possible values include `protection_group_s3_asset_backup`.
     ClumioType               *string                            `json:"type"`
 }
@@ -7704,6 +7831,16 @@ type ReadTaskHateoasOuterEmbedded struct {
     ReadTask interface{} `json:"read-task"`
 }
 
+// RegionConfigurationModel represents a custom type struct.
+// RegionConfigurationModel contains the configuration of a single GCP region
+// of the connection.
+type RegionConfigurationModel struct {
+    // The inventory bridge bucket for the region.
+    InventoryBridgeBucketName *string `json:"inventory_bridge_bucket_name"`
+    // The GCP region the configuration applies to.
+    Region                    *string `json:"region"`
+}
+
 // ReplicaDescription represents a custom type struct.
 // Contains the details of the replica.
 type ReplicaDescription struct {
@@ -7874,15 +8011,6 @@ type RestoreGCSProtectionGroupBucketLinks struct {
 // RestoreGCSProtectionGroupLinks represents a custom type struct.
 // URLs to pages related to the resource.
 type RestoreGCSProtectionGroupLinks struct {
-    // The HATEOAS link to this resource.
-    Self     *HateoasSelfLink     `json:"_self"`
-    // A HATEOAS link to the task associated with this resource.
-    ReadTask *ReadTaskHateoasLink `json:"read-task"`
-}
-
-// RestoreIcebergTableLinks represents a custom type struct.
-// URLs to pages related to the resource.
-type RestoreIcebergTableLinks struct {
     // The HATEOAS link to this resource.
     Self     *HateoasSelfLink     `json:"_self"`
     // A HATEOAS link to the task associated with this resource.
@@ -8496,6 +8624,55 @@ type S3AssetMalwareScanTask struct {
     TaskId    *int64  `json:"task_id"`
 }
 
+// S3AssetThreatReportSource represents a custom type struct.
+// The parameters to specify how to generate the threat report for protection group S3 asset.
+// Must set exactly one of the options.
+type S3AssetThreatReportSource struct {
+    // The parameters to generate the report of malicious objects detected within backup time range.
+    BackupTimeRange       *S3AssetBackupTimeRange            `json:"backup_time_range"`
+    // The parameters to specify s3 asset backup by protection group and s3 asset id.
+    ProtectionGroupBackup *ThreatReportProtectionGroupBackup `json:"protection_group_backup"`
+    // Option to generate threat report using S3AssetBackupID.
+    // This is an Clumio-assigned ID of the protection group S3 asset backup. Use the
+    // [GET /backups/protection-groups/s3-assets](#operation/list-backup-protection-group-s3-assets)
+    // endpoint to fetch valid values.
+    S3AssetBackupId       *string                            `json:"s3_asset_backup_id"`
+    // The parameters to generate the report of malicious objects detected in a specific threat scan task.
+    ThreatScanTask        *S3AssetThreatScanTask             `json:"threat_scan_task"`
+}
+
+// S3AssetThreatReportTarget represents a custom type struct.
+// The parameters for which S3 bucket to export the threat report to.
+type S3AssetThreatReportTarget struct {
+    // The Clumio-assigned ID of the bucket where the report is exported to
+    // Use the [GET /datasources/aws/s3-buckets](#operation/list-aws-s3-buckets) endpoint
+    // to fetch valid values.
+    BucketId      *string `json:"bucket_id"`
+    // The Clumio-assigned ID of the AWS environment to be used as the export destination.
+    // Use the [GET /datasources/aws/s3-buckets/{bucket_id}](#operation/read-aws-s3-bucket) endpoint
+    // to fetch the environment ID for a bucket.
+    EnvironmentId *string `json:"environment_id"`
+    // Prefix to export the objects under.
+    // The final destination would be `s3://///malware_report_.csv`
+    Prefix        *string `json:"prefix"`
+    // Storage class for exported objects. Valid values are: `S3 Standard`, `S3 Standard-IA`,
+    // `S3 Intelligent-Tiering` and `S3 One Zone-IA`. 
+    // Default is `S3 Standard`.
+    StorageClass  *string `json:"storage_class"`
+}
+
+// S3AssetThreatScanTask represents a custom type struct.
+// The parameters to generate the report of malicious objects detected in a specific threat scan task.
+type S3AssetThreatScanTask struct {
+    // Clumio-assigned ID of protection group S3 asset, representing the
+    // bucket within the protection group to generate report from. Use the
+    // [GET /datasources/protection-groups/s3-assets](#operation/list-protection-group-s3-assets)
+    // endpoint to fetch valid values.
+    S3AssetId *string `json:"s3_asset_id"`
+    // The task ID assigned to the backup or regular threat scan where malicious objects were detected.
+    TaskId    *int64  `json:"task_id"`
+}
+
 // S3BucketSizeRes represents a custom type struct.
 // The size breakdown in bytes with timestamps of a bucket per storage class.
 type S3BucketSizeRes struct {
@@ -8986,9 +9163,9 @@ type S3SseKmsEncryptedObjects struct {
 
 // S3TablesIcebergCompaction represents a custom type struct
 type S3TablesIcebergCompaction struct {
-    // TODO: Add struct field description
+    // Whether compaction is enabled. Possible values include "enabled" and "disabled".
     Status           *string `json:"status"`
-    // TODO: Add struct field description
+    // The compaction strategy. Possible values include "auto", "binpack", "sort", and "z-order".
     Strategy         *string `json:"strategy"`
     // TODO: Add struct field description
     TargetFileSizeMb *int64  `json:"target_file_size_mb"`
@@ -9000,7 +9177,7 @@ type S3TablesIcebergSnapshotManagement struct {
     MaxSnapshotAgeHours *int64  `json:"max_snapshot_age_hours"`
     // TODO: Add struct field description
     MinSnapshotsToKeep  *int64  `json:"min_snapshots_to_keep"`
-    // TODO: Add struct field description
+    // Whether snapshot management is enabled. Possible values include "enabled" and "disabled".
     Status              *string `json:"status"`
 }
 
@@ -9361,6 +9538,20 @@ type TemplateConfigurationV2 struct {
 type TemplateLinks struct {
     // The HATEOAS link to this resource.
     Self *HateoasSelfLink `json:"_self"`
+}
+
+// ThreatReportProtectionGroupBackup represents a custom type struct.
+// The parameters to specify s3 asset backup by protection group and s3 asset id.
+type ThreatReportProtectionGroupBackup struct {
+    // The Clumio-assigned ID of the protection group backup. Use the
+    // [GET /backups/protection-groups](#operation/list-backup-protection-groups)
+    // endpoint to fetch valid values.
+    ProtectionGroupBackupId *string `json:"protection_group_backup_id"`
+    // Clumio-assigned ID of protection group S3 asset, representing the
+    // bucket within the protection group to generate report from. Use the
+    // [GET /datasources/protection-groups/s3-assets](#operation/list-protection-group-s3-assets)
+    // endpoint to fetch valid values.
+    S3AssetId               *string `json:"s3_asset_id"`
 }
 
 // TimeUnitParamAssetBackupMinRetentionDuration represents a custom type struct.

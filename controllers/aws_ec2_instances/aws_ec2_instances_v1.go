@@ -21,6 +21,7 @@ type AwsEc2InstancesV1 struct {
 func (a *AwsEc2InstancesV1) ListAwsEc2Instances(
     limit *int64, 
     start *string, 
+    sort *string, 
     filter *string, 
     embed *string, 
     lookbackDays *int64)(
@@ -37,6 +38,9 @@ func (a *AwsEc2InstancesV1) ListAwsEc2Instances(
     }
     if start != nil {
         queryParams["start"] = *start
+    }
+    if sort != nil {
+        queryParams["sort"] = *sort
     }
     if filter != nil {
         queryParams["filter"] = *filter

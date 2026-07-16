@@ -20,7 +20,6 @@ type BackupAwsIcebergTablesV1Client interface {
     
     // CreateBackupAwsIcebergTable Performs an on-demand backup for the specified AWS Iceberg Table.
     CreateBackupAwsIcebergTable(
-        embed *string, 
         body models.CreateBackupAwsIcebergTableV1Request)(
         *models.OnDemandAWSIcebergTableBackupResponse,  *apiutils.APIError)
     

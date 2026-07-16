@@ -100,7 +100,7 @@ func (b *BackupProtectionGroupsV1) ListBackupProtectionGroupS3Assets(
 }
 
 
-// ExportProtectionGroupS3AssetMalwareReport Exports the specified malware report for a protection group S3 asset.
+// ExportProtectionGroupS3AssetMalwareReport Exports the specified malware report for a protection group S3 asset. This endpoint is deprecated; use [POST /backups/protection-groups/s3-assets/threat-report](#operation/export-protection-group-s3-asset-threat-report) instead.
 func (b *BackupProtectionGroupsV1) ExportProtectionGroupS3AssetMalwareReport(
     embed *string, 
     body models.ExportProtectionGroupS3AssetMalwareReportV1Request)(
@@ -119,6 +119,45 @@ func (b *BackupProtectionGroupsV1) ExportProtectionGroupS3AssetMalwareReport(
     payload := string(bytes)
     header := "application/api.clumio.backup-protection-groups=v1+json"
     result := &models.ExportMalwareReportResponse{}
+    queryParams := make(map[string]string)
+    if embed != nil {
+        queryParams["embed"] = *embed
+    }
+    
+
+    apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
+        Config: b.config,
+        RequestUrl: queryBuilder,
+        QueryParams: queryParams,
+        AcceptHeader: header,
+        Body: payload,
+        Result202: &result,
+        RequestType: common.Post,
+    })
+
+    return result, apiErr
+}
+
+
+// ExportProtectionGroupS3AssetThreatReport Exports the specified threat report for a protection group S3 asset.
+func (b *BackupProtectionGroupsV1) ExportProtectionGroupS3AssetThreatReport(
+    embed *string, 
+    body models.ExportProtectionGroupS3AssetThreatReportV1Request)(
+    *models.ExportThreatReportResponse, *apiutils.APIError) {
+
+    queryBuilder := b.config.BaseUrl + "/backups/protection-groups/s3-assets/threat-report"
+
+    bytes, err := json.Marshal(body)
+    if err != nil {
+        return nil, &apiutils.APIError{
+            ResponseCode: 500,
+            Reason:       fmt.Sprintf("Failed to Marshal Request Body %v", body),
+            Response:     []byte(fmt.Sprintf("%v", err)),
+        }
+    }
+    payload := string(bytes)
+    header := "application/api.clumio.backup-protection-groups=v1+json"
+    result := &models.ExportThreatReportResponse{}
     queryParams := make(map[string]string)
     if embed != nil {
         queryParams["embed"] = *embed

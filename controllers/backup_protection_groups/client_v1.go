@@ -26,11 +26,17 @@ type BackupProtectionGroupsV1Client interface {
         filter *string)(
         *models.ListProtectionGroupS3AssetBackupsResponse,  *apiutils.APIError)
     
-    // ExportProtectionGroupS3AssetMalwareReport Exports the specified malware report for a protection group S3 asset.
+    // ExportProtectionGroupS3AssetMalwareReport Exports the specified malware report for a protection group S3 asset. This endpoint is deprecated; use [POST /backups/protection-groups/s3-assets/threat-report](#operation/export-protection-group-s3-asset-threat-report) instead.
     ExportProtectionGroupS3AssetMalwareReport(
         embed *string, 
         body models.ExportProtectionGroupS3AssetMalwareReportV1Request)(
         *models.ExportMalwareReportResponse,  *apiutils.APIError)
+    
+    // ExportProtectionGroupS3AssetThreatReport Exports the specified threat report for a protection group S3 asset.
+    ExportProtectionGroupS3AssetThreatReport(
+        embed *string, 
+        body models.ExportProtectionGroupS3AssetThreatReportV1Request)(
+        *models.ExportThreatReportResponse,  *apiutils.APIError)
     
     // ReadBackupProtectionGroupS3Asset Returns a representation of the specified protection group S3 asset backup.
     ReadBackupProtectionGroupS3Asset(

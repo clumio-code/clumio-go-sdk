@@ -1,7 +1,7 @@
 // Copyright (c) 2023 Clumio All Rights Reserved
 
-// Package backupawsicebergtables contains methods related to BackupAwsIcebergTables
-package backupawsicebergtables
+// Package backupawsdocumentdb contains methods related to BackupAwsDocumentdb
+package backupawsdocumentdb
 
 import (
     "encoding/json"
@@ -13,24 +13,24 @@ import (
     "github.com/clumio-code/clumio-go-sdk/models"
 )
 
-// BackupAwsIcebergTablesV1 represents a custom type struct
-type BackupAwsIcebergTablesV1 struct {
+// BackupAwsDocumentdbV1 represents a custom type struct
+type BackupAwsDocumentdbV1 struct {
     config config.Config
 }
 
-// ListBackupAwsIcebergTables Retrieves a list of Iceberg table backups.
-func (b *BackupAwsIcebergTablesV1) ListBackupAwsIcebergTables(
+// ListBackupAwsDocumentdb Retrieves a list of DocumentDB backups.
+func (b *BackupAwsDocumentdbV1) ListBackupAwsDocumentdb(
     limit *int64, 
     start *string, 
     sort *string, 
     filter *string)(
-    *models.ListIcebergTableBackupsResponse, *apiutils.APIError) {
+    *models.ListDocumentDBBackupsResponse, *apiutils.APIError) {
 
-    queryBuilder := b.config.BaseUrl + "/backups/aws/iceberg-tables"
+    queryBuilder := b.config.BaseUrl + "/backups/aws/documentdb"
 
     
-    header := "application/api.clumio.backup-aws-iceberg-tables=v1+json"
-    result := &models.ListIcebergTableBackupsResponse{}
+    header := "application/api.clumio.backup-aws-documentdb=v1+json"
+    result := &models.ListDocumentDBBackupsResponse{}
     queryParams := make(map[string]string)
     if limit != nil {
         queryParams["limit"] = fmt.Sprintf("%v", *limit)
@@ -59,12 +59,13 @@ func (b *BackupAwsIcebergTablesV1) ListBackupAwsIcebergTables(
 }
 
 
-// CreateBackupAwsIcebergTable Performs an on-demand backup for the specified AWS Iceberg Table.
-func (b *BackupAwsIcebergTablesV1) CreateBackupAwsIcebergTable(
-    body models.CreateBackupAwsIcebergTableV1Request)(
-    *models.OnDemandAWSIcebergTableBackupResponse, *apiutils.APIError) {
+// CreateBackupAwsDocumentdb Performs an on-demand backup for the specified DocumentDB cluster.
+func (b *BackupAwsDocumentdbV1) CreateBackupAwsDocumentdb(
+    embed *string, 
+    body models.CreateBackupAwsDocumentdbV1Request)(
+    *models.OnDemandDocumentDBBackupResponse, *apiutils.APIError) {
 
-    queryBuilder := b.config.BaseUrl + "/backups/aws/iceberg-tables"
+    queryBuilder := b.config.BaseUrl + "/backups/aws/documentdb"
 
     bytes, err := json.Marshal(body)
     if err != nil {
@@ -75,12 +76,18 @@ func (b *BackupAwsIcebergTablesV1) CreateBackupAwsIcebergTable(
         }
     }
     payload := string(bytes)
-    header := "application/api.clumio.backup-aws-iceberg-tables=v1+json"
-    result := &models.OnDemandAWSIcebergTableBackupResponse{}
+    header := "application/api.clumio.backup-aws-documentdb=v1+json"
+    result := &models.OnDemandDocumentDBBackupResponse{}
+    queryParams := make(map[string]string)
+    if embed != nil {
+        queryParams["embed"] = *embed
+    }
+    
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: b.config,
         RequestUrl: queryBuilder,
+        QueryParams: queryParams,
         AcceptHeader: header,
         Body: payload,
         Result202: &result,
@@ -91,12 +98,12 @@ func (b *BackupAwsIcebergTablesV1) CreateBackupAwsIcebergTable(
 }
 
 
-// ReadBackupAwsIcebergTable Returns a representation of the specified Iceberg table backup.
-func (b *BackupAwsIcebergTablesV1) ReadBackupAwsIcebergTable(
+// ReadBackupAwsDocumentdb Returns a representation of the specified DocumentDB backup.
+func (b *BackupAwsDocumentdbV1) ReadBackupAwsDocumentdb(
     backupId string)(
-    *models.ReadIcebergTableBackupResponse, *apiutils.APIError) {
+    *models.ReadDocumentDBBackupResponse, *apiutils.APIError) {
 
-    pathURL := "/backups/aws/iceberg-tables/{backup_id}"
+    pathURL := "/backups/aws/documentdb/{backup_id}"
     //process optional template parameters
     pathParams := map[string]string{
         "backup_id": backupId,
@@ -104,8 +111,8 @@ func (b *BackupAwsIcebergTablesV1) ReadBackupAwsIcebergTable(
     queryBuilder := b.config.BaseUrl + pathURL
 
     
-    header := "application/api.clumio.backup-aws-iceberg-tables=v1+json"
-    result := &models.ReadIcebergTableBackupResponse{}
+    header := "application/api.clumio.backup-aws-documentdb=v1+json"
+    result := &models.ReadDocumentDBBackupResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: b.config,

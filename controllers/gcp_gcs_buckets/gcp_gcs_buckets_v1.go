@@ -22,7 +22,8 @@ func (g *GcpGcsBucketsV1) ListGcpGcsBuckets(
     limit *int64, 
     start *string, 
     filter *string, 
-    bucketMatcher *string)(
+    bucketMatcher *string, 
+    sort *string)(
     *models.ListGCSBucketsResponse, *apiutils.APIError) {
 
     queryBuilder := g.config.BaseUrl + "/datasources/gcp/gcs-buckets"
@@ -42,6 +43,9 @@ func (g *GcpGcsBucketsV1) ListGcpGcsBuckets(
     }
     if bucketMatcher != nil {
         queryParams["bucket_matcher"] = *bucketMatcher
+    }
+    if sort != nil {
+        queryParams["sort"] = *sort
     }
     
 

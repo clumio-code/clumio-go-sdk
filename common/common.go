@@ -5,6 +5,7 @@ package common
 import (
 	"encoding/json"
 	"fmt"
+	"time"
 
 	apiutils "github.com/clumio-code/clumio-go-sdk/api_utils"
 	"github.com/clumio-code/clumio-go-sdk/config"
@@ -12,7 +13,10 @@ import (
 )
 
 const (
-	sdkVersion = "0.31.2"
+	sdkVersion = "0.32.0"
+
+	// defaultRequestTimeout bounds each HTTP request when Config.Timeout is unset.
+	defaultRequestTimeout = 60 * time.Second
 
 	AcceptHeader         = "Accept"
 	OrgUnitContextHeader = "x-clumio-organizationalunit-context"
@@ -21,6 +25,7 @@ const (
 
 	InternalServerError       = "Internal Server Error"
 	NonSuccessStatusCodeError = "Non-success status code returned."
+	InvalidConfigError        = "Invalid configuration"
 
 	Get    = "GET"
 	Post   = "POST"
@@ -46,6 +51,20 @@ type InvokeAPIRequest struct {
 // InvokeAPI invokes the REST API and returns an error if it fails.
 func InvokeAPI(request *InvokeAPIRequest) *apiutils.APIError {
 	client := resty.New()
+	// A zero timeout means "unset"; fall back to the default. A negative value
+	// is a caller misconfiguration, so reject it instead of silently defaulting.
+	timeout := request.Config.Timeout
+	if timeout < 0 {
+		return &apiutils.APIError{
+			ResponseCode: 400,
+			Reason:       InvalidConfigError,
+			Response:     []byte(fmt.Sprintf("config Timeout must not be negative: %v", timeout)),
+		}
+	}
+	if timeout == 0 {
+		timeout = defaultRequestTimeout
+	}
+	client.SetTimeout(timeout)
 	req := client.R().
 		SetHeader(AcceptHeader, request.AcceptHeader).
 		SetHeader(OrgUnitContextHeader, request.Config.OrganizationalUnitContext).

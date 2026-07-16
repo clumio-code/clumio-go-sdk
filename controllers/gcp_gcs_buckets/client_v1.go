@@ -15,7 +15,8 @@ type GcpGcsBucketsV1Client interface {
         limit *int64, 
         start *string, 
         filter *string, 
-        bucketMatcher *string)(
+        bucketMatcher *string, 
+        sort *string)(
         *models.ListGCSBucketsResponse,  *apiutils.APIError)
     
     // ReadGcpGcsBucket Returns a representation of the specified GCS bucket.

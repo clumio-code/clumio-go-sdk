@@ -1,7 +1,7 @@
 // Copyright (c) 2023 Clumio All Rights Reserved
 
-// Package backupawsicebergtables contains methods related to BackupAwsIcebergTables
-package backupawsicebergtables
+// Package backupawsneptune contains methods related to BackupAwsNeptune
+package backupawsneptune
 
 import (
     "encoding/json"
@@ -13,24 +13,24 @@ import (
     "github.com/clumio-code/clumio-go-sdk/models"
 )
 
-// BackupAwsIcebergTablesV1 represents a custom type struct
-type BackupAwsIcebergTablesV1 struct {
+// BackupAwsNeptuneV1 represents a custom type struct
+type BackupAwsNeptuneV1 struct {
     config config.Config
 }
 
-// ListBackupAwsIcebergTables Retrieves a list of Iceberg table backups.
-func (b *BackupAwsIcebergTablesV1) ListBackupAwsIcebergTables(
+// ListBackupAwsNeptune Retrieves a list of Neptune backups.
+func (b *BackupAwsNeptuneV1) ListBackupAwsNeptune(
     limit *int64, 
     start *string, 
     sort *string, 
     filter *string)(
-    *models.ListIcebergTableBackupsResponse, *apiutils.APIError) {
+    *models.ListNeptuneBackupsResponse, *apiutils.APIError) {
 
-    queryBuilder := b.config.BaseUrl + "/backups/aws/iceberg-tables"
+    queryBuilder := b.config.BaseUrl + "/backups/aws/neptune"
 
     
-    header := "application/api.clumio.backup-aws-iceberg-tables=v1+json"
-    result := &models.ListIcebergTableBackupsResponse{}
+    header := "application/api.clumio.backup-aws-neptune=v1+json"
+    result := &models.ListNeptuneBackupsResponse{}
     queryParams := make(map[string]string)
     if limit != nil {
         queryParams["limit"] = fmt.Sprintf("%v", *limit)
@@ -59,12 +59,13 @@ func (b *BackupAwsIcebergTablesV1) ListBackupAwsIcebergTables(
 }
 
 
-// CreateBackupAwsIcebergTable Performs an on-demand backup for the specified AWS Iceberg Table.
-func (b *BackupAwsIcebergTablesV1) CreateBackupAwsIcebergTable(
-    body models.CreateBackupAwsIcebergTableV1Request)(
-    *models.OnDemandAWSIcebergTableBackupResponse, *apiutils.APIError) {
+// CreateBackupAwsNeptune Performs an on-demand backup for the specified Neptune cluster.
+func (b *BackupAwsNeptuneV1) CreateBackupAwsNeptune(
+    embed *string, 
+    body models.CreateBackupAwsNeptuneV1Request)(
+    *models.OnDemandNeptuneBackupResponse, *apiutils.APIError) {
 
-    queryBuilder := b.config.BaseUrl + "/backups/aws/iceberg-tables"
+    queryBuilder := b.config.BaseUrl + "/backups/aws/neptune"
 
     bytes, err := json.Marshal(body)
     if err != nil {
@@ -75,12 +76,18 @@ func (b *BackupAwsIcebergTablesV1) CreateBackupAwsIcebergTable(
         }
     }
     payload := string(bytes)
-    header := "application/api.clumio.backup-aws-iceberg-tables=v1+json"
-    result := &models.OnDemandAWSIcebergTableBackupResponse{}
+    header := "application/api.clumio.backup-aws-neptune=v1+json"
+    result := &models.OnDemandNeptuneBackupResponse{}
+    queryParams := make(map[string]string)
+    if embed != nil {
+        queryParams["embed"] = *embed
+    }
+    
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: b.config,
         RequestUrl: queryBuilder,
+        QueryParams: queryParams,
         AcceptHeader: header,
         Body: payload,
         Result202: &result,
@@ -91,12 +98,12 @@ func (b *BackupAwsIcebergTablesV1) CreateBackupAwsIcebergTable(
 }
 
 
-// ReadBackupAwsIcebergTable Returns a representation of the specified Iceberg table backup.
-func (b *BackupAwsIcebergTablesV1) ReadBackupAwsIcebergTable(
+// ReadBackupAwsNeptune Returns a representation of the specified Neptune backup.
+func (b *BackupAwsNeptuneV1) ReadBackupAwsNeptune(
     backupId string)(
-    *models.ReadIcebergTableBackupResponse, *apiutils.APIError) {
+    *models.ReadNeptuneBackupResponse, *apiutils.APIError) {
 
-    pathURL := "/backups/aws/iceberg-tables/{backup_id}"
+    pathURL := "/backups/aws/neptune/{backup_id}"
     //process optional template parameters
     pathParams := map[string]string{
         "backup_id": backupId,
@@ -104,8 +111,8 @@ func (b *BackupAwsIcebergTablesV1) ReadBackupAwsIcebergTable(
     queryBuilder := b.config.BaseUrl + pathURL
 
     
-    header := "application/api.clumio.backup-aws-iceberg-tables=v1+json"
-    result := &models.ReadIcebergTableBackupResponse{}
+    header := "application/api.clumio.backup-aws-neptune=v1+json"
+    result := &models.ReadNeptuneBackupResponse{}
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: b.config,

@@ -15,7 +15,8 @@ type GcpGcsAssetsV1Client interface {
         limit *int64, 
         start *string, 
         filter *string, 
-        embed *string)(
+        embed *string, 
+        sort *string)(
         *models.ListGCPGCSAssetsResponse,  *apiutils.APIError)
     
     // ReadGcpGcsAsset Returns a representation of the specified GCP GCS asset.

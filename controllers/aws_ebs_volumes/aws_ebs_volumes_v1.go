@@ -21,6 +21,7 @@ type AwsEbsVolumesV1 struct {
 func (a *AwsEbsVolumesV1) ListAwsEbsVolumes(
     limit *int64, 
     start *string, 
+    sort *string, 
     filter *string, 
     embed *string, 
     lookbackDays *int64)(
@@ -37,6 +38,9 @@ func (a *AwsEbsVolumesV1) ListAwsEbsVolumes(
     }
     if start != nil {
         queryParams["start"] = *start
+    }
+    if sort != nil {
+        queryParams["sort"] = *sort
     }
     if filter != nil {
         queryParams["filter"] = *filter
