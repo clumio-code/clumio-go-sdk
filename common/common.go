@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	sdkVersion = "0.32.0"
+	sdkVersion = "0.32.1"
 
 	// defaultRequestTimeout bounds each HTTP request when Config.Timeout is unset.
 	defaultRequestTimeout = 60 * time.Second
