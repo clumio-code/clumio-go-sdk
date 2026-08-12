@@ -33,4 +33,4 @@ func main() {
 	res, cerr := handler.ListPolicyDefinitions(nil, nil)
 }
 ```
-The REST API documentation describes all the available APIs and can be accessed from the help section in the top right corner of the Clumio UI.
+The REST API documentation describes all the available APIs and can be accessed from [here](https://api.commvault.com/docs/latest/api/cv/ClumioAPIs/clumio-rest-api/).

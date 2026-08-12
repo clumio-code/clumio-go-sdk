@@ -5545,7 +5545,18 @@ type ReadRuleResponse struct {
     // |                       |                           | sensitive key);          |
     // |                       |                           | resources without a      |
     // |                       |                           | Name tag will have an    |
-    // |                       |                           | empty asset name.        |
+    // |                       |                           | empty asset name. Match  |
+    // |                       |                           | an empty asset name via  |
+    // |                       |                           | $eq with an empty        |
+    // |                       |                           | string, which is also    |
+    // |                       |                           | accepted in              |
+    // |                       |                           | $in/$not_in alongside    |
+    // |                       |                           | another distinct name.   |
+    // |                       |                           | $in/$not_in require at   |
+    // |                       |                           | least two distinct       |
+    // |                       |                           | values;                  |
+    // |                       |                           | $contains/$not_contains  |
+    // |                       |                           | reject an empty value.   |
     // |                       |                           |                          |
     // |                       |                           | {"asset_name":{"$eq":"my |
     // |                       |                           | -asset"}}                |

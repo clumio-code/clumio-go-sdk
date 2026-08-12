@@ -387,6 +387,10 @@ type AssignmentEntity struct {
     // +------------------------+-------------------------+
     // | aws_dynamodb_table     | AWS DynamoDB table.     |
     // +------------------------+-------------------------+
+    // | aws_documentdb         | AWS DocumentDB cluster. |
+    // +------------------------+-------------------------+
+    // | aws_neptune            | AWS Neptune cluster.    |
+    // +------------------------+-------------------------+
     // | protection_group       | Protection group.       |
     // +------------------------+-------------------------+
     // | aws_iceberg_glue_table | AWS Iceberg Glue table. |
@@ -6486,6 +6490,13 @@ type PolicyOperation struct {
     // If set to `window` and `operation in ("aws_rds_resource_aws_snapshot", "mssql_log_backup", "ec2_mssql_log_backup")`,
     // the backup window will not be determined by Clumio's backup window.
     ActionSetting     *string                 `json:"action_setting"`
+    // The activation status of this individual operation, independent of the policy-level
+    // `activation_status`. The operation runs only if both this and the policy-level status
+    // are `"activated"`. Set through `PATCH /policies/definitions/set-activation-status`
+    // with the `operations` parameter; read-only here.
+    // Refer to the Policy Activation Status table
+    // for a complete list of policy activation statuses.
+    ActivationStatus  *string                 `json:"activation_status"`
     // Additional operation-specific policy settings. For operation types which do not support additional settings, this field is `null`.
     AdvancedSettings  *PolicyAdvancedSettings `json:"advanced_settings"`
     // The region in which this backup is stored. This might be used for cross-region backup.
@@ -8419,7 +8430,18 @@ type Rule struct {
     // |                       |                           | sensitive key);          |
     // |                       |                           | resources without a      |
     // |                       |                           | Name tag will have an    |
-    // |                       |                           | empty asset name.        |
+    // |                       |                           | empty asset name. Match  |
+    // |                       |                           | an empty asset name via  |
+    // |                       |                           | $eq with an empty        |
+    // |                       |                           | string, which is also    |
+    // |                       |                           | accepted in              |
+    // |                       |                           | $in/$not_in alongside    |
+    // |                       |                           | another distinct name.   |
+    // |                       |                           | $in/$not_in require at   |
+    // |                       |                           | least two distinct       |
+    // |                       |                           | values;                  |
+    // |                       |                           | $contains/$not_contains  |
+    // |                       |                           | reject an empty value.   |
     // |                       |                           |                          |
     // |                       |                           | {"asset_name":{"$eq":"my |
     // |                       |                           | -asset"}}                |
