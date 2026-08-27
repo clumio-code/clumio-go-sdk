@@ -4207,11 +4207,13 @@ type GCPConnection struct {
 // URLs to pages related to the resource.
 type GCPConnectionLinks struct {
     // The HATEOAS link to this resource.
-    Self                *HateoasSelfLink `json:"_self"`
+    Self                   *HateoasSelfLink `json:"_self"`
     // A resource-specific HATEOAS link.
-    DeleteGcpConnection *HateoasLink     `json:"delete-gcp-connection"`
+    DeleteGcpConnection    *HateoasLink     `json:"delete-gcp-connection"`
     // A resource-specific HATEOAS link.
-    UpdateGcpConnection *HateoasLink     `json:"update-gcp-connection"`
+    ReadOrganizationalUnit *HateoasLink     `json:"read-organizational-unit"`
+    // A resource-specific HATEOAS link.
+    UpdateGcpConnection    *HateoasLink     `json:"update-gcp-connection"`
 }
 
 // GCPConnectionListEmbedded represents a custom type struct.
@@ -6492,8 +6494,7 @@ type PolicyOperation struct {
     ActionSetting     *string                 `json:"action_setting"`
     // The activation status of this individual operation, independent of the policy-level
     // `activation_status`. The operation runs only if both this and the policy-level status
-    // are `"activated"`. Set through `PATCH /policies/definitions/set-activation-status`
-    // with the `operations` parameter; read-only here.
+    // are `"activated"`. This field is read-only.
     // Refer to the Policy Activation Status table
     // for a complete list of policy activation statuses.
     ActivationStatus  *string                 `json:"activation_status"`
