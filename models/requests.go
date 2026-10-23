@@ -46,14 +46,6 @@ type CreateBackupAwsDynamodbTableV1Request struct {
     ClumioType *string          `json:"type"`
 }
 
-// CreateBackupAwsEbsVolumeV1Request represents a custom type struct
-type CreateBackupAwsEbsVolumeV1Request struct {
-    // Settings for requesting on-demand backup directly.
-    Settings *OnDemandSetting `json:"settings"`
-    // Performs the operation on the EBS volume with the specified Clumio-assigned ID.
-    VolumeId *string          `json:"volume_id"`
-}
-
 // CreateBackupAwsEbsVolumeV2Request represents a custom type struct
 type CreateBackupAwsEbsVolumeV2Request struct {
     // Settings for requesting on-demand backup directly.
@@ -63,6 +55,14 @@ type CreateBackupAwsEbsVolumeV2Request struct {
     ClumioType *string          `json:"type"`
     // Performs the operation on the EBS volume with the specified Clumio-assigned ID.
     VolumeId   *string          `json:"volume_id"`
+}
+
+// CreateBackupAwsEbsVolumeV1Request represents a custom type struct
+type CreateBackupAwsEbsVolumeV1Request struct {
+    // Settings for requesting on-demand backup directly.
+    Settings *OnDemandSetting `json:"settings"`
+    // Performs the operation on the EBS volume with the specified Clumio-assigned ID.
+    VolumeId *string          `json:"volume_id"`
 }
 
 // CreateBackupAwsEc2InstanceV1Request represents a custom type struct
@@ -540,7 +540,6 @@ type CreatePolicyDefinitionV1Request struct {
     // The policy-level timezone is deprecated, as the operation-level timezone should be used instead.
     // The timezone must be a valid location name from the IANA Time Zone database.
     // For instance, "America/New_York", "US/Central", "UTC".
-    // Deprecated: true
     Timezone             *string                 `json:"timezone"`
 }
 
@@ -558,7 +557,6 @@ type UpdatePolicyDefinitionV1Request struct {
     // The policy-level timezone is deprecated, as the operation-level timezone should be used instead.
     // The timezone must be a valid location name from the IANA Time Zone database.
     // For instance, "America/New_York", "US/Central", "UTC".
-    // Deprecated: true
     Timezone             *string                 `json:"timezone"`
 }
 
@@ -1350,20 +1348,20 @@ type RestoreRecordsAwsDynamodbTableV1Request struct {
     Target      *DynamoDBGrrTarget      `json:"target"`
 }
 
-// RestoreAwsEbsVolumeV1Request represents a custom type struct
-type RestoreAwsEbsVolumeV1Request struct {
-    // The EBS volume backup to be restored.
-    Source *EBSRestoreSourceV1 `json:"source"`
-    // The configuration of the EBS volume to be restored.
-    Target *EBSRestoreTargetV1 `json:"target"`
-}
-
 // RestoreAwsEbsVolumeV2Request represents a custom type struct
 type RestoreAwsEbsVolumeV2Request struct {
     // The EBS volume backup to be restored.
     Source *EBSRestoreSource `json:"source"`
     // The configuration of the EBS volume to be restored.
     Target *EBSRestoreTarget `json:"target"`
+}
+
+// RestoreAwsEbsVolumeV1Request represents a custom type struct
+type RestoreAwsEbsVolumeV1Request struct {
+    // The EBS volume backup to be restored.
+    Source *EBSRestoreSourceV1 `json:"source"`
+    // The configuration of the EBS volume to be restored.
+    Target *EBSRestoreTargetV1 `json:"target"`
 }
 
 // RestoreAwsEc2InstanceV1Request represents a custom type struct
@@ -1494,7 +1492,7 @@ type RestoreGcsProtectionGroupAssetV1Request struct {
 // PreviewGcsProtectionGroupAssetV1Request represents a custom type struct
 type PreviewGcsProtectionGroupAssetV1Request struct {
     // The Clumio-assigned ID of the protection group GCS asset backup to be restored. Use the
-    // [GET /backups/gcp/protection-groups/assets](#operation/list-backup-gcs-protection-group-assets)
+    // [GET /backups/gcp/protection-groups/assets](#operation/list-backup-gcp-protection-group-gcs-assets)
     // endpoint to fetch valid values. 
     // Note that only one of `backup_id` or `pitr` must be given.
     BackupId      *string                   `json:"backup_id"`
@@ -1516,15 +1514,23 @@ type RestoreGcsProtectionGroupObjectsV1Request struct {
 
 // PreviewGcsProtectionGroupV1Request represents a custom type struct
 type PreviewGcsProtectionGroupV1Request struct {
-    // The Clumio-assigned ID of the protection group GCS asset backup to be restored. Use the
-    // [GET /backups/gcp/protection-groups/assets](#operation/list-backup-gcp-protection-group-gcs-assets)
+    // The Clumio-assigned ID of the protection group backup to be restored. Use the
+    // [GET /backups/gcp/protection-groups](#operation/list-backup-gcp-protection-groups)
     // endpoint to fetch valid values. 
     // Note that only one of `backup_id` or `pitr` must be given.
     BackupId      *string                   `json:"backup_id"`
     // A list of Clumio-assigned IDs of GCS assets, representing the buckets
     // within the protection group to restore from. Use the
     // [GET /datasources/gcp/gcs-assets](#operation/list-gcp-gcs-assets)
-    // endpoint to fetch valid values.
+    // endpoint to fetch valid values. 
+    // If given, every listed asset must belong to the protection group and be
+    // within your organizational unit, and the request is rejected otherwise. If
+    // omitted, every asset in the backup or protection group must be available and
+    // within your organizational unit; Clumio rejects the preview rather than
+    // previewing only part of the protection group. 
+    // At most 50 assets can be previewed in one request, whether listed here
+    // or resolved from the protection group. This is lower than the restore
+    // limit because the preview workflow fans out one step per asset.
     GcsAssetIds   []*string                 `json:"gcs_asset_ids"`
     // Search for or restore only objects that pass the source object filter.
     ObjectFilters *GCSSourceObjectFilters   `json:"object_filters"`

@@ -14,7 +14,8 @@ type GcpConnectionsV1Client interface {
     ListGcpConnections(
         limit *int64, 
         start *string, 
-        filter *string)(
+        filter *string, 
+        embed *string)(
         *models.ListGCPConnectionsResponse,  *apiutils.APIError)
     
     // CreateGcpConnection Create a new GCP Connection. This API should only be invoked by the Clumio Terraform provider and should not be invoked manually.
@@ -29,7 +30,8 @@ type GcpConnectionsV1Client interface {
     
     // ReadGcpConnection Reads a GCP Connection from the given project id
     ReadGcpConnection(
-        projectId string)(
+        projectId string, 
+        embed *string)(
         *models.ReadGCPConnectionResponse,  *apiutils.APIError)
     
     // DeleteGcpConnection Deletes a GCP Connection

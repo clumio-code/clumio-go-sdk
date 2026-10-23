@@ -22,7 +22,8 @@ type GcpConnectionsV1 struct {
 func (g *GcpConnectionsV1) ListGcpConnections(
     limit *int64, 
     start *string, 
-    filter *string)(
+    filter *string, 
+    embed *string)(
     *models.ListGCPConnectionsResponse, *apiutils.APIError) {
 
     queryBuilder := g.config.BaseUrl + "/connections/gcp"
@@ -39,6 +40,9 @@ func (g *GcpConnectionsV1) ListGcpConnections(
     }
     if filter != nil {
         queryParams["filter"] = *filter
+    }
+    if embed != nil {
+        queryParams["embed"] = *embed
     }
     
 
@@ -121,7 +125,8 @@ func (g *GcpConnectionsV1) PostProcessGcpConnection(
 
 // ReadGcpConnection Reads a GCP Connection from the given project id
 func (g *GcpConnectionsV1) ReadGcpConnection(
-    projectId string)(
+    projectId string, 
+    embed *string)(
     *models.ReadGCPConnectionResponse, *apiutils.APIError) {
 
     pathURL := "/connections/gcp/{project_id}"
@@ -134,10 +139,16 @@ func (g *GcpConnectionsV1) ReadGcpConnection(
     
     header := "application/api.clumio.gcp-connections=v1+json"
     result := &models.ReadGCPConnectionResponse{}
+    queryParams := make(map[string]string)
+    if embed != nil {
+        queryParams["embed"] = *embed
+    }
+    
 
     apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
         Config: g.config,
         RequestUrl: queryBuilder,
+        QueryParams: queryParams,
         PathParams: pathParams,
         AcceptHeader: header,
         Result200: &result,

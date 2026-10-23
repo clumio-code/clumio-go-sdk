@@ -81,6 +81,19 @@ type PolicyDefinitionsV1 struct {
 //  |                   |                                                          |
 //  +-------------------+----------------------------------------------------------+
 //  
+//  
+//  The following table describes the policy operations that support threat detection.
+//  
+//  +-------------------------+---------------------------------+
+//  |        Operation        |           Description           |
+//  +=========================+=================================+
+//  | aws_ebs_volume_backup   | AWS EBS volume backup.          |
+//  +-------------------------+---------------------------------+
+//  | aws_ec2_instance_backup | AWS EC2 instance backup.        |
+//  +-------------------------+---------------------------------+
+//  | protection_group_backup | AWS S3 Protection Group backup. |
+//  +-------------------------+---------------------------------+
+//  
 func (p *PolicyDefinitionsV1) ListPolicyDefinitions(
     filter *string, 
     embed *string)(

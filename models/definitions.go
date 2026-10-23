@@ -24,6 +24,7 @@ type AWSConnection struct {
     // Clumio assigned ID of the associated connection group.
     ConnectionGroupId          *string                  `json:"connection_group_id"`
     // Management status of connection.
+    // "managed" if the connection is managed by a connection group or 'ummanaged' otherwise.
     ConnectionManagementStatus *string                  `json:"connection_management_status"`
     // The status of the connection considering all the deployments made for it.
     ConnectionStatus           *string                  `json:"connection_status"`
@@ -233,7 +234,7 @@ type AlertLinks struct {
 // Embedded responses related to the resource.
 type AlertListEmbedded struct {
     // TODO: Add struct field description
-    Items []*ConsolidatedAlertWithETag `json:"items"`
+    Items []*AlertWithETag `json:"items"`
 }
 
 // AlertListLinks represents a custom type struct.
@@ -275,6 +276,50 @@ type AlertPrimaryEntity struct {
     Value      *string `json:"value"`
 }
 
+// AlertWithETag represents a custom type struct
+type AlertWithETag struct {
+    // Embedded responses related to the resource.
+    Embedded            *AlertEmbedded          `json:"_embedded"`
+    // The ETag value.
+    Etag                *string                 `json:"_etag"`
+    // URLs to pages related to the resource.
+    Links               *AlertLinks             `json:"_links"`
+    // The issue that generated the alert. Each cause belongs to an alert type.
+    Cause               *string                 `json:"cause"`
+    // The timestamp of when the alert was cleared, either automatically by Clumio or manually by a Clumio user.
+    // Represented in RFC-3339 format. If this alert has not been cleared, then this field has a value of `null`.
+    ClearedTimestamp    *string                 `json:"cleared_timestamp"`
+    // The Clumio-assigned ID of the consolidated alert associated with this individual alert. Alerts are consolidated based on matching parent entity, alert type, and alert cause.
+    ConsolidatedAlertId *string                 `json:"consolidated_alert_id"`
+    // Additional information about the alert.
+    Details             *IndividualAlertDetails `json:"details"`
+    // The Clumio-assigned ID of the individual alert.
+    Id                  *string                 `json:"id"`
+    // A record of user-provided information about the alert.
+    Notes               *string                 `json:"notes"`
+    // The parent object of the primary entity associated with or affected by the alert. For example, "aws_environment" is the parent entity of primary entity "aws_ebs_volume".
+    ParentEntity        *AlertParentEntity      `json:"parent_entity"`
+    // The primary object associated with or affected by the alert. Examples of primary entities include "aws_connection", "aws_ebs_volume".
+    PrimaryEntity       *AlertPrimaryEntity     `json:"primary_entity"`
+    // The number of times the alert has recurred for this primary entity.
+    RaisedCount         *uint64                 `json:"raised_count"`
+    // The timestamp of when the alert was raised. Represented in RFC-3339 format.
+    RaisedTimestamp     *string                 `json:"raised_timestamp"`
+    // The alert severity level. Values include "error" and "warning".
+    Severity            *string                 `json:"severity"`
+    // The individual alert status. An individual alert that is in "active" status is one that is still open and has yet to be addressed.
+    // An individual alert that is in "cleared" status is one that has been cleared, either automatically by Clumio or manually by a Clumio user.
+    Status              *string                 `json:"status"`
+    // TODO: Add struct field description
+    Tags                []*RestEntity           `json:"tags"`
+    // The general alert category. Some alert types may be associated with multiple causes.
+    // Refer to the Alert Type table for a complete list of alert types.
+    ClumioType          *string                 `json:"type"`
+    // The timestamp of when the alert was last updated. Represented in RFC-3339 format.
+    // The alert is updated whenever there is a new occurrence of the same alert within the same entity.
+    UpdatedTimestamp    *string                 `json:"updated_timestamp"`
+}
+
 // AmiModel represents a custom type struct.
 // An Amazon Machine Image is a supported and maintained image provided by AWS
 // that provides the information required to launch an instance.
@@ -283,6 +328,9 @@ type AmiModel struct {
     AmiNativeId              *string `json:"ami_native_id"`
     // The architecture of the AMI. Possible values include 'i386', 'x86_64', and 'arm64'.
     Architecture             *string `json:"architecture"`
+    // The boot mode declared by the AMI. Empty when the AMI declares none, in which case
+    // instances launched from it boot with the instance type's default.
+    BootMode                 *string `json:"boot_mode"`
     // Specifies whether enhanced networking with ENA is enabled.
     HasEnaSupport            *bool   `json:"has_ena_support"`
     // The hypervisor type of the AMI. Possible values include 'ovm' and 'xen'.
@@ -310,6 +358,8 @@ type AmiModel struct {
     SriovNetSupport          *string `json:"sriov_net_support"`
     // The current state of the AMI.
     State                    *string `json:"state"`
+    // The NitroTPM version the AMI enables, for example "v2.0". Empty when the AMI has none.
+    TpmSupport               *string `json:"tpm_support"`
     // The type of virtualization of the AMI. Possible values include 'hvm' and 'paravirtual.'
     VirtualizationType       *string `json:"virtualization_type"`
 }
@@ -566,6 +616,12 @@ type AuditTrails struct {
     // +-------------------------+----------------------------------------------------+
     // | organizational_unit     | Changes in the Organizational Unit/Entity group    |
     // |                         | such as creation, deletion, patch.                 |
+    // +-------------------------+----------------------------------------------------+
+    // | threat_detect           | ThreatDetect operations such as resolving a        |
+    // |                         | detected threat.                                   |
+    // +-------------------------+----------------------------------------------------+
+    // | billing                 | Billing changes such as setting the active payment |
+    // |                         | method.                                            |
     // +-------------------------+----------------------------------------------------+
     // 
     Category        *string             `json:"category"`
@@ -1845,23 +1901,26 @@ type DocumentDBRestoreSourcePitrOptions struct {
 type DocumentDBRestoreTarget struct {
     // The Clumio-assigned ID of the AWS environment to be used as the restore destination.
     // Use the [GET /datasources/aws/environments](#operation/list-aws-environments) endpoint to fetch valid values.
-    EnvironmentId          *string              `json:"environment_id"`
+    EnvironmentId           *string              `json:"environment_id"`
     // The instance class of the DocumentDB cluster instances to be created. Possible values include `db.r5.2xlarge` and `db.t2.small`.
-    InstanceClass          *string              `json:"instance_class"`
+    InstanceClass           *string              `json:"instance_class"`
     // The AWS-assigned ID of the KMS encryption key used to encrypt data in this DocumentDB cluster.
-    KmsKeyNativeId         *string              `json:"kms_key_native_id"`
+    KmsKeyNativeId          *string              `json:"kms_key_native_id"`
     // The name given to the restored DocumentDB cluster.
-    Name                   *string              `json:"name"`
+    Name                    *string              `json:"name"`
     // Option group name to be added to the restored DocumentDB cluster.
-    OptionGroupName        *string              `json:"option_group_name"`
+    OptionGroupName         *string              `json:"option_group_name"`
     // The name of the parameter group to be associated with the restored DocumentDB cluster.
-    ParameterGroupName     *string              `json:"parameter_group_name"`
+    ParameterGroupName      *string              `json:"parameter_group_name"`
     // The AWS-assigned IDs of the security groups to be associated with the restored DocumentDB cluster.
-    SecurityGroupNativeIds []*string            `json:"security_group_native_ids"`
+    SecurityGroupNativeIds  []*string            `json:"security_group_native_ids"`
+    // Determines whether the airgap restore delivers the snapshot to the destination
+    // account instead of restoring a live database. Defaults to false.
+    ShouldRestoreAsSnapshot *bool                `json:"should_restore_as_snapshot"`
     // The AWS-assigned name of the subnet group to be associated with the restored DocumentDB cluster.
-    SubnetGroupName        *string              `json:"subnet_group_name"`
+    SubnetGroupName         *string              `json:"subnet_group_name"`
     // A tag created through AWS Console which can be applied to EBS volumes.
-    Tags                   []*AwsTagCommonModel `json:"tags"`
+    Tags                    []*AwsTagCommonModel `json:"tags"`
 }
 
 // DownloadSharedFileLinks represents a custom type struct.
@@ -2355,6 +2414,12 @@ type DynamoDBTableBackupWithETag struct {
     // For [POST /restores/aws/dynamodb](#operation/restore-aws-dynamodb-table), this is defaulted to the
     // value set in backup if `null`.
     ContributorInsightsStatus *bool                     `json:"contributor_insights_status"`
+    // The number of items this backup recorded as created. `null` when the backup did not record
+    // whether each item was created, updated or deleted, as for `aws_snapshot` backups.
+    CreatedItemsCount         *int64                    `json:"created_items_count"`
+    // The number of items this backup recorded as deleted. `null` when the backup did not record
+    // whether each item was created, updated or deleted, as for `aws_snapshot` backups.
+    DeletedItemsCount         *int64                    `json:"deleted_items_count"`
     // Indicates whether DynamoDB Deletion Protection is enabled (true) or disabled (false)
     // on the table.
     // For [POST /restores/aws/dynamodb](#operation/restore-aws-dynamodb-table), this is defaulted to the
@@ -2370,6 +2435,10 @@ type DynamoDBTableBackupWithETag struct {
     GlobalTableVersion        *string                   `json:"global_table_version"`
     // The Clumio-assigned ID of the backup.
     Id                        *string                   `json:"id"`
+    // Whether this backup read the whole table, as a table's first backup or a re-seed, rather
+    // than only the items changed since the previous backup. `null` for `aws_snapshot` backups
+    // and for older backups that did not record it.
+    IsSeedBackup              *bool                     `json:"is_seed_backup"`
     // The number of items in DynamoDB table backup.
     ItemCount                 *int64                    `json:"item_count"`
     // Represents the properties of a local secondary index.
@@ -2404,6 +2473,9 @@ type DynamoDBTableBackupWithETag struct {
     Tags                      []*AwsTagCommonModel      `json:"tags"`
     // The type of backup. Possible values include `clumio_backup` and `aws_snapshot`.
     ClumioType                *string                   `json:"type"`
+    // The number of items this backup recorded as updated. `null` when the backup did not record
+    // whether each item was created, updated or deleted, as for `aws_snapshot` backups.
+    UpdatedItemsCount         *int64                    `json:"updated_items_count"`
 }
 
 // DynamoDBTableEmbedded represents a custom type struct.
@@ -2921,6 +2993,9 @@ type EC2Backup struct {
     BackupAmi                        *AmiModel                          `json:"backup_ami"`
     // The tier to which the backup is tagged to.
     BackupTier                       *string                            `json:"backup_tier"`
+    // The firmware the backed up instance boots with. Empty for backups taken before
+    // this was recorded.
+    BootMode                         *string                            `json:"boot_mode"`
     // The reason that browsing is unavailable for the backup.
     // If browse indexing is successful, then this field has a value of `null`.
     BrowsingFailedReason             *string                            `json:"browsing_failed_reason"`
@@ -2961,6 +3036,9 @@ type EC2Backup struct {
     SubnetNativeId                   *string                            `json:"subnet_native_id"`
     // A tag created through AWS Console which can be applied to EBS volumes.
     Tags                             []*AwsTagCommonModel               `json:"tags"`
+    // The NitroTPM version the backed up instance was launched with, for example "v2.0".
+    // Empty when the instance has none or the backup predates this field.
+    TpmSupport                       *string                            `json:"tpm_support"`
     // The type of the backup.
     ClumioType                       *string                            `json:"type"`
     // The total number of bytes written in all the disks of the EC2 instance.
@@ -4101,27 +4179,27 @@ type FileSystemListLinks struct {
 // FileVersion represents a custom type struct
 type FileVersion struct {
     // URLs to pages related to the resource.
-    Links             *FileVersionHateoas `json:"_links"`
+    Links             *FileVersionLinks `json:"_links"`
     // The Clumio-assigned ID of the backup.
-    BackupId          *string             `json:"backup_id"`
+    BackupId          *string           `json:"backup_id"`
     // The Clumio-assigned ID of the filesystem within which to restore the file. Use
     // [ GET /backups/files/search/{search_result_id}/versions](#operation/list-file-versions)
     // to fetch the value.
-    FilesystemId      *string             `json:"filesystem_id"`
+    FilesystemId      *string           `json:"filesystem_id"`
     // The timestamp of the last time the file was modified. Represented in RFC-3339 format.
-    ModifiedTimestamp *string             `json:"modified_timestamp"`
+    ModifiedTimestamp *string           `json:"modified_timestamp"`
     // The path of the file to be restored. Use
     // [GET /backups/files/search](#operation/list-files) to fetch the value.
-    Path              *string             `json:"path"`
+    Path              *string           `json:"path"`
     // The size of the file in bytes.
-    Size              *int64              `json:"size"`
+    Size              *int64            `json:"size"`
     // The timestamp of when the backup associated with this file started. Represented in RFC-3339 format.
-    StartTimestamp    *string             `json:"start_timestamp"`
+    StartTimestamp    *string           `json:"start_timestamp"`
 }
 
-// FileVersionHateoas represents a custom type struct.
+// FileVersionLinks represents a custom type struct.
 // URLs to pages related to the resource.
-type FileVersionHateoas struct {
+type FileVersionLinks struct {
     // A resource-specific HATEOAS link.
     RestoreFiles *HateoasLink `json:"restore-files"`
 }
@@ -4207,11 +4285,13 @@ type GCPConnection struct {
 // URLs to pages related to the resource.
 type GCPConnectionLinks struct {
     // The HATEOAS link to this resource.
-    Self                *HateoasSelfLink `json:"_self"`
+    Self                   *HateoasSelfLink `json:"_self"`
     // A resource-specific HATEOAS link.
-    DeleteGcpConnection *HateoasLink     `json:"delete-gcp-connection"`
+    DeleteGcpConnection    *HateoasLink     `json:"delete-gcp-connection"`
     // A resource-specific HATEOAS link.
-    UpdateGcpConnection *HateoasLink     `json:"update-gcp-connection"`
+    ReadOrganizationalUnit *HateoasLink     `json:"read-organizational-unit"`
+    // A resource-specific HATEOAS link.
+    UpdateGcpConnection    *HateoasLink     `json:"update-gcp-connection"`
 }
 
 // GCPConnectionListEmbedded represents a custom type struct.
@@ -4626,10 +4706,12 @@ type GCPProtectionGroup struct {
     // "protected", "unprotected".
     ProtectionStatus             *string                     `json:"protection_status"`
     // Cumulative count of all unexpired objects in each backup (any new or updated since
-    // the last backup) that have been backed up as part of this protection group
+    // the last backup) that have been backed up as part of this protection group.
+    // Omitted when statistics are unavailable.
     TotalBackedUpObjectCount     *int64                      `json:"total_backed_up_object_count"`
     // Cumulative size of all unexpired objects in each backup (any new or updated since
-    // the last backup) that have been backed up as part of this protection group
+    // the last backup) that have been backed up as part of this protection group.
+    // Omitted when statistics are unavailable.
     TotalBackedUpSizeBytes       *int64                      `json:"total_backed_up_size_bytes"`
     // Version of the protection group. The version number is incremented every time
     // a change is made to the protection group.
@@ -4801,7 +4883,9 @@ type GCSObject struct {
     ObjectKey        *string `json:"object_key"`
     // Encrypted metadata for the object to be restored 
     // You can get `restore_cookie` via
-    // [POST /restores/gcp/protection-groups/{gcs_protection_group_id}/previews](#operation/preview-gcs-protection-group)
+    // [GET /restores/gcp/protection-groups/{gcs_protection_group_id}/previews/{preview_id}](#operation/preview-details-gcs-protection-group)
+    // or
+    // [GET /restores/gcp/protection-groups/assets/{gcs_asset_id}/previews/{preview_id}](#operation/preview-details-gcs-protection-group-asset).
     RestoreCookie    *string `json:"restore_cookie"`
     // Size in Bytes
     SizeInBytes      *int64  `json:"size_in_bytes"`
@@ -4883,7 +4967,7 @@ type GCSProtectionGroupAssetBackupListLinks struct {
 // The parameters for initiating a GCS protection group asset restore from a backup.
 type GCSProtectionGroupAssetRestoreSource struct {
     // The Clumio-assigned ID of the protection group GCS asset backup to be restored. Use the
-    // [GET /backups/gcp/protection-groups/assets](#operation/list-backup-gcs-protection-group-assets)
+    // [GET /backups/gcp/protection-groups/assets](#operation/list-backup-gcp-protection-group-gcs-assets)
     // endpoint to fetch valid values. 
     // Note that only one of `backup_id` or `pitr` must be given.
     BackupId      *string                                          `json:"backup_id"`
@@ -4976,14 +5060,21 @@ type GCSProtectionGroupBackupListLinks struct {
 // The parameters for initiating a GCS protection group restore from a backup.
 type GCSProtectionGroupRestoreSource struct {
     // The Clumio-assigned ID of the protection group backup to be restored. Use the
-    // [GET /backups/gcp/protection-groups](#operation/list-backup-gcs-protection-groups)
+    // [GET /backups/gcp/protection-groups](#operation/list-backup-gcp-protection-groups)
     // endpoint to fetch valid values. 
     // Note that only one of `backup_id` or `pitr` must be given.
     BackupId      *string                                     `json:"backup_id"`
     // A list of Clumio-assigned IDs of GCS assets, representing the buckets
     // within the protection group to restore from. Use the
     // [GET /datasources/gcp/gcs-assets](#operation/list-gcp-gcs-assets)
-    // endpoint to fetch valid values.
+    // endpoint to fetch valid values. 
+    // If given, every listed asset must belong to the protection group and be
+    // within your organizational unit, and the restore is rejected otherwise. If
+    // omitted, every asset in the backup or protection group must be available and
+    // within your organizational unit; Clumio rejects the restore rather than
+    // restoring only part of the protection group. 
+    // At most 2,500 assets can be restored in one request, whether listed here
+    // or resolved from the protection group.
     GcsAssetIds   []*string                                   `json:"gcs_asset_ids"`
     // Search for or restore only objects that pass the source object filter.
     ObjectFilters *GCSSourceObjectFilters                     `json:"object_filters"`
@@ -5011,7 +5102,7 @@ type GCSProtectionGroupRestoreSourcePitrOptions struct {
 // The destination where the GCS protection group will be restored.
 type GCSProtectionGroupRestoreTarget struct {
     // The Clumio-assigned ID of the bucket to which the backup must be restored.
-    // Use the [GET /datasources/gcp/cloud-storage-buckets](#operation/list-gcp-cloud-storage-buckets) endpoint
+    // Use the [GET /datasources/gcp/gcs-buckets](#operation/list-gcp-gcs-buckets) endpoint
     // to fetch valid values.
     BucketId                       *string          `json:"bucket_id"`
     // Default GCS checksum algorithm for restored object.
@@ -5027,7 +5118,7 @@ type GCSProtectionGroupRestoreTarget struct {
     // bucket name will be appended to the prefix.
     Prefix                         *string          `json:"prefix"`
     // The Clumio-assigned ID of the GCP project to be used as the restore destination.
-    // Use the [GET /datasources/gcp/cloud-storage-buckets/{bucket_id}](#operation/read-gcp-cloud-storage-bucket) endpoint
+    // Use the [GET /datasources/gcp/gcs-buckets/{bucket_id}](#operation/read-gcp-gcs-bucket) endpoint
     // to fetch the project ID for a bucket.
     ProjectId                      *string          `json:"project_id"`
     // Whether to restore objects with their original storage class or not. 
@@ -5305,9 +5396,9 @@ type IamInstanceProfileModel struct {
 // IcebergBackupAdvancedSetting represents a custom type struct.
 // IcebergBackupAdvancedSetting defines the advanced settings for Iceberg backup operations
 type IcebergBackupAdvancedSetting struct {
-    // TODO: Add struct field description
+    // If true, back up only compaction snapshots. Default: false
     BackupCompactedSnapshotOnly *bool   `json:"backup_compacted_snapshot_only"`
-    // TODO: Add struct field description
+    // If true, back up only the latest snapshot instead of all snapshots. Default: false
     BackupLastSnapshotOnly      *bool   `json:"backup_last_snapshot_only"`
     // Backup tier to store the backup in. Valid values are: `standard`.
     BackupTier                  *string `json:"backup_tier"`
@@ -5372,30 +5463,32 @@ type IcebergRestoreTarget struct {
     // The asset id of the target Iceberg Table to restore into.
     // If specified, the restore targets an existing table. If omitted, a new table is created
     // using the catalog-specific fields below.
-    AssetId       *string    `json:"asset_id"`
+    AssetId       *string              `json:"asset_id"`
     // The catalog of the Iceberg table — an empty string for Glue tables,
     // and the table bucket ARN for S3 tables.
     // Required when creating a new S3 Tables target table.
-    Catalog       *string    `json:"catalog"`
+    Catalog       *string              `json:"catalog"`
     // The type of catalog to which the restored Iceberg Table belongs.
-    CatalogType   *string    `json:"catalog_type"`
+    CatalogType   *string              `json:"catalog_type"`
     // The Clumio-assigned ID of the AWS environment to be used as the restore destination. Use the
     // [GET /datasources/aws/environments](#operation/list-aws-environments) endpoint to fetch valid
     // values.
-    EnvironmentId *string    `json:"environment_id"`
+    EnvironmentId *string              `json:"environment_id"`
     // The namespace of the Iceberg table - database name for Glue tables,
     // and namespace for S3 tables.
     // Required when creating a new target table.
-    Namespace     *string    `json:"namespace"`
+    Namespace     *string              `json:"namespace"`
     // TODO: Add struct field description
-    Optimizer     *Optimizer `json:"optimizer"`
+    Optimizer     *Optimizer           `json:"optimizer"`
     // The location of the iceberg table. This is generally the S3 prefix of
     // the table bucket.
     // Required when creating a new Glue target table.
-    TableLocation *string    `json:"table_location"`
+    TableLocation *string              `json:"table_location"`
     // The name of the Iceberg Table to restore.
     // Required when creating a new target table.
-    TableName     *string    `json:"table_name"`
+    TableName     *string              `json:"table_name"`
+    // A tag created through AWS Console which can be applied to EBS volumes.
+    Tags          []*AwsTagCommonModel `json:"tags"`
 }
 
 // IcebergTable represents a custom type struct
@@ -5456,36 +5549,38 @@ type IcebergTable struct {
 // IcebergTableBackup represents a custom type struct
 type IcebergTableBackup struct {
     // The AWS-assigned ID of the account associated with this database at the time of backup.
-    AccountNativeId     *string       `json:"account_native_id"`
+    AccountNativeId     *string              `json:"account_native_id"`
     // The AWS region associated with this environment.
-    AwsRegion           *string       `json:"aws_region"`
+    AwsRegion           *string              `json:"aws_region"`
     // The region in which this backup is stored. For policies that keep backups
     // in-region, this value will be the same as the source region of the asset backed up.
     // For out of region policies, this region will the one specified in the policy.
-    BackupAwsRegion     *string       `json:"backup_aws_region"`
+    BackupAwsRegion     *string              `json:"backup_aws_region"`
     // The timestamp of when this backup expires. Represented in RFC-3339 format.
-    ExpirationTimestamp *string       `json:"expiration_timestamp"`
+    ExpirationTimestamp *string              `json:"expiration_timestamp"`
     // The Clumio-assigned ID of the backup.
-    Id                  *string       `json:"id"`
+    Id                  *string              `json:"id"`
     // The total count of the newly added snapshots in this backup.
-    NewlyAddedSnapshots *int32        `json:"newly_added_snapshots"`
+    NewlyAddedSnapshots *int32               `json:"newly_added_snapshots"`
     // The schema of the Iceberg table captured in this backup.
-    Schema              *string       `json:"schema"`
+    Schema              *string              `json:"schema"`
     // The timestamp of when the Iceberg snapshot was created. Represented in RFC-3339 format.
-    SnapshotCreatedAt   *string       `json:"snapshot_created_at"`
+    SnapshotCreatedAt   *string              `json:"snapshot_created_at"`
     // The ID of the Iceberg snapshot associated with this backup.
-    SnapshotId          *string       `json:"snapshot_id"`
+    SnapshotId          *string              `json:"snapshot_id"`
     // The timestamp of when this backup started. Represented in RFC-3339 format.
-    StartTimestamp      *string       `json:"start_timestamp"`
+    StartTimestamp      *string              `json:"start_timestamp"`
     // TODO: Add struct field description
-    Summary             *ModelSummary `json:"summary"`
+    Summary             *ModelSummary        `json:"summary"`
     // The Clumio-assigned ID of the Iceberg table.
-    TableId             *string       `json:"table_id"`
+    TableId             *string              `json:"table_id"`
     // The name of the Iceberg table.
-    TableName           *string       `json:"table_name"`
+    TableName           *string              `json:"table_name"`
+    // A tag created through AWS Console which can be applied to EBS volumes.
+    Tags                []*AwsTagCommonModel `json:"tags"`
     // The record type of this backup.
     // This field is always set to "iceberg_snapshot" or "iceberg_metadata".
-    ClumioType          *string       `json:"type"`
+    ClumioType          *string              `json:"type"`
 }
 
 // IcebergTableBackupListEmbedded represents a custom type struct.
@@ -5739,12 +5834,6 @@ type MssqlDatabaseFile struct {
     ClumioType *string `json:"type"`
 }
 
-// MssqlServiceInstanceProfiles represents a custom type struct
-type MssqlServiceInstanceProfiles struct {
-    // Policy created for ec2 instance profile role
-    Ec2SsmInstanceProfileArn *string `json:"ec2_ssm_instance_profile_arn"`
-}
-
 // MssqlServiceRoles represents a custom type struct
 type MssqlServiceRoles struct {
     // Role assumable by ec2 service.
@@ -5789,23 +5878,26 @@ type NeptuneRestoreSourcePitrOptions struct {
 type NeptuneRestoreTarget struct {
     // The Clumio-assigned ID of the AWS environment to be used as the restore destination.
     // Use the [GET /datasources/aws/environments](#operation/list-aws-environments) endpoint to fetch valid values.
-    EnvironmentId          *string              `json:"environment_id"`
+    EnvironmentId           *string              `json:"environment_id"`
     // The instance class of the Neptune cluster instances to be created. Possible values include `db.r5.2xlarge` and `db.t2.small`.
-    InstanceClass          *string              `json:"instance_class"`
+    InstanceClass           *string              `json:"instance_class"`
     // The AWS-assigned ID of the KMS encryption key used to encrypt data in this Neptune cluster.
-    KmsKeyNativeId         *string              `json:"kms_key_native_id"`
+    KmsKeyNativeId          *string              `json:"kms_key_native_id"`
     // The name given to the restored Neptune cluster.
-    Name                   *string              `json:"name"`
+    Name                    *string              `json:"name"`
     // Option group name to be added to the restored Neptune cluster.
-    OptionGroupName        *string              `json:"option_group_name"`
+    OptionGroupName         *string              `json:"option_group_name"`
     // The name of the parameter group to be associated with the restored Neptune cluster.
-    ParameterGroupName     *string              `json:"parameter_group_name"`
+    ParameterGroupName      *string              `json:"parameter_group_name"`
     // The AWS-assigned IDs of the security groups to be associated with the restored Neptune cluster.
-    SecurityGroupNativeIds []*string            `json:"security_group_native_ids"`
+    SecurityGroupNativeIds  []*string            `json:"security_group_native_ids"`
+    // Determines whether the airgap restore delivers the snapshot to the destination
+    // account instead of restoring a live database. Defaults to false.
+    ShouldRestoreAsSnapshot *bool                `json:"should_restore_as_snapshot"`
     // The AWS-assigned name of the subnet group to be associated with the restored Neptune cluster.
-    SubnetGroupName        *string              `json:"subnet_group_name"`
+    SubnetGroupName         *string              `json:"subnet_group_name"`
     // A tag created through AWS Console which can be applied to EBS volumes.
-    Tags                   []*AwsTagCommonModel `json:"tags"`
+    Tags                    []*AwsTagCommonModel `json:"tags"`
 }
 
 // NetworkInterface represents a custom type struct
@@ -5998,6 +6090,8 @@ type OnDemandSetting struct {
     // Additional operation-specific policy settings. For operation types which do not support additional settings, this field is `null`.
     AdvancedSettings  *PolicyAdvancedSettings  `json:"advanced_settings"`
     // The region in which this backup is stored. This might be used for cross-region backup.
+    // Possible values are AWS region string, for example: `us-east-1`, `us-west-2`, ...
+    // If no value is provided, it defaults to in-region (the asset's source region).
     BackupAwsRegion   *string                  `json:"backup_aws_region"`
     // The retention time for this SLA. For example, to retain the backup for 1 month, set `unit="months"` and `value=1`.
     RetentionDuration *RetentionBackupSLAParam `json:"retention_duration"`
@@ -6385,7 +6479,6 @@ type Policy struct {
     // The policy-level timezone is deprecated, as the operation-level timezone should be used instead.
     // The timezone must be a valid location name from the IANA Time Zone database.
     // For instance, "America/New_York", "US/Central", "UTC".
-    // Deprecated: true
     Timezone             *string            `json:"timezone"`
     // The updated time of the policy in unix time.
     UpdatedTime          *int64             `json:"updated_time"`
@@ -6490,16 +6583,14 @@ type PolicyOperation struct {
     // If set to `window` and `operation in ("aws_rds_resource_aws_snapshot", "mssql_log_backup", "ec2_mssql_log_backup")`,
     // the backup window will not be determined by Clumio's backup window.
     ActionSetting     *string                 `json:"action_setting"`
-    // The activation status of this individual operation, independent of the policy-level
-    // `activation_status`. The operation runs only if both this and the policy-level status
-    // are `"activated"`. Set through `PATCH /policies/definitions/set-activation-status`
-    // with the `operations` parameter; read-only here.
-    // Refer to the Policy Activation Status table
-    // for a complete list of policy activation statuses.
+    // The activation status of this individual operation. The operation runs only if both this and the policy-level `activation_status` are `"activated"`, and an omitted value leaves the stored status unchanged.
+    // Refer to the Policy Activation Status table for a complete list of policy activation statuses.
     ActivationStatus  *string                 `json:"activation_status"`
     // Additional operation-specific policy settings. For operation types which do not support additional settings, this field is `null`.
     AdvancedSettings  *PolicyAdvancedSettings `json:"advanced_settings"`
     // The region in which this backup is stored. This might be used for cross-region backup.
+    // Possible values are AWS region string, for example: `us-east-1`, `us-west-2`, ...
+    // If no value is provided, it defaults to in-region (the asset's source region).
     BackupAwsRegion   *string                 `json:"backup_aws_region"`
     // The start and end times of the customized backup window. Use of `backup_window` is deprecated, use `backup_window_tz` instead.
     BackupWindow      *BackupWindow           `json:"backup_window"`
@@ -6527,9 +6618,14 @@ type PolicyOperationInput struct {
     // If set to `window` and `operation in ("aws_rds_resource_aws_snapshot", "mssql_log_backup", "ec2_mssql_log_backup")`,
     // the backup window will not be determined by Clumio's backup window.
     ActionSetting    *string                 `json:"action_setting"`
+    // The activation status of this individual operation. The operation runs only if both this and the policy-level `activation_status` are `"activated"`, and an omitted value leaves the stored status unchanged.
+    // Refer to the Policy Activation Status table for a complete list of policy activation statuses.
+    ActivationStatus *string                 `json:"activation_status"`
     // Additional operation-specific policy settings. For operation types which do not support additional settings, this field is `null`.
     AdvancedSettings *PolicyAdvancedSettings `json:"advanced_settings"`
     // The region in which this backup is stored. This might be used for cross-region backup.
+    // Possible values are AWS region string, for example: `us-east-1`, `us-west-2`, ...
+    // If no value is provided, it defaults to in-region (the asset's source region).
     BackupAwsRegion  *string                 `json:"backup_aws_region"`
     // The start and end times of the customized backup window. Use of `backup_window` is deprecated, use `backup_window_tz` instead.
     BackupWindow     *BackupWindow           `json:"backup_window"`
@@ -7398,7 +7494,7 @@ type ProvisionedThroughputOverride struct {
 
 // RDSBackupDatabase represents a custom type struct
 type RDSBackupDatabase struct {
-    // name of the database
+    // The name of the database.
     Name *string `json:"name"`
 }
 
@@ -7469,7 +7565,9 @@ type RDSDatabaseTableEmbedded struct {
 // URLs to pages related to the resource.
 type RDSDatabaseTableLinks struct {
     // The HATEOAS link to this resource.
-    Self *HateoasSelfLink `json:"_self"`
+    Self                                         *HateoasSelfLink `json:"_self"`
+    // A resource-specific HATEOAS link.
+    ReadBackupAwsRdsResourceDatabaseTableColumns *HateoasLink     `json:"read-backup-aws-rds-resource-database-table-columns"`
 }
 
 // RDSDatabaseTableListEmbedded represents a custom type struct.
@@ -7532,52 +7630,63 @@ type RdsAssetInfo struct {
 // RdsDatabaseBackup represents a custom type struct
 type RdsDatabaseBackup struct {
     // URLs to pages related to the resource.
-    Links               *RdsDatabaseBackupLinks `json:"_links"`
+    Links                  *RdsDatabaseBackupLinks `json:"_links"`
     // The AWS-assigned ID of the account associated with this database at the time of backup.
-    AccountNativeId     *string                 `json:"account_native_id"`
+    AccountNativeId        *string                 `json:"account_native_id"`
     // The AWS availability zones associated with this database at the time of backup.
-    AwsAzs              []*string               `json:"aws_azs"`
-    // The AWS-assigned ID of the KMS key associated with this database at the time of backup.
-    AwsKmsKeyId         *string                 `json:"aws_kms_key_id"`
+    AwsAzs                 []*string               `json:"aws_azs"`
     // The AWS region associated with this environment.
-    AwsRegion           *string                 `json:"aws_region"`
-    // Security groups of instance of cluster at the time of backup
-    AwsSecurityGroup    []*string               `json:"aws_security_group"`
-    // The subnet group of RDS instance or cluster at the time of backup.
-    AwsSubnetGroup      *string                 `json:"aws_subnet_group"`
-    // The Clumio-assigned ID of the database associated with this backup.
-    DatabaseId          *string                 `json:"database_id"`
+    AwsRegion              *string                 `json:"aws_region"`
     // The AWS-assigned ID of the database at the time of backup.
-    DatabaseNativeId    *string                 `json:"database_native_id"`
-    // The type of the RDS database associated with this backup.
-    DatabaseType        *string                 `json:"database_type"`
+    DatabaseNativeId       *string                 `json:"database_native_id"`
     // The AWS database engine at the time of backup.
-    Engine              *string                 `json:"engine"`
+    Engine                 *string                 `json:"engine"`
     // The aws database engine version at the time of backup.
-    EngineVersion       *string                 `json:"engine_version"`
+    EngineVersion          *string                 `json:"engine_version"`
     // The timestamp of when this backup expires. Represented in RFC-3339 format.
-    ExpirationTimestamp *string                 `json:"expiration_timestamp"`
+    ExpirationTimestamp    *string                 `json:"expiration_timestamp"`
     // The Clumio-assigned ID of the backup.
-    Id                  *string                 `json:"id"`
-    // Instance class of the RDS instance at the time of backup.
-    InstanceClass       []*string               `json:"instance_class"`
-    // Public accessibility of instances.
-    PublicAccess        []*bool                 `json:"public_access"`
-    // The size of the database (i.e. in GiB) as noted by AWS at the time of backup.
-    Size                *int64                  `json:"size"`
+    Id                     *string                 `json:"id"`
+    // TODO: Add struct field description
+    Instances              []*RdsInstanceModel     `json:"instances"`
+    // The AWS-assigned ID of the KMS key associated with this database at the time of backup.
+    KmsKeyNativeId         *string                 `json:"kms_key_native_id"`
+    // The timestamp of when the migration was triggered. This field will be set only for
+    // migration granular backups. Represented in RFC-3339 format.
+    MigrationTimestamp     *string                 `json:"migration_timestamp"`
+    // Option group name associated with the backed up RDS resource.
+    OptionGroupName        *string                 `json:"option_group_name"`
+    // Parameter group name associated with the backed up RDS resource.
+    ParameterGroupName     *string                 `json:"parameter_group_name"`
+    // The Clumio-assigned ID of the database associated with this backup.
+    ResourceId             *string                 `json:"resource_id"`
+    // The type of the RDS resource associated with this backup. Possible values include `aws_rds_cluster` and `aws_rds_instance`.
+    ResourceType           *string                 `json:"resource_type"`
+    // The AWS-assigned IDs of the security groups associated with this RDS resource backup.
+    SecurityGroupNativeIds []*string               `json:"security_group_native_ids"`
+    // The size of the RDS resource backup. Measured in bytes (B).
+    Size                   *int64                  `json:"size"`
     // The timestamp of when this backup started. Represented in RFC-3339 format.
-    StartTimestamp      *string                 `json:"start_timestamp"`
+    StartTimestamp         *string                 `json:"start_timestamp"`
+    // The AWS-assigned name of the subnet group associated with this RDS resource backup.
+    SubnetGroupName        *string                 `json:"subnet_group_name"`
     // A tag created through AWS Console which can be applied to EBS volumes.
-    Tags                []*AwsTagCommonModel    `json:"tags"`
+    Tags                   []*AwsTagCommonModel    `json:"tags"`
     // The type of backup. Possible values include `clumio_snapshot` and `granular_backup`.
-    ClumioType          *string                 `json:"type"`
+    ClumioType             *string                 `json:"type"`
 }
 
 // RdsDatabaseBackupLinks represents a custom type struct.
 // URLs to pages related to the resource.
 type RdsDatabaseBackupLinks struct {
     // The HATEOAS link to this resource.
-    Self *HateoasSelfLink `json:"_self"`
+    Self                            *HateoasSelfLink `json:"_self"`
+    // A resource-specific HATEOAS link.
+    ListAwsRdsResourcesOptionGroups *HateoasLink     `json:"list-aws-rds-resources-option-groups"`
+    // A resource-specific HATEOAS link.
+    RestoreAwsRdsResource           *HateoasLink     `json:"restore-aws-rds-resource"`
+    // A resource-specific HATEOAS link.
+    RestoreRdsRecord                *HateoasLink     `json:"restore-rds-record"`
 }
 
 // RdsDatabaseBackupListEmbedded represents a custom type struct.
@@ -7784,27 +7893,30 @@ type RdsResourceRestoreSourcePitrOptions struct {
 type RdsResourceRestoreTarget struct {
     // The Clumio-assigned ID of the AWS environment to be used as the restore destination.
     // Use the [GET /datasources/aws/environments](#operation/list-aws-environments) endpoint to fetch valid values.
-    EnvironmentId          *string              `json:"environment_id"`
+    EnvironmentId           *string              `json:"environment_id"`
     // The instance class of the RDS resources to be created. Possible values include `db.r5.2xlarge` and `db.t2.small`.
-    InstanceClass          *string              `json:"instance_class"`
+    InstanceClass           *string              `json:"instance_class"`
     // Designates whether the restored RDS resource also has a public IP address in addition to the private IP address.
-    IsPubliclyAccessible   *bool                `json:"is_publicly_accessible"`
+    IsPubliclyAccessible    *bool                `json:"is_publicly_accessible"`
     // The AWS-assigned ID of the KMS encryption key used to encrypt data in this RDS resource.
-    KmsKeyNativeId         *string              `json:"kms_key_native_id"`
+    KmsKeyNativeId          *string              `json:"kms_key_native_id"`
     // The name given to the restored RDS resource.
     // The name must follow AWS RDS naming conventions:
     // https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Limits.html#RDS_Limits.Constraints
-    Name                   *string              `json:"name"`
+    Name                    *string              `json:"name"`
     // Option group name to be added to the restored RDS resource.
-    OptionGroupName        *string              `json:"option_group_name"`
+    OptionGroupName         *string              `json:"option_group_name"`
     // The name of the parameter group to be associated with the restored RDS resource.
-    ParameterGroupName     *string              `json:"parameter_group_name"`
+    ParameterGroupName      *string              `json:"parameter_group_name"`
     // The AWS-assigned IDs of the security groups to be associated with the restored RDS resource.
-    SecurityGroupNativeIds []*string            `json:"security_group_native_ids"`
+    SecurityGroupNativeIds  []*string            `json:"security_group_native_ids"`
+    // Determines whether the airgap restore delivers the snapshot to the destination
+    // account instead of restoring a live database. Defaults to false.
+    ShouldRestoreAsSnapshot *bool                `json:"should_restore_as_snapshot"`
     // The AWS-assigned name of the subnet group to be associated with the restored RDS resource.
-    SubnetGroupName        *string              `json:"subnet_group_name"`
+    SubnetGroupName         *string              `json:"subnet_group_name"`
     // A tag created through AWS Console which can be applied to EBS volumes.
-    Tags                   []*AwsTagCommonModel `json:"tags"`
+    Tags                    []*AwsTagCommonModel `json:"tags"`
 }
 
 // RdsTemplateInfo represents a custom type struct
@@ -7941,17 +8053,15 @@ type ReportDownloadListLinks struct {
 // including those for resources that are not being updated.
 type Resources struct {
     // SNS topic created in the account to receive relevant events.
-    ClumioEventPubArn       *string                  `json:"clumio_event_pub_arn"`
+    ClumioEventPubArn    *string       `json:"clumio_event_pub_arn"`
     // ARN of the IAM role created in the account, which will be assumed by Clumio.
-    ClumioIamRoleArn        *string                  `json:"clumio_iam_role_arn"`
+    ClumioIamRoleArn     *string       `json:"clumio_iam_role_arn"`
     // ARN of the support role which will be used by the Clumio support team.
-    ClumioSupportRoleArn    *string                  `json:"clumio_support_role_arn"`
+    ClumioSupportRoleArn *string       `json:"clumio_support_role_arn"`
     // TODO: Add struct field description
-    EventRules              *EventRules              `json:"event_rules"`
+    EventRules           *EventRules   `json:"event_rules"`
     // TODO: Add struct field description
-    ServiceInstanceProfiles *ServiceInstanceProfiles `json:"service_instance_profiles"`
-    // TODO: Add struct field description
-    ServiceRoles            *ServiceRoles            `json:"service_roles"`
+    ServiceRoles         *ServiceRoles `json:"service_roles"`
 }
 
 // RestEntity represents a custom type struct
@@ -8299,6 +8409,14 @@ type RoleModel struct {
     UserCount   *int64             `json:"user_count"`
 }
 
+// RoleModelCommon represents a custom type struct
+type RoleModelCommon struct {
+    // A description of the role.
+    Description *string `json:"description"`
+    // Unique name assigned to the role.
+    Name        *string `json:"name"`
+}
+
 // RoleWithETag represents a custom type struct.
 // RoleWithETag to support etag string to be calculated
 type RoleWithETag struct {
@@ -8566,13 +8684,6 @@ type RuleProvision struct {
     RoleId                *string   `json:"role_id"`
 }
 
-// S3AccessControlTranslation represents a custom type struct.
-// A container for information about access control for replicas.
-type S3AccessControlTranslation struct {
-    // Specifies the replica ownership.
-    Owner *string `json:"owner"`
-}
-
 // S3AssetBackupTimeRange represents a custom type struct.
 // The parameters to generate the report of malicious objects detected within backup time range.
 type S3AssetBackupTimeRange struct {
@@ -8651,16 +8762,16 @@ type S3AssetMalwareScanTask struct {
 // Must set exactly one of the options.
 type S3AssetThreatReportSource struct {
     // The parameters to generate the report of malicious objects detected within backup time range.
-    BackupTimeRange       *S3AssetBackupTimeRange            `json:"backup_time_range"`
+    BackupTimeRange       *ThreatReportS3AssetBackupTimeRange `json:"backup_time_range"`
     // The parameters to specify s3 asset backup by protection group and s3 asset id.
-    ProtectionGroupBackup *ThreatReportProtectionGroupBackup `json:"protection_group_backup"`
+    ProtectionGroupBackup *ThreatReportProtectionGroupBackup  `json:"protection_group_backup"`
     // Option to generate threat report using S3AssetBackupID.
     // This is an Clumio-assigned ID of the protection group S3 asset backup. Use the
     // [GET /backups/protection-groups/s3-assets](#operation/list-backup-protection-group-s3-assets)
     // endpoint to fetch valid values.
-    S3AssetBackupId       *string                            `json:"s3_asset_backup_id"`
+    S3AssetBackupId       *string                             `json:"s3_asset_backup_id"`
     // The parameters to generate the report of malicious objects detected in a specific threat scan task.
-    ThreatScanTask        *S3AssetThreatScanTask             `json:"threat_scan_task"`
+    ThreatScanTask        *S3AssetThreatScanTask              `json:"threat_scan_task"`
 }
 
 // S3AssetThreatReportTarget represents a custom type struct.
@@ -8824,44 +8935,17 @@ type S3CloudwatchMetrics struct {
     SizeBytesRetrievedTime     *string          `json:"size_bytes_retrieved_time"`
 }
 
-// S3DeleteMarkerReplication represents a custom type struct.
-// Specifies whether Amazon S3 replicates delete markers.
-type S3DeleteMarkerReplication struct {
-    // Indicates whether to replicate delete markers.
-    Status *string `json:"status"`
-}
-
 // S3Destination represents a custom type struct.
 // Specifies information about where to publish analysis or configuration results.
 type S3Destination struct {
-    // A container for information about access control for replicas.
-    AccessControlTranslation *S3AccessControlTranslation `json:"access_control_translation"`
     // Destination bucket owner account ID.
-    Account                  *string                     `json:"account"`
+    Account         *string            `json:"account"`
     // The Amazon Resource Name (ARN) of the bucket where
     // you want Amazon S3 to store the results.
-    Bucket                   *string                     `json:"bucket"`
-    // Specifies encryption-related information for an Amazon S3 bucket
-    // that is a destination for replicated objects.
-    EncryptionConfiguration  *S3EncryptionConfiguration  `json:"encryption_configuration"`
-    // A container specifying replication metrics-related settings
-    // enabling replication metrics and events.
-    Metrics                  *S3Metrics                  `json:"metrics"`
+    Bucket          *string            `json:"bucket"`
     // A container specifying S3 Replication Time Control (S3 RTC)
     // related information.
-    ReplicationTime          *S3ReplicationTime          `json:"replication_time"`
-    // The storage class to use when replicating objects.
-    StorageClass             *string                     `json:"storage_class"`
-}
-
-// S3EncryptionConfiguration represents a custom type struct.
-// Specifies encryption-related information for an Amazon S3 bucket
-// that is a destination for replicated objects.
-type S3EncryptionConfiguration struct {
-    // Specifies the ID (Key ARN or Alias ARN) of the customer managed
-    // AWS KMS key stored in AWS Key Management Service (KMS) for the
-    // destination bucket.
-    ReplicaKmsKeyId *string `json:"replica_kms_key_id"`
+    ReplicationTime *S3ReplicationTime `json:"replication_time"`
 }
 
 // S3EncryptionOutput represents a custom type struct.
@@ -8869,13 +8953,6 @@ type S3EncryptionConfiguration struct {
 type S3EncryptionOutput struct {
     // Specifies the default server-side-encryption configuration.
     ServerSideEncryptionConfiguration *S3ServerSideEncryptionConfiguration `json:"server_side_encryption_configuration"`
-}
-
-// S3ExistingObjectReplication represents a custom type struct.
-// Configuration to replicate existing source bucket objects.
-type S3ExistingObjectReplication struct {
-    // Specifies whether the existing object replication is enabled.
-    Status *string `json:"status"`
 }
 
 // S3InstantAccessEndpoint represents a custom type struct.
@@ -8979,7 +9056,6 @@ type S3InstantAccessEndpointRole struct {
 // S3InstantAccessEndpointStat represents a custom type struct.
 // S3InstantAccessEndpointStat
 // Statistical metric related to the instant access endpoint.
-// S3InstantAccessEndpointStat swagger: model S3InstantAccessEndpointStat
 type S3InstantAccessEndpointStat struct {
     // The unit counts of the metric.
     Count *int64  `json:"count"`
@@ -9026,24 +9102,6 @@ type S3InstantAccessSourcePitrOptions struct {
     RestoreStartTimestamp *string `json:"restore_start_timestamp"`
 }
 
-// S3Metrics represents a custom type struct.
-// A container specifying replication metrics-related settings
-// enabling replication metrics and events.
-type S3Metrics struct {
-    // A container specifying the time value for S3 Replication Time
-    // Control (S3 RTC) and replication metrics EventThreshold.
-    EventThreshold *S3ReplicationTimeValue `json:"event_threshold"`
-    // Specifies whether the replication metrics are enabled.
-    Status         *string                 `json:"status"`
-}
-
-// S3ReplicaModifications represents a custom type struct.
-// A filter that you can specify for selection for modifications on replicas.
-type S3ReplicaModifications struct {
-    // Specifies whether Amazon S3 replicates modifications on replicas.
-    Status *string `json:"status"`
-}
-
 // S3ReplicationConfiguration represents a custom type struct.
 // A container for replication rules with a maximum size
 // of 2MB and a maximum of 1,000 rules.
@@ -9066,25 +9124,15 @@ type S3ReplicationOutput struct {
 // S3ReplicationRule represents a custom type struct.
 // Specifies which Amazon S3 objects to replicate and where to store the replicas.
 type S3ReplicationRule struct {
-    // Specifies whether Amazon S3 replicates delete markers.
-    DeleteMarkerReplication   *S3DeleteMarkerReplication   `json:"delete_marker_replication"`
     // Specifies information about where to publish analysis or configuration results.
-    Destination               *S3Destination               `json:"destination"`
-    // Configuration to replicate existing source bucket objects.
-    ExistingObjectReplication *S3ExistingObjectReplication `json:"existing_object_replication"`
+    Destination *S3Destination           `json:"destination"`
     // A filter that identifies the subset of objects
     // to which the replication rule applies.
-    Filter                    *S3ReplicationRuleFilter     `json:"filter"`
+    Filter      *S3ReplicationRuleFilter `json:"filter"`
     // A unique identifier for the rule (max 255 characters).
-    Id                        *string                      `json:"id"`
-    // The priority indicates which rule has precedence whenever
-    // two or more replication rules conflict.
-    Priority                  *int64                       `json:"priority"`
-    // A container that describes additional filters for identifying
-    // the source objects that you want to replicate.
-    SourceSelectionCriteria   *S3SourceSelectionCriteria   `json:"source_selection_criteria"`
+    Id          *string                  `json:"id"`
     // Specifies whether the rule is enabled.
-    Status                    *string                      `json:"status"`
+    Status      *string                  `json:"status"`
 }
 
 // S3ReplicationRuleAndOperator represents a custom type struct.
@@ -9161,26 +9209,6 @@ type S3ServerSideEncryptionRule struct {
 type S3ServiceRoles struct {
     // Role assumable by Event Bridge to send event notifications.
     ContinuousBackupsRoleArn *string `json:"continuous_backups_role_arn"`
-}
-
-// S3SourceSelectionCriteria represents a custom type struct.
-// A container that describes additional filters for identifying
-// the source objects that you want to replicate.
-type S3SourceSelectionCriteria struct {
-    // A filter that you can specify for selection for modifications on replicas.
-    ReplicaModifications   *S3ReplicaModifications   `json:"replica_modifications"`
-    // A container for filter information for the selection of
-    // S3 objects encrypted with AWS KMS.
-    SseKmsEncryptedObjects *S3SseKmsEncryptedObjects `json:"sse_kms_encrypted_objects"`
-}
-
-// S3SseKmsEncryptedObjects represents a custom type struct.
-// A container for filter information for the selection of
-// S3 objects encrypted with AWS KMS.
-type S3SseKmsEncryptedObjects struct {
-    // Specifies whether Amazon S3 replicates objects created with server-side
-    // encryption using an AWS KMS key stored in AWS Key Management Service.
-    Status *string `json:"status"`
 }
 
 // S3TablesIcebergCompaction represents a custom type struct
@@ -9276,12 +9304,6 @@ type ScheduleSetting struct {
     Timezone   *string `json:"timezone"`
 }
 
-// ServiceInstanceProfiles represents a custom type struct
-type ServiceInstanceProfiles struct {
-    // TODO: Add struct field description
-    Mssql *MssqlServiceInstanceProfiles `json:"mssql"`
-}
-
 // ServiceRoles represents a custom type struct
 type ServiceRoles struct {
     // TODO: Add struct field description
@@ -9374,16 +9396,16 @@ type StreamSpecification struct {
     // is written to the stream for this table. Valid values for ViewType
     // are:
     // 
-    // KEYS_ONLY - Only the key attributes of the modified item are written
+    // - KEYS_ONLY - Only the key attributes of the modified item are written
     // to the stream.
     // 
-    // NEW_IMAGE - The entire item, as it appears after it was modified, is
+    // - NEW_IMAGE - The entire item, as it appears after it was modified, is
     // written to the stream.
     // 
-    // OLD_IMAGE - The entire item, as it appeared before it was modified,
+    // - OLD_IMAGE - The entire item, as it appeared before it was modified,
     // is written to the stream.
     // 
-    // NEW_AND_OLD_IMAGES - Both the new and the old item images of the item
+    // - NEW_AND_OLD_IMAGES - Both the new and the old item images of the item
     // are written to the stream.
     ViewType *string `json:"view_type"`
 }
@@ -9576,6 +9598,22 @@ type ThreatReportProtectionGroupBackup struct {
     S3AssetId               *string `json:"s3_asset_id"`
 }
 
+// ThreatReportS3AssetBackupTimeRange represents a custom type struct.
+// The parameters to generate the report of malicious objects detected within backup time range.
+type ThreatReportS3AssetBackupTimeRange struct {
+    // The end timestamp of searching time range in RFC-3339 format.
+    // Clumio backup time until the given time inclusive. If not provided, defaults to the latest backup time.
+    EndTimestamp   *string `json:"end_timestamp"`
+    // Clumio-assigned ID of protection group S3 asset, representing the
+    // bucket within the protection group to generate report from. Use the
+    // [GET /datasources/protection-groups/s3-assets](#operation/list-protection-group-s3-assets)
+    // endpoint to fetch valid values.
+    S3AssetId      *string `json:"s3_asset_id"`
+    // The start timestamp of searching time range in RFC-3339 format.
+    // Clumio backup time since the given time inclusive. If not provided, defaults to the earliest backup time.
+    StartTimestamp *string `json:"start_timestamp"`
+}
+
 // TimeUnitParamAssetBackupMinRetentionDuration represents a custom type struct.
 // The minimum required retention duration for a backup to be considered compliant.
 type TimeUnitParamAssetBackupMinRetentionDuration struct {
@@ -9702,10 +9740,8 @@ type UserEmbedded struct {
 // UserEmbeddedV1 represents a custom type struct.
 // Embedded responses related to the resource.
 type UserEmbeddedV1 struct {
-    // A description of the role.
-    Description *string `json:"description"`
-    // Unique name assigned to the role.
-    Name        *string `json:"name"`
+    // TODO: Add struct field description
+    ReadRole *RoleModelCommon `json:"read-role"`
 }
 
 // UserHateoasV1 represents a custom type struct
