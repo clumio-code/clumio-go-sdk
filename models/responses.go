@@ -170,6 +170,7 @@ type CreateAWSConnectionResponse struct {
     // Clumio assigned ID of the associated connection group.
     ConnectionGroupId          *string                  `json:"connection_group_id"`
     // Management status of connection.
+    // "managed" if the connection is managed by a connection group or 'ummanaged' otherwise.
     ConnectionManagementStatus *string                  `json:"connection_management_status"`
     // The status of the connection considering all the deployments made for it.
     ConnectionStatus           *string                  `json:"connection_status"`
@@ -249,8 +250,6 @@ type CreateAWSTemplateV2Response struct {
     Config                      *TemplateConfigurationV2 `json:"config"`
     // The latest available URL for the deployable template.
     DeployableCloudformationUrl *string                  `json:"deployable_cloudformation_url"`
-    // swagger: ignore
-    GroupToken                  *string                  `json:"group_token"`
     // Categorised Resources, based on the generated template, to be created manually by the user
     Resources                   *CategorisedResources    `json:"resources"`
     // The latest available URL for the terraform template.
@@ -559,10 +558,12 @@ type CreateGCPProtectionGroupResponse struct {
     // "protected", "unprotected".
     ProtectionStatus             *string                     `json:"protection_status"`
     // Cumulative count of all unexpired objects in each backup (any new or updated since
-    // the last backup) that have been backed up as part of this protection group
+    // the last backup) that have been backed up as part of this protection group.
+    // Omitted when statistics are unavailable.
     TotalBackedUpObjectCount     *int64                      `json:"total_backed_up_object_count"`
     // Cumulative size of all unexpired objects in each backup (any new or updated since
-    // the last backup) that have been backed up as part of this protection group
+    // the last backup) that have been backed up as part of this protection group.
+    // Omitted when statistics are unavailable.
     TotalBackedUpSizeBytes       *int64                      `json:"total_backed_up_size_bytes"`
     // Version of the protection group. The version number is incremented every time
     // a change is made to the protection group.
@@ -738,7 +739,6 @@ type CreatePolicyResponse struct {
     // The policy-level timezone is deprecated, as the operation-level timezone should be used instead.
     // The timezone must be a valid location name from the IANA Time Zone database.
     // For instance, "America/New_York", "US/Central", "UTC".
-    // Deprecated: true
     Timezone             *string            `json:"timezone"`
     // The updated time of the policy in unix time.
     UpdatedTime          *int64             `json:"updated_time"`
@@ -1085,7 +1085,9 @@ type DeleteRuleResponse struct {
     TaskId    *string                  `json:"task_id"`
 }
 
-// DownloadSharedFileResponse represents a custom type struct for Success
+// DownloadSharedFileResponse represents a custom type struct.
+// *****************************************************************************
+// Success
 type DownloadSharedFileResponse struct {
     // URLs to pages related to the resource.
     Links       *DownloadSharedFileLinks `json:"_links"`
@@ -1287,7 +1289,9 @@ type GcsProtectionGroupErrorReportV1Response struct {
     TaskId *int64           `json:"task_id"`
 }
 
-// GenerateRestoredFilePasscodeResponse represents a custom type struct for Success
+// GenerateRestoredFilePasscodeResponse represents a custom type struct.
+// *****************************************************************************
+// Success
 type GenerateRestoredFilePasscodeResponse struct {
     // URLs to pages related to the resource.
     Links    *GenerateRestoredFilePasscodeLinks `json:"_links"`
@@ -2969,6 +2973,7 @@ type ReadAWSConnectionResponse struct {
     // Clumio assigned ID of the associated connection group.
     ConnectionGroupId          *string                  `json:"connection_group_id"`
     // Management status of connection.
+    // "managed" if the connection is managed by a connection group or 'ummanaged' otherwise.
     ConnectionManagementStatus *string                  `json:"connection_management_status"`
     // The status of the connection considering all the deployments made for it.
     ConnectionStatus           *string                  `json:"connection_status"`
@@ -3586,6 +3591,12 @@ type ReadDynamoDBTableBackupResponse struct {
     // For [POST /restores/aws/dynamodb](#operation/restore-aws-dynamodb-table), this is defaulted to the
     // value set in backup if `null`.
     ContributorInsightsStatus *bool                     `json:"contributor_insights_status"`
+    // The number of items this backup recorded as created. `null` when the backup did not record
+    // whether each item was created, updated or deleted, as for `aws_snapshot` backups.
+    CreatedItemsCount         *int64                    `json:"created_items_count"`
+    // The number of items this backup recorded as deleted. `null` when the backup did not record
+    // whether each item was created, updated or deleted, as for `aws_snapshot` backups.
+    DeletedItemsCount         *int64                    `json:"deleted_items_count"`
     // Indicates whether DynamoDB Deletion Protection is enabled (true) or disabled (false)
     // on the table.
     // For [POST /restores/aws/dynamodb](#operation/restore-aws-dynamodb-table), this is defaulted to the
@@ -3601,6 +3612,10 @@ type ReadDynamoDBTableBackupResponse struct {
     GlobalTableVersion        *string                   `json:"global_table_version"`
     // The Clumio-assigned ID of the backup.
     Id                        *string                   `json:"id"`
+    // Whether this backup read the whole table, as a table's first backup or a re-seed, rather
+    // than only the items changed since the previous backup. `null` for `aws_snapshot` backups
+    // and for older backups that did not record it.
+    IsSeedBackup              *bool                     `json:"is_seed_backup"`
     // The number of items in DynamoDB table backup.
     ItemCount                 *int64                    `json:"item_count"`
     // Represents the properties of a local secondary index.
@@ -3635,6 +3650,9 @@ type ReadDynamoDBTableBackupResponse struct {
     Tags                      []*AwsTagCommonModel      `json:"tags"`
     // The type of backup. Possible values include `clumio_backup` and `aws_snapshot`.
     ClumioType                *string                   `json:"type"`
+    // The number of items this backup recorded as updated. `null` when the backup did not record
+    // whether each item was created, updated or deleted, as for `aws_snapshot` backups.
+    UpdatedItemsCount         *int64                    `json:"updated_items_count"`
 }
 
 // ReadDynamoDBTableResponse represents a custom type struct for Success
@@ -3851,6 +3869,9 @@ type ReadEC2BackupResponse struct {
     BackupAmi                        *AmiModel                          `json:"backup_ami"`
     // The tier to which the backup is tagged to.
     BackupTier                       *string                            `json:"backup_tier"`
+    // The firmware the backed up instance boots with. Empty for backups taken before
+    // this was recorded.
+    BootMode                         *string                            `json:"boot_mode"`
     // The reason that browsing is unavailable for the backup.
     // If browse indexing is successful, then this field has a value of `null`.
     BrowsingFailedReason             *string                            `json:"browsing_failed_reason"`
@@ -3891,6 +3912,9 @@ type ReadEC2BackupResponse struct {
     SubnetNativeId                   *string                            `json:"subnet_native_id"`
     // A tag created through AWS Console which can be applied to EBS volumes.
     Tags                             []*AwsTagCommonModel               `json:"tags"`
+    // The NitroTPM version the backed up instance was launched with, for example "v2.0".
+    // Empty when the instance has none or the backup predates this field.
+    TpmSupport                       *string                            `json:"tpm_support"`
     // The type of the backup.
     ClumioType                       *string                            `json:"type"`
     // The total number of bytes written in all the disks of the EC2 instance.
@@ -4469,10 +4493,12 @@ type ReadGCPProtectionGroupResponse struct {
     // "protected", "unprotected".
     ProtectionStatus             *string                     `json:"protection_status"`
     // Cumulative count of all unexpired objects in each backup (any new or updated since
-    // the last backup) that have been backed up as part of this protection group
+    // the last backup) that have been backed up as part of this protection group.
+    // Omitted when statistics are unavailable.
     TotalBackedUpObjectCount     *int64                      `json:"total_backed_up_object_count"`
     // Cumulative size of all unexpired objects in each backup (any new or updated since
-    // the last backup) that have been backed up as part of this protection group
+    // the last backup) that have been backed up as part of this protection group.
+    // Omitted when statistics are unavailable.
     TotalBackedUpSizeBytes       *int64                      `json:"total_backed_up_size_bytes"`
     // Version of the protection group. The version number is incremented every time
     // a change is made to the protection group.
@@ -4627,36 +4653,38 @@ type ReadGeneralSettingsResponseV2 struct {
 // ReadIcebergTableBackupResponse represents a custom type struct for Success
 type ReadIcebergTableBackupResponse struct {
     // The AWS-assigned ID of the account associated with this database at the time of backup.
-    AccountNativeId     *string       `json:"account_native_id"`
+    AccountNativeId     *string              `json:"account_native_id"`
     // The AWS region associated with this environment.
-    AwsRegion           *string       `json:"aws_region"`
+    AwsRegion           *string              `json:"aws_region"`
     // The region in which this backup is stored. For policies that keep backups
     // in-region, this value will be the same as the source region of the asset backed up.
     // For out of region policies, this region will the one specified in the policy.
-    BackupAwsRegion     *string       `json:"backup_aws_region"`
+    BackupAwsRegion     *string              `json:"backup_aws_region"`
     // The timestamp of when this backup expires. Represented in RFC-3339 format.
-    ExpirationTimestamp *string       `json:"expiration_timestamp"`
+    ExpirationTimestamp *string              `json:"expiration_timestamp"`
     // The Clumio-assigned ID of the backup.
-    Id                  *string       `json:"id"`
+    Id                  *string              `json:"id"`
     // The total count of the newly added snapshots in this backup.
-    NewlyAddedSnapshots *int32        `json:"newly_added_snapshots"`
+    NewlyAddedSnapshots *int32               `json:"newly_added_snapshots"`
     // The schema of the Iceberg table captured in this backup.
-    Schema              *string       `json:"schema"`
+    Schema              *string              `json:"schema"`
     // The timestamp of when the Iceberg snapshot was created. Represented in RFC-3339 format.
-    SnapshotCreatedAt   *string       `json:"snapshot_created_at"`
+    SnapshotCreatedAt   *string              `json:"snapshot_created_at"`
     // The ID of the Iceberg snapshot associated with this backup.
-    SnapshotId          *string       `json:"snapshot_id"`
+    SnapshotId          *string              `json:"snapshot_id"`
     // The timestamp of when this backup started. Represented in RFC-3339 format.
-    StartTimestamp      *string       `json:"start_timestamp"`
+    StartTimestamp      *string              `json:"start_timestamp"`
     // TODO: Add struct field description
-    Summary             *ModelSummary `json:"summary"`
+    Summary             *ModelSummary        `json:"summary"`
     // The Clumio-assigned ID of the Iceberg table.
-    TableId             *string       `json:"table_id"`
+    TableId             *string              `json:"table_id"`
     // The name of the Iceberg table.
-    TableName           *string       `json:"table_name"`
+    TableName           *string              `json:"table_name"`
+    // A tag created through AWS Console which can be applied to EBS volumes.
+    Tags                []*AwsTagCommonModel `json:"tags"`
     // The record type of this backup.
     // This field is always set to "iceberg_snapshot" or "iceberg_metadata".
-    ClumioType          *string       `json:"type"`
+    ClumioType          *string              `json:"type"`
 }
 
 // ReadIcebergTableResponse represents a custom type struct for Success
@@ -4979,7 +5007,6 @@ type ReadPolicyResponse struct {
     // The policy-level timezone is deprecated, as the operation-level timezone should be used instead.
     // The timezone must be a valid location name from the IANA Time Zone database.
     // For instance, "America/New_York", "US/Central", "UTC".
-    // Deprecated: true
     Timezone             *string            `json:"timezone"`
     // The updated time of the policy in unix time.
     UpdatedTime          *int64             `json:"updated_time"`
@@ -5662,7 +5689,6 @@ type ReadS3InstantAccessEndpointResponse struct {
     Roles                    []*S3InstantAccessEndpointRole   `json:"roles"`
     // S3InstantAccessEndpointStat
     // Statistical metric related to the instant access endpoint.
-    // S3InstantAccessEndpointStat swagger: model S3InstantAccessEndpointStat
     Stats                    []*S3InstantAccessEndpointStat   `json:"stats"`
     // The time that this endpoint was last updated, in RFC-3339 format.
     UpdatedTimestamp         *string                          `json:"updated_timestamp"`
@@ -6196,6 +6222,7 @@ type UpdateAWSConnectionResponse struct {
     // Clumio assigned ID of the associated connection group.
     ConnectionGroupId          *string                  `json:"connection_group_id"`
     // Management status of connection.
+    // "managed" if the connection is managed by a connection group or 'ummanaged' otherwise.
     ConnectionManagementStatus *string                  `json:"connection_management_status"`
     // The status of the connection considering all the deployments made for it.
     ConnectionStatus           *string                  `json:"connection_status"`
@@ -6622,10 +6649,12 @@ type UpdateGCPProtectionGroupResponse struct {
     // "protected", "unprotected".
     ProtectionStatus             *string                     `json:"protection_status"`
     // Cumulative count of all unexpired objects in each backup (any new or updated since
-    // the last backup) that have been backed up as part of this protection group
+    // the last backup) that have been backed up as part of this protection group.
+    // Omitted when statistics are unavailable.
     TotalBackedUpObjectCount     *int64                      `json:"total_backed_up_object_count"`
     // Cumulative size of all unexpired objects in each backup (any new or updated since
-    // the last backup) that have been backed up as part of this protection group
+    // the last backup) that have been backed up as part of this protection group.
+    // Omitted when statistics are unavailable.
     TotalBackedUpSizeBytes       *int64                      `json:"total_backed_up_size_bytes"`
     // Version of the protection group. The version number is incremented every time
     // a change is made to the protection group.
@@ -6687,7 +6716,6 @@ type UpdatePolicyResponse struct {
     // The policy-level timezone is deprecated, as the operation-level timezone should be used instead.
     // The timezone must be a valid location name from the IANA Time Zone database.
     // For instance, "America/New_York", "US/Central", "UTC".
-    // Deprecated: true
     Timezone             *string                    `json:"timezone"`
     // The updated time of the policy in unix time.
     UpdatedTime          *int64                     `json:"updated_time"`
