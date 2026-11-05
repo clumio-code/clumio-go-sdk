@@ -130,7 +130,7 @@ type AWSConnectionListEmbedded struct {
 type AWSConnectionListLinks struct {
     // The HATEOAS link to the first page of results.
     First               *HateoasFirstLink `json:"_first"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next                *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to this resource.
     Self                *HateoasSelfLink  `json:"_self"`
@@ -206,7 +206,7 @@ type AWSEnvironmentListEmbedded struct {
 type AWSEnvironmentListLinks struct {
     // The HATEOAS link to the first page of results.
     First *HateoasFirstLink `json:"_first"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to this resource.
     Self  *HateoasSelfLink  `json:"_self"`
@@ -244,7 +244,7 @@ type AlertListLinks struct {
     First *HateoasFirstLink `json:"_first"`
     // The HATEOAS link to the last page of results.
     Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to the previous page of results.
     Prev  *HateoasPrevLink  `json:"_prev"`
@@ -364,6 +364,15 @@ type AmiModel struct {
     VirtualizationType       *string `json:"virtualization_type"`
 }
 
+// Approver represents a custom type struct.
+// Approver denotes the Approver structure for Create Backup Deletion request
+type Approver struct {
+    // The email of the approver for backup deletion request
+    Email *string `json:"email"`
+    // The name of the approver for backup deletion request
+    Name  *string `json:"name"`
+}
+
 // AssetBackupControl represents a custom type struct.
 // The control evaluating whether assets have at least one backup within each window of the specified look back period,
 // with retention meeting the minimum required duration.
@@ -399,6 +408,20 @@ type AssetGroupFilter struct {
     Region     *string `json:"region"`
     // The type of asset group.
     ClumioType *string `json:"type"`
+}
+
+// AssetIdInfo represents a custom type struct.
+// AssetIdInfo is list of assetId and assetMetadata
+// Metadata is provided by UI
+type AssetIdInfo struct {
+    // The Clumio-assigned ID of the asset
+    Id           *string     `json:"id"`
+    // The name of the asset
+    Name         *string     `json:"name"`
+    // The native ID of the asset
+    NativeId     *string     `json:"native_id"`
+    // ParentInfo is metadata of parent connection of asset provided by UI
+    ParentEntity *ParentInfo `json:"parent_entity"`
 }
 
 // AssetProtectionControl represents a custom type struct.
@@ -690,7 +713,7 @@ type AuditTrailListLinks struct {
     First *HateoasFirstLink `json:"_first"`
     // The HATEOAS link to the last page of results.
     Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to the previous page of results.
     Prev  *HateoasPrevLink  `json:"_prev"`
@@ -731,7 +754,7 @@ type AutoUserProvisioningRuleListEmbedded struct {
 type AutoUserProvisioningRuleListLinks struct {
     // The HATEOAS link to the first page of results.
     First                          *HateoasFirstLink `json:"_first"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next                           *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to this resource.
     Self                           *HateoasSelfLink  `json:"_self"`
@@ -935,7 +958,7 @@ type AwsTagListLinks struct {
     First *HateoasFirstLink `json:"_first"`
     // The HATEOAS link to the last page of results.
     Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to the previous page of results.
     Prev  *HateoasPrevLink  `json:"_prev"`
@@ -954,6 +977,80 @@ type AwsTagModel struct {
     KeyId *string `json:"key_id"`
     // The AWS-assigned tag value.
     Value *string `json:"value"`
+}
+
+// BackupPurgeApprover represents a custom type struct.
+// BackupPurgeApprover denotes the Approver structure for Backup Deletion request
+type BackupPurgeApprover struct {
+    // The email of the approver for backup deletion request
+    Email       *string `json:"email"`
+    // If true this approver is the requestor for the backup deletion request
+    IsRequestor *bool   `json:"is_requestor"`
+    // The job title of the approver for backup deletion request
+    JobTitle    *string `json:"job_title"`
+    // The name of the approver for backup deletion request
+    Name        *string `json:"name"`
+}
+
+// BackupPurgeInfo represents a custom type struct.
+// BackupPurgeInfo denotes details of backup deletion request
+type BackupPurgeInfo struct {
+    // URLs to pages related to the resource.
+    Links                         *BackupPurgeInfoLinks  `json:"_links"`
+    // BackupPurgeApprover denotes the Approver structure for Backup Deletion request
+    Approvers                     []*BackupPurgeApprover `json:"approvers"`
+    // Count of assets that will be deleted with these filters
+    AssetCount                    *int64                 `json:"asset_count"`
+    // Count of backups that will be deleted with these filters
+    BackupCount                   *int64                 `json:"backup_count"`
+    // Password to unlock the backup list zip file
+    BackupListZipPassword         *string                `json:"backup_list_zip_password"`
+    // URL to download the zip file listing the backups selected for deletion
+    BackupListZipUrl              *string                `json:"backup_list_zip_url"`
+    // Email of the Clumio user who created the backup deletion request
+    CreatedByUserEmail            *string                `json:"created_by_user_email"`
+    // Time at which this backup deletion was executed, represented in RFC-3339 format.
+    DeletionCompletionTimestamp   *string                `json:"deletion_completion_timestamp"`
+    // Deletion status for the created Backup Deletion
+    DeletionStatus                *string                `json:"deletion_status"`
+    // ID for the created Backup Deletion
+    Id                            *string                `json:"id"`
+    // Name for the created Backup Deletion
+    Name                          *string                `json:"name"`
+    // Time at which the signature request was fully signed, represented in RFC-3339 format.
+    SignatureCompletionTimestamp  *string                `json:"signature_completion_timestamp"`
+    // Time at which the signature request was sent out for signing, represented in RFC-3339 format.
+    SignatureRequestSentTimestamp *string                `json:"signature_request_sent_timestamp"`
+    // The signature status of the backup deletion request.
+    SignatureStatus               *string                `json:"signature_status"`
+    // Created task ID when backup purge request is submitted
+    SubmitTaskId                  *string                `json:"submit_task_id"`
+    // Time at which this backup deletion was submitted, represented in RFC-3339 format.
+    SubmittedTimestamp            *string                `json:"submitted_timestamp"`
+}
+
+// BackupPurgeInfoLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type BackupPurgeInfoLinks struct {
+    // The HATEOAS link to this resource.
+    Self                 *HateoasSelfLink `json:"_self"`
+    // A resource-specific HATEOAS link.
+    CreateBackupDeletion *HateoasLink     `json:"create-backup-deletion"`
+    // A resource-specific HATEOAS link.
+    DeleteBackupDeletion *HateoasLink     `json:"delete-backup-deletion"`
+    // A resource-specific HATEOAS link.
+    ListBackupDeletions  *HateoasLink     `json:"list-backup-deletions"`
+    // A resource-specific HATEOAS link.
+    ReadBackupDeletion   *HateoasLink     `json:"read-backup-deletion"`
+    // A resource-specific HATEOAS link.
+    UpdateBackupDeletion *HateoasLink     `json:"update-backup-deletion"`
+}
+
+// BackupPurgeItemsResponseLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type BackupPurgeItemsResponseLinks struct {
+    // A resource-specific HATEOAS link.
+    DeleteBackupDeletionItem *HateoasLink `json:"delete-backup-deletion-item"`
 }
 
 // BackupSLA represents a custom type struct.
@@ -1092,7 +1189,7 @@ type BucketListLinks struct {
     First                            *HateoasFirstLink `json:"_first"`
     // The HATEOAS link to the last page of results.
     Last                             *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next                             *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to the previous page of results.
     Prev                             *HateoasPrevLink  `json:"_prev"`
@@ -1102,6 +1199,49 @@ type BucketListLinks struct {
     ListBackupProtectionGroupBuckets *HateoasLink      `json:"list-backup-protection-group-buckets"`
     // A resource-specific HATEOAS link.
     RestoreProtectionGroupS3Asset    *HateoasLink      `json:"restore-protection-group-s3-asset"`
+}
+
+// CartItemPreviewDetails represents a custom type struct.
+// CartItemPreviewDetails represents the details of an asset shown during preview
+type CartItemPreviewDetails struct {
+    // The Clumio-assigned ID of the asset.
+    AssetId               *string                              `json:"asset_id"`
+    // Name of the asset
+    AssetName             *string                              `json:"asset_name"`
+    // The number of backups of this asset.
+    BackupCount           *int64                               `json:"backup_count"`
+    // Data source of the asset
+    DataSource            *string                              `json:"data_source"`
+    // Latest backup time, represented in RFC-3339 format.
+    LatestBackupTimestamp *string                              `json:"latest_backup_timestamp"`
+    // The parent entity associated with the preview asset.
+    ParentEntity          *CartItemPreviewDetailsParentEntity  `json:"parent_entity"`
+    // The primary entity associated with the preview asset.
+    PrimaryEntity         *CartItemPreviewDetailsPrimaryEntity `json:"primary_entity"`
+}
+
+// CartItemPreviewDetailsParentEntity represents a custom type struct.
+// The parent entity associated with the preview asset.
+type CartItemPreviewDetailsParentEntity struct {
+    // A system-generated ID assigned to this entity.
+    Id         *string `json:"id"`
+    // Type is mostly an asset type or the type of Entity. Some examples are
+    // "restored_file", "aws_ebs_volume",  etc.
+    ClumioType *string `json:"type"`
+    // A system-generated value assigned to the entity. For example, if the primary entity type is "aws_ebs_volume", then the value is the name of the EBS.
+    Value      *string `json:"value"`
+}
+
+// CartItemPreviewDetailsPrimaryEntity represents a custom type struct.
+// The primary entity associated with the preview asset.
+type CartItemPreviewDetailsPrimaryEntity struct {
+    // A system-generated ID assigned to this entity.
+    Id         *string `json:"id"`
+    // Type is mostly an asset type or the type of Entity. Some examples are
+    // "restored_file", "aws_ebs_volume",  etc.
+    ClumioType *string `json:"type"`
+    // A system-generated value assigned to the entity. For example, if the primary entity type is "aws_ebs_volume", then the value is the name of the EBS.
+    Value      *string `json:"value"`
 }
 
 // CategorisedResources represents a custom type struct.
@@ -1265,7 +1405,7 @@ type ComplianceConfigurationListEmbedded struct {
 type ComplianceConfigurationListLinks struct {
     // The HATEOAS link to the first page of results.
     First                               *HateoasFirstLink `json:"_first"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next                                *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to this resource.
     Self                                *HateoasSelfLink  `json:"_self"`
@@ -1366,7 +1506,7 @@ type ComplianceRunListHateoasEmbedded struct {
 type ComplianceRunListHateoasLinks struct {
     // The HATEOAS link to the first page of results.
     First                               *HateoasFirstLink `json:"_first"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next                                *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to this resource.
     Self                                *HateoasSelfLink  `json:"_self"`
@@ -1404,7 +1544,7 @@ type ConnectionGroupLinks struct {
 type ConnectionGroupListLinks struct {
     // The HATEOAS link to the first page of results.
     First                    *HateoasFirstLink `json:"_first"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next                     *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to this resource.
     Self                     *HateoasSelfLink  `json:"_self"`
@@ -1501,7 +1641,7 @@ type ConnectionRegionListEmbedded struct {
 type ConnectionRegionListLinks struct {
     // The HATEOAS link to the first page of results.
     First *HateoasFirstLink `json:"_first"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to this resource.
     Self  *HateoasSelfLink  `json:"_self"`
@@ -1553,7 +1693,7 @@ type ConsolidatedAlertListLinks struct {
     First *HateoasFirstLink `json:"_first"`
     // The HATEOAS link to the last page of results.
     Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to the previous page of results.
     Prev  *HateoasPrevLink  `json:"_prev"`
@@ -1663,6 +1803,46 @@ type ControlInfo struct {
     UnknownCount      *int64  `json:"unknown_count"`
 }
 
+// CreateBackupPurgeItemsPreviewResponseLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type CreateBackupPurgeItemsPreviewResponseLinks struct {
+    // The HATEOAS link to this resource.
+    Self *HateoasSelfLink `json:"_self"`
+}
+
+// CreateBackupPurgeItemsResponseEmbedded represents a custom type struct.
+// Embedded responses related to the resource.
+type CreateBackupPurgeItemsResponseEmbedded struct {
+    // Backup deletion item to be deleted with given filters
+    Items []*Item `json:"items"`
+}
+
+// CreateBackupPurgeItemsResponseLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type CreateBackupPurgeItemsResponseLinks struct {
+    // The HATEOAS link to this resource.
+    Self                    *HateoasSelfLink `json:"_self"`
+    // A resource-specific HATEOAS link.
+    ListBackupDeletionItems *HateoasLink     `json:"list-backup-deletion-items"`
+}
+
+// CreateBackupPurgeResponseLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type CreateBackupPurgeResponseLinks struct {
+    // The HATEOAS link to this resource.
+    Self                 *HateoasSelfLink `json:"_self"`
+    // A resource-specific HATEOAS link.
+    CreateBackupDeletion *HateoasLink     `json:"create-backup-deletion"`
+    // A resource-specific HATEOAS link.
+    DeleteBackupDeletion *HateoasLink     `json:"delete-backup-deletion"`
+    // A resource-specific HATEOAS link.
+    ListBackupDeletions  *HateoasLink     `json:"list-backup-deletions"`
+    // A resource-specific HATEOAS link.
+    ReadBackupDeletion   *HateoasLink     `json:"read-backup-deletion"`
+    // A resource-specific HATEOAS link.
+    UpdateBackupDeletion *HateoasLink     `json:"update-backup-deletion"`
+}
+
 // CreateComplianceRunHateoasLinks represents a custom type struct.
 // CreateComplianceRunHateoasLinks
 // URLs to pages related to the resource.
@@ -1768,6 +1948,17 @@ type DataAccessObject struct {
     Email          *EmailDownloadDataAccessObject  `json:"email"`
 }
 
+// DeleteBackupPurgeResponseLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type DeleteBackupPurgeResponseLinks struct {
+    // The HATEOAS link to this resource.
+    Self                 *HateoasSelfLink `json:"_self"`
+    // A resource-specific HATEOAS link.
+    CreateBackupDeletion *HateoasLink     `json:"create-backup-deletion"`
+    // A resource-specific HATEOAS link.
+    ListBackupDeletions  *HateoasLink     `json:"list-backup-deletions"`
+}
+
 // DeletePolicyResponseLinks represents a custom type struct.
 // URLs to pages related to the resource.
 type DeletePolicyResponseLinks struct {
@@ -1839,7 +2030,7 @@ type DirectoryBrowseEmbedded struct {
 type DirectoryBrowseLinks struct {
     // The HATEOAS link to the first page of results.
     First *HateoasFirstLink `json:"_first"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to this resource.
     Self  *HateoasSelfLink  `json:"_self"`
@@ -1850,7 +2041,7 @@ type DirectoryBrowseLinks struct {
 type DirectoryLinks struct {
     // The HATEOAS link to the first page of results.
     First *HateoasFirstLink `json:"_first"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to this resource.
     Self  *HateoasSelfLink  `json:"_self"`
@@ -2150,16 +2341,6 @@ type DynamoDBKeyFilter struct {
     // |                      | String, Number and Binary.                            |
     // |                      |                                                       |
     // +----------------------+-------------------------------------------------------+
-    // | Exists               | Checks the filter attribute to exist.                 |
-    // |                      | It does not expect any operand value. Supported types |
-    // |                      | are: String, Number and Binary.                       |
-    // |                      |                                                       |
-    // +----------------------+-------------------------------------------------------+
-    // | NotExists            | Checks the filter attribute to not exist.             |
-    // |                      | It does not expect any operand value. Supported types |
-    // |                      | are: String, Number and Binary.                       |
-    // |                      |                                                       |
-    // +----------------------+-------------------------------------------------------+
     // | Contains             | Checks the filter attribute to contain the operand    |
     // |                      | value.                                                |
     // |                      | It expects only one operand value. Supported types    |
@@ -2387,7 +2568,7 @@ type DynamoDBTableBackupListLinks struct {
     First *HateoasFirstLink `json:"_first"`
     // The HATEOAS link to the last page of results.
     Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to the previous page of results.
     Prev  *HateoasPrevLink  `json:"_prev"`
@@ -2514,7 +2695,7 @@ type DynamoDBTableListLinks struct {
     First *HateoasFirstLink `json:"_first"`
     // The HATEOAS link to the last page of results.
     Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to the previous page of results.
     Prev  *HateoasPrevLink  `json:"_prev"`
@@ -2772,7 +2953,7 @@ type EBSBackupListLinks struct {
     First *HateoasFirstLink `json:"_first"`
     // The HATEOAS link to the last page of results.
     Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to the previous page of results.
     Prev  *HateoasPrevLink  `json:"_prev"`
@@ -2787,7 +2968,7 @@ type EBSBackupListLinksV1 struct {
     First *HateoasFirstLink `json:"_first"`
     // The HATEOAS link to the last page of results.
     Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to the previous page of results.
     Prev  *HateoasPrevLink  `json:"_prev"`
@@ -3079,7 +3260,7 @@ type EC2BackupListLinks struct {
     First *HateoasFirstLink `json:"_first"`
     // The HATEOAS link to the last page of results.
     Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to the previous page of results.
     Prev  *HateoasPrevLink  `json:"_prev"`
@@ -3094,7 +3275,7 @@ type EC2InstanceListLinks struct {
     First *HateoasFirstLink `json:"_first"`
     // The HATEOAS link to the last page of results.
     Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to the previous page of results.
     Prev  *HateoasPrevLink  `json:"_prev"`
@@ -3190,7 +3371,7 @@ type EC2MSSQLAGListLinks struct {
     First *HateoasFirstLink `json:"_first"`
     // The HATEOAS link to the last page of results.
     Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to the previous page of results.
     Prev  *HateoasPrevLink  `json:"_prev"`
@@ -3346,7 +3527,7 @@ type EC2MSSQLDatabaseBackupListLinks struct {
     First *HateoasFirstLink `json:"_first"`
     // The HATEOAS link to the last page of results.
     Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to the previous page of results.
     Prev  *HateoasPrevLink  `json:"_prev"`
@@ -3398,7 +3579,7 @@ type EC2MSSQLDatabaseListLinks struct {
     First *HateoasFirstLink `json:"_first"`
     // The HATEOAS link to the last page of results.
     Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to the previous page of results.
     Prev  *HateoasPrevLink  `json:"_prev"`
@@ -3462,7 +3643,7 @@ type EC2MSSQLFCIListLinks struct {
     First *HateoasFirstLink `json:"_first"`
     // The HATEOAS link to the last page of results.
     Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to the previous page of results.
     Prev  *HateoasPrevLink  `json:"_prev"`
@@ -3540,7 +3721,7 @@ type EC2MSSQLInstanceListLinks struct {
     First *HateoasFirstLink `json:"_first"`
     // The HATEOAS link to the last page of results.
     Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to the previous page of results.
     Prev  *HateoasPrevLink  `json:"_prev"`
@@ -3603,7 +3784,7 @@ type EC2MSSQLInvHostListLinks struct {
     First *HateoasFirstLink `json:"_first"`
     // The HATEOAS link to the last page of results.
     Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to the previous page of results.
     Prev  *HateoasPrevLink  `json:"_prev"`
@@ -3736,7 +3917,7 @@ type EC2MssqlDatabasePitrIntervalListEmbedded struct {
 type EC2MssqlDatabasePitrIntervalListLinks struct {
     // The HATEOAS link to the first page of results.
     First *HateoasFirstLink `json:"_first"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to this resource.
     Self  *HateoasSelfLink  `json:"_self"`
@@ -3865,7 +4046,7 @@ type EbsVolumeListLinks struct {
     First *HateoasFirstLink `json:"_first"`
     // The HATEOAS link to the last page of results.
     Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to the previous page of results.
     Prev  *HateoasPrevLink  `json:"_prev"`
@@ -4096,7 +4277,7 @@ type FileSearchListEmbedded struct {
 type FileSearchListLinks struct {
     // The HATEOAS link to the first page of results.
     First *HateoasFirstLink `json:"_first"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to this resource.
     Self  *HateoasSelfLink  `json:"_self"`
@@ -4168,7 +4349,7 @@ type FileSystemListLinks struct {
     First *HateoasFirstLink `json:"_first"`
     // The HATEOAS link to the last page of results.
     Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to the previous page of results.
     Prev  *HateoasPrevLink  `json:"_prev"`
@@ -4216,7 +4397,7 @@ type FileVersionsListEmbedded struct {
 type FileVersionsListLinks struct {
     // The HATEOAS link to the first page of results.
     First *HateoasFirstLink `json:"_first"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to this resource.
     Self  *HateoasSelfLink  `json:"_self"`
@@ -4306,7 +4487,7 @@ type GCPConnectionListEmbedded struct {
 type GCPConnectionListLinks struct {
     // The HATEOAS link to the first page of results.
     First               *HateoasFirstLink `json:"_first"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next                *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to this resource.
     Self                *HateoasSelfLink  `json:"_self"`
@@ -4444,7 +4625,7 @@ type GCPGCSAssetListLinks struct {
     First *HateoasFirstLink `json:"_first"`
     // The HATEOAS link to the last page of results.
     Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to the previous page of results.
     Prev  *HateoasPrevLink  `json:"_prev"`
@@ -4470,7 +4651,7 @@ type GCPGCSAssetPitrIntervalListEmbedded struct {
 type GCPGCSAssetPitrIntervalListLinks struct {
     // The HATEOAS link to the first page of results.
     First *HateoasFirstLink `json:"_first"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to this resource.
     Self  *HateoasSelfLink  `json:"_self"`
@@ -4516,7 +4697,7 @@ type GCPLabelKeyListLinks struct {
     First *HateoasFirstLink `json:"_first"`
     // The HATEOAS link to the last page of results.
     Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to the previous page of results.
     Prev  *HateoasPrevLink  `json:"_prev"`
@@ -4589,7 +4770,7 @@ type GCPLabelValueListLinks struct {
     First *HateoasFirstLink `json:"_first"`
     // The HATEOAS link to the last page of results.
     Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to the previous page of results.
     Prev  *HateoasPrevLink  `json:"_prev"`
@@ -4639,7 +4820,7 @@ type GCPProjectListLinks struct {
     First *HateoasFirstLink `json:"_first"`
     // The HATEOAS link to the last page of results.
     Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to the previous page of results.
     Prev  *HateoasPrevLink  `json:"_prev"`
@@ -4767,7 +4948,7 @@ type GCPProtectionGroupListLinks struct {
     First                    *HateoasFirstLink `json:"_first"`
     // The HATEOAS link to the last page of results.
     Last                     *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next                     *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to the previous page of results.
     Prev                     *HateoasPrevLink  `json:"_prev"`
@@ -4859,7 +5040,7 @@ type GCSBucketListLinks struct {
     First                    *HateoasFirstLink `json:"_first"`
     // The HATEOAS link to the last page of results.
     Last                     *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next                     *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to the previous page of results.
     Prev                     *HateoasPrevLink  `json:"_prev"`
@@ -4955,7 +5136,7 @@ type GCSProtectionGroupAssetBackupListLinks struct {
     First *HateoasFirstLink `json:"_first"`
     // The HATEOAS link to the last page of results.
     Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to the previous page of results.
     Prev  *HateoasPrevLink  `json:"_prev"`
@@ -5048,7 +5229,7 @@ type GCSProtectionGroupBackupListLinks struct {
     First *HateoasFirstLink `json:"_first"`
     // The HATEOAS link to the last page of results.
     Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to the previous page of results.
     Prev  *HateoasPrevLink  `json:"_prev"`
@@ -5348,7 +5529,7 @@ type HateoasLink struct {
 }
 
 // HateoasNextLink represents a custom type struct.
-// The HATEOAS link to the next page of results.
+// The link to the next page of results.
 type HateoasNextLink struct {
     // The URI for the referenced operation.
     Href       *string `json:"href"`
@@ -5597,7 +5778,7 @@ type IcebergTableBackupListLinks struct {
     First *HateoasFirstLink `json:"_first"`
     // The HATEOAS link to the last page of results.
     Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to the previous page of results.
     Prev  *HateoasPrevLink  `json:"_prev"`
@@ -5645,6 +5826,71 @@ type InstanceStoreBlockDeviceMapping struct {
     VirtualName *string `json:"virtual_name"`
 }
 
+// Item represents a custom type struct.
+// Backup deletion item to be deleted with given filters
+type Item struct {
+    // URLs to pages related to the resource.
+    Links                *BackupPurgeItemsResponseLinks `json:"_links"`
+    // Preview of asset count with provided filters
+    AssetCount           *int64                         `json:"asset_count"`
+    // Filter backups whose clumio asset IDs is provided in list. Used for bulk asset ID upload.
+    AssetIds             []*string                      `json:"asset_ids"`
+    // Filter backups whose asset status is equal to the specified string.
+    AssetStatus          *string                        `json:"asset_status"`
+    // AssetIdInfo is list of assetId and assetMetadata
+    // Metadata is provided by UI
+    Assets               []*AssetIdInfo                 `json:"assets"`
+    // Filter backups whose AWS Account ID is equal to the specified string.
+    AwsAccountId         *string                        `json:"aws_account_id"`
+    // Filter backups whose AWS region is equal to the specified string.
+    AwsRegion            *string                        `json:"aws_region"`
+    // Preview of backup count with provided filters
+    BackupCount          *int64                         `json:"backup_count"`
+    // Unique ID for this backup deletion item
+    BackupDeletionItemId *string                        `json:"backup_deletion_item_id"`
+    // Filter backups with the given backup type. Possible values are
+    // `aws_ebs_volume_clumio_backup`, `aws_ebs_volume_aws_snapshot`,
+    // `aws_ec2_instance_clumio_backup`, `aws_ec2_instance_aws_snapshot`,
+    // `aws_rds_resource_rolling_backup`, `aws_rds_resource_granular_backup`,
+    // `aws_dynamodb_snapshot`, `aws_dynamodb_backup`, `protection_group_backup`,
+    // `protection_group_s3_asset_backup`, `ec2_mssql_database_backup` and
+    // `ec2_mssql_vss_snapshot`.
+    BackupType           *string                        `json:"backup_type"`
+    // Creation time of this cart item, represented in RFC-3339 format.
+    CreatedTimestamp     *string                        `json:"created_timestamp"`
+    // Filter backups whose data source type is equal to the specified string. The only
+    // supported value is `AWS`.
+    DatasourceType       *string                        `json:"datasource_type"`
+    // Filter backups with entity types.
+    EntityTypes          []*string                      `json:"entity_types"`
+    // Filter backups entries whose start timestamp is "greater than or equal to" a given timestamp.
+    FromDate             *string                        `json:"from_date"`
+    // Filter backups whose MSSQL host ID is equal to the specified string. Applies to the
+    // `EC2_MSSQL_DATABASE` entity type.
+    MssqlHostId          *string                        `json:"mssql_host_id"`
+    // Filter backups entries whose start timestamp is on or before the given number of days.
+    OlderThanInDays      *int64                         `json:"older_than_in_days"`
+    // Indication whether preview of 'asset_count' and 'backup_count' is available or still
+    // processing.
+    PreviewStatus        *string                        `json:"preview_status"`
+    // Task ID of preview of cart item
+    PreviewTaskId        *string                        `json:"preview_task_id"`
+    // Filter S3 Assets whose Protection Group Id is equal the specified string.
+    ProtectionGroupId    *string                        `json:"protection_group_id"`
+    // Filter backups whose protection status is equal to the specified string.
+    ProtectionStatus     *string                        `json:"protection_status"`
+    // Filter backups entries whose start timestamp is "less than or equal to" a given timestamp.
+    ToDate               *string                        `json:"to_date"`
+}
+
+// ItemPreviewTask represents a custom type struct
+type ItemPreviewTask struct {
+    // The ID for the backup deletion item
+    BackupDeletionItemId *string `json:"backup_deletion_item_id"`
+    // The ID of the task created to compute the item's preview
+    TaskId               *string `json:"task_id"`
+}
+
 // ItemsCovered represents a custom type struct.
 // The items covered in the compliance report created by the report run.
 type ItemsCovered struct {
@@ -5690,6 +5936,76 @@ type LatestRun struct {
     TaskId             *string         `json:"task_id"`
     // The RFC3339 format time when the report run was updated.
     Updated            *string         `json:"updated"`
+}
+
+// ListBackupPurgeItemsPreviewResponseEmbedded represents a custom type struct.
+// Embedded responses related to the resource.
+type ListBackupPurgeItemsPreviewResponseEmbedded struct {
+    // CartItemPreviewDetails represents the details of an asset shown during preview
+    Items []*CartItemPreviewDetails `json:"items"`
+}
+
+// ListBackupPurgeItemsPreviewResponseLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type ListBackupPurgeItemsPreviewResponseLinks struct {
+    // The HATEOAS link to the first page of results.
+    First *HateoasFirstLink `json:"_first"`
+    // The HATEOAS link to the last page of results.
+    Last  *HateoasLastLink  `json:"_last"`
+    // The link to the next page of results.
+    Next  *HateoasNextLink  `json:"_next"`
+    // The HATEOAS link to the previous page of results.
+    Prev  *HateoasPrevLink  `json:"_prev"`
+    // The HATEOAS link to this resource.
+    Self  *HateoasSelfLink  `json:"_self"`
+}
+
+// ListBackupPurgeItemsResponseEmbedded represents a custom type struct.
+// Embedded responses related to the resource.
+type ListBackupPurgeItemsResponseEmbedded struct {
+    // Backup deletion item to be deleted with given filters
+    Items []*Item `json:"items"`
+}
+
+// ListBackupPurgeItemsResponseLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type ListBackupPurgeItemsResponseLinks struct {
+    // The HATEOAS link to the first page of results.
+    First                     *HateoasFirstLink `json:"_first"`
+    // The HATEOAS link to the last page of results.
+    Last                      *HateoasLastLink  `json:"_last"`
+    // The link to the next page of results.
+    Next                      *HateoasNextLink  `json:"_next"`
+    // The HATEOAS link to the previous page of results.
+    Prev                      *HateoasPrevLink  `json:"_prev"`
+    // The HATEOAS link to this resource.
+    Self                      *HateoasSelfLink  `json:"_self"`
+    // A resource-specific HATEOAS link.
+    CreateBackupDeletionItems *HateoasLink      `json:"create-backup-deletion-items"`
+}
+
+// ListBackupPurgeResponseEmbedded represents a custom type struct.
+// Embedded responses related to the resource.
+type ListBackupPurgeResponseEmbedded struct {
+    // BackupPurgeInfo denotes details of backup deletion request
+    Items []*BackupPurgeInfo `json:"items"`
+}
+
+// ListBackupPurgeResponseLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type ListBackupPurgeResponseLinks struct {
+    // The HATEOAS link to the first page of results.
+    First                *HateoasFirstLink `json:"_first"`
+    // The HATEOAS link to the last page of results.
+    Last                 *HateoasLastLink  `json:"_last"`
+    // The link to the next page of results.
+    Next                 *HateoasNextLink  `json:"_next"`
+    // The HATEOAS link to the previous page of results.
+    Prev                 *HateoasPrevLink  `json:"_prev"`
+    // The HATEOAS link to this resource.
+    Self                 *HateoasSelfLink  `json:"_self"`
+    // A resource-specific HATEOAS link.
+    CreateBackupDeletion *HateoasLink      `json:"create-backup-deletion"`
 }
 
 // ListFileVersionsHateoasLink represents a custom type struct.
@@ -5808,7 +6124,7 @@ type ManagementGroupListEmbedded struct {
 type ManagementGroupListLinks struct {
     // The HATEOAS link to the first page of results.
     First *HateoasFirstLink `json:"_first"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to this resource.
     Self  *HateoasSelfLink  `json:"_self"`
@@ -6084,6 +6400,16 @@ type OnDemandNeptuneBackupLinks struct {
     ReadTask *ReadTaskHateoasLink `json:"read-task"`
 }
 
+// OnDemandRDSBackupLinks represents a custom type struct.
+// OnDemandRDSBackupLinks
+// URLs to pages related to the resource.
+type OnDemandRDSBackupLinks struct {
+    // The HATEOAS link to this resource.
+    Self     *HateoasSelfLink     `json:"_self"`
+    // A HATEOAS link to the task associated with this resource.
+    ReadTask *ReadTaskHateoasLink `json:"read-task"`
+}
+
 // OnDemandSetting represents a custom type struct.
 // Settings for requesting on-demand backup directly.
 type OnDemandSetting struct {
@@ -6180,7 +6506,7 @@ type OptionGroupsListEmbedded struct {
 type OptionGroupsListLinks struct {
     // The HATEOAS link to the first page of results.
     First *HateoasFirstLink `json:"_first"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to this resource.
     Self  *HateoasSelfLink  `json:"_self"`
@@ -6279,7 +6605,7 @@ type OrganizationalUnitListLinks struct {
     First *HateoasFirstLink `json:"_first"`
     // The HATEOAS link to the last page of results.
     Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to the previous page of results.
     Prev  *HateoasPrevLink  `json:"_prev"`
@@ -6384,6 +6710,17 @@ type Parameter struct {
     Filters  *ComplianceFilters  `json:"filters"`
 }
 
+// ParentInfo represents a custom type struct.
+// ParentInfo is metadata of parent connection of asset provided by UI
+type ParentInfo struct {
+    // The native ID of the parent
+    Id         *string `json:"id"`
+    // The Parent type. The only supported value is `aws_environment`.
+    ClumioType *string `json:"type"`
+    // The display value of the parent
+    Value      *string `json:"value"`
+}
+
 // PermissionListEmbedded represents a custom type struct.
 // Embedded responses related to the resource.
 type PermissionListEmbedded struct {
@@ -6398,7 +6735,7 @@ type PermissionListLinks struct {
     First *HateoasFirstLink `json:"_first"`
     // The HATEOAS link to the last page of results.
     Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to the previous page of results.
     Prev  *HateoasPrevLink  `json:"_prev"`
@@ -6568,7 +6905,7 @@ type PolicyListEmbedded struct {
 type PolicyListLinks struct {
     // The HATEOAS link to the first page of results.
     First                  *HateoasFirstLink `json:"_first"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next                   *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to this resource.
     Self                   *HateoasSelfLink  `json:"_self"`
@@ -6582,33 +6919,50 @@ type PolicyOperation struct {
     // If set to `immediate`, Clumio starts the backup process right away. If set to `window`, Clumio starts the backup process when the backup window (`backup_window_tz`) opens.
     // If set to `window` and `operation in ("aws_rds_resource_aws_snapshot", "mssql_log_backup", "ec2_mssql_log_backup")`,
     // the backup window will not be determined by Clumio's backup window.
-    ActionSetting     *string                 `json:"action_setting"`
-    // The activation status of this individual operation. The operation runs only if both this and the policy-level `activation_status` are `"activated"`, and an omitted value leaves the stored status unchanged.
+    ActionSetting            *string                 `json:"action_setting"`
+    // The activation status of this individual operation. The operation runs only if both this and the policy-level `activation_status` are `"activated"`.
+    // If the policy-level `activation_status` is `"deactivated"`, every operation is set to `"deactivated"`, even if this field is `"activated"`.
+    // If the request activates a deactivated policy, where an omitted policy-level `activation_status` counts as `"activated"`, every operation is set to `"activated"`, even if this field is `"deactivated"`.
+    // Otherwise, an omitted value leaves the stored status unchanged.
     // Refer to the Policy Activation Status table for a complete list of policy activation statuses.
-    ActivationStatus  *string                 `json:"activation_status"`
+    ActivationStatus         *string                 `json:"activation_status"`
     // Additional operation-specific policy settings. For operation types which do not support additional settings, this field is `null`.
-    AdvancedSettings  *PolicyAdvancedSettings `json:"advanced_settings"`
+    AdvancedSettings         *PolicyAdvancedSettings `json:"advanced_settings"`
     // The region in which this backup is stored. This might be used for cross-region backup.
     // Possible values are AWS region string, for example: `us-east-1`, `us-west-2`, ...
     // If no value is provided, it defaults to in-region (the asset's source region).
-    BackupAwsRegion   *string                 `json:"backup_aws_region"`
+    BackupAwsRegion          *string                 `json:"backup_aws_region"`
     // The start and end times of the customized backup window. Use of `backup_window` is deprecated, use `backup_window_tz` instead.
-    BackupWindow      *BackupWindow           `json:"backup_window"`
+    BackupWindow             *BackupWindow           `json:"backup_window"`
     // The start and end times of the customized backup window. Use of `backup_window` is deprecated, use `backup_window_tz` instead.
-    BackupWindowTz    *BackupWindow           `json:"backup_window_tz"`
-    // The next start time of this operation in unix time.
-    NextStartTime     *int64                  `json:"next_start_time"`
+    BackupWindowTz           *BackupWindow           `json:"backup_window_tz"`
+    // The next start time of this operation in unix time. It is not included while the
+    // cloud that pays for this operation's backups cannot be billed.
+    NextStartTime            *int64                  `json:"next_start_time"`
     // The previous start time of this operation in unix time.
-    PreviousStartTime *int64                  `json:"previous_start_time"`
+    PreviousStartTime        *int64                  `json:"previous_start_time"`
     // backup_sla captures the SLA parameters
     // backup_sla captures the SLA parameters
-    Slas              []*BackupSLA            `json:"slas"`
+    Slas                     []*BackupSLA            `json:"slas"`
+    // Determines whether threat detection is performed for each backup taken by this
+    // operation. Threat detection is supported for a subset of policy operations only.
+    // Refer to the Threat Detection Operation table
+    // for a complete list of policy operations that support threat detection.
+    // Responses omit the field when threat detection is not available for the
+    // operation or is not enabled for the organization.
+    // If omitted in a request, the value comes from the `ransomware_analysis` advanced
+    // setting, or false when that is not set. If both are set, this field takes precedence.
+    ThreatDetect             *bool                   `json:"threat_detect"`
+    // The time at which `threat_detect` was last turned off for this operation, in unix
+    // time. Omitted when threat detection has never been turned off. This field is stamped
+    // by Clumio and cannot be set by the caller.
+    ThreatDetectDisabledTime *int64                  `json:"threat_detect_disabled_time"`
     // The timezone for the operation. The timezone must be a valid location name from the IANA Time Zone database.
     // For instance, "America/New_York", "US/Central", "UTC".
-    Timezone          *string                 `json:"timezone"`
+    Timezone                 *string                 `json:"timezone"`
     // The operation to be performed for this SLA set. Each SLA set corresponds to one and only one operation.
     // Refer to the Policy Operation table for a complete list of policy operations.
-    ClumioType        *string                 `json:"type"`
+    ClumioType               *string                 `json:"type"`
 }
 
 // PolicyOperationInput represents a custom type struct
@@ -6618,7 +6972,10 @@ type PolicyOperationInput struct {
     // If set to `window` and `operation in ("aws_rds_resource_aws_snapshot", "mssql_log_backup", "ec2_mssql_log_backup")`,
     // the backup window will not be determined by Clumio's backup window.
     ActionSetting    *string                 `json:"action_setting"`
-    // The activation status of this individual operation. The operation runs only if both this and the policy-level `activation_status` are `"activated"`, and an omitted value leaves the stored status unchanged.
+    // The activation status of this individual operation. The operation runs only if both this and the policy-level `activation_status` are `"activated"`.
+    // If the policy-level `activation_status` is `"deactivated"`, every operation is set to `"deactivated"`, even if this field is `"activated"`.
+    // If the request activates a deactivated policy, where an omitted policy-level `activation_status` counts as `"activated"`, every operation is set to `"activated"`, even if this field is `"deactivated"`.
+    // Otherwise, an omitted value leaves the stored status unchanged.
     // Refer to the Policy Activation Status table for a complete list of policy activation statuses.
     ActivationStatus *string                 `json:"activation_status"`
     // Additional operation-specific policy settings. For operation types which do not support additional settings, this field is `null`.
@@ -6634,6 +6991,15 @@ type PolicyOperationInput struct {
     // backup_sla captures the SLA parameters
     // backup_sla captures the SLA parameters
     Slas             []*BackupSLA            `json:"slas"`
+    // Determines whether threat detection is performed for each backup taken by this
+    // operation. Threat detection is supported for a subset of policy operations only.
+    // Refer to the Threat Detection Operation table
+    // for a complete list of policy operations that support threat detection.
+    // Responses omit the field when threat detection is not available for the
+    // operation or is not enabled for the organization.
+    // If omitted in a request, the value comes from the `ransomware_analysis` advanced
+    // setting, or false when that is not set. If both are set, this field takes precedence.
+    ThreatDetect     *bool                   `json:"threat_detect"`
     // The timezone for the operation. The timezone must be a valid location name from the IANA Time Zone database.
     // For instance, "America/New_York", "US/Central", "UTC".
     Timezone         *string                 `json:"timezone"`
@@ -6970,7 +7336,7 @@ type ProtectionGroupBackupListLinks struct {
     First *HateoasFirstLink `json:"_first"`
     // The HATEOAS link to the last page of results.
     Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to the previous page of results.
     Prev  *HateoasPrevLink  `json:"_prev"`
@@ -7130,7 +7496,7 @@ type ProtectionGroupBucketListLinks struct {
     First *HateoasFirstLink `json:"_first"`
     // The HATEOAS link to the last page of results.
     Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to the previous page of results.
     Prev  *HateoasPrevLink  `json:"_prev"`
@@ -7193,7 +7559,7 @@ type ProtectionGroupListLinks struct {
     First                 *HateoasFirstLink `json:"_first"`
     // The HATEOAS link to the last page of results.
     Last                  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next                  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to the previous page of results.
     Prev                  *HateoasPrevLink  `json:"_prev"`
@@ -7348,7 +7714,7 @@ type ProtectionGroupS3AssetBackupListLinks struct {
     First *HateoasFirstLink `json:"_first"`
     // The HATEOAS link to the last page of results.
     Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to the previous page of results.
     Prev  *HateoasPrevLink  `json:"_prev"`
@@ -7376,7 +7742,7 @@ type ProtectionGroupS3AssetPitrIntervalListEmbedded struct {
 type ProtectionGroupS3AssetPitrIntervalListLinks struct {
     // The HATEOAS link to the first page of results.
     First *HateoasFirstLink `json:"_first"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to this resource.
     Self  *HateoasSelfLink  `json:"_self"`
@@ -7510,7 +7876,7 @@ type RDSBackupDatabaseListEmbedded struct {
 type RDSBackupDatabaseListLinks struct {
     // The HATEOAS link to the first page of results.
     First *HateoasFirstLink `json:"_first"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to this resource.
     Self  *HateoasSelfLink  `json:"_self"`
@@ -7548,7 +7914,7 @@ type RDSDatabaseTableColumn struct {
 type RDSDatabaseTableColumnLinks struct {
     // The HATEOAS link to the first page of results.
     First *HateoasFirstLink `json:"_first"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to this resource.
     Self  *HateoasSelfLink  `json:"_self"`
@@ -7582,7 +7948,7 @@ type RDSDatabaseTableListEmbedded struct {
 type RDSDatabaseTableListLinks struct {
     // The HATEOAS link to the first page of results.
     First *HateoasFirstLink `json:"_first"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to this resource.
     Self  *HateoasSelfLink  `json:"_self"`
@@ -7703,7 +8069,7 @@ type RdsDatabaseBackupListLinks struct {
     First *HateoasFirstLink `json:"_first"`
     // The HATEOAS link to the last page of results.
     Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to the previous page of results.
     Prev  *HateoasPrevLink  `json:"_prev"`
@@ -7851,7 +8217,7 @@ type RdsResourceListLinks struct {
     First *HateoasFirstLink `json:"_first"`
     // The HATEOAS link to the last page of results.
     Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to the previous page of results.
     Prev  *HateoasPrevLink  `json:"_prev"`
@@ -7964,6 +8330,24 @@ type RegionConfigurationModel struct {
     Region                    *string `json:"region"`
 }
 
+// RemoveBackupPurgeItemResponseLinks represents a custom type struct.
+// URLs to pages related to the resource.
+type RemoveBackupPurgeItemResponseLinks struct {
+    // The HATEOAS link to this resource.
+    Self                      *HateoasSelfLink `json:"_self"`
+    // A resource-specific HATEOAS link.
+    CreateBackupDeletionItems *HateoasLink     `json:"create-backup-deletion-items"`
+    // A resource-specific HATEOAS link.
+    ListBackupDeletionItems   *HateoasLink     `json:"list-backup-deletion-items"`
+}
+
+// RemoveBackupPurgeItemsResponseEmbedded represents a custom type struct.
+// Embedded responses related to the resource.
+type RemoveBackupPurgeItemsResponseEmbedded struct {
+    // Backup deletion item to be deleted with given filters
+    Items []*Item `json:"items"`
+}
+
 // ReplicaDescription represents a custom type struct.
 // Contains the details of the replica.
 type ReplicaDescription struct {
@@ -8040,7 +8424,7 @@ type ReportDownloadListLinks struct {
     First *HateoasFirstLink `json:"_first"`
     // The HATEOAS link to the last page of results.
     Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to the previous page of results.
     Prev  *HateoasPrevLink  `json:"_prev"`
@@ -8277,7 +8661,7 @@ type RestoredFilesListLinks struct {
     First *HateoasFirstLink `json:"_first"`
     // The HATEOAS link to the last page of results.
     Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to the previous page of results.
     Prev  *HateoasPrevLink  `json:"_prev"`
@@ -8336,7 +8720,7 @@ type RestoredRecordListLinks struct {
     First *HateoasFirstLink `json:"_first"`
     // The HATEOAS link to the last page of results.
     Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to the previous page of results.
     Prev  *HateoasPrevLink  `json:"_prev"`
@@ -8386,7 +8770,7 @@ type RoleListLinks struct {
     First *HateoasFirstLink `json:"_first"`
     // The HATEOAS link to the last page of results.
     Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to the previous page of results.
     Prev  *HateoasPrevLink  `json:"_prev"`
@@ -8658,7 +9042,7 @@ type RuleListEmbedded struct {
 type RuleListLinks struct {
     // The HATEOAS link to the first page of results.
     First            *HateoasFirstLink `json:"_first"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next             *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to this resource.
     Self             *HateoasSelfLink  `json:"_self"`
@@ -9034,7 +9418,7 @@ type S3InstantAccessEndpointListEmbedded struct {
 type S3InstantAccessEndpointListLinks struct {
     // The HATEOAS link to the first page of results.
     First *HateoasFirstLink `json:"_first"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to this resource.
     Self  *HateoasSelfLink  `json:"_self"`
@@ -9444,7 +9828,7 @@ type TaskListLinks struct {
     First *HateoasFirstLink `json:"_first"`
     // The HATEOAS link to the last page of results.
     Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to the previous page of results.
     Prev  *HateoasPrevLink  `json:"_prev"`
@@ -9814,7 +10198,7 @@ type UserListHateoasLinks struct {
     First      *HateoasFirstLink `json:"_first"`
     // The HATEOAS link to the last page of results.
     Last       *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next       *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to the previous page of results.
     Prev       *HateoasPrevLink  `json:"_prev"`
@@ -9955,7 +10339,7 @@ type WalletListLinks struct {
     First *HateoasFirstLink `json:"_first"`
     // The HATEOAS link to the last page of results.
     Last  *HateoasLastLink  `json:"_last"`
-    // The HATEOAS link to the next page of results.
+    // The link to the next page of results.
     Next  *HateoasNextLink  `json:"_next"`
     // The HATEOAS link to the previous page of results.
     Prev  *HateoasPrevLink  `json:"_prev"`

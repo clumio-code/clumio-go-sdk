@@ -324,6 +324,42 @@ type CreateAutoUserProvisioningRuleResponse struct {
     RuleId    *string                           `json:"rule_id"`
 }
 
+// CreateBackupPurgeItemsPreviewResponse represents a custom type struct for Success
+type CreateBackupPurgeItemsPreviewResponse struct {
+    // URLs to pages related to the resource.
+    Links        *CreateBackupPurgeItemsPreviewResponseLinks `json:"_links"`
+    // TODO: Add struct field description
+    PreviewTasks []*ItemPreviewTask                          `json:"preview_tasks"`
+    // The total number of backup deletion items previewed.
+    TotalCount   *int64                                      `json:"total_count"`
+}
+
+// CreateBackupPurgeItemsResponse represents a custom type struct for Success
+type CreateBackupPurgeItemsResponse struct {
+    // Embedded responses related to the resource.
+    Embedded         *CreateBackupPurgeItemsResponseEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links            *CreateBackupPurgeItemsResponseLinks    `json:"_links"`
+    // ID for the created Backup Deletion
+    BackupDeletionId *string                                 `json:"backup_deletion_id"`
+}
+
+// CreateBackupPurgeResponse represents a custom type struct for Success
+type CreateBackupPurgeResponse struct {
+    // URLs to pages related to the resource.
+    Links              *CreateBackupPurgeResponseLinks `json:"_links"`
+    // Email of the Clumio user who created the backup deletion request
+    CreatedByUserEmail *string                         `json:"created_by_user_email"`
+    // Deletion status for the created Backup Deletion
+    DeletionStatus     *string                         `json:"deletion_status"`
+    // ID for the created Backup Deletion
+    Id                 *string                         `json:"id"`
+    // Name for the created Backup Deletion
+    Name               *string                         `json:"name"`
+    // The signature status of the backup deletion request.
+    SignatureStatus    *string                         `json:"signature_status"`
+}
+
 // CreateComplianceConfigurationResponse represents a custom type struct for Success
 type CreateComplianceConfigurationResponse struct {
     // If the `embed` query parameter is set, displays the responses of the related resource,
@@ -1007,6 +1043,12 @@ type CreateWalletResponse struct {
     Token              *string                `json:"token"`
 }
 
+// DeleteBackupPurgeResponse represents a custom type struct for Success
+type DeleteBackupPurgeResponse struct {
+    // URLs to pages related to the resource.
+    Links *DeleteBackupPurgeResponseLinks `json:"_links"`
+}
+
 // DeleteBucketFromProtectionGroupResponse represents a custom type struct for Success
 type DeleteBucketFromProtectionGroupResponse struct {
     // The AWS-assigned ID of the account associated with the DynamoDB table.
@@ -1421,6 +1463,67 @@ type ListAwsTagsResponse struct {
     TotalCount      *int64              `json:"total_count"`
     // The total number of pages of results.
     TotalPagesCount *int64              `json:"total_pages_count"`
+}
+
+// ListBackupPurgeItemsPreviewResponse represents a custom type struct for Success
+type ListBackupPurgeItemsPreviewResponse struct {
+    // Embedded responses related to the resource.
+    Embedded        *ListBackupPurgeItemsPreviewResponseEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links           *ListBackupPurgeItemsPreviewResponseLinks    `json:"_links"`
+    // The number of items listed on the current page.
+    CurrentCount    *int64                                       `json:"current_count"`
+    // The maximum number of items displayed per page in the response.
+    Limit           *int64                                       `json:"limit"`
+    // The page number used to get this response.
+    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
+    Start           *string                                      `json:"start"`
+    // The total number of items, summed across all pages.
+    TotalCount      *int64                                       `json:"total_count"`
+    // The total number of pages of results.
+    TotalPagesCount *int64                                       `json:"total_pages_count"`
+}
+
+// ListBackupPurgeItemsResponse represents a custom type struct for Success
+type ListBackupPurgeItemsResponse struct {
+    // Embedded responses related to the resource.
+    Embedded         *ListBackupPurgeItemsResponseEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links            *ListBackupPurgeItemsResponseLinks    `json:"_links"`
+    // ID for the listed Backup Deletion Items
+    BackupDeletionId *string                               `json:"backup_deletion_id"`
+    // The number of items listed on the current page.
+    CurrentCount     *int64                                `json:"current_count"`
+    // The maximum number of items displayed per page in the response.
+    Limit            *int64                                `json:"limit"`
+    // The page number used to get this response.
+    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
+    Start            *string                               `json:"start"`
+    // The total number of items, summed across all pages.
+    TotalCount       *int64                                `json:"total_count"`
+    // The total number of pages of results.
+    TotalPagesCount  *int64                                `json:"total_pages_count"`
+}
+
+// ListBackupPurgeResponse represents a custom type struct for Success
+type ListBackupPurgeResponse struct {
+    // Embedded responses related to the resource.
+    Embedded        *ListBackupPurgeResponseEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links           *ListBackupPurgeResponseLinks    `json:"_links"`
+    // The number of items listed on the current page.
+    CurrentCount    *int64                           `json:"current_count"`
+    // The filter used in the request. The filter includes both manually-specified and system-generated filters.
+    FilterApplied   *string                          `json:"filter_applied"`
+    // The maximum number of items displayed per page in the response.
+    Limit           *int64                           `json:"limit"`
+    // The page number used to get this response.
+    // Pages are indexed starting from 1 (i.e., `"start": "1"`).
+    Start           *string                          `json:"start"`
+    // The total number of items, summed across all pages.
+    TotalCount      *int64                           `json:"total_count"`
+    // The total number of pages of results.
+    TotalPagesCount *int64                           `json:"total_pages_count"`
 }
 
 // ListBucketsResponse represents a custom type struct for Success
@@ -2668,6 +2771,18 @@ type OnDemandNeptuneBackupResponse struct {
     TaskId   *string                       `json:"task_id"`
 }
 
+// OnDemandRDSBackupResponse represents a custom type struct for Success
+type OnDemandRDSBackupResponse struct {
+    // Embedded responses related to the resource.
+    Embedded *ReadTaskHateoasOuterEmbedded `json:"_embedded"`
+    // OnDemandRDSBackupLinks
+    // URLs to pages related to the resource.
+    Links    *OnDemandRDSBackupLinks       `json:"_links"`
+    // The Clumio-assigned ID of the task created for RDS backup.
+    // The progress of the task can be monitored using the `GET /tasks/{task_id}` endpoint.
+    TaskId   *string                       `json:"task_id"`
+}
+
 // PatchGeneralSettingsResponseV2 represents a custom type struct for Success
 type PatchGeneralSettingsResponseV2 struct {
     // URLs to pages related to the resource.
@@ -3231,6 +3346,45 @@ type ReadAwsTagResponse struct {
     ProtectionStatus     *string         `json:"protection_status"`
     // The AWS-assigned tag value.
     Value                *string         `json:"value"`
+}
+
+// ReadBackupPurgeResponse represents a custom type struct.
+// ReadBackupPurgeResponse Success
+type ReadBackupPurgeResponse struct {
+    // The ETag value.
+    Etag                          *string                `json:"_etag"`
+    // URLs to pages related to the resource.
+    Links                         *BackupPurgeInfoLinks  `json:"_links"`
+    // BackupPurgeApprover denotes the Approver structure for Backup Deletion request
+    Approvers                     []*BackupPurgeApprover `json:"approvers"`
+    // Count of assets that will be deleted with these filters
+    AssetCount                    *int64                 `json:"asset_count"`
+    // Count of backups that will be deleted with these filters
+    BackupCount                   *int64                 `json:"backup_count"`
+    // Password to unlock the backup list zip file
+    BackupListZipPassword         *string                `json:"backup_list_zip_password"`
+    // URL to download the zip file listing the backups selected for deletion
+    BackupListZipUrl              *string                `json:"backup_list_zip_url"`
+    // Email of the Clumio user who created the backup deletion request
+    CreatedByUserEmail            *string                `json:"created_by_user_email"`
+    // Time at which this backup deletion was executed, represented in RFC-3339 format.
+    DeletionCompletionTimestamp   *string                `json:"deletion_completion_timestamp"`
+    // Deletion status for the created Backup Deletion
+    DeletionStatus                *string                `json:"deletion_status"`
+    // ID for the created Backup Deletion
+    Id                            *string                `json:"id"`
+    // Name for the created Backup Deletion
+    Name                          *string                `json:"name"`
+    // Time at which the signature request was fully signed, represented in RFC-3339 format.
+    SignatureCompletionTimestamp  *string                `json:"signature_completion_timestamp"`
+    // Time at which the signature request was sent out for signing, represented in RFC-3339 format.
+    SignatureRequestSentTimestamp *string                `json:"signature_request_sent_timestamp"`
+    // The signature status of the backup deletion request.
+    SignatureStatus               *string                `json:"signature_status"`
+    // Created task ID when backup purge request is submitted
+    SubmitTaskId                  *string                `json:"submit_task_id"`
+    // Time at which this backup deletion was submitted, represented in RFC-3339 format.
+    SubmittedTimestamp            *string                `json:"submitted_timestamp"`
 }
 
 // ReadBucketResponse represents a custom type struct for Success
@@ -5970,6 +6124,16 @@ type RefreshWalletResponse struct {
     Token              *string                `json:"token"`
 }
 
+// RemoveBackupPurgeItemResponse represents a custom type struct for Success
+type RemoveBackupPurgeItemResponse struct {
+    // Embedded responses related to the resource.
+    Embedded         *RemoveBackupPurgeItemsResponseEmbedded `json:"_embedded"`
+    // URLs to pages related to the resource.
+    Links            *RemoveBackupPurgeItemResponseLinks     `json:"_links"`
+    // ID for the created Backup Deletion
+    BackupDeletionId *string                                 `json:"backup_deletion_id"`
+}
+
 // RestoreAWSIcebergTableResponse represents a custom type struct for Success
 type RestoreAWSIcebergTableResponse struct {
     // Embedded responses related to the resource.
@@ -6410,6 +6574,44 @@ type UpdateAutoUserProvisioningSettingResponse struct {
     Links     *AutoUserProvisioningSettingLinks `json:"_links"`
     // Whether auto user provisioning is enabled or not.
     IsEnabled *bool                             `json:"is_enabled"`
+}
+
+// UpdateBackupPurgeResponse represents a custom type struct for Success
+type UpdateBackupPurgeResponse struct {
+    // The ETag value.
+    Etag                          *string                `json:"_etag"`
+    // URLs to pages related to the resource.
+    Links                         *BackupPurgeInfoLinks  `json:"_links"`
+    // BackupPurgeApprover denotes the Approver structure for Backup Deletion request
+    Approvers                     []*BackupPurgeApprover `json:"approvers"`
+    // Count of assets that will be deleted with these filters
+    AssetCount                    *int64                 `json:"asset_count"`
+    // Count of backups that will be deleted with these filters
+    BackupCount                   *int64                 `json:"backup_count"`
+    // Password to unlock the backup list zip file
+    BackupListZipPassword         *string                `json:"backup_list_zip_password"`
+    // URL to download the zip file listing the backups selected for deletion
+    BackupListZipUrl              *string                `json:"backup_list_zip_url"`
+    // Email of the Clumio user who created the backup deletion request
+    CreatedByUserEmail            *string                `json:"created_by_user_email"`
+    // Time at which this backup deletion was executed, represented in RFC-3339 format.
+    DeletionCompletionTimestamp   *string                `json:"deletion_completion_timestamp"`
+    // Deletion status for the created Backup Deletion
+    DeletionStatus                *string                `json:"deletion_status"`
+    // ID for the created Backup Deletion
+    Id                            *string                `json:"id"`
+    // Name for the created Backup Deletion
+    Name                          *string                `json:"name"`
+    // Time at which the signature request was fully signed, represented in RFC-3339 format.
+    SignatureCompletionTimestamp  *string                `json:"signature_completion_timestamp"`
+    // Time at which the signature request was sent out for signing, represented in RFC-3339 format.
+    SignatureRequestSentTimestamp *string                `json:"signature_request_sent_timestamp"`
+    // The signature status of the backup deletion request.
+    SignatureStatus               *string                `json:"signature_status"`
+    // Created task ID when backup purge request is submitted
+    SubmitTaskId                  *string                `json:"submit_task_id"`
+    // Time at which this backup deletion was submitted, represented in RFC-3339 format.
+    SubmittedTimestamp            *string                `json:"submitted_timestamp"`
 }
 
 // UpdateComplianceConfigurationResponse represents a custom type struct for Success
