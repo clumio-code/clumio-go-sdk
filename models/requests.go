@@ -25,6 +25,72 @@ type UpdateIndividualAlertV1Request struct {
     Status *string `json:"status"`
 }
 
+// CreateBackupDeletionV1Request represents a custom type struct
+type CreateBackupDeletionV1Request struct {
+    // Approver denotes the Approver structure for Create Backup Deletion request
+    AdditionalApprovers []*Approver `json:"additional_approvers"`
+    // The name of backup deletion request.
+    Name                *string     `json:"name"`
+    // The email of the backup deletion requestor, which receives the signature request.
+    // Defaults to and must match the calling user's registered email, unless Clumio has
+    // enabled custom requestor details for the organization, in which case any address
+    // in the same domain is accepted. Must be sent together with requestor_name.
+    RequestorEmail      *string     `json:"requestor_email"`
+    // The job title of backup deletion requestor. Any free-form text.
+    RequestorJobTitle   *string     `json:"requestor_job_title"`
+    // The name of the backup deletion requestor. Defaults to the calling user's name
+    // in Clumio, and must match it unless Clumio has enabled custom requestor details
+    // for the organization. Must be sent together with requestor_email, except when
+    // the calling user has no name recorded in Clumio, where it is required on its own.
+    RequestorName       *string     `json:"requestor_name"`
+}
+
+// UpdateBackupDeletionV1Request represents a custom type struct
+type UpdateBackupDeletionV1Request struct {
+    // Approver denotes the Approver structure for Create Backup Deletion request
+    AdditionalApprovers []*Approver `json:"additional_approvers"`
+    // The state to move the request to. "submitted" sends it for signature;
+    // "cancelled" abandons it. Both are allowed only while the request is in draft,
+    // and both are matched case-insensitively. Omit this field to edit the draft
+    // without changing its state. The values read back from this field use the same
+    // lowercase spelling and cover the full lifecycle: draft, submitted,
+    // waiting_for_signature, waiting_for_execution, deletion_in_progress, completed,
+    // cancelled, failed, no_backups_found.
+    DeletionStatus      *string     `json:"deletion_status"`
+    // The name of backup deletion request.
+    Name                *string     `json:"name"`
+    // The email of the backup deletion requestor, which receives the signature
+    // request. Editable only when Clumio has enabled custom requestor details for
+    // the organization, and the address must belong to the same domain as the
+    // calling user's registered email.
+    RequestorEmail      *string     `json:"requestor_email"`
+    // The job title of backup deletion requestor.
+    RequestorJobTitle   *string     `json:"requestor_job_title"`
+    // The name of backup deletion  requestor.
+    RequestorName       *string     `json:"requestor_name"`
+}
+
+// CreateBackupDeletionItemsV1Request represents a custom type struct
+type CreateBackupDeletionItemsV1Request struct {
+    // filter={
+    // "text":{"$eq":"SampleText"},
+    // "status":{"$in":["COMPLETED","STOPPED"]},
+    // "created_ts":{"$lt":1558430361},
+    // "source":{"$eq":"USER"}}
+    // }
+    Items []interface{} `json:"items"`
+}
+
+// CreateBackupDeletionItemsPreviewV1Request represents a custom type struct
+type CreateBackupDeletionItemsPreviewV1Request struct {
+    // The backup deletion items to preview. Required when should_preview_all is
+    // false, and must be omitted when it is true.
+    ItemIds          []*string `json:"item_ids"`
+    // Set to true to preview every item under the specified backup deletion ID.
+    // Set to false to preview only the items listed in item_ids.
+    ShouldPreviewAll *bool     `json:"should_preview_all"`
+}
+
 // CreateBackupAwsDocumentdbV1Request represents a custom type struct
 type CreateBackupAwsDocumentdbV1Request struct {
     // Performs the operation on the DocumentDB cluster with the specified Clumio-assigned ID.
@@ -102,6 +168,18 @@ type CreateBackupAwsNeptuneV1Request struct {
     Settings   *OnDemandSetting `json:"settings"`
     // The type of the backup. Possible values - `aws_snapshot`.
     ClumioType *string          `json:"type"`
+}
+
+// CreateBackupAwsRdsResourceV1Request represents a custom type struct
+type CreateBackupAwsRdsResourceV1Request struct {
+    // Performs the operation on the RDS resource with the specified Clumio-assigned ID.
+    RdsResourceId *string          `json:"rds_resource_id"`
+    // Settings for requesting on-demand backup directly.
+    Settings      *OnDemandSetting `json:"settings"`
+    // The type of the backup. Possible values - `clumio_backup`, `aws_snapshot`.
+    // For `clumio_backup`, `settings.retention_duration.unit` must be `years` and
+    // `settings.advanced_settings.aws_rds_resource_granular_backup.backup_tier` must be `archive`.
+    ClumioType    *string          `json:"type"`
 }
 
 // ExportProtectionGroupS3AssetMalwareReportV1Request represents a custom type struct

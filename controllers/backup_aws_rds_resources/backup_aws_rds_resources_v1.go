@@ -4,6 +4,7 @@
 package backupawsrdsresources
 
 import (
+    "encoding/json"
     "fmt"
 
     "github.com/clumio-code/clumio-go-sdk/api_utils"
@@ -52,6 +53,45 @@ func (b *BackupAwsRdsResourcesV1) ListBackupAwsRdsResources(
         AcceptHeader: header,
         Result200: &result,
         RequestType: common.Get,
+    })
+
+    return result, apiErr
+}
+
+
+// CreateBackupAwsRdsResource Performs an on-demand backup for the specified RDS database.
+func (b *BackupAwsRdsResourcesV1) CreateBackupAwsRdsResource(
+    embed *string, 
+    body models.CreateBackupAwsRdsResourceV1Request)(
+    *models.OnDemandRDSBackupResponse, *apiutils.APIError) {
+
+    queryBuilder := b.config.BaseUrl + "/backups/aws/rds-resources"
+
+    bytes, err := json.Marshal(body)
+    if err != nil {
+        return nil, &apiutils.APIError{
+            ResponseCode: 500,
+            Reason:       fmt.Sprintf("Failed to Marshal Request Body %v", body),
+            Response:     []byte(fmt.Sprintf("%v", err)),
+        }
+    }
+    payload := string(bytes)
+    header := "application/api.clumio.backup-aws-rds-resources=v1+json"
+    result := &models.OnDemandRDSBackupResponse{}
+    queryParams := make(map[string]string)
+    if embed != nil {
+        queryParams["embed"] = *embed
+    }
+    
+
+    apiErr := common.InvokeAPI(&common.InvokeAPIRequest{
+        Config: b.config,
+        RequestUrl: queryBuilder,
+        QueryParams: queryParams,
+        AcceptHeader: header,
+        Body: payload,
+        Result202: &result,
+        RequestType: common.Post,
     })
 
     return result, apiErr

@@ -18,6 +18,12 @@ type BackupAwsRdsResourcesV1Client interface {
         filter *string)(
         *models.ListRdsDatabaseBackupsResponse,  *apiutils.APIError)
     
+    // CreateBackupAwsRdsResource Performs an on-demand backup for the specified RDS database.
+    CreateBackupAwsRdsResource(
+        embed *string, 
+        body models.CreateBackupAwsRdsResourceV1Request)(
+        *models.OnDemandRDSBackupResponse,  *apiutils.APIError)
+    
     // ReadBackupAwsRdsResource Returns a representation of the specified RDS database backup.
     ReadBackupAwsRdsResource(
         backupId string)(
